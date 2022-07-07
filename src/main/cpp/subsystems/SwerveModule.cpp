@@ -61,7 +61,7 @@ int m_MotorControllerTurning,
          samDriveMotor = new rev::CANSparkMax(m_MotorController, rev::CANSparkMax::MotorType::kBrushless);
          samTurningMotor = new rev::CANSparkMax(m_MotorControllerTurning, rev::CANSparkMax::MotorType::kBrushless);
         //  samDriveEncoder = new rev::CANEncoder(*samDriveMotor, m_EncoderType, m_counts_per_rev);
-        //  samDriveEncoder = &(samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev));
+         samDriveEncoder = new rev::SparkMaxRelativeEncoder(samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev));
         //  samTurningEncoder = new rev::CANEncoder(*samTurningMotor, m_EncoderTypeTurning, m_counts_per_revTurning);
          samTurningEncoder = new ctre::phoenix::sensors::CANCoder(TurningEncoderNumber);	
 
@@ -73,7 +73,7 @@ int m_MotorControllerTurning,
   // Set the distance per pulse for the drive encoder. We can simply use the
   // distance traveled for one rotation of the wheel divided by the encoder
   // resolution.
-  samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev).SetPositionConversionFactor(
+  samDriveEncoder->SetPositionConversionFactor(
       ModuleConstants::kDriveEncoderDistancePerPulse);
 
   // Set the distance (in this case, angle, radians) per pulse for the turning encoder.
@@ -95,9 +95,8 @@ int m_MotorControllerTurning,
   frc::SmartDashboard::PutNumber("Wheel Offset " + std::to_string(samTurningMotor->GetDeviceId()), ModuleConstants::wheelOffset);
 
 }
-
 frc::SwerveModuleState SwerveModule::GetState() {
-  return {units::meters_per_second_t{samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev).GetVelocity()},
+  return {units::meters_per_second_t{samDriveEncoder->GetVelocity()},
           frc::Rotation2d(units::radian_t(samTurningEncoder->GetPosition()))};
 }
 
@@ -106,7 +105,7 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState& state) {
   // Calculate the drive output from the drive PID controller.
   m_drivePIDController.SetP(frc::SmartDashboard::GetNumber("Enter P Value" + std::to_string(samDriveMotor->GetDeviceId()), 1E-5));
   const auto driveOutput = m_drivePIDController.Calculate(
-     (samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev).GetVelocity(), state.speed.to<double>()) / 10);
+     (samDriveEncoder->GetVelocity(), state.speed.to<double>()) / 10);
   // Calculate the turning motor output from the turning PID controller.
   m_turningPIDController.SetP(
     frc::SmartDashboard::GetNumber("Enter P Value for Turn" + std::to_string(samTurningMotor->GetDeviceId()), 1E-5));
@@ -114,7 +113,7 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState& state) {
       units::radian_t( samTurningEncoder->GetPosition() /* * 78.73*/ + m_wheelOffset), state.angle.Radians());
   frc::SmartDashboard::PutNumber(std::to_string(samDriveMotor->GetDeviceId()), driveOutput);
   frc::SmartDashboard::PutNumber("Get Velocity output" + std::to_string(samDriveMotor->GetDeviceId()), 
-                                 samTurningMotor->GetEncoder(m_EncoderType, m_counts_per_rev).GetVelocity() / 10);
+                                samDriveEncoder->GetVelocity() / 10);
   frc::SmartDashboard::PutNumber("Motor Position - " + std::to_string(samTurningMotor->GetDeviceId()), 
                                  samTurningEncoder->GetPosition() + m_wheelOffset /* * 78.73*/);
   frc::SmartDashboard::PutNumber("Motor Set Position - " + std::to_string(samTurningMotor->GetDeviceId()),
@@ -137,4 +136,5 @@ SwerveModule::~SwerveModule(){
   delete samDriveMotor;
   delete samTurningMotor;
   delete samTurningEncoder;
+  delete samDriveEncoder;
 }

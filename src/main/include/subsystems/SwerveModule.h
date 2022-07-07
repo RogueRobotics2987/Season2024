@@ -60,7 +60,7 @@ class SwerveModule {
 
 //   frc::Encoder m_driveEncoder;
 //   frc::Encoder m_turningEncoder;
-  // rev::SparkMaxRelativeEncoder* samDriveEncoder;
+  rev::SparkMaxRelativeEncoder* samDriveEncoder;
   // rev::CANEncoder* samTurningEncoder;
   ctre::phoenix::sensors::CANCoder* samTurningEncoder;
   rev::SparkMaxRelativeEncoder::Type m_EncoderType;
@@ -78,3 +78,5 @@ class SwerveModule {
       0.0,
       {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}};
 };
+
+

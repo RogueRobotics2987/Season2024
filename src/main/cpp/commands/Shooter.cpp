@@ -30,7 +30,6 @@ void Shooter::Execute() {
   } else {
       Timer = Timer + 1;
   }
-  std::cout << "Open solinoid number " << TubeCounter << std::endl; 
   
 }
 
