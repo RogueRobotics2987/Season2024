@@ -14,14 +14,19 @@ void ShooterSubsystem::Close(int SolenoidNum){
     
 
     if(SolenoidNum==1){
+        std::cout << "Solenoid 1 is closing" << std::endl;
         ShooterSolenoid1->Set(frc::DoubleSolenoid::kForward);
     } else if(SolenoidNum==2){
+        std::cout << "Solenoid 2 is closing" << std::endl;
         ShooterSolenoid2->Set(frc::DoubleSolenoid::kForward);
     } else if(SolenoidNum==3){
+        std::cout << "Solenoid 3 is closing" << std::endl;
         ShooterSolenoid3->Set(frc::DoubleSolenoid::kForward);
     } else if(SolenoidNum==4){
+        std::cout << "Solenoid 4 is closing" << std::endl;
         ShooterSolenoid4->Set(frc::DoubleSolenoid::kForward);
     } else if(SolenoidNum==5){
+        std::cout << "Solenoid 5 is closing" << std::endl;
         ShooterSolenoid5->Set(frc::DoubleSolenoid::kForward);
     }
 }
@@ -29,14 +34,19 @@ void ShooterSubsystem::Close(int SolenoidNum){
 void ShooterSubsystem::Open(int SolenoidNum){ 
 
     if(SolenoidNum==1){
+        std::cout << "Solenoid 1 is opening" << std::endl;
         ShooterSolenoid1->Set(frc::DoubleSolenoid::kReverse);
     } else if(SolenoidNum==2){
+        std::cout << "Solenoid 2 is opening" << std::endl;
         ShooterSolenoid2->Set(frc::DoubleSolenoid::kReverse);
     } else if(SolenoidNum==3){
+        std::cout << "Solenoid 3 is opening" << std::endl;
         ShooterSolenoid3->Set(frc::DoubleSolenoid::kReverse);
     } else if(SolenoidNum==4){
+        std::cout << "Solenoid 4 is opening" << std::endl;
         ShooterSolenoid4->Set(frc::DoubleSolenoid::kReverse);
     } else if(SolenoidNum==5){
+        std::cout << "Solenoid 5 is opening" << std::endl;
         ShooterSolenoid5->Set(frc::DoubleSolenoid::kReverse);
     }
 } 
