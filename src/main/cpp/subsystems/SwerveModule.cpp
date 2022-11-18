@@ -114,7 +114,9 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState& state) {
   frc::SmartDashboard::PutNumber(std::to_string(samDriveMotor->GetDeviceId()), driveOutput);
   frc::SmartDashboard::PutNumber("Get Velocity output" + std::to_string(samDriveMotor->GetDeviceId()), 
                                 samDriveEncoder->GetVelocity() / 10);
-  frc::SmartDashboard::PutNumber("Motor Position - " + std::to_string(samTurningMotor->GetDeviceId()), 
+  frc::SmartDashboard::PutNumber("Get Drive Positon" + std::to_string(samDriveMotor->GetDeviceId()), 
+                                samDriveEncoder->GetPosition());
+  frc::SmartDashboard::PutNumber("get rotation Position - " + std::to_string(samTurningMotor->GetDeviceId()), 
                                  samTurningEncoder->GetPosition() + m_wheelOffset /* * 78.73*/);
   frc::SmartDashboard::PutNumber("Motor Set Position - " + std::to_string(samTurningMotor->GetDeviceId()),
                                  double(state.angle.Radians()) /* * 78.73*/);
