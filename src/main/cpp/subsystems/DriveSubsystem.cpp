@@ -73,6 +73,11 @@ void DriveSubsystem::Periodic() {
   m_odometry.Update(m_gyro.GetRotation2d(), m_frontLeft.GetState(),
                     m_rearLeft.GetState(), m_frontRight.GetState(),
                     m_rearRight.GetState());
+
+  frc::SmartDashboard::PutNumber("Odometry x", double(m_odometry.GetPose().X()));
+  frc::SmartDashboard::PutNumber("Odometry y", double(m_odometry.GetPose().Y()));
+  frc::SmartDashboard::PutNumber("Odometry Rotation", double(m_odometry.GetPose().Rotation().Radians()));
+  
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
