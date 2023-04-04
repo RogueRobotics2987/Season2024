@@ -46,7 +46,7 @@ RobotContainer::RobotContainer() {
   }
   },
   {&m_Actuator}));
-  m_Compressor.SetDefaultCommand(beginCompressor(&m_Compressor));
+  m_compressor.SetDefaultCommand(BeginCompressor(m_compressor));
   m_Shooter.SetDefaultCommand(ShooterSafe(&m_Shooter));
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {

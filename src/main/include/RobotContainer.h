@@ -51,7 +51,7 @@ class RobotContainer {
   DriveSubsystem m_drive;
   ShooterSubsystem m_Shooter;
   ActuatorSubsystem m_Actuator;
-  CompressorObject m_Compressor;
+  CompressorObject m_compressor;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

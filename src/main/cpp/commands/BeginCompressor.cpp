@@ -1,22 +1,22 @@
 #include "commands/BeginCompressor.h"
 
-beginCompressor::beginCompressor(CompressorObject* c_compressor):m_compressor(c_compressor) {
-//   m_compressor = c_compressor;
+BeginCompressor::BeginCompressor(CompressorObject &compressor) {
+  m_compressor = &compressor;
   AddRequirements(m_compressor);
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
-void beginCompressor::Initialize() {}
+void BeginCompressor::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void beginCompressor::Execute() {
+void BeginCompressor::Execute() {
     // std::cout << "Runing The Compressor" << std::endl;
-  m_compressor->startCompressor();
+  m_compressor->StartCompressor();
 }
 
 // Called once the command ends or is interrupted.
-void beginCompressor::End(bool interrupted) {}
+void BeginCompressor::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool beginCompressor::IsFinished() { return false; }
+bool BeginCompressor::IsFinished() { return false; }
