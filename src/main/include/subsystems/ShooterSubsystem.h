@@ -9,6 +9,7 @@
 #include <frc/Solenoid.h>
 #include <frc/DoubleSolenoid.h>
 #include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:
