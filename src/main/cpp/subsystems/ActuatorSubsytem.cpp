@@ -4,7 +4,7 @@ ActuatorSubsystem::ActuatorSubsystem(){
 ActuatorMotor = new rev::CANSparkMax(m_MotorController, rev::CANSparkMax::MotorType::kBrushless);
 ActuatorMotor->EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
 // ActuatorMotor->SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, 5000); // TODO Change limit number
-m_limitSwitch = new rev::SparkMaxLimitSwitch(ActuatorMotor->GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed));
+m_limitSwitch = new rev::SparkMaxLimitSwitch(ActuatorMotor->GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen));
 }
 
 void ActuatorSubsystem::Periodic() {

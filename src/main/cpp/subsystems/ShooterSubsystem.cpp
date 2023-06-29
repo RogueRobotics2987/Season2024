@@ -9,9 +9,19 @@ ShooterSolenoid4 = new frc::DoubleSolenoid(frc::PneumaticsModuleType::REVPH, 6, 
 ShooterSolenoid5 = new frc::DoubleSolenoid(frc::PneumaticsModuleType::REVPH, 8, 9); 
 }
 
-void ShooterSubsystem::Periodic() {}
+void ShooterSubsystem::Periodic() {
+    int NextShot = frc::SmartDashboard::GetNumber("LastShot", 0);
+    if(NextShot != 5){
+    frc::SmartDashboard::PutNumber("NextToShoot", NextShot + 1);
+    }
+    else if(NextShot == 5){
+    frc::SmartDashboard::PutNumber("NextToShoot", 1);
+    }
+
+}
 void ShooterSubsystem::Close(int SolenoidNum){
-    
+
+    frc::SmartDashboard::PutNumber("LastShot", SolenoidNum);
 
     if(SolenoidNum==1){
         std::cout << "Solenoid 1 is closing" << std::endl;

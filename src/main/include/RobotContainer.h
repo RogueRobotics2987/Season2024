@@ -37,21 +37,23 @@
 class RobotContainer {
  public:
   RobotContainer();
-
+  ~RobotContainer();
   // frc2::Command* GetAutonomousCommand();
+  float Deadzone(float x);
 
  private:
   // The driver's controller
   //frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
-  frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
+  frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
 
   // The robot's subsystems and commands are defined here...
+  frc2::Command* shootCmd = new Shooter(&m_Shooter);
 
   // The robot's subsystems
   DriveSubsystem m_drive;
   ShooterSubsystem m_Shooter;
   ActuatorSubsystem m_Actuator;
-  CompressorObject m_Compressor;
+  CompressorObject m_compressor;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

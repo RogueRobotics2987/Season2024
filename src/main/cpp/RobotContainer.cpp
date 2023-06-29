@@ -46,52 +46,61 @@ RobotContainer::RobotContainer() {
   }
   },
   {&m_Actuator}));
-  m_Compressor.SetDefaultCommand(beginCompressor(&m_Compressor));
+  m_compressor.SetDefaultCommand(BeginCompressor(m_compressor));
   m_Shooter.SetDefaultCommand(ShooterSafe(&m_Shooter));
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        //   std::cout << "sea out in robot container" << std::endl;
-          frc::SmartDashboard::PutNumber("Left Hand Y", m_driverController.GetX());
-          frc::SmartDashboard::PutNumber("Right Hand Y", m_driverController.GetY());
-          frc::SmartDashboard::PutNumber("Left Hand X", m_driverController.GetZ());
-        
-        
-        
-        double safeX = m_driverController.GetX();
-        if(fabs(safeX)<.225) {
-            safeX=0;}
-        double safeY =  m_driverController.GetY();
-        if(fabs(safeY)<.225) { 
-            safeY=0;}
-        double safeRot = m_driverController.GetZ();
-        if(fabs(safeRot)<.24) {
-            safeRot=0;}
-        
-        // std::cout << "Sam Debug" << safeX << "," << safeY << "," << safeRot << std::endl;
-        
-        m_drive.Drive(units::meters_per_second_t(
-                         -safeY),
-                      units::meters_per_second_t(
-                         -safeX),
-                      units::radians_per_second_t(
-                         -safeRot),
-                      true);
-        // m_drive.Drive(units::meters_per_second_t(0),
-        // units::meters_per_second_t(1),
-        // units::radians_per_second_t(0),
-        // false);
+      bool noJoystick = false;
+      double safeX = Deadzone(m_driverController.GetLeftX());
+      double safeY =  Deadzone(m_driverController.GetLeftY());
+      double safeRot = Deadzone(m_driverController.GetRightX());
+      bool fieldOrientated;
+      if (m_driverController.GetRawAxis(3)> 0.15){
+        fieldOrientated = false;
+      }
+      if (m_driverController.GetRawAxis(3)< 0.15){
+        fieldOrientated = true;
+      }
+      if((safeX == 0) && (safeY == 0) && (safeRot == 0)) {
+        noJoystick = true;
+      }
+      m_drive.Drive(units::meters_per_second_t(
+                    -safeY * AutoConstants::kMaxSpeed),
+                    units::meters_per_second_t(
+                    -safeX * AutoConstants::kMaxSpeed),
+                    units::radians_per_second_t(
+                    -safeRot * std::numbers::pi * 1.5),
+                    fieldOrientated,
+                    noJoystick);
       },
       {&m_drive}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
-    frc2::JoystickButton(&m_driverController, 2).WhenPressed(ResetHeading(&m_drive));
-    frc2::JoystickButton(&m_driverController, 12).WhenPressed(Shooter(&m_Shooter));
+    frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
+    frc2::JoystickButton(&m_driverController, 1).OnTrue(shootCmd);
 //       [this] {
 //         m_drive.ZeroHeading();
     //   },
 //       {&m_drive}));
       
+}
+
+float RobotContainer::Deadzone(float x){
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if(x >= 0.1){
+    x = x - 0.1;
+  }
+  else if(x <= -0.1){
+    x = x + 0.1;
+  }
+  return(x);
+}
+
+RobotContainer::~RobotContainer(){
+  delete shootCmd;
 }
 
 // frc2::Command* RobotContainer::GetAutonomousCommand() {
@@ -116,8 +125,8 @@ void RobotContainer::ConfigureButtonBindings() {
 //       AutoConstants::kPThetaController, 0, 0,
 //       AutoConstants::kThetaControllerConstraints};
 
-//   thetaController.EnableContinuousInput(units::radian_t(-wpi::numbers::pi),
-//                                         units::radian_t(wpi::numbers::pi));
+//   thetaController.EnableContinuousInput(units::radian_t(-std::numbers::pi),
+//                                         units::radian_t(std::numbers::pi));
 
 //   frc2::SwerveControllerCommand<4> swerveControllerCommand(
 //       exampleTrajectory, [this]() { return m_drive.GetPose(); },

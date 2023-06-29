@@ -6,13 +6,14 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <units/acceleration.h>
+#include <units/angular_acceleration.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/length.h>
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
-#include <wpi/numbers>
+#include <numbers>
 // #include "rev/CANEncoder.h"
 #include "rev/SparkMaxRelativeEncoder.h"
 
@@ -28,20 +29,20 @@
  */
 
 namespace DriveConstants {
-constexpr int kFrontLeftDriveMotorPort = 13;
-constexpr int kRearLeftDriveMotorPort = 7;
-constexpr int kFrontRightDriveMotorPort = 3;
-constexpr int kRearRightDriveMotorPort = 5;
+constexpr int kFrontLeftDriveMotorPort = 13; //13 for tshirt cannon
+constexpr int kRearLeftDriveMotorPort = 7; //7 for tshirt
+constexpr int kFrontRightDriveMotorPort = 3; //3 for tshirt
+constexpr int kRearRightDriveMotorPort = 5; // 5 for tshirt
 
-constexpr int kFrontLeftTurningMotorPort = 2;
-constexpr int kRearLeftTurningMotorPort = 8;
-constexpr int kFrontRightTurningMotorPort = 4;
-constexpr int kRearRightTurningMotorPort = 6;
+constexpr int kFrontLeftTurningMotorPort = 2; //2 for tshirt
+constexpr int kRearLeftTurningMotorPort = 8; // 8 for tshirt
+constexpr int kFrontRightTurningMotorPort = 4;//4 for tshirt
+constexpr int kRearRightTurningMotorPort = 6; //6 for tshirt
 
-constexpr int kFrontLeftTurningEncoderNumber = 9;
-constexpr int kRearLeftTurningEncoderNumber = 12;
-constexpr int kFrontRightTurningEncoderNumber = 10;
-constexpr int kRearRightTurningEncoderNumber = 11;
+constexpr int kFrontLeftTurningEncoderNumber = 9; //9 for tshirt
+constexpr int kRearLeftTurningEncoderNumber = 12; //12 for tshirt
+constexpr int kFrontRightTurningEncoderNumber = 10;//10 for tshirt
+constexpr int kRearRightTurningEncoderNumber = 11;//11 for tshirt
 
 // constexpr int Actuator = 40;
 
@@ -94,33 +95,52 @@ constexpr double kPFrontRightVel = 0.5;
 constexpr double kPRearRightVel = 0.5;
 }  // namespace DriveConstants
 
+
+// namespace ModuleConstants {
+// constexpr int kEncoderCPR = 1024;
+// constexpr double kWheelDiameterMeters = 0.15;
+// constexpr double kDriveEncoderDistancePerPulse =
+//     // Assumes the encoders are directly mounted on the wheel shafts
+//     (kWheelDiameterMeters * std::numbers::pi) /
+//     static_cast<double>(kEncoderCPR);
+
+// constexpr double kTurningEncoderDistancePerPulse =
+//     // Assumes the encoders are directly mounted on the wheel shafts
+//     (std::numbers::pi * 2) / static_cast<double>(kEncoderCPR);
+
+// constexpr double kPModuleTurningController = 1;
+// constexpr double kPModuleDriveController = 1;
+// }  // namespace ModuleConstants
+
 namespace ModuleConstants {
-constexpr double wheelOffset = 89.65;
-constexpr int kEncoderCPR = 1024;
-constexpr double kWheelDiameterMeters = 0.0762;
+constexpr double wheelOffset = 0;
+constexpr double gearRatio = 8.14; //we measured 8.91
+constexpr double kEncoderCPR = 1;
+constexpr double kWheelDiameterMeters = 0.0977; // 0.0762
 constexpr double kDriveEncoderDistancePerPulse =
     // Assumes the encoders are directly mounted on the wheel shafts
-    (kWheelDiameterMeters * wpi::numbers::pi) / static_cast<double>(kEncoderCPR);
+    (kWheelDiameterMeters * std::numbers::pi) / (kEncoderCPR) / gearRatio;
 
 constexpr double kTurningEncoderDistancePerPulse =
     // Assumes the encoders are directly mounted on the wheel shafts
-    (wpi::numbers::pi * 2) / static_cast<double>(kEncoderCPR);
+    (std::numbers::pi * 2) / (kEncoderCPR);
 
-constexpr double kPModuleTurningController = 0.5;
-constexpr double kPModuleDriveController = 8;
+constexpr double kPModuleTurningController = 0.6;//1.0; // 0.5 //0.003 // TODO: reduce this by a factor of half outside comp
+constexpr double kPModuleDriveController = 0.1; // 0.1
 // TODO Lower Value of P to 0.0001,  Change Value of p Till its the Highest Without Osilation, 
-}  // namespace ModuleConstants
+constexpr double kFFModuleDriveController = 0.259375;
+
+}
 
 namespace AutoConstants {
-using radians_per_second_squared_t =
-    units::compound_unit<units::radians,
-                         units::inverse<units::squared<units::second>>>;
+// using radians_per_second_squared_t =
+//     units::compound_unit<units::radians,
+//                          units::inverse<units::squared<units::second>>>;
 
-constexpr auto kMaxSpeed = units::meters_per_second_t(1);
-constexpr auto kMaxAcceleration = units::meters_per_second_squared_t(1);
-constexpr auto kMaxAngularSpeed = units::radians_per_second_t(3.142 * 2);
-constexpr auto kMaxAngularAcceleration =
-    units::unit_t<radians_per_second_squared_t>(3.142 * 2);
+constexpr auto kMaxSpeed = 4.2_mps;
+constexpr auto kMaxAcceleration = 0.5_mps_sq;
+constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
+constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
 constexpr double kPXController = 0.1;
 constexpr double kPYController = 0;
@@ -134,5 +154,5 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 }  // namespace AutoConstants
 
 namespace OIConstants {
-constexpr int kDriverControllerPort = 0;
+constexpr int kDriverControllerPort = 2;
 }  // namespace OIConstants
