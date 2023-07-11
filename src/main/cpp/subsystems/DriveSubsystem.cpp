@@ -78,7 +78,7 @@ DriveSubsystem::DriveSubsystem()
                  frc::Rotation2d(m_gyro.GetRotation2d()),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-                 frc::Pose2d{}} {}
+                 frc::Pose2d{}}{}
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.

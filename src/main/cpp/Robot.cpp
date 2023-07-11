@@ -8,7 +8,8 @@
 #include <frc2/command/CommandScheduler.h>
 
 void Robot::RobotInit() {
-  
+    frc::SmartDashboard::PutData("Field", &m_field);
+
     //     ShooterSolenoid1->Set(true);
     //     ShooterSolenoid2->Set(true);
     //     ShooterSolenoid3->Set(true);
@@ -27,8 +28,8 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+  // frc::SmartDashboard::PutNumber("Odometry Position", m_container.GetOdometry());
 }
-
 /**
  * This function is called once each time the robot enters Disabled mode. You
  * can use it to reset any subsystem information you want to clear when the
@@ -43,11 +44,11 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  // m_autonomousCommand = m_container.GetAutonomousCommand();
+  m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  // if (m_autonomousCommand != nullptr) {
-  //   m_autonomousCommand->Schedule();
-  // }
+  if (m_autonomousCommand != nullptr) {
+    m_autonomousCommand->Schedule();
+  }
 }
 
 void Robot::AutonomousPeriodic() {}

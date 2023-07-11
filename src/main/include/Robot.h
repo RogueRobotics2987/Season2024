@@ -6,6 +6,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
+#include <frc/smartdashboard/Field2d.h>
 
 #include "RobotContainer.h"
 
@@ -28,5 +29,6 @@ class Robot : public frc::TimedRobot {
 
   RobotContainer m_container;
 
-  
+  frc::Field2d m_field;
+
 };
