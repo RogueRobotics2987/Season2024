@@ -39,7 +39,7 @@ class RobotContainer {
   RobotContainer();
   ~RobotContainer();
   frc2::Command* GetAutonomousCommand();
-  frc::Pose2d GetOdometry();
+  // frc::Pose2d GetOdometry();
   float Deadzone(float x);
 
  private:

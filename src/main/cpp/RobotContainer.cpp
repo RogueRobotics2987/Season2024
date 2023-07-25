@@ -104,22 +104,26 @@ RobotContainer::~RobotContainer(){
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  m_drive.ResetOdometry(frc::Pose2d(1_m, 0_m, 0_deg));
+  std::cout<<"1"<< std::endl;
+  m_drive.ResetOdometry(frc::Pose2d(5_m, 5_m, 0_deg));
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
                                AutoConstants::kMaxAcceleration);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
-
+  std::cout<<"2"<< std::endl;
   // An example trajectory to follow.  All units in meters.
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       
       m_drive.GetPose(),
-      {frc::Translation2d(0_m, 0_m)},
-      frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+      {frc::Translation2d(4.5_m, 5.3_m)}, // needs to move by any amount or crashes
+      frc::Pose2d(4_m, 5_m, 0_deg),
       // Pass the config
+
       config);
+
+  std::cout<<"3"<< std::endl;
 
   frc::ProfiledPIDController<units::radians> thetaController{
       AutoConstants::kPThetaController, 0, 0,
@@ -127,6 +131,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
   thetaController.EnableContinuousInput(units::radian_t(-std::numbers::pi),
                                         units::radian_t(std::numbers::pi));
+
+  std::cout<<"4"<< std::endl;
 
   frc2::SwerveControllerCommand<4> swerveControllerCommand(
       exampleTrajectory, [this]() { return m_drive.GetPose(); },
@@ -140,12 +146,16 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
       {&m_drive});
 
+  std::cout<<"5"<< std::endl;
+
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
 
+  std::cout<<"6"<< std::endl;
+
   // no auto
   return new frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand), std::move(swerveControllerCommand),
+      std::move(swerveControllerCommand), //std::move(swerveControllerCommand), when left in crashes at the end
       frc2::InstantCommand(
           [this]() {
             m_drive.Drive(units::meters_per_second_t(0),
@@ -153,8 +163,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
                           units::radians_per_second_t(0), false, false);
           },
           {}));
+
 }
 
-frc::Pose2d RobotContainer::GetOdometry(){
-  return m_drive.GetPose();
-}
+// frc::Pose2d RobotContainer::GetOdometry(){
+//   return m_drive.GetPose();
+// }
