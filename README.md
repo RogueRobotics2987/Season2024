@@ -2,3 +2,4 @@
 A repository for all code developed by FRC Team 2987 Rogue Robotics in the 2024 season.
 
 Potato
+# Sam is so cool
