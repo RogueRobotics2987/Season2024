@@ -11,7 +11,8 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int m_MotorController, rev::SparkRe
   m_turningMotor->SetInverted(true);
   m_turningMotor->SetOpenLoopRampRate(0);
   m_driveEncoder = new rev::SparkRelativeEncoder(m_driveMotor->GetEncoder(m_EncoderType, m_counts_per_rev));
-  m_turningEncoder = new ctre::phoenix::sensors::CANCoder(TurningEncoderNumber);  
+  //TODO debug how to set the turning encoder device ID
+  m_turningEncoder = new ctre::phoenix6::hardware::CANcoder:: CANCoder(TurningEncoderNumber);  
 
 
   m_reverseDriveEncoder = driveEncoderReversed;

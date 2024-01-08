@@ -1,6 +1,6 @@
 #pragma once
 #include "Constants.h"
-#include "ctre/Phoenix.h"
+#include "ctre/phoenix6/CANcoder.hpp"
 #include "rev/CANSparkMax.h"
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -59,7 +59,8 @@ SwerveModuleSubsystem(int m_MotorController, rev::SparkRelativeEncoder::Type m_E
   int m_counts_per_rev;
 
 
-  ctre::phoenix::sensors::CANCoder* m_turningEncoder;
+//   ctre::phoenix::sensors::CANCoder* m_turningEncoder;
+  ctre::phoenix6::hardware::CANcoder m_turningEncoder;
 
 
   bool m_reverseDriveEncoder;

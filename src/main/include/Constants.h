@@ -1,5 +1,5 @@
 #pragma once
-#include "rev/SparkMaxRelativeEncoder.h"
+#include "rev/SparkRelativeEncoder.h"
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
