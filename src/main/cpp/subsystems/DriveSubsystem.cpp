@@ -130,7 +130,7 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
 }
 
 
-units::degree_t DriveSubsystem::GetHeading() const {
+units::degree_t DriveSubsystem::GetHeading() {
   return m_gyro.GetRotation2d().Degrees();
 }
 
