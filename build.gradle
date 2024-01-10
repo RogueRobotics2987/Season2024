@@ -49,6 +49,10 @@ wpi.sim.addDriverstation()
 model {
     components {
         frcUserProgram(NativeExecutableSpec) {
+            binaries.all {
+                if (!(toolChain instanceof VisualCpp))
+                    cppCompiler.args << '-Wno-deprecated-declarations'
+            }
             targetPlatform wpi.platforms.roborio
             if (includeDesktopSupport) {
                 targetPlatform wpi.platforms.desktop
