@@ -29,25 +29,74 @@ RobotContainer::RobotContainer() {
 
   // Configure the button bindings
   ConfigureButtonBindings();
+  m_drive.ZeroHeading();
 
   // Set up default drive command
-  // The left stick controls translation of the robot.
-  // Turning is controlled by the X axis of the right stick.
+  m_Actuator.SetDefaultCommand(frc2::RunCommand(
+  [this]{
+    m_driverController.GetPOV();
+    frc::SmartDashboard::PutNumber("My POV Value is ", m_driverController.GetPOV());
+  if (m_driverController.GetPOV()==0){
+    m_Actuator.Extend();
+  } else if (m_driverController.GetPOV()==180){
+    m_Actuator.Retract();
+  } else if (m_driverController.GetPOV()==-1){
+    m_Actuator.Neutral();
+  }
+  },
+  {&m_Actuator}));
+  m_compressor.SetDefaultCommand(BeginCompressor(m_compressor));
+  m_Shooter.SetDefaultCommand(ShooterSafe(&m_Shooter));
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_drive.Drive(
-            // Multiply by max speed to map the joystick unitless inputs to
-            // actual units. This will map the [-1, 1] to [max speed backwards,
-            // max speed forwards], converting them to actual units.
-            m_driverController.GetLeftY() * AutoConstants::kMaxSpeed,
-            m_driverController.GetLeftX() * AutoConstants::kMaxSpeed,
-            m_driverController.GetRightX() * AutoConstants::kMaxAngularSpeed,
-            false);
+      bool noJoystick = false;
+      double safeX = Deadzone(m_driverController.GetLeftX());
+      double safeY =  Deadzone(m_driverController.GetLeftY());
+      double safeRot = Deadzone(m_driverController.GetRightX());
+      bool fieldOrientated;
+      if (m_driverController.GetRawAxis(3)> 0.15){
+        fieldOrientated = false;
+      }
+      if (m_driverController.GetRawAxis(3)< 0.15){
+        fieldOrientated = true;
+      }
+      if((safeX == 0) && (safeY == 0) && (safeRot == 0)) {
+        noJoystick = true;
+      }
+      m_drive.Drive(units::meters_per_second_t(
+                    -safeY * AutoConstants::kMaxSpeed),
+                    units::meters_per_second_t(
+                    -safeX * AutoConstants::kMaxSpeed),
+                    units::radians_per_second_t(
+                    -safeRot * std::numbers::pi * 1.5),
+                    fieldOrientated,
+                    noJoystick);
       },
       {&m_drive}));
 }
 
-void RobotContainer::ConfigureButtonBindings() {}
+void RobotContainer::ConfigureButtonBindings() {
+    frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
+    frc2::JoystickButton(&m_driverController, 1).OnTrue(shootCmd);
+//       [this] {
+//         m_drive.ZeroHeading();
+    //   },
+//       {&m_drive}));
+      
+}
+
+float RobotContainer::Deadzone(float x){
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if(x >= 0.1){
+    x = x - 0.1;
+  }
+  else if(x <= -0.1){
+    x = x + 0.1;
+  }
+  return(x);
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // Set up config for trajectory
