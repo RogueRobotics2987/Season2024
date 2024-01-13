@@ -79,6 +79,20 @@ float RobotContainer::Deadzone(float x){
 
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+  m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg});
+  frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {2_m, 0_m, 0_deg}});
+  
+  return frc2::cmd::Sequence(
+      std::move(GoToAbsolutePoint(waypointB)),
+      frc2::InstantCommand(
+          [this]() { m_drive.Drive(0.2_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
+          frc2::WaitCommand(2.0_s).ToPtr(),
+      std::move(GoToAbsolutePoint(waypointB)
+    ));
+}
+
+frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
+
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
                                AutoConstants::kMaxAcceleration);
@@ -89,8 +103,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       {frc::Pose2d{m_drive.GetPose()},
-      m_drive.GetPose().TransformBy(frc::Transform2d{ 1_m, 0_m, 0_deg}),
-      frc::Pose2d{1_m, 0_m, 0_deg}},
+      waypoint},
       // Pass the config
       config);
 
@@ -114,18 +127,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
       {&m_drive})
       .ToPtr();
-
-  // Reset odometry to the starting pose of the trajectory.
-  m_drive.ResetOdometry(exampleTrajectory.InitialPose());
-
-  // no auto
-  return frc2::cmd::Sequence(
-      std::move(swerveControllerCommand),
-      frc2::InstantCommand(
-          [this]() { m_drive.Drive(0.2_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
-          frc2::WaitCommand(2.0_s).ToPtr(),
-      std::move(swerveControllerCommand)
-          );
+      
+    return swerveControllerCommand;
 }
 
+//m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), translation})
 

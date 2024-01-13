@@ -33,6 +33,8 @@ class RobotContainer {
  public:
   RobotContainer();
   frc2::CommandPtr GetAutonomousCommand();
+  frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint);
+  frc2::CommandPtr GoToRelativePoint(frc::Pose2d translation);
 
 
   float Deadzone(float x);
