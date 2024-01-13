@@ -80,14 +80,16 @@ float RobotContainer::Deadzone(float x){
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg});
-  frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {2_m, 0_m, 0_deg}});
+  frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {1_m, 0_m, 0_deg}});
   
+
+
   return frc2::cmd::Sequence(
       std::move(GoToAbsolutePoint(waypointB)),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(0.2_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
+          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
           frc2::WaitCommand(2.0_s).ToPtr(),
-      std::move(GoToAbsolutePoint(waypointB)
+      std::move(GoToAbsolutePoint({0.5_m, 0_m, 0_deg})
     ));
 }
 
@@ -106,6 +108,13 @@ frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
       waypoint},
       // Pass the config
       config);
+
+  frc::SmartDashboard::PutNumber("WaypointX", (double)waypoint.X());
+  frc::SmartDashboard::PutNumber("WaypointY", (double)waypoint.Y());
+  frc::SmartDashboard::PutNumber("WaypointRot", (double)waypoint.Rotation().Degrees());
+  frc::SmartDashboard::PutNumber("RobotX", (double)m_drive.GetPose().X());
+  frc::SmartDashboard::PutNumber("RobotY", (double)m_drive.GetPose().Y());
+  frc::SmartDashboard::PutNumber("RobotRot", (double)m_drive.GetPose().Rotation().Degrees());
 
   frc::ProfiledPIDController<units::radians> thetaController {
     AutoConstants::kPThetaController, 0, 0, AutoConstants::kThetaControllerConstraints
