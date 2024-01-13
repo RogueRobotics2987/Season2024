@@ -78,7 +78,7 @@ float RobotContainer::Deadzone(float x){
 }
 
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
                                AutoConstants::kMaxAcceleration);
@@ -88,9 +88,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example trajectory to follow.  All units in meters.
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
-      frc::Pose2d{0_m, 0_m, 0_deg},
-      {frc::Translation2d{0.3_m, 0.5_m} , frc::Translation2d{0.6_m, -0.5_m}},
-      frc::Pose2d{1_m, 0_m, 0_deg},
+      {frc::Pose2d{m_drive.GetPose()},
+      m_drive.GetPose().TransformBy(frc::Transform2d{ 1_m, 0_m, 0_deg}),
+      frc::Pose2d{1_m, 0_m, 0_deg}},
       // Pass the config
       config);
 
@@ -101,7 +101,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
 
-  frc2::SwerveControllerCommand<4> swerveControllerCommand(
+  frc2::CommandPtr swerveControllerCommand =
+  frc2::SwerveControllerCommand<4> (
       exampleTrajectory, [this]() { return m_drive.GetPose(); },
 
       m_drive.kDriveKinematics,
@@ -111,14 +112,20 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
 
-      {&m_drive});
+      {&m_drive})
+      .ToPtr();
 
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
 
   // no auto
-  return new frc2::SequentialCommandGroup(
+  return frc2::cmd::Sequence(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}));
+          [this]() { m_drive.Drive(0.2_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
+          frc2::WaitCommand(2.0_s).ToPtr(),
+      std::move(swerveControllerCommand)
+          );
 }
+
+

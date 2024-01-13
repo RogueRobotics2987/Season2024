@@ -6,12 +6,13 @@
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/SwerveControllerCommand.h>
-#include <frc2/command/Command.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/WaitCommand.h>
 #include <iostream>
 
 #include "subsystems/LimelightPose.h"
@@ -31,7 +32,7 @@
 class RobotContainer {
  public:
   RobotContainer();
-  frc2::Command* GetAutonomousCommand();
+  frc2::CommandPtr GetAutonomousCommand();
 
 
   float Deadzone(float x);
