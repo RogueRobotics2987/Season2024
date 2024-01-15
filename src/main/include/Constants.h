@@ -109,8 +109,8 @@ constexpr double kFFModuleDriveController = 0.259375;
 
 
 namespace AutoConstants {
-    constexpr auto kMaxSpeed = 4.2_mps;
-    constexpr auto kMaxAcceleration = 0.5_mps_sq;
+    constexpr auto kMaxSpeed = 7.2_mps;
+    constexpr auto kMaxAcceleration = 2_mps_sq;
     constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
     constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 

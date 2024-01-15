@@ -80,17 +80,19 @@ float RobotContainer::Deadzone(float x){
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg});
-  frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {1_m, 0_m, 0_deg}});
-  
+  // frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {1_m, 0_m, 0_deg}});
 
+  // frc::Pose2d waypointC = {-0.5_m, 0_m, 0_deg};
 
   return frc2::cmd::Sequence(
-      std::move(GoToAbsolutePoint(waypointB)),
+      std::move(GoToAbsolutePoint({2_m, 0_m, 0_deg})),
+      // frc2::InstantCommand(
+      //     [this]() { m_drive.Drive(0.5_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
+      //     frc2::WaitCommand(2.0_s).ToPtr(),
+      // std::move(GoToAbsolutePoint({1_m, 0_m, 0_deg})),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
-          frc2::WaitCommand(2.0_s).ToPtr(),
-      std::move(GoToAbsolutePoint({0.5_m, 0_m, 0_deg})
-    ));
+          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr()
+    );
 }
 
 frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
@@ -100,21 +102,61 @@ frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
                                AutoConstants::kMaxAcceleration);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
+  config.SetReversed(true);
 
-  // An example trajectory to follow.  All units in meters.
-  auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
-      // Start at the origin facing the +X direction
-      {frc::Pose2d{m_drive.GetPose()},
-      waypoint},
-      // Pass the config
-      config);
+  // // An example trajectory to follow.  All units in meters.
+  // auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+  //     // Start at the origin facing the +X direction
+  //     frc::Pose2d{m_drive.GetPose()},
+  //     {frc::Translation2d{2_m, 0_m}, frc::Translation2d{1_m, 0_m}},
+  //     waypoint,
+  //     // Pass the config
+  //     config);
 
-  frc::SmartDashboard::PutNumber("WaypointX", (double)waypoint.X());
-  frc::SmartDashboard::PutNumber("WaypointY", (double)waypoint.Y());
-  frc::SmartDashboard::PutNumber("WaypointRot", (double)waypoint.Rotation().Degrees());
-  frc::SmartDashboard::PutNumber("RobotX", (double)m_drive.GetPose().X());
-  frc::SmartDashboard::PutNumber("RobotY", (double)m_drive.GetPose().Y());
-  frc::SmartDashboard::PutNumber("RobotRot", (double)m_drive.GetPose().Rotation().Degrees());
+
+  // auto trajectoryOne = frc::TrajectoryGenerator::GenerateTrajectory(
+  //  frc::Pose2d(0_m, 0_m, 0_deg),
+  //  {frc::Translation2d(0.5_m, 1_m), frc::Translation2d(-0.5_m, 2_m)},
+  //  frc::Pose2d(0_m, 3_m, 0_deg), config);
+
+  // auto trajectoryTwo = frc::TrajectoryGenerator::GenerateTrajectory(
+  //  frc::Pose2d(0_m, 3_m, 0_deg),
+  //  {frc::Translation2d(0.5_m, 4_m), frc::Translation2d(-0.5_m, 5_m)},
+  //  frc::Pose2d(0_m, 6_m, 0_deg), config);
+
+  // auto trajectoryOne = frc::TrajectoryGenerator::GenerateTrajectory(
+  //  frc::Pose2d(0_m, 0_m, 0_deg),
+  //  {frc::Translation2d(0.5_m, 1_m), frc::Translation2d(-0.5_m, 2_m)},
+  //  frc::Pose2d(0_m, 3_m, 0_deg), config);
+
+  // auto trajectoryTwo = frc::TrajectoryGenerator::GenerateTrajectory(
+  //  frc::Pose2d(0_m, 3_m, 0_deg),
+  //  {frc::Translation2d(0.5_m, 4_m), frc::Translation2d(-0.5_m, 5_m)},
+  //  frc::Pose2d(0_m, 6_m, 0_deg), config);
+
+  // concatTraj = trajectoryOne + trajectoryTwo;
+
+  auto Backwards = frc::TrajectoryGenerator::GenerateTrajectory(
+    frc::Pose2d(0_m, 0_m, 0_deg),
+    {frc::Translation2d(2_m, 0_m), frc::Translation2d(1_m, 0.01_m)},
+    frc::Pose2d(0_m, 0_m, 0_deg), config
+  );
+
+  auto Forwards = frc::TrajectoryGenerator::GenerateTrajectory(
+    frc::Pose2d(0_m, 0_m, 0_deg),
+    {frc::Translation2d(-2_m, 0_m), frc::Translation2d(-1_m, 0.01_m)},
+    frc::Pose2d(0_m, 0_m, 0_deg), config
+  );
+
+  auto concatTraj = Backwards + Forwards;
+
+
+  // frc::SmartDashboard::PutNumber("WaypointX", (double)waypoint.X());
+  // frc::SmartDashboard::PutNumber("WaypointY", (double)waypoint.Y());
+  // frc::SmartDashboard::PutNumber("WaypointRot", (double)waypoint.Rotation().Degrees());
+  // frc::SmartDashboard::PutNumber("RobotX", (double)m_drive.GetPose().X());
+  // frc::SmartDashboard::PutNumber("RobotY", (double)m_drive.GetPose().Y());
+  // frc::SmartDashboard::PutNumber("RobotRot", (double)m_drive.GetPose().Rotation().Degrees());
 
   frc::ProfiledPIDController<units::radians> thetaController {
     AutoConstants::kPThetaController, 0, 0, AutoConstants::kThetaControllerConstraints
@@ -125,7 +167,7 @@ frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
 
   frc2::CommandPtr swerveControllerCommand =
   frc2::SwerveControllerCommand<4> (
-      exampleTrajectory, [this]() { return m_drive.GetPose(); },
+      concatTraj, [this]() { return m_drive.GetPose(); },
 
       m_drive.kDriveKinematics,
 
