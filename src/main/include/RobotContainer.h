@@ -37,7 +37,7 @@ class RobotContainer {
   frc2::CommandPtr GoToRelativePoint(frc::Pose2d translation);
 
 
-  float Deadzone(float x);
+  float DeadzoneCubed(float x);
 
 
  private:

@@ -14,12 +14,12 @@ RobotContainer::RobotContainer() {
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
 
-m_drive.SetDefaultCommand(frc2::RunCommand(
+  m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
-      double safeX = Deadzone(m_driverController.GetLeftX());
-      double safeY =  Deadzone(m_driverController.GetLeftY());
-      double safeRot = Deadzone(m_driverController.GetRightX());
+      double safeX = DeadzoneCubed(m_driverController.GetLeftX());
+      double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
+      double safeRot = DeadzoneCubed(m_driverController.GetRightX());
 
 
       bool fieldOrientated;
@@ -46,7 +46,7 @@ m_drive.SetDefaultCommand(frc2::RunCommand(
                     noJoystickInput);
       },{&m_drive}));
 
-m_limePose.SetDefaultCommand(LimeLightCmd(m_limePose));
+  m_limePose.SetDefaultCommand(LimeLightCmd(m_limePose));
 
 }
 
@@ -66,7 +66,9 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 
-float RobotContainer::Deadzone(float x){
+float RobotContainer::DeadzoneCubed(float x){
+  x = x*x*x;
+
   if ((x < 0.1) &&  (x > -0.1)){
     x=0;
   } else if (x >= 0.1){
@@ -74,6 +76,7 @@ float RobotContainer::Deadzone(float x){
   } else if (x <= -0.1){
     x = x + 0.1;
   }
+
   return(x);
 }
 
