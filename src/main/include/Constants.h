@@ -87,7 +87,7 @@ constexpr double kPRearRightVel = 0.5;
 
 namespace ModuleConstants {
 constexpr double wheelOffset = 0;
-constexpr double gearRatio = 8.14;
+constexpr double gearRatio = 6.75; //L2 of gear ratio
 constexpr double kEncoderCPR = 1;
 constexpr double kWheelDiameterMeters = 0.0977;
 constexpr double kDriveEncoderDistancePerPulse =
