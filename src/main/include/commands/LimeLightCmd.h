@@ -7,6 +7,9 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <subsystems/LimelightPose.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "networktables/NetworkTableInstance.inc"
+
 
 /**
  * An example command.
