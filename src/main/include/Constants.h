@@ -4,6 +4,7 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <numbers>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
@@ -109,7 +110,7 @@ constexpr double kFFModuleDriveController = 0.259375;
 
 
 namespace AutoConstants {
-    constexpr auto kMaxSpeed = 7.2_mps;
+    constexpr auto kMaxSpeed = 6.7_mps;
     constexpr auto kMaxAcceleration = 2_mps_sq;
     constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
     constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
@@ -119,10 +120,13 @@ namespace AutoConstants {
     constexpr double kPThetaController = 0;
 
     extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
-}  
+
+} 
+
+
 
 
 namespace DebugConstants {
-    constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debug = true; //change this to true to debug and put most things to the smartdashboard
 }  
 
