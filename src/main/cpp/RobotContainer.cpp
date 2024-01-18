@@ -6,7 +6,7 @@ using namespace DriveConstants;
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
-      std::cout << "cout in robot container" << std::endl;
+  std::cout << "cout in robot container" << std::endl;
 
 
   // Configure the button bindings
@@ -15,7 +15,7 @@ RobotContainer::RobotContainer() {
 
 
   m_drive.SetDefaultCommand(frc2::RunCommand(
-      [this] {
+    [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
       double safeX = DeadzoneCubed(m_driverController.GetLeftX());
       double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
@@ -44,7 +44,7 @@ RobotContainer::RobotContainer() {
                     -safeRot * std::numbers::pi * 1.5),
                     fieldOrientated,
                     noJoystickInput);
-      },{&m_drive}));
+    },{&m_drive}));
 
   m_limePose.SetDefaultCommand(LimeLightCmd(m_limePose));
 
@@ -67,10 +67,10 @@ void RobotContainer::ConfigureButtonBindings() {
 
 
 float RobotContainer::DeadzoneCubed(float x){
-  x = x*x*x;
+  x = x * x * x;  // exponetial curve, slow acceleration at begining
 
-  if ((x < 0.1) &&  (x > -0.1)){
-    x=0;
+  if ((x < 0.1) && (x > -0.1)){
+    x = 0;
   } else if (x >= 0.1){
     x = x - 0.1;
   } else if (x <= -0.1){
