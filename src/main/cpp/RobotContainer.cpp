@@ -80,17 +80,17 @@ float RobotContainer::Deadzone(float x){
 
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 180_deg});
+  m_drive.ResetOdometry(frc::Pose2d{1_m, 1_m, 180_deg});
   // frc::Pose2d waypointB = m_drive.GetPose().TransformBy(frc::Transform2d{m_drive.GetPose(), {1_m, 0_m, 0_deg}});
 
   // frc::Pose2d waypointC = {-0.5_m, 0_m, 0_deg};
 
   return frc2::cmd::Sequence(
-      std::move(GoToAbsolutePoint({2_m, 0.01_m, 0_deg}, false)),
+      std::move(GoToAbsolutePoint({2_m, 0.01_m, 0_deg}, false))
       // frc2::InstantCommand(
       //     [this]() { m_drive.Drive(0.5_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
       //     frc2::WaitCommand(2.0_s).ToPtr(),
-      std::move(GoToAbsolutePoint({0_m , 0_m , 180_deg}, true))
+      // std::move(GoToAbsolutePoint({0_m , 0_m , 180_deg}, false))
       // frc2::InstantCommand(
           // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr()
     );  
@@ -107,12 +107,27 @@ frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint, bool re
 
   // An example trajectory to follow.  All units in meters.
 
+  // auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+  //     // Start at the origin facing the +X direction
+  //     {frc::Pose2d{m_drive.GetDrivePosePtr()->X(), 0_m, waypoint.Rotation()},
+  //     waypoint},
+  //     // Pass the config
+  //     config);
+
+  std::vector<frc::Pose2d> poses{
+    frc::Pose2d(1.0_m, 1.0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2.0_m, 1.0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(3.0_m, 2.0_m, frc::Rotation2d(90_deg))
+};
+
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
-      {frc::Pose2d{m_drive.GetDrivePosePtr()->X(), 0_m, waypoint.Rotation()},
-      waypoint},
+      {poses},
       // Pass the config
       config);
+
+
+
 
 if(reversed == true){
       for(int i = 0; i<static_cast<int>(exampleTrajectory.States().size()); i++){

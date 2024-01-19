@@ -15,6 +15,7 @@
 #include <frc2/command/WaitCommand.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <iostream>
+#include <pathplanner/lib/path/PathPlannerPath.h> 
 
 #include "subsystems/LimelightPose.h"
 #include "commands/LimeLightCmd.h"
@@ -22,6 +23,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
 
+using namespace pathplanner;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
