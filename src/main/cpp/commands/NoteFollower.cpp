@@ -34,7 +34,7 @@ void NoteFollower::Execute() {
     if(ty > -15 && ty < -8){
       speed = units::velocity::meters_per_second_t(-0.5);
     }
-    else if(ty <= -15){
+    else if(ty <= -17){
       speed = units::velocity::meters_per_second_t(0.5);
     }
     else{
