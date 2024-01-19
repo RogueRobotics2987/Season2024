@@ -20,6 +20,7 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
+#include "commands/NoteFollower.h"
 
 
 /**

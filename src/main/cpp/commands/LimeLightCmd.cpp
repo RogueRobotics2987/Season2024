@@ -14,8 +14,8 @@ LimeLightCmd::LimeLightCmd(LimelightPose &limePose) {
 
 // Called when the command is initially scheduled.
 void LimeLightCmd::Initialize() {
-nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("camMode",0);
-nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("pipeline",0);
+nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("camMode",0);
+nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
 
 
 }
@@ -26,8 +26,9 @@ void LimeLightCmd::Execute() {
     // std::cout << botPose[0] << std::endl;
     // std::cout << botPose[1] << std::endl;
     // std::cout << botPose[2] << std::endl;
-    double tx = nt::NetworkTableInstance::GetDefault().GetTable("limeb")->GetNumber("tx",0.0);
-    frc::SmartDashboard::PutNumber("tx: ", tx);
+    double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+    frc::SmartDashboard::PutNumber("Note_tx: ", tx);
+    std::cout<<"This is LimeLightCmd Running Execute!"<<std::endl;
 
 }
 

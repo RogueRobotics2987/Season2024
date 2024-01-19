@@ -123,6 +123,6 @@ namespace AutoConstants {
 
 
 namespace DebugConstants {
-    constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debug = true; //change this to true to debug and put most things to the smartdashboard
 }  
 
