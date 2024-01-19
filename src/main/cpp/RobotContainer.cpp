@@ -86,33 +86,39 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // frc::Pose2d waypointC = {-0.5_m, 0_m, 0_deg};
 
   return frc2::cmd::Sequence(
-      std::move(GoToAbsolutePoint({3_m, 0.01_m, 180_deg})),
-      frc2::InstantCommand(
-          [this]() { m_drive.Drive(0.0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
-          frc2::WaitCommand(2.0_s).ToPtr(),
-      std::move(GoToAbsolutePoint({-2_m, 0.01_m, 180_deg})), 
-      frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr()
-    );
+      std::move(GoToAbsolutePoint({2_m, 0.01_m, 0_deg}, false)),
+      // frc2::InstantCommand(
+      //     [this]() { m_drive.Drive(0.5_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(),
+      //     frc2::WaitCommand(2.0_s).ToPtr(),
+      std::move(GoToAbsolutePoint({0_m , 0_m , 180_deg}, true))
+      // frc2::InstantCommand(
+          // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr()
+    );  
 }
 
-frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
+frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint, bool reversed){
 
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
                                AutoConstants::kMaxAcceleration);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
-  config.SetReversed(true);
+  config.SetReversed(reversed);
 
   // An example trajectory to follow.  All units in meters.
+
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
-      {frc::Pose2d{m_drive.GetPose()},
+      {frc::Pose2d{m_drive.GetDrivePosePtr()->X(), 0_m, waypoint.Rotation()},
       waypoint},
       // Pass the config
       config);
 
+if(reversed == true){
+      for(int i = 0; i<static_cast<int>(exampleTrajectory.States().size()); i++){
+        std::cout << (double)exampleTrajectory.States()[i].pose.X() << std::endl;
+      }
+}
   // auto FrontBack = frc::TrajectoryGenerator::GenerateTrajectory(
   //   frc::Pose2d(0_m, 0_m, 0_deg),
   //   {frc::Translation2d(2_m, 0_m), frc::Translation2d(1_m, 0.01_m), frc::Translation2d(0_m, 0_m), frc::Translation2d(-2_m, 0_m), frc::Translation2d(-1_m, 0.01_m)},
@@ -152,6 +158,9 @@ frc2::CommandPtr RobotContainer::GoToAbsolutePoint(frc::Pose2d waypoint){
 
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
+
+  frc::SmartDashboard::PutNumber("AutoX", (double)m_drive.GetPose().X());
+  frc::SmartDashboard::PutNumber("AutoY", (double)m_drive.GetPose().Y());
 
   frc2::CommandPtr swerveControllerCommand =
   frc2::SwerveControllerCommand<4> (

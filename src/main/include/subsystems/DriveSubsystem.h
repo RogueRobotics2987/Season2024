@@ -11,6 +11,7 @@
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
   DriveSubsystem();
+  ~DriveSubsystem();
  
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -116,6 +117,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
       frc::Translation2d{-kWheelBase / 2, kTrackWidth / 2},
       frc::Translation2d{-kWheelBase / 2, -kTrackWidth / 2}};
 
+  frc::Pose2d* GetDrivePosePtr();
+
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -136,6 +139,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
   bool driveSlow = false;
   bool WheelsStraight = false;
 
+  frc::Pose2d* DrivePose;
+  frc::Pose2d tempPose;
 
   frc::Field2d m_field;
 

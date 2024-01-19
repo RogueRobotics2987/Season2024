@@ -34,8 +34,7 @@ class RobotContainer {
  public:
   RobotContainer();
   frc2::CommandPtr GetAutonomousCommand();
-  frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint);
-  frc2::CommandPtr GoToRelativePoint(frc::Pose2d translation);
+  frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint, bool reversed);
 
 
   float Deadzone(float x);
@@ -44,7 +43,6 @@ class RobotContainer {
  private:
   //replace with frc::Joystick if using a joystick instead of an xbox controller
   frc::XboxController m_driverController{0};
-
 
   // The robot's subsystems are defined here...
   DriveSubsystem m_drive;

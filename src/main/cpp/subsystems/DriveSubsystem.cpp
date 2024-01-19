@@ -59,6 +59,9 @@ void DriveSubsystem::Periodic() {
   frc::SmartDashboard::PutNumber("TeleRobotX", (double)GetPose().X());
   frc::SmartDashboard::PutNumber("TeleRobotY", (double)GetPose().Y());
   frc::SmartDashboard::PutNumber("TeleRobotRot", (double)GetPose().Rotation().Degrees());
+  tempPose = GetPose();
+  DrivePose = &tempPose;
+  frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
 }
 
 
@@ -177,3 +180,13 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       pose);
 }
+
+frc::Pose2d* DriveSubsystem::GetDrivePosePtr(){
+  return DrivePose;
+}
+
+DriveSubsystem::~DriveSubsystem(){
+  delete DrivePose;
+}
+
+
