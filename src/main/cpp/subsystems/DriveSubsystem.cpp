@@ -139,13 +139,6 @@ void DriveSubsystem::Drive(
 
   auto [fl, fr, bl, br] = states;
    
-  if (DebugConstants::debug == true)
-  {
-    frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
-    frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
-    frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
-    frc::SmartDashboard::PutNumber("Br Desired angle",(float)br.angle.Degrees());
-  }
 
   if (noJoystickInput == true)
   {
@@ -175,8 +168,19 @@ void DriveSubsystem::Drive(
     br.angle = (units::angle::degree_t)(0);
   }
 
+   if (DebugConstants::debug == true){
+    frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
+    frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
+    frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
+    frc::SmartDashboard::PutNumber("Br Desired angle",(float)br.angle.Degrees());
+    frc::SmartDashboard::PutNumber("Fl Desired speed",(float)fl.speed);
+    frc::SmartDashboard::PutNumber("Fr Desired speed",(float)fr.speed);
+    frc::SmartDashboard::PutNumber("Bl Desired speed",(float)bl.speed);
+    frc::SmartDashboard::PutNumber("Br Desired speed",(float)br.speed);
+  }
+
   m_frontLeft.SetDesiredState(fl);
-  m_frontRight.SetDesiredState(fr);
+  m_frontRight.SetDesiredState(fr); 
   m_rearLeft.SetDesiredState(bl);
   m_rearRight.SetDesiredState(br);
 }
