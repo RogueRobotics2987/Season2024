@@ -6,20 +6,24 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/LimelightPose.h>
+#include "networktables/NetworkTableInstance.inc"
+#include "subsystems/DriveSubsystem.h"
+#include "subsystems/LimelightPose.h"
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 
 /**
  * An example command.
  *
- * <p>Note that this extends CommandHelper, rather extending CommandBase
+ * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class LimeLightCmd
-    : public frc2::CommandHelper<frc2::Command, LimeLightCmd> {
+class AprilTagFollower
+    : public frc2::CommandHelper<frc2::Command, AprilTagFollower> {
  public:
-  LimeLightCmd();
-  LimeLightCmd(LimelightPose &limePose);
+  AprilTagFollower(); 
+  AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
   void Initialize() override;
 
@@ -29,7 +33,10 @@ class LimeLightCmd
 
   bool IsFinished() override;
 
+  double kp = 0.09927;
 
   private:
   LimelightPose* m_limePose = nullptr;
+  DriveSubsystem* m_drivetrain = nullptr;
+  frc::XboxController* m_Xbox = nullptr;
 };

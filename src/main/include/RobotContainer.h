@@ -18,10 +18,11 @@
 #include <pathplanner/lib/path/PathPlannerPath.h> 
 
 #include "subsystems/LimelightPose.h"
-#include "commands/LimeLightCmd.h"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
+#include "commands/NoteFollower.h"
+#include "commands/AprilTagFollower.h"
 
 using namespace pathplanner;
 
