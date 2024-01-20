@@ -21,6 +21,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
 #include "commands/NoteFollower.h"
+#include "commands/AprilTagFollower.h"
 
 
 /**

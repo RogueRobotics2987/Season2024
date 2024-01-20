@@ -46,7 +46,7 @@ m_drive.SetDefaultCommand(frc2::RunCommand(
                     noJoystickInput);
       },{&m_drive}));
 
-m_limePose.SetDefaultCommand(NoteFollower(m_limePose, m_drive));
+m_limePose.SetDefaultCommand(AprilTagFollower(m_limePose, m_drive));
 
 }
 
