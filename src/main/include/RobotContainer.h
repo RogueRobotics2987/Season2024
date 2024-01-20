@@ -16,6 +16,14 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <iostream>
 #include <pathplanner/lib/path/PathPlannerPath.h> 
+#include <pathplanner/lib/commands/FollowPathHolonomic.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/util/PIDConstants.h>
+#include <pathplanner/lib/util/ReplanningConfig.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/DriverStation.h>
 
 #include "subsystems/LimelightPose.h"
 #include "commands/LimeLightCmd.h"
@@ -36,7 +44,7 @@ class RobotContainer {
  public:
   RobotContainer();
   frc2::CommandPtr GetAutonomousCommand();
-  frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint, bool reversed);
+  // frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint, bool reversed);
 
 
   float Deadzone(float x);

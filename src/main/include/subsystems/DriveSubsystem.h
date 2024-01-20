@@ -9,11 +9,15 @@
 
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/commands/FollowPathHolonomic.h>
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/DriverStation.h>
+#include <pathplanner/lib/commands/FollowPathCommand.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <pathplanner/lib/util/PIDConstants.h>
 
 using namespace pathplanner;
 
@@ -129,6 +133,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   frc::Pose2d* GetDrivePosePtr();
   frc::ChassisSpeeds getRobotRelativeSpeeds();
+  frc2::CommandPtr FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path);
+
 
 
  private:
