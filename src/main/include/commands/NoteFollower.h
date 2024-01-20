@@ -9,6 +9,8 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightPose.h"
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 
 
 /**
@@ -22,7 +24,7 @@ class NoteFollower
     : public frc2::CommandHelper<frc2::Command, NoteFollower> {
  public:
   NoteFollower();
-  NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain);
+  NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
   void Initialize() override;
@@ -33,7 +35,12 @@ class NoteFollower
 
   bool IsFinished() override;
 
+  units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+  units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
+  double kp = 0.09927;
+
   private:
   LimelightPose* m_limePose = nullptr;
   DriveSubsystem* m_drivetrain = nullptr;
+  frc::XboxController* m_Xbox = nullptr;
 };

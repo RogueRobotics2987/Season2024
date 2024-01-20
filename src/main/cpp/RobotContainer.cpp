@@ -46,8 +46,6 @@ m_drive.SetDefaultCommand(frc2::RunCommand(
                     noJoystickInput);
       },{&m_drive}));
 
-m_limePose.SetDefaultCommand(AprilTagFollower(m_limePose, m_drive));
-
 }
 
 
@@ -63,6 +61,13 @@ void RobotContainer::ConfigureButtonBindings() {
 
   //Robot slides left (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
+
+  //Limelight Note Detection
+  frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limePose, m_drive, m_driverController).ToPtr());
+
+  //Limelight April Tag Detection
+  frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limePose, m_drive, m_driverController).ToPtr());
+
 }
 
 

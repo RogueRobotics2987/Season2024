@@ -9,6 +9,8 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightPose.h"
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 
 /**
  * An example command.
@@ -21,7 +23,7 @@ class AprilTagFollower
     : public frc2::CommandHelper<frc2::Command, AprilTagFollower> {
  public:
   AprilTagFollower(); 
-  AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain);
+  AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
   void Initialize() override;
 
@@ -31,7 +33,10 @@ class AprilTagFollower
 
   bool IsFinished() override;
 
+  double kp = 0.09927;
+
   private:
   LimelightPose* m_limePose = nullptr;
   DriveSubsystem* m_drivetrain = nullptr;
+  frc::XboxController* m_Xbox = nullptr;
 };
