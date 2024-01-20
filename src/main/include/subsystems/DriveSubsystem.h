@@ -7,6 +7,16 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/util/PIDConstants.h>
+#include <pathplanner/lib/util/ReplanningConfig.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/DriverStation.h>
+
+using namespace pathplanner;
+
 
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
@@ -118,6 +128,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
       frc::Translation2d{-kWheelBase / 2, -kTrackWidth / 2}};
 
   frc::Pose2d* GetDrivePosePtr();
+  frc::ChassisSpeeds getRobotRelativeSpeeds();
 
 
  private:

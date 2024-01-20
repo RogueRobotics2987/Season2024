@@ -46,6 +46,32 @@ DriveSubsystem::DriveSubsystem()
                  frc::Pose2d{}} 
                  {
                   m_gyro.SetAngleAdjustment(180);
+
+      AutoBuilder::configureHolonomic(
+        [this](){ return GetPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ ResetOdometry(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            PIDConstants(AutoConstants::kPXController, AutoConstants::kPYController, 0.0), // Translation PID constants
+            AutoConstants::kPThetaController, // Rotation PID constants
+            AutoConstants::kMaxSpeed, // Max module speed, in m/s
+            0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+            ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        []() {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
                  }
                  
 
@@ -183,6 +209,13 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 
 frc::Pose2d* DriveSubsystem::GetDrivePosePtr(){
   return DrivePose;
+}
+
+frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
+  auto [forward, sideways, angular] = kDriveKinematics.ToChassisSpeeds(
+  m_frontLeft.GetState(), m_frontRight.GetState(), m_rearLeft.GetState(), m_rearRight.GetState());
+
+  return {forward, sideways, angular};
 }
 
 DriveSubsystem::~DriveSubsystem(){
