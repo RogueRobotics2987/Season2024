@@ -9,6 +9,7 @@
 
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
+#include "ctre/Phoenix.h"
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
@@ -24,6 +25,9 @@ class TestMotor : public frc2::SubsystemBase {
  public:
   TestMotor();
 
+  frc2::CommandPtr Move();
+  frc2::CommandPtr Stop();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -32,4 +36,9 @@ class TestMotor : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
+  rev::CANSparkMax* m_motor;
+
+  int m_motorPort = 15;
+
 };

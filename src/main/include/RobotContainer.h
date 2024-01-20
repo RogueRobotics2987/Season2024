@@ -20,6 +20,7 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
+#include "subsystems/TestMotor.h"
 
 
 /**
@@ -48,6 +49,7 @@ class RobotContainer {
   // The robot's subsystems are defined here...
   DriveSubsystem m_drive;
   LimelightPose m_limePose;
+  TestMotor m_testMotor;
 
 
   void ConfigureButtonBindings();

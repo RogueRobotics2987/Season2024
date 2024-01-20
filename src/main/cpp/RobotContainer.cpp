@@ -53,16 +53,21 @@ RobotContainer::RobotContainer() {
 
 
 void RobotContainer::ConfigureButtonBindings() {
-  //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
+  // Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
 
 
-  //Robot slides right (when front is away from the drivers)
+  // Robot slides right (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
 
 
-  //Robot slides left (when front is away from the drivers)
+  // Robot slides left (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
+
+  // Run/stop test motor
+  frc2::JoystickButton(&m_driverController, 3).OnTrue(m_testMotor.Move());
+  frc2::JoystickButton(&m_driverController, 4).OnTrue(m_testMotor.Stop());
+
 }
 
 
