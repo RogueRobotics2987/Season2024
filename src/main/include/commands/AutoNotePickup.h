@@ -19,11 +19,14 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AprilTagFollower
-    : public frc2::CommandHelper<frc2::Command, AprilTagFollower> {
+
+  
+class AutoNotePickup
+    : public frc2::CommandHelper<frc2::Command, AutoNotePickup> {
  public:
-  AprilTagFollower(); 
-  AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+  AutoNotePickup();
+  AutoNotePickup(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+
 
   void Initialize() override;
 
@@ -33,7 +36,9 @@ class AprilTagFollower
 
   bool IsFinished() override;
 
-  double kp = -0.09927;
+  units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+  units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
+  double kp = 0.09927;
 
   private:
   LimelightPose* m_limePose = nullptr;

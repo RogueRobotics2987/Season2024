@@ -31,6 +31,7 @@
 #include "subsystems/SwerveModuleSubsystem.h"
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
+#include "commands/AutoAprilTag.h"
 
 using namespace pathplanner;
 
@@ -45,6 +46,7 @@ class RobotContainer {
  public:
   RobotContainer();
   frc2::CommandPtr GetAutonomousCommand();
+  frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
   // frc2::CommandPtr GoToAbsolutePoint(frc::Pose2d waypoint, bool reversed);
 
 

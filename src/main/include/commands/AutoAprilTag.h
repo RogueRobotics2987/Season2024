@@ -6,11 +6,6 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "networktables/NetworkTableInstance.inc"
-#include "subsystems/DriveSubsystem.h"
-#include "subsystems/LimelightPose.h"
-#include <frc/Joystick.h>
-#include <frc/XboxController.h>
 
 /**
  * An example command.
@@ -19,11 +14,23 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AprilTagFollower
-    : public frc2::CommandHelper<frc2::Command, AprilTagFollower> {
+
+#include "networktables/NetworkTableInstance.inc"
+#include "subsystems/DriveSubsystem.h"
+#include "subsystems/LimelightPose.h"
+
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending Command
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class AutoAprilTag
+    : public frc2::CommandHelper<frc2::Command, AutoAprilTag> {
  public:
-  AprilTagFollower(); 
-  AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+  AutoAprilTag(); 
+  AutoAprilTag(LimelightPose &limePose, DriveSubsystem &drivetrain);
 
   void Initialize() override;
 
@@ -38,5 +45,6 @@ class AprilTagFollower
   private:
   LimelightPose* m_limePose = nullptr;
   DriveSubsystem* m_drivetrain = nullptr;
-  frc::XboxController* m_Xbox = nullptr;
+  double tx = 0;
+  double tv = 0;
 };

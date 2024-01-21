@@ -66,7 +66,7 @@ void RobotContainer::ConfigureButtonBindings() {
   //Limelight Note Detection
   frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limePose, m_drive, m_driverController).ToPtr());
 
-  //Limelight April Tag Detection
+  //Limelight April Tag Detection, y
   frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limePose, m_drive, m_driverController).ToPtr());
 
 }
@@ -83,9 +83,28 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, -180_deg}); 
+  m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg}); 
+
+  std::vector<frc::Pose2d> twoNotePoses{
+    // frc::Pose2d(0.5_m, 0_m, frc::Rotation2d(-180_deg)),
+    // frc::Pose2d(3_m, 0_m, frc::Rotation2d(-90_deg))
+    frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(0.5_m, 0.9_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(235_deg))
+  };
+
+  return frc2::cmd::Sequence(
+      AutoAprilTag(m_limePose,m_drive).ToPtr(),
+      std::move(GetPath(twoNotePoses))
+      // frc2::InstantCommand(
+      // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(), //always drives in the X-axis no matter if we put input in the X or Y
+      // frc2::WaitCommand(1.0_s).ToPtr(),
+      // std::move(pathplanner::AutoBuilder::followPath(path2))
+    );  
+}
+frc2::CommandPtr RobotContainer::GetPath(std::vector<frc::Pose2d> waypoints) {
+  // m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, -180_deg}); 
 
 //   std::vector<frc::Pose2d> poses{
 //     frc::Pose2d(1.0_m, 0_m, frc::Rotation2d(0_deg)),
@@ -96,10 +115,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 //     frc::Pose2d(0.01_m, 0_m, frc::Rotation2d(0_deg))
 // };
 
-  std::vector<frc::Pose2d> poses{
-    frc::Pose2d(0.5_m, 0_m, frc::Rotation2d(-180_deg)),
-    frc::Pose2d(3_m, 0_m, frc::Rotation2d(-90_deg))
-};
+//   std::vector<frc::Pose2d> twoNotePoses{
+//     // frc::Pose2d(0.5_m, 0_m, frc::Rotation2d(-180_deg)),
+//     // frc::Pose2d(3_m, 0_m, frc::Rotation2d(-90_deg))
+//     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+//     frc::Pose2d(0.5_m, 0.9_m, frc::Rotation2d(0_deg)),
+//     frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(45_deg))
+// };
 
 //   std::vector<frc::Pose2d> poses2{
 //     frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
@@ -108,7 +130,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 
 
-std::vector<frc::Translation2d> bezierPoints = PathPlannerPath::bezierFromPoses(poses);
+std::vector<frc::Translation2d> bezierPoints = PathPlannerPath::bezierFromPoses(waypoints);
 
 // Create the path using the bezier points created above
 // We make a shared pointer here since the path following commands require a shared pointer
