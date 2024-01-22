@@ -89,9 +89,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(235_deg))
   };
 
+  auto path = PathPlannerPath::fromPathFile("Rotate");
+
+
   return frc2::cmd::Sequence(
-    AutoAprilTag(m_limePose,m_drive).ToPtr(),
-    std::move(GetPath(twoNotePoses))
+    // AutoAprilTag(m_limePose,m_drive).ToPtr(),
+    // std::move(GetPath(twoNotePoses))
+    std::move(pathplanner::AutoBuilder::followPath(path))
     // frc2::InstantCommand(
     // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(), //always drives in the X-axis no matter if we put input in the X or Y
     // frc2::WaitCommand(1.0_s).ToPtr(),
@@ -131,7 +135,7 @@ frc2::CommandPtr RobotContainer::GetPath(std::vector<frc::Pose2d> waypoints)
   auto path = std::make_shared<PathPlannerPath>(
       bezierPoints,
       PathConstraints(AutoConstants::kMaxSpeed, AutoConstants::kMaxAcceleration, AutoConstants::kMaxAngularSpeed, AutoConstants::kMaxAngularAcceleration), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      GoalEndState(0.0_mps, frc::Rotation2d(-90_deg), true) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+      GoalEndState(0.0_mps, frc::Rotation2d(-235_deg), true) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
   );
   path->preventFlipping = true;
 
