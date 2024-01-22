@@ -4,14 +4,14 @@
 
 #pragma once
 
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightPose.h"
-#include <frc/Joystick.h>
-#include <frc/XboxController.h>
-
 
 /**
  * An example command.
@@ -21,26 +21,27 @@
  * Command will *not* work!
  */
 class NoteFollower
-    : public frc2::CommandHelper<frc2::Command, NoteFollower> {
- public:
-  NoteFollower();
-  NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    : public frc2::CommandHelper<frc2::Command, NoteFollower>
+{
+  public:
+    NoteFollower();
+    NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
+    bool IsFinished() override;
 
-  units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
-  units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
-  double kp = 0.09927;
+    units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+    units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
+    double kp = 0.09927;
 
   private:
-  LimelightPose* m_limePose = nullptr;
-  DriveSubsystem* m_drivetrain = nullptr;
-  frc::XboxController* m_Xbox = nullptr;
+    LimelightPose* m_limePose = nullptr;
+    DriveSubsystem* m_drivetrain = nullptr;
+    frc::XboxController* m_Xbox = nullptr;
 };

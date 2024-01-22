@@ -7,19 +7,10 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
-
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightPose.h"
-
-/**
+/*
  * An example command.
  *
  * <p>Note that this extends CommandHelper, rather extending Command
@@ -27,24 +18,25 @@
  * Command will *not* work!
  */
 class AutoAprilTag
-    : public frc2::CommandHelper<frc2::Command, AutoAprilTag> {
- public:
-  AutoAprilTag(); 
-  AutoAprilTag(LimelightPose &limePose, DriveSubsystem &drivetrain);
+    : public frc2::CommandHelper<frc2::Command, AutoAprilTag>
+{
+  public:
+    AutoAprilTag(); 
+    AutoAprilTag(LimelightPose &limePose, DriveSubsystem &drivetrain);
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
+    bool IsFinished() override;
 
-  double kp = -0.09927;
+    double kp = -0.09927;
 
   private:
-  LimelightPose* m_limePose = nullptr;
-  DriveSubsystem* m_drivetrain = nullptr;
-  double tx = 0;
-  double tv = 0;
+    LimelightPose* m_limePose = nullptr;
+    DriveSubsystem* m_drivetrain = nullptr;
+    double tx = 0;
+    double tv = 0;
 };

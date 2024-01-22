@@ -88,7 +88,8 @@ DriveSubsystem::DriveSubsystem()
       );
     }
 
-void DriveSubsystem::Periodic() {
+void DriveSubsystem::Periodic()
+{
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(
     frc::Rotation2d(m_gyro.GetRotation2d()),
@@ -133,12 +134,9 @@ void DriveSubsystem::Drive(
       ) 
     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
-  //TODO: is clean up to here continue down through files
-
   kDriveKinematics.DesaturateWheelSpeeds(&states, AutoConstants::kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
-   
 
   if (noJoystickInput == true)
   {
@@ -168,7 +166,7 @@ void DriveSubsystem::Drive(
     br.angle = (units::angle::degree_t)(0);
   }
 
-   if (DebugConstants::debug == true){
+  if (DebugConstants::debug == true){
     frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
     frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
     frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
@@ -194,107 +192,117 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
   m_rearRight.SetDesiredState(desiredStates[3]);
 }
 
-
 units::degree_t DriveSubsystem::GetHeading()
 {
   return m_gyro.GetRotation2d().Degrees();
 }
-
 
 frc2::CommandPtr DriveSubsystem::ZeroHeading()
 {
   return this->RunOnce(
     [this] {
       m_gyro.Reset();
-    });
+    }
+  );
 }
 
 //small left right movement. Optional to have
 frc2::CommandPtr DriveSubsystem::Twitch(bool direction)
 {
   return this -> Run(
-    [this, direction]{
-
-    if (direction == true)
+    [this, direction]
     {
-      //right
-      DriveSubsystem::Drive(0_mps, -0.35_mps, 0_rad_per_s, false, false);
-    }
-    else if (direction == false)
-    {
-      //left
-      DriveSubsystem::Drive(0_mps, 0.35_mps, 0_rad_per_s, false, false);
-    } 
-    else
-    {
-      //stop
-      DriveSubsystem::Drive(0_mps, 0.0_mps, 0_rad_per_s, false, false);
-    }
+      if (direction == true)
+      {
+        DriveSubsystem::Drive(0_mps, -0.35_mps, 0_rad_per_s, false, false); //right
+      }
+      else if (direction == false)
+      {
+        DriveSubsystem::Drive(0_mps, 0.35_mps, 0_rad_per_s, false, false); //left
+      } 
+      else
+      {
+        DriveSubsystem::Drive(0_mps, 0.0_mps, 0_rad_per_s, false, false); //stop
+      }
     }
   );
 }
 
 
-double DriveSubsystem::GetTurnRate() {
+double DriveSubsystem::GetTurnRate()
+{
   return -m_gyro.GetRate();
 }
 
 
-frc::Pose2d DriveSubsystem::GetPose() {
+frc::Pose2d DriveSubsystem::GetPose()
+{
   return m_odometry.GetPose();
 }
 
 
-void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
+void DriveSubsystem::ResetOdometry(frc::Pose2d pose)
+{
   m_odometry.ResetPosition(
-      GetHeading(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-       m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-      pose);
+    GetHeading(),
+    {
+      m_frontLeft.GetPosition(),
+      m_frontRight.GetPosition(),
+      m_rearLeft.GetPosition(),
+      m_rearRight.GetPosition()
+    },
+    pose
+  );
 }
 
-frc::Pose2d* DriveSubsystem::GetDrivePosePtr(){
+frc::Pose2d* DriveSubsystem::GetDrivePosePtr()
+{
   return DrivePose;
 }
 
-frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
+frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds()
+{
   auto [forward, sideways, angular] = kDriveKinematics.ToChassisSpeeds(
-  m_frontLeft.GetState(), m_frontRight.GetState(), m_rearLeft.GetState(), m_rearRight.GetState());
-
+    m_frontLeft.GetState(),
+    m_frontRight.GetState(),
+    m_rearLeft.GetState(),
+    m_rearRight.GetState()
+  );
   return {forward, sideways, angular};
 }
 
-frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path){
+frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path)
+{
+  return FollowPathHolonomic(
+    path,
+    [this](){ return GetPose(); }, // Robot pose supplier
+    [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+      PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
+      PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
+      AutoConstants::kMaxSpeed, // Max module speed, in m/s
+      0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+      ReplanningConfig() // Default path replanning config. See the API for the options here
+    ),
+    []()
+    {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+      auto alliance = frc::DriverStation::GetAlliance();
 
-    return FollowPathHolonomic(
-        path,
-        [this](){ return GetPose(); }, // Robot pose supplier
-        [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
-            PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
-            AutoConstants::kMaxSpeed, // Max module speed, in m/s
-            0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
-            ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
-        []() {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-            auto alliance = frc::DriverStation::GetAlliance();
-            if (alliance) {
-                return alliance.value() == frc::DriverStation::Alliance::kRed;
-            }
-            return false;
-        },
-       { this }// Reference to this subsystem to set requirements
-    ).ToPtr();
+      if (alliance)
+      {
+        return alliance.value() == frc::DriverStation::Alliance::kRed;
+      }
+        return false;
+      },
+      { this }// Reference to this subsystem to set requirements
+  ).ToPtr();
 }
 
-DriveSubsystem::~DriveSubsystem(){
+DriveSubsystem::~DriveSubsystem()
+{
   delete DrivePose;
 }
-
-

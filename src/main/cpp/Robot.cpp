@@ -1,8 +1,6 @@
 #include "Robot.h"
 
-
 void Robot::RobotInit() {}
-
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -12,10 +10,10 @@ void Robot::RobotInit() {}
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {
+void Robot::RobotPeriodic()
+{
   frc2::CommandScheduler::GetInstance().Run();
 }
-
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
@@ -24,15 +22,14 @@ void Robot::RobotPeriodic() {
  */
 void Robot::DisabledInit() {}
 
-
 void Robot::DisabledPeriodic() {}
-
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand) {
@@ -40,11 +37,10 @@ void Robot::AutonomousInit() {
   }
 }
 
-
 void Robot::AutonomousPeriodic() {}
 
-
-void Robot::TeleopInit() {
+void Robot::TeleopInit()
+{
   // This makes sure that the autonomous stops running when
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
@@ -55,21 +51,19 @@ void Robot::TeleopInit() {
   }
 }
 
-
 /**
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {}
-
 
 /**
  * This function is called periodically during test mode.
  */
 void Robot::TestPeriodic() {}
 
-
 #ifndef RUNNING_FRC_TESTS
-int main() {
+int main()
+{
   return frc::StartRobot<Robot>();
 }
 #endif
