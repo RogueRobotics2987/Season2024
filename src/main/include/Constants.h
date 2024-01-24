@@ -76,7 +76,10 @@ namespace DriveConstants {
 }  
 
 namespace ModuleConstants {
-    constexpr double wheelOffset = 0;
+    constexpr units::meter_t kTrackWidth = 0.58_m;  // Distance between centers of right and left wheels on robot
+    constexpr units::meter_t kWheelBase = 0.58_m;  // Distance between centers of front and back wheels on robot
+    constexpr units::meter_t kModuleRadius = 0.41_m;  // Distance between centers of robot and Swerve modules
+    constexpr double wheelOffset = 0; //For rotation of wheels
     constexpr double gearRatio = 6.75; //L2 of gear ratio
     constexpr double kEncoderCPR = 1;
     constexpr double kWheelDiameterMeters = 0.0977;
@@ -102,7 +105,7 @@ namespace AutoConstants {
 
     constexpr double kPXController = 0.1;
     constexpr double kPYController = 0.1;
-    constexpr double kPThetaController = 1.0;
+    constexpr double kPThetaController = -1.0;
     extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
 } 
 

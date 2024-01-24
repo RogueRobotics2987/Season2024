@@ -49,6 +49,9 @@ void RobotContainer::ConfigureButtonBindings()
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
 
+  //runs a basic autonomous
+  frc2::JoystickButton(&m_driverController, 6).OnTrue(onFlyGeneration());
+
   //Robot slides right (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
 
@@ -82,15 +85,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg}); 
 
   std::vector<frc::Pose2d> twoNotePoses{
-    // frc::Pose2d(0.5_m, 0_m, frc::Rotation2d(-180_deg)),
-    // frc::Pose2d(3_m, 0_m, frc::Rotation2d(-90_deg))
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(0.5_m, 0.9_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(235_deg))
   };
 
   auto path = PathPlannerPath::fromPathFile("Rotate");
-
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
@@ -102,6 +102,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     // std::move(pathplanner::AutoBuilder::followPath(path2))
   );  
 }
+
 frc2::CommandPtr RobotContainer::GetPath(std::vector<frc::Pose2d> waypoints)
 {
   // m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, -180_deg}); 
@@ -133,9 +134,9 @@ frc2::CommandPtr RobotContainer::GetPath(std::vector<frc::Pose2d> waypoints)
   // Create the path using the bezier points created above
   // We make a shared pointer here since the path following commands require a shared pointer
   auto path = std::make_shared<PathPlannerPath>(
-      bezierPoints,
-      PathConstraints(AutoConstants::kMaxSpeed, AutoConstants::kMaxAcceleration, AutoConstants::kMaxAngularSpeed, AutoConstants::kMaxAngularAcceleration), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      GoalEndState(0.0_mps, frc::Rotation2d(-235_deg), true) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    bezierPoints,
+    PathConstraints(AutoConstants::kMaxSpeed, AutoConstants::kMaxAcceleration, AutoConstants::kMaxAngularSpeed, AutoConstants::kMaxAngularAcceleration), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+    GoalEndState(0.0_mps, frc::Rotation2d(-235_deg), true) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
   );
   path->preventFlipping = true;
 
@@ -151,4 +152,31 @@ frc2::CommandPtr RobotContainer::GetPath(std::vector<frc::Pose2d> waypoints)
   // path2->preventFlipping = true;
 
   return m_drive.FollowPathCommand(path);
+}
+
+frc2::CommandPtr RobotContainer::onFlyGeneration(){
+  return frc2::cmd::RunOnce([this]() {
+  frc::Pose2d *currentPose = m_drive.GetDrivePosePtr();
+
+  // The rotation component in these poses represents the direction of travel
+  frc::Pose2d startPos = frc::Pose2d(currentPose->Translation(), frc::Rotation2d(currentPose->Rotation()));
+  frc::Pose2d endPos = frc::Pose2d(currentPose->Translation() + frc::Translation2d(2.0_m, 0_m), frc::Rotation2d(currentPose->RotateBy(-180_deg).Rotation()));
+
+  std::vector<frc::Translation2d> bezierPoints = PathPlannerPath::bezierFromPoses({startPos, endPos});
+  // Paths must be used as shared pointers
+
+  auto path = std::make_shared<PathPlannerPath>(
+    bezierPoints, 
+    PathConstraints(1.0_mps, 2.0_mps_sq, 180_deg_per_s, 180_deg_per_s_sq),
+    GoalEndState(0_mps, frc::Rotation2d(currentPose->RotateBy(-180_deg).Rotation()))
+  );
+
+  // Prevent this path from being flipped on the red alliance, since the given positions are already correct
+  path->preventFlipping = true;
+
+  this->followOnTheFly = AutoBuilder::followPath(path).Unwrap();
+  this->followOnTheFly->Schedule();
+  },
+  {&m_drive}
+  );
 }

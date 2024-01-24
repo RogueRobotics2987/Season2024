@@ -57,7 +57,7 @@ DriveSubsystem::DriveSubsystem()
     } 
 
     {
-      m_gyro.SetAngleAdjustment(180); //Determines the front of the robot to via gyro returns
+      // m_gyro.SetAngleAdjustment(180); //Determines the front of the robot to via gyro returns
 
       AutoBuilder::configureHolonomic(
         [this](){ return GetPose(); }, // Robot pose supplier
@@ -68,7 +68,7 @@ DriveSubsystem::DriveSubsystem()
           PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
           PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
           AutoConstants::kMaxSpeed, // Max module speed, in m/s
-          0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+          ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
           ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         []()
@@ -105,6 +105,7 @@ void DriveSubsystem::Periodic()
   DrivePose = &tempPose;
 
   frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
+  frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
   frc::SmartDashboard::PutNumber("TeleRobotX", (double)GetPose().X());
   frc::SmartDashboard::PutNumber("TeleRobotY", (double)GetPose().Y());
   frc::SmartDashboard::PutNumber("TeleRobotRot", (double)GetPose().Rotation().Degrees());
@@ -240,7 +241,6 @@ frc::Pose2d DriveSubsystem::GetPose()
   return m_odometry.GetPose();
 }
 
-
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose)
 {
   m_odometry.ResetPosition(
@@ -268,6 +268,11 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds()
     m_rearLeft.GetState(),
     m_rearRight.GetState()
   );
+
+  frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
+  frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);
+  frc::SmartDashboard::PutNumber("angular chassis speed", (double)angular);
+
   return {forward, sideways, angular};
 }
 
@@ -282,7 +287,7 @@ frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::
       PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
       PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
       AutoConstants::kMaxSpeed, // Max module speed, in m/s
-      0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+      ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
       ReplanningConfig() // Default path replanning config. See the API for the options here
     ),
     []()
