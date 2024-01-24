@@ -33,6 +33,7 @@
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
+#include "commands/followWaypoints.h"
 
 using namespace pathplanner;
 

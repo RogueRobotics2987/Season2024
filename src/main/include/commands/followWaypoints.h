@@ -6,6 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <math.h>
+#include <list>
 
 #include "subsystems/DriveSubsystem.h"
 
@@ -17,11 +19,11 @@
  * Command will *not* work!
  */
 class followWaypoints
-    : public frc2::CommandHelper<frc2::Command, followWaypoints> {
+    : public frc2::CommandHelper<frc2::Command, followWaypoints>
+{
   public:
     followWaypoints();
-    followWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meter_t driveSpeed);
-
+    followWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed);
 
     void Initialize() override;
 
@@ -31,11 +33,15 @@ class followWaypoints
 
     bool IsFinished() override;
 
-    bool finished;
+    bool finished = false;
     frc::Pose2d currentPose;
     frc::Pose2d desiredPose;
+    units::meters_per_second_t robot_speed;
+    double alpha; // Possibly change to rotation?
+    units::meters_per_second_t xVal;
+    units::meters_per_second_t yVal;
+    units::radians_per_second_t thetaVal;
   private:
     DriveSubsystem* m_drivetrain = nullptr;
-    std::vector<frc::Pose2d> m_waypoints;
-
+    std::list<frc::Pose2d> m_waypoints;
 };

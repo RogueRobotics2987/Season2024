@@ -90,12 +90,19 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(235_deg))
   };
 
+    std::vector<frc::Pose2d> snakePath{
+    frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1_m, 1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg))
+  };
+
   auto path = PathPlannerPath::fromPathFile("Rotate");
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     // std::move(GetPath(twoNotePoses))
-    std::move(pathplanner::AutoBuilder::followPath(path))
+    followWaypoints(m_drive, twoNotePoses, 0.25_mps).ToPtr()
+    // std::move(pathplanner::AutoBuilder::followPath(path))
     // frc2::InstantCommand(
     // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(), //always drives in the X-axis no matter if we put input in the X or Y
     // frc2::WaitCommand(1.0_s).ToPtr(),
