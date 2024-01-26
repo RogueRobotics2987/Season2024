@@ -60,7 +60,7 @@ void followWaypoints::Execute()
 
 // Called once the command ends or is interrupted.
 void followWaypoints::End(bool interrupted) {
-  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, false, false);
+  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
 }
 
 // Returns true when the command should end.
