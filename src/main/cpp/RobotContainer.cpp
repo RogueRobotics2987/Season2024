@@ -82,7 +82,7 @@ float RobotContainer::Deadzone(float x)
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  m_drive.ZeroHeading();
+  // m_drive.ZeroHeading();
   m_drive.ResetOdometry(frc::Pose2d{0_m, 0_m, 0_deg}); 
 
   std::vector<frc::Pose2d> twoNotePoses{
@@ -91,7 +91,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(1.61_m, 0.9_m, frc::Rotation2d(235_deg))
   };
 
-    std::vector<frc::Pose2d> snakePath{
+    std::vector<frc::Pose2d> squareDance{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1_m, 1_m, frc::Rotation2d(0_deg)),
@@ -99,12 +99,18 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))
   };
 
+  std::vector<frc::Pose2d> theTwist{
+    frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg)),
+  };
+
   auto path = PathPlannerPath::fromPathFile("Rotate");
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     // std::move(GetPath(twoNotePoses))
-    followWaypoints(m_drive, snakePath, 0.25_mps).ToPtr()
+    followWaypoints(m_drive, theTwist , 0.25_mps).ToPtr()
     // std::move(pathplanner::AutoBuilder::followPath(path))
     // frc2::InstantCommand(
     // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(), //always drives in the X-axis no matter if we put input in the X or Y

@@ -26,7 +26,7 @@ void followWaypoints::Execute()
 {
   currentPose = m_drivetrain->GetPose(); 
 
-  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.01) && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.01) /*&& (currentPose.Rotation().Degrees() - desiredPose.Rotation().Degrees() < frc::Rotation2d(5_deg).Degrees())*/)
+  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.01) && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.01) && (fabs((double)currentPose.Rotation().Degrees() - (double)desiredPose.Rotation().Degrees()) < 5))
   {
     if(m_waypoints.size() > 0)
     {
@@ -45,7 +45,8 @@ void followWaypoints::Execute()
     alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
     xVal = robot_speed * cos(alpha);
     yVal = robot_speed * sin(alpha);
-    thetaVal = 0_rad_per_s;
+    double thetaDouble = (((double)desiredPose.Rotation().Radians() - (double)currentPose.Rotation().Radians()) * AutoConstants::kPThetaController);
+    thetaVal = thetaDouble * 1_rad_per_s;
     m_drivetrain->Drive(xVal, yVal, thetaVal, false, false);
   }
 
