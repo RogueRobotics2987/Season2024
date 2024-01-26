@@ -94,7 +94,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     std::vector<frc::Pose2d> snakePath{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg))
+    frc::Pose2d(1_m, 1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0_m, 1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))
   };
 
   auto path = PathPlannerPath::fromPathFile("Rotate");
