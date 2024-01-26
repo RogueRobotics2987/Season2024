@@ -28,7 +28,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  enum intakeState {EMPTY, PICKUP, MAGAZINE, LOADED, SHOOTER_WARMUP, SHOOT};
+  enum intakeState {EMPTY, PICKUP, /*MAGAZINE,*/ LOADED, SHOOTER_WARMUP, SHOOT, DROP_WARMUP, DROP};
   intakeState state = EMPTY;
 
 
@@ -37,7 +37,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // intakeMotore3 == middle motor that picks up note
   rev::CANSparkMax* m_intakeMotor3 = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);
 
-  rev::CANSparkMax* m_MagMotor1 = new rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushless);
+  rev::CANSparkMax* m_magMotor1 = new rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushless);
+  rev::CANSparkMax* m_magMotor2 = new rev::CANSparkMax(7, rev::CANSparkMax::MotorType::kBrushless); // mag motors on the hood
 
   rev::CANSparkMax* m_shooterMotor1 = new rev::CANSparkMax(5, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax* m_shooterMotor2 = new rev::CANSparkMax(6, rev::CANSparkMax::MotorType::kBrushless);
@@ -49,11 +50,16 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   int shooterMotor1Port = 5;
   int shooterMotor2Port = 6;*/
 
-  // intake sensor
-  // magazine sensor
+  bool orangeCheerio = false;     // if auto/teleop want to pickup a note
 
-  bool orangeCheerio = false; // if a note is detected
-  bool warmMilk = false;      // warm up shooter
-  bool spoon = false;         // activate shooter
+  bool detectiveOrange1 = false;  // color sensor on the __ of robot
+  bool detectiveOrange2 = false;  // color sensor on the __ of robot
+  bool eatenCheerio = false;      // color sensor on hood
 
+  bool warmMilk = false;          // warmup shooter
+  bool spoon = false;             // activate shooter
+
+  bool spillMilk = false;         // warmup dropper, move arm into position
+  bool micdrop = false;           // activate dropper
+  
 };
