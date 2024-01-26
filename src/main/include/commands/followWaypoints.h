@@ -33,6 +33,11 @@ class followWaypoints
 
     bool IsFinished() override;
 
+
+  private:
+    DriveSubsystem* m_drivetrain = nullptr;
+    std::list<frc::Pose2d> m_waypoints;
+
     bool finished = false;
     frc::Pose2d currentPose;
     frc::Pose2d desiredPose;
@@ -41,7 +46,4 @@ class followWaypoints
     units::meters_per_second_t xVal;
     units::meters_per_second_t yVal;
     units::radians_per_second_t thetaVal;
-  private:
-    DriveSubsystem* m_drivetrain = nullptr;
-    std::list<frc::Pose2d> m_waypoints;
 };

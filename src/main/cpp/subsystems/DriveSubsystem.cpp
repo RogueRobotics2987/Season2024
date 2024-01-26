@@ -104,11 +104,8 @@ void DriveSubsystem::Periodic()
   tempPose = GetPose();
   DrivePose = &tempPose;
 
-  frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
-  frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
-  frc::SmartDashboard::PutNumber("TeleRobotX", (double)GetPose().X());
-  frc::SmartDashboard::PutNumber("TeleRobotY", (double)GetPose().Y());
-  frc::SmartDashboard::PutNumber("TeleRobotRot", (double)GetPose().Rotation().Degrees());
+  // frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
+  // frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
 }
 
 void DriveSubsystem::Drive(
@@ -167,7 +164,8 @@ void DriveSubsystem::Drive(
     br.angle = (units::angle::degree_t)(0);
   }
 
-  if (DebugConstants::debug == true){
+  if (DebugConstants::debug == true)
+  {
     frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
     frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
     frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
@@ -176,6 +174,9 @@ void DriveSubsystem::Drive(
     frc::SmartDashboard::PutNumber("Fr Desired speed",(float)fr.speed);
     frc::SmartDashboard::PutNumber("Bl Desired speed",(float)bl.speed);
     frc::SmartDashboard::PutNumber("Br Desired speed",(float)br.speed);
+    frc::SmartDashboard::PutNumber("TeleRobotX", (double)GetPose().X());
+    frc::SmartDashboard::PutNumber("TeleRobotY", (double)GetPose().Y());
+    frc::SmartDashboard::PutNumber("TeleRobotRot", (double)GetPose().Rotation().Degrees());
   }
 
   m_frontLeft.SetDesiredState(fl);

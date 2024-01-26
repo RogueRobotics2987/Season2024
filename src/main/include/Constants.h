@@ -42,10 +42,10 @@ namespace DriveConstants {
     constexpr bool kFrontRightTurningEncoderReversed = false;
     constexpr bool kRearRightTurningEncoderReversed = false;
 
-    constexpr bool kFrontLeftDriveEncoderReversed = false;
-    constexpr bool kRearLeftDriveEncoderReversed = true;
-    constexpr bool kFrontRightDriveEncoderReversed = false;
-    constexpr bool kRearRightDriveEncoderReversed = true;
+    constexpr bool kFrontLeftDriveEncoderReversed = true;
+    constexpr bool kRearLeftDriveEncoderReversed = false;
+    constexpr bool kFrontRightDriveEncoderReversed = true;
+    constexpr bool kRearRightDriveEncoderReversed = false;
 
     constexpr int kFrontLeftDriveCPR = 42;
     constexpr int kRearLeftDriveCPR = 42;
@@ -110,5 +110,5 @@ namespace AutoConstants {
 } 
 
 namespace DebugConstants {
-    constexpr bool debug = true; //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
 }  
