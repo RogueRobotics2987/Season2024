@@ -101,11 +101,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   std::vector<frc::Pose2d> theTwist{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg)),
   };
-
-  auto path = PathPlannerPath::fromPathFile("Rotate");
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),

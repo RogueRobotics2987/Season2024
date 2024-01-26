@@ -138,7 +138,8 @@ void SwerveModuleSubsystem::SetDesiredState(const frc::SwerveModuleState& refere
 
 void SwerveModuleSubsystem::ResetEncoders()
 {
-  // m_driveEncoder->Reset();
+  // m_driveEncoder->Reset(); 
+  m_driveEncoder->SetPosition(0); //Remove?
   // m_turningEncoder->Reset();
 }
 

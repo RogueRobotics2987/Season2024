@@ -308,6 +308,13 @@ frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::
   ).ToPtr();
 }
 
+void DriveSubsystem::ResetEncoders(){
+  m_frontLeft.ResetEncoders(); //remove?
+  m_rearLeft.ResetEncoders();
+  m_frontRight.ResetEncoders();
+  m_rearRight.ResetEncoders();
+}
+
 DriveSubsystem::~DriveSubsystem()
 {
   delete DrivePose;

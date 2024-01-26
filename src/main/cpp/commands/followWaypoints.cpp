@@ -43,6 +43,7 @@ void followWaypoints::Execute()
   {
     robot_speed = 0.25_mps; //0-1.0 aka Z
     alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
+    alpha = alpha - (double)currentPose.Rotation().Radians();
     xVal = robot_speed * cos(alpha);
     yVal = robot_speed * sin(alpha);
     double thetaDouble = (((double)desiredPose.Rotation().Radians() - (double)currentPose.Rotation().Radians()) * AutoConstants::kPThetaController);
