@@ -41,9 +41,15 @@ class FollowWaypoints
     bool finished = false;
     frc::Pose2d currentPose;
     frc::Pose2d desiredPose;
-    units::meters_per_second_t robot_speed;
+    units::meters_per_second_t robotSpeed;
     double alpha; // Possibly change to rotation?
     units::meters_per_second_t xVal;
     units::meters_per_second_t yVal;
     units::radians_per_second_t thetaVal;
+    double totalDistance;
+    double deltaX;
+    double deltaY;
+    double distanceTraveled;
+    frc::Pose2d lastPose;
+    units::meters_per_second_t maxSpeed;
 };

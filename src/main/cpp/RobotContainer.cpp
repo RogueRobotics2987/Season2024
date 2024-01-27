@@ -100,12 +100,18 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   std::vector<frc::Pose2d> theTwist{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
-    frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg))
+  };
+
+  std::vector<frc::Pose2d> walkTheLine{
+    frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg))
   };
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.05_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, theTwist , 0.25_mps).ToPtr()
+    FollowWaypoints(m_drive, walkTheLine , 1_mps).ToPtr()
   );  
 }
