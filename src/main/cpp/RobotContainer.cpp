@@ -105,7 +105,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(1.75_m, -1.16_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(0.75_m, -1.8_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(0.75_m, -2.66_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1.75_m, -2.66_m, frc::Rotation2d(0_deg))
+    frc::Pose2d(1.75_m, -2.66_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1.75_m, 0.25_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(7.1_m, 0.7_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(4.1_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(5.85_m, -0.95_m, frc::Rotation2d(0_deg)),
+  frc::Pose2d(7.1_m, -0.95_m, frc::Rotation2d(0_deg))
   };
 
     std::vector<frc::Pose2d> squareDance{
