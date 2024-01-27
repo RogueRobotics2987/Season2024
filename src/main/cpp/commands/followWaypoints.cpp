@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/followWaypoints.h"
+#include "commands/FollowWaypoints.h"
 
-followWaypoints::followWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed) 
+FollowWaypoints::FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed) 
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drivetrain = &drivetrain;
@@ -15,18 +15,20 @@ followWaypoints::followWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Po
 }
 
 // Called when the command is initially scheduled.
-void followWaypoints::Initialize() 
+void FollowWaypoints::Initialize() 
 {
   desiredPose = m_waypoints.front();
   m_waypoints.pop_front(); 
 }
 
 // Called repeatedly when this Command is scheduled to run
-void followWaypoints::Execute()
+void FollowWaypoints::Execute()
 {
   currentPose = m_drivetrain->GetPose(); 
 
-  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.01) && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.01) && (fabs((double)currentPose.Rotation().Degrees() - (double)desiredPose.Rotation().Degrees()) < 5))
+  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.01) 
+    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.01) 
+    && (fabs((double)currentPose.Rotation().Degrees() - (double)desiredPose.Rotation().Degrees()) < 5))
   {
     if(m_waypoints.size() > 0)
     {
@@ -61,12 +63,12 @@ void followWaypoints::Execute()
 }
 
 // Called once the command ends or is interrupted.
-void followWaypoints::End(bool interrupted) {
+void FollowWaypoints::End(bool interrupted) {
   m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
 }
 
 // Returns true when the command should end.
-bool followWaypoints::IsFinished()
+bool FollowWaypoints::IsFinished()
 {
   return finished;
 }

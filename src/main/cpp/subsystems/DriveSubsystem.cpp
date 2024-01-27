@@ -54,39 +54,7 @@ DriveSubsystem::DriveSubsystem()
         m_rearRight.GetPosition()
       },
       frc::Pose2d{}
-    } 
-
-    {
-      // m_gyro.SetAngleAdjustment(180); //Determines the front of the robot to via gyro returns
-
-      AutoBuilder::configureHolonomic(
-        [this](){ return GetPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose){ ResetOdometry(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-        [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-          PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
-          PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
-          AutoConstants::kMaxSpeed, // Max module speed, in m/s
-          ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-          ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
-        []()
-        {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-          auto alliance = frc::DriverStation::GetAlliance();
-
-          if (alliance)
-          {
-            return alliance.value() == frc::DriverStation::Alliance::kRed;
-          }
-          return false;
-        },
-        this // Reference to this subsystem to set requirements
-      );
-    }
+    } {}
 
 void DriveSubsystem::Periodic()
 {
@@ -95,8 +63,8 @@ void DriveSubsystem::Periodic()
     frc::Rotation2d(m_gyro.GetRotation2d()),
       {
         m_frontLeft.GetPosition(),
-        m_rearLeft.GetPosition(),
         m_frontRight.GetPosition(),
+        m_rearLeft.GetPosition(),
         m_rearRight.GetPosition()
       }
   );
@@ -104,8 +72,11 @@ void DriveSubsystem::Periodic()
   tempPose = GetPose();
   DrivePose = &tempPose;
 
-  // frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
-  // frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
+  if(DebugConstants::debug == true)
+  {
+    frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
+    frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
+  }
 }
 
 void DriveSubsystem::Drive(
@@ -270,49 +241,14 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds()
     m_rearRight.GetState()
   );
 
-  frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
-  frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);
-  frc::SmartDashboard::PutNumber("angular chassis speed", (double)angular);
+  if(DebugConstants::debug == true)
+  {
+    frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
+    frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);
+    frc::SmartDashboard::PutNumber("angular chassis speed", (double)angular);
+  }
 
   return {forward, sideways, angular};
-}
-
-frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path)
-{
-  return FollowPathHolonomic(
-    path,
-    [this](){ return GetPose(); }, // Robot pose supplier
-    [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-      PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
-      PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
-      AutoConstants::kMaxSpeed, // Max module speed, in m/s
-      ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-      ReplanningConfig() // Default path replanning config. See the API for the options here
-    ),
-    []()
-    {
-      // Boolean supplier that controls when the path will be mirrored for the red alliance
-      // This will flip the path being followed to the red side of the field.
-      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-      auto alliance = frc::DriverStation::GetAlliance();
-
-      if (alliance)
-      {
-        return alliance.value() == frc::DriverStation::Alliance::kRed;
-      }
-        return false;
-      },
-      { this }// Reference to this subsystem to set requirements
-  ).ToPtr();
-}
-
-void DriveSubsystem::ResetEncoders(){
-  m_frontLeft.ResetEncoders(); //remove?
-  m_rearLeft.ResetEncoders();
-  m_frontRight.ResetEncoders();
-  m_rearRight.ResetEncoders();
 }
 
 DriveSubsystem::~DriveSubsystem()

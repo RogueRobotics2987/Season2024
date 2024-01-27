@@ -80,7 +80,8 @@ float RobotContainer::Deadzone(float x)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
   // m_drive.ZeroHeading();
-  m_drive.ResetOdometry(m_drive.GetPose()); 
+  m_drive.ResetOdometry({0_m, 0_m, 0_deg});
+
 
   std::vector<frc::Pose2d> twoNotePoses{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
@@ -104,12 +105,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
-    // std::move(GetPath(twoNotePoses))
-    followWaypoints(m_drive, theTwist , 0.25_mps).ToPtr()
-    // std::move(pathplanner::AutoBuilder::followPath(path))
-    // frc2::InstantCommand(
-    // [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); }, {}).ToPtr(), //always drives in the X-axis no matter if we put input in the X or Y
-    // frc2::WaitCommand(1.0_s).ToPtr(),
-    // std::move(pathplanner::AutoBuilder::followPath(path2))
+    frc2::WaitCommand(0.05_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+    FollowWaypoints(m_drive, theTwist , 0.25_mps).ToPtr()
   );  
 }

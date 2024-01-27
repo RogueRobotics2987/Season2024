@@ -18,12 +18,12 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class followWaypoints
-    : public frc2::CommandHelper<frc2::Command, followWaypoints>
+class FollowWaypoints
+    : public frc2::CommandHelper<frc2::Command, FollowWaypoints>
 {
   public:
-    followWaypoints();
-    followWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed);
+    FollowWaypoints();
+    FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed);
 
     void Initialize() override;
 

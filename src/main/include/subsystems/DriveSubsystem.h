@@ -107,7 +107,6 @@ class DriveSubsystem : public frc2::SubsystemBase
 
     frc::Pose2d* GetDrivePosePtr();
     frc::ChassisSpeeds getRobotRelativeSpeeds();
-    frc2::CommandPtr FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path);
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
