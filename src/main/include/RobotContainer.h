@@ -33,6 +33,7 @@
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
+#include "commands/followWaypoints.h"
 
 using namespace pathplanner;
 
@@ -50,6 +51,7 @@ class RobotContainer
     frc2::CommandPtr GetAutonomousCommand();
     frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
     float Deadzone(float x);
+    frc2::CommandPtr onFlyGeneration();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -59,4 +61,6 @@ class RobotContainer
     LimelightPose m_limePose;
     // frc::SendableChooser<frc2::Command*> m_chooser;
     void ConfigureButtonBindings();
+    std::unique_ptr<frc2::Command> onTheFly;
+    std::unique_ptr<frc2::Command> followOnTheFly;
 };

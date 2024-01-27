@@ -97,15 +97,12 @@ class DriveSubsystem : public frc2::SubsystemBase
     void ConfigMotorControllers();
     frc2::CommandPtr Twitch(bool direction);
 
-    units::meter_t kTrackWidth = 0.4699_m;  // Distance between centers of right and left wheels on robot
-    units::meter_t kWheelBase = 0.4699_m;  // Distance between centers of front and back wheels on robot
-
     frc::SwerveDriveKinematics<4> kDriveKinematics
     {
-      frc::Translation2d{kWheelBase / 2, kTrackWidth / 2},
-      frc::Translation2d{kWheelBase / 2, -kTrackWidth / 2},
-      frc::Translation2d{-kWheelBase / 2, kTrackWidth / 2},
-      frc::Translation2d{-kWheelBase / 2, -kTrackWidth / 2}
+      frc::Translation2d{ModuleConstants::kWheelBase / 2, ModuleConstants::kTrackWidth / 2},
+      frc::Translation2d{ModuleConstants::kWheelBase / 2, -ModuleConstants::kTrackWidth / 2},
+      frc::Translation2d{-ModuleConstants::kWheelBase / 2, ModuleConstants::kTrackWidth / 2},
+      frc::Translation2d{-ModuleConstants::kWheelBase / 2, -ModuleConstants::kTrackWidth / 2}
     };
 
     frc::Pose2d* GetDrivePosePtr();
