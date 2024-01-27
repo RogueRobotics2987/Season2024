@@ -22,7 +22,7 @@ AutoNotePickup::AutoNotePickup(LimelightPose &limePose, DriveSubsystem &drivetra
 // Called when the command is initially scheduled.
 void AutoNotePickup::Initialize()
 {
-   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
+  //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
 }
 
 // Called repeatedly when this Command is scheduled to run

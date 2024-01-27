@@ -17,13 +17,13 @@ AprilTagFollower::AprilTagFollower(LimelightPose &limePose, DriveSubsystem &driv
 // Called when the command is initially scheduled.
 void AprilTagFollower::Initialize()
 {
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+  // nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AprilTagFollower::Execute()
 {
-  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
   // if(tx > 7 || tx < -7){
   rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);

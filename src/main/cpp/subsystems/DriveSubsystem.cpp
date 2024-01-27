@@ -241,11 +241,10 @@ frc::Pose2d DriveSubsystem::GetPose()
 }
 
 
-void DriveSubsystem::ResetOdometry(frc::Pose2d pose)
-{
+void DriveSubsystem::ResetOdometry(frc::Pose2d pose){
   m_odometry.ResetPosition(
     GetHeading(),
-    {
+  {
       m_frontLeft.GetPosition(),
       m_frontRight.GetPosition(),
       m_rearLeft.GetPosition(),
