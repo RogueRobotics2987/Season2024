@@ -39,6 +39,8 @@ class NoteFollower
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
     units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
     double kp = 0.09927;
+    double speedY = 0;
+    bool NoJoystickInput = false;
 
   private:
     LimelightPose* m_limePose = nullptr;

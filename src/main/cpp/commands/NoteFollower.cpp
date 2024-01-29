@@ -33,8 +33,16 @@ void NoteFollower::Execute()
   {
     rot = units::angular_velocity::radians_per_second_t(0);
   }
+  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1){
+    speedY = 0; 
+    NoJoystickInput = true;
+  }
+  else {
+    speedY = m_Xbox->GetLeftY();
+    NoJoystickInput = false;
+  }
 
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(m_Xbox->GetLeftY()), units::velocity::meters_per_second_t(0), rot, false, false);
+  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rot, false, NoJoystickInput);
 }
 
 // Called once the command ends or is interrupted.

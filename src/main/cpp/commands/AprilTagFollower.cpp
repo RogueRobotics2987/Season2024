@@ -27,11 +27,29 @@ void AprilTagFollower::Execute()
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
   // if(tx > 7 || tx < -7){
   rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
+
+  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1){
+    speedY = 0; 
+  }
+  else {
+    speedY = m_Xbox->GetLeftY();
+    NoJoystickInput = false;
+  }
+  if(m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1){
+    speedX = 0; 
+  }
+  else {
+    speedX = m_Xbox->GetLeftX();
+    NoJoystickInput = false;
+  }
+  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1 && m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1){
+    NoJoystickInput = true;
+  }
   // }
   // else{
   // rot = units::angular_velocity::radians_per_second_t(0);
   // }
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(m_Xbox->GetLeftY()), units::velocity::meters_per_second_t(m_Xbox->GetLeftX()), rot, false, false);
+  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rot, false, NoJoystickInput);
 }
 
 // Called once the command ends or is interrupted.
