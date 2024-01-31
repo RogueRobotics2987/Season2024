@@ -82,6 +82,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   // m_drive.ZeroHeading();
   m_drive.ResetOdometry({0_m, 0_m, 0_deg});
 
+  //Counter clock wise is positive, Clockwise is positive.
 
   std::vector<frc::Pose2d> twoNotePoses{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
@@ -110,7 +111,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(7.1_m, 0.7_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(4.1_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(5.85_m, -0.95_m, frc::Rotation2d(0_deg)),
-  frc::Pose2d(7.1_m, -0.95_m, frc::Rotation2d(0_deg))
+    frc::Pose2d(7.1_m, -0.95_m, frc::Rotation2d(0_deg))
   };
 
     std::vector<frc::Pose2d> squareDance{
@@ -123,8 +124,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   std::vector<frc::Pose2d> theTwist{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
-    frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg))
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(-90_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(-180_deg))
   };
 
   std::vector<frc::Pose2d> walkTheLine{
@@ -135,7 +136,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
-    frc2::WaitCommand(0.05_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, walkTheLine , 1_mps).ToPtr()
+    frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+    FollowWaypoints(m_drive, theTwist, 0.25_mps).ToPtr()
   );  
 }

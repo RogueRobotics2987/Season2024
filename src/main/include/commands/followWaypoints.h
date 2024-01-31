@@ -8,6 +8,9 @@
 #include <frc2/command/CommandHelper.h>
 #include <math.h>
 #include <list>
+#include <frc/trajectory/TrapezoidProfile.h>
+
+
 
 #include "subsystems/DriveSubsystem.h"
 
@@ -33,6 +36,8 @@ class FollowWaypoints
 
     bool IsFinished() override;
 
+    double DistanceBetweenAngles(double angle1, double angle2);
+
 
   private:
     DriveSubsystem* m_drivetrain = nullptr;
@@ -42,14 +47,16 @@ class FollowWaypoints
     frc::Pose2d currentPose;
     frc::Pose2d desiredPose;
     units::meters_per_second_t robotSpeed;
-    double alpha; // Possibly change to rotation?
+    double alpha = 0; // Possibly change to rotation?
     units::meters_per_second_t xVal;
     units::meters_per_second_t yVal;
     units::radians_per_second_t thetaVal;
-    double totalDistance;
-    double deltaX;
-    double deltaY;
-    double distanceTraveled;
+    double totalDistance = 0;
+    double deltaX = 0;
+    double deltaY = 0;
+    double distanceTraveled = 0;
+    double thetaDouble = 0;
     frc::Pose2d lastPose;
     units::meters_per_second_t maxSpeed;
+    int sign;
 };

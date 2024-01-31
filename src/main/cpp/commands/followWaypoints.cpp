@@ -22,6 +22,8 @@ FollowWaypoints::FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Po
 // Called when the command is initially scheduled.
 void FollowWaypoints::Initialize() 
 {
+  deltaX = 0;
+  deltaY = 0;
   desiredPose = m_waypoints.front();
   m_waypoints.pop_front(); 
 }
@@ -30,12 +32,21 @@ void FollowWaypoints::Initialize()
 void FollowWaypoints::Execute()
 {
   currentPose = m_drivetrain->GetPose(); 
-
-  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.05) 
-    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.05) 
-    && (fabs((double)currentPose.Rotation().Degrees() - (double)desiredPose.Rotation().Degrees()) < 5))
+  
+  //true if negative
+  if(std::signbit((double)desiredPose.Rotation().Degrees() * (double)currentPose.Rotation().Degrees()) == true)
   {
-    if(m_waypoints.size() > 0)
+    sign = 1;
+  }
+  else{
+    sign = -1;
+  }
+
+  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.1) 
+    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.1) 
+    && ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5))
+  {
+    if(m_waypoints.size() > 0) 
     {
       desiredPose = m_waypoints.front();
       m_waypoints.pop_front();
@@ -50,18 +61,31 @@ void FollowWaypoints::Execute()
   deltaY = fabs((double)lastPose.Y() - (double)currentPose.Y());
   distanceTraveled = distanceTraveled + hypot(deltaX, deltaY);
 
+  if(DebugConstants::debug == true){
+    frc::SmartDashboard::PutNumber("Hypot(X,Y)", hypot(deltaX, deltaY));
+  }
+
   if(!finished)
   {
+    // robotSpeed = 1_mps;
     if(distanceTraveled >= totalDistance){
       robotSpeed = 0.1_mps;
     }
     else if((totalDistance-distanceTraveled) <= 0.75){
       double x = (totalDistance-distanceTraveled) / 0.75;
       robotSpeed = 1 * (x) * maxSpeed; //0-100% of max speed aka Z
+
+      if(DebugConstants::debug == true){
+        frc::SmartDashboard::PutNumber("Xvalue2", x);
+      }
     }
     else if(distanceTraveled <= 0.5){
       double x = distanceTraveled / 0.5;
       robotSpeed = 1 * x * maxSpeed + 0.1_mps; //0-100% of max speed aka Z
+
+      if(DebugConstants::debug == true){
+        frc::SmartDashboard::PutNumber("Xvalue1", x);
+      }
     }
     else{
       robotSpeed = maxSpeed;
@@ -71,7 +95,11 @@ void FollowWaypoints::Execute()
     alpha = alpha - (double)currentPose.Rotation().Radians();
     xVal = robotSpeed * cos(alpha);
     yVal = robotSpeed * sin(alpha);
-    double thetaDouble = (((double)desiredPose.Rotation().Radians() - (double)currentPose.Rotation().Radians()) * AutoConstants::kPThetaController);
+
+    thetaDouble = (DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), ((double)currentPose.Rotation().Degrees())));
+    thetaDouble = thetaDouble * (3.14/180.0);
+    thetaDouble = thetaDouble * AutoConstants::kPThetaController;
+
     thetaVal = thetaDouble * 1_rad_per_s;
     m_drivetrain->Drive(xVal, yVal, thetaVal, false, false);
   }
@@ -81,8 +109,10 @@ void FollowWaypoints::Execute()
   if(DebugConstants::debug == true){
     frc::SmartDashboard::PutNumber("DesiredPoseX", (double)desiredPose.X());
     frc::SmartDashboard::PutNumber("DesiredPoseY", (double)desiredPose.Y());
+    frc::SmartDashboard::PutNumber("DesiredAngle", (double)desiredPose.Rotation().Degrees());
     frc::SmartDashboard::PutNumber("CurrentPoseX", (double)currentPose.X());
     frc::SmartDashboard::PutNumber("CurrentPoseY", (double)currentPose.Y());
+    frc::SmartDashboard::PutNumber("CurrentAngle", (double)currentPose.Rotation().Degrees());
     frc::SmartDashboard::PutNumber("AutoDriveAlpha", (double)alpha);
     frc::SmartDashboard::PutNumber("AutoDriveYval", (double)yVal);
     frc::SmartDashboard::PutNumber("AutoDriveXval", (double)xVal);
@@ -90,6 +120,8 @@ void FollowWaypoints::Execute()
     frc::SmartDashboard::PutNumber("totalDistance", (double)totalDistance);
     frc::SmartDashboard::PutNumber("distanceTraveled", (double)distanceTraveled);
     frc::SmartDashboard::PutNumber("percentDistanceTraveled", (double)(distanceTraveled/totalDistance));
+    frc::SmartDashboard::PutNumber("lastPoseX", (double)lastPose.X());
+    frc::SmartDashboard::PutNumber("lastPoseY", (double)lastPose.Y());
   }
 }
 
@@ -107,4 +139,23 @@ void FollowWaypoints::End(bool interrupted) {
 bool FollowWaypoints::IsFinished()
 {
   return finished;
+}
+
+
+double FollowWaypoints::DistanceBetweenAngles(double targetAngle, double sourceAngle){
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
 }
