@@ -8,6 +8,7 @@
 #include <frc/XboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <iostream>
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"

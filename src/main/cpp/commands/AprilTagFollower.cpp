@@ -17,7 +17,7 @@ AprilTagFollower::AprilTagFollower(LimelightPose &limePose, DriveSubsystem &driv
 // Called when the command is initially scheduled.
 void AprilTagFollower::Initialize()
 {
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+  // nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -42,7 +42,7 @@ void AprilTagFollower::Execute()
     speedX = m_Xbox->GetLeftX();
     NoJoystickInput = false;
   }
-  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1 && m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1){
+  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1 && m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1 && tx < 7 &&  tx > -7){
     NoJoystickInput = true;
   }
   // }
