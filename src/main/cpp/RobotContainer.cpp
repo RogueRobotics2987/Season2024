@@ -116,16 +116,19 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
     std::vector<frc::Pose2d> squareDance{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 1_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(0_m, 1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1.7_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2_m, 0.3_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2_m, 1.7_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1.7_m, 2_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0.3_m, 2_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0_m, 1.7_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))
   };
 
   std::vector<frc::Pose2d> theTwist{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 0_m, frc::Rotation2d(-90_deg)),
-    frc::Pose2d(2_m, 0_m, frc::Rotation2d(-180_deg))
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
+    frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg))
   };
 
   std::vector<frc::Pose2d> walkTheLine{
@@ -137,6 +140,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, theTwist, 0.25_mps).ToPtr()
+    FollowWaypoints(m_drive, walkTheLine, 4_mps).ToPtr()
   );  
 }

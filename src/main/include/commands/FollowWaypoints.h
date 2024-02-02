@@ -10,8 +10,6 @@
 #include <list>
 #include <frc/trajectory/TrapezoidProfile.h>
 
-
-
 #include "subsystems/DriveSubsystem.h"
 
 /**
@@ -58,5 +56,4 @@ class FollowWaypoints
     double thetaDouble = 0;
     frc::Pose2d lastPose;
     units::meters_per_second_t maxSpeed;
-    int sign;
 };

@@ -32,15 +32,6 @@ void FollowWaypoints::Initialize()
 void FollowWaypoints::Execute()
 {
   currentPose = m_drivetrain->GetPose(); 
-  
-  //true if negative
-  if(std::signbit((double)desiredPose.Rotation().Degrees() * (double)currentPose.Rotation().Degrees()) == true)
-  {
-    sign = 1;
-  }
-  else{
-    sign = -1;
-  }
 
   if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.1) 
     && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.1) 
@@ -71,8 +62,8 @@ void FollowWaypoints::Execute()
     if(distanceTraveled >= totalDistance){
       robotSpeed = 0.1_mps;
     }
-    else if((totalDistance-distanceTraveled) <= 0.75){
-      double x = (totalDistance-distanceTraveled) / 0.75;
+    else if((totalDistance-distanceTraveled) <= 0.5){
+      double x = (totalDistance-distanceTraveled) / 0.5;
       robotSpeed = 1 * (x) * maxSpeed; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true){
@@ -90,6 +81,7 @@ void FollowWaypoints::Execute()
     else{
       robotSpeed = maxSpeed;
     }
+
 
     alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
     alpha = alpha - (double)currentPose.Rotation().Radians();
@@ -127,7 +119,7 @@ void FollowWaypoints::Execute()
 
 // Called once the command ends or is interrupted.
 void FollowWaypoints::End(bool interrupted) {
-  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
+  m_drivetrain->Drive(0_ mps, 0_mps , 0_rad_per_s, true, false);
   distanceTraveled = 0;
   finished = false;
   totalDistance = 0;
@@ -140,7 +132,6 @@ bool FollowWaypoints::IsFinished()
 {
   return finished;
 }
-
 
 double FollowWaypoints::DistanceBetweenAngles(double targetAngle, double sourceAngle){
   double a = targetAngle - sourceAngle;
@@ -159,3 +150,7 @@ double FollowWaypoints::DistanceBetweenAngles(double targetAngle, double sourceA
 
   return a;
 }
+
+// void FollowWaypoints::TrapazoidProfile(std::vector<frc::Pose2d> waypoints, std::vector<units::meters_per_second_t> waypointSpeeds, units::meters_per_second_t maxSpeed){
+
+// }

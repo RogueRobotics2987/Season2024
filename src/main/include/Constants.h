@@ -98,14 +98,14 @@ namespace ModuleConstants {
 }
 
 namespace AutoConstants {
-    constexpr auto kMaxSpeed = 1.0_mps;
+    constexpr auto kMaxSpeed = 4.0_mps;
     constexpr auto kMaxAcceleration = 2_mps_sq;
-    constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
-    constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
+    constexpr auto kMaxAngularSpeed = 3.142_rad_per_s * 2;
+    constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq * 2;
 
     constexpr double kPXController = 0.1;
     constexpr double kPYController = 0.1;
-    constexpr double kPThetaController = 1;
+    constexpr double kPThetaController = 2;
     extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
 } 
 
