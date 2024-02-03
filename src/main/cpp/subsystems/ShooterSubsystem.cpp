@@ -5,10 +5,13 @@
 #include "subsystems/ShooterSubsystem.h"
 
 ShooterSubsystem::ShooterSubsystem() {
-    LeftShooter = new rev::CANSparkMax(15, rev::CANSparkMax::MotorType::kBrushless);
-    RightShooter = new rev::CANSparkMax(16, rev::CANSparkMax::MotorType::kBrushless);
-    ShooterActuator = new rev::CANSparkMax(13, rev::CANSparkMax::MotorType::kBrushless);
+    LeftShooter.SetInverted(true);
 }
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {}
+
+void ShooterSubsystem::StopShooter()
+    {
+
+    }

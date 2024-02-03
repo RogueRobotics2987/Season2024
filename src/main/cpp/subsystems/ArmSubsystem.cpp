@@ -4,10 +4,9 @@
 
 #include "subsystems/ArmSubsystem.h"
 
-ArmSubsystem::ArmSubsystem() {
-    LowerArm = new rev::CANSparkMax(17, rev::CANSparkMax::MotorType::kBrushless);
-    UpperArm = new rev::CANSparkMax(18, rev::CANSparkMax::MotorType::kBrushless);
-    ArmWheels = new rev::CANSparkMax(19, rev::CANSparkMax::MotorType::kBrushless);
+ArmSubsystem::ArmSubsystem() 
+{
+    
 }
 
 // This method will be called once per scheduler run

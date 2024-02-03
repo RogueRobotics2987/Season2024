@@ -6,7 +6,7 @@
 
 ClimberSubsystem::ClimberSubsystem()
 {
-    ClimberMoter = new rev::CANSparkMax(12, rev::CANSparkMax::MotorType::kBrushless);
+
 }
 
 // This method will be called once per scheduler run

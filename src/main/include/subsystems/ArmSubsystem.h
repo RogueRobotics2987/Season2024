@@ -18,9 +18,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
- rev::CANSparkMax* LowerArm;
- rev::CANSparkMax* UpperArm;
- rev::CANSparkMax* ArmWheels;
+ rev::CANSparkMax LowerArm{17, rev::CANSparkMax::MotorType::kBrushless};
+ rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
+ rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

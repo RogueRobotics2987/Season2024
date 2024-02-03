@@ -4,11 +4,8 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem() {
-    BackIntake = new rev::CANSparkMax(9, rev::CANSparkMax::MotorType::kBrushless);
-    FrontIntake = new rev::CANSparkMax(10, rev::CANSparkMax::MotorType::kBrushless);
-    CenterIntake = new rev::CANSparkMax(11, rev::CANSparkMax::MotorType::kBrushless);
-    Magazine = new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushless);
+IntakeSubsystem::IntakeSubsystem() 
+{
 
 }
 
