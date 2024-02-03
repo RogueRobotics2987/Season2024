@@ -56,4 +56,5 @@ class FollowWaypoints
     double thetaDouble = 0;
     frc::Pose2d lastPose;
     units::meters_per_second_t maxSpeed;
+    double threshold = 0.1;
 };

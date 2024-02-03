@@ -33,14 +33,17 @@ void FollowWaypoints::Execute()
 {
   currentPose = m_drivetrain->GetPose(); 
 
-  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < 0.1) 
-    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < 0.1) 
+  if((fabs((double)currentPose.X() - (double)desiredPose.X()) < threshold) 
+    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
     && ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5))
   {
     if(m_waypoints.size() > 0) 
     {
       desiredPose = m_waypoints.front();
       m_waypoints.pop_front();
+      if(m_waypoints.size() == 0){
+        threshold = 0.05;
+      }
     }
     else
     {
@@ -64,7 +67,7 @@ void FollowWaypoints::Execute()
     }
     else if((totalDistance-distanceTraveled) <= 0.5){
       double x = (totalDistance-distanceTraveled) / 0.5;
-      robotSpeed = 1 * (x) * maxSpeed; //0-100% of max speed aka Z
+      robotSpeed = 1 * (x) * maxSpeed + 0.25_mps; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true){
         frc::SmartDashboard::PutNumber("Xvalue2", x);
@@ -114,17 +117,19 @@ void FollowWaypoints::Execute()
     frc::SmartDashboard::PutNumber("percentDistanceTraveled", (double)(distanceTraveled/totalDistance));
     frc::SmartDashboard::PutNumber("lastPoseX", (double)lastPose.X());
     frc::SmartDashboard::PutNumber("lastPoseY", (double)lastPose.Y());
+    frc::SmartDashboard::PutNumber("Threshold", threshold);
   }
 }
 
 // Called once the command ends or is interrupted.
 void FollowWaypoints::End(bool interrupted) {
-  m_drivetrain->Drive(0_ mps, 0_mps , 0_rad_per_s, true, false);
+  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
   distanceTraveled = 0;
   finished = false;
   totalDistance = 0;
   deltaX = 0;
   deltaY = 0;
+  threshold = 0.1;
 }
 
 // Returns true when the command should end.
