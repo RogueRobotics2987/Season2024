@@ -15,11 +15,13 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
-  rev::CANSparkMax* LeftShooter;
-  rev::CANSparkMax* RightShooter;
+
 
 
  private:
+  rev::CANSparkMax* LeftShooter;
+  rev::CANSparkMax* RightShooter;
+  rev::CANSparkMax* ShooterActuator;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };
