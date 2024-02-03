@@ -7,6 +7,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
 
+
+#include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/FunctionalCommand.h>
@@ -14,10 +16,14 @@
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
+#include <hal/can.h> 
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
+
+  frc2::CommandPtr Pickup();
+  frc2::CommandPtr PickupStop();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -43,17 +49,14 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax* m_shooterMotor1 = new rev::CANSparkMax(5, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax* m_shooterMotor2 = new rev::CANSparkMax(6, rev::CANSparkMax::MotorType::kBrushless);
 
-  /*int IntakeMotor1Port = 1;
-  int IntakeMotor2Port = 2;
-  int IntakeMotor3Port = 3; // middle motor that picks up piece
-  int MagMotor1Port = 4;
-  int shooterMotor1Port = 5;
-  int shooterMotor2Port = 6;*/
+  frc::DigitalInput colorInput {0};   // 0 is a place holder for the DIO port
+  frc::DigitalInput colorInput2 {1};  // 1 is a place holder for the DIO port
+  
 
   bool orangeCheerio = false;     // if auto/teleop want to pickup a note
 
   bool detectiveOrange1 = false;  // color sensor on the __ of robot
-  bool detectiveOrange2 = false;  // color sensor on the __ of robot
+  //bool detectiveOrange2 = false;  // color sensor on the __ of robot
   bool eatenCheerio = false;      // color sensor on hood
 
   bool warmMilk = false;          // warmup shooter

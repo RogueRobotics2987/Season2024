@@ -50,15 +50,13 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureButtonBindings()
 {
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
-  frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
+  //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
 
   //runs a basic autonomous
   frc2::JoystickButton(&m_driverController, 6).OnTrue(onFlyGeneration());
 
   // Robot slides right (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
-
-
   // Robot slides left (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
@@ -69,8 +67,12 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limePose, m_drive, m_driverController).ToPtr());
 
   // Run/stop test motor
-  frc2::JoystickButton(&m_driverController, 3).OnTrue(m_testMotor.Move());
-  frc2::JoystickButton(&m_driverController, 4).OnTrue(m_testMotor.Stop());
+  frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
+  frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
+
+  //start PICKUP state
+  frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
+  frc2::JoystickButton(&m_driverController, 5).ToggleOnFalse(m_intakeShoot.PickupStop());
 
 }
 

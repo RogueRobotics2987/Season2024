@@ -8,42 +8,53 @@ IntakeSubsystem::IntakeSubsystem() = default;
 
 // This method will be called once per scheduler run
 void IntakeSubsystem::Periodic() {
+    detectiveOrange1 = colorInput.Get();
+
+    frc::SmartDashboard::PutBoolean("color sensor val: ", detectiveOrange1);
+    
+    frc::SmartDashboard::PutBoolean("orangeCheerio: ", orangeCheerio);
+
     switch (state) {
     case EMPTY:     // turn everything off
-        m_intakeMotor1->Set(0.0); 
-        m_intakeMotor2->Set(0.0);
-        m_intakeMotor3->Set(0.0);
+        frc::SmartDashboard::PutString("state: ", "EMPTY");
 
-        m_magMotor1->Set(0.0);
-        m_magMotor2->Set(0.0);
+        //m_intakeMotor1->Set(0.0); 
+        //m_intakeMotor2->Set(0.0);
+        //m_intakeMotor3->Set(0.0);
 
-        m_shooterMotor1->Set(0.0);
-        m_shooterMotor2->Set(0.0);   
+        //m_magMotor1->Set(0.0);
+        //m_magMotor2->Set(0.0);
+
+        //m_shooterMotor1->Set(0.0);
+        //m_shooterMotor2->Set(0.0);   
         
 
         if(orangeCheerio == true){
             state = PICKUP;   
+            frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
         } 
 
         break;
     
     case PICKUP:    // start intake and magazine
-        m_intakeMotor1->Set(0.5);
-        m_intakeMotor2->Set(0.5);
-        m_intakeMotor3->Set(0.5);   // TODO: switch direction based on robot direction
+        frc::SmartDashboard::PutString("state: ", "PICKUP");
+        //m_intakeMotor1->Set(0.5);
+        //m_intakeMotor2->Set(0.5);
+        //m_intakeMotor3->Set(0.5);   // TODO: switch direction based on robot direction
 
-        if(detectiveOrange1 == true || detectiveOrange2 == true){
-            m_magMotor1->Set(0.5);
-            m_magMotor2->Set(0.5);
+        if(detectiveOrange1 == true /*|| detectiveOrange2 == true*/){
+            //m_magMotor1->Set(0.5);
+            //m_magMotor2->Set(0.5);
+            frc::SmartDashboard::PutBoolean("detect cheerio?: ", detectiveOrange1);
 
         }
 
-        if(orangeCheerio == false){
+        /*if(orangeCheerio == false){
             state = EMPTY;
 
         } else if(eatenCheerio == true){
             state = LOADED;
-        }
+        }*/
 
         break;
 
@@ -52,12 +63,14 @@ void IntakeSubsystem::Periodic() {
         break;
     */
     case LOADED:    // self explanitory
-        m_intakeMotor1->Set(0.0);
+        frc::SmartDashboard::PutString("state: ", "LOADED");
+
+        /*m_intakeMotor1->Set(0.0);
         m_intakeMotor2->Set(0.0);
         m_intakeMotor3->Set(0.0);
 
         m_magMotor1->Set(0.0);
-        m_magMotor2->Set(0.0);
+        m_magMotor2->Set(0.0);*/
 
         orangeCheerio = false;
 
@@ -93,4 +106,16 @@ void IntakeSubsystem::Periodic() {
         break;
     }
 
+}
+
+frc2::CommandPtr IntakeSubsystem::Pickup(){
+    return this->RunOnce( [this] {
+      orangeCheerio = true;
+
+    });
+}
+frc2::CommandPtr IntakeSubsystem::PickupStop(){
+    return this->RunOnce( [this] {
+      orangeCheerio = false;
+    });
 }

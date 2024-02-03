@@ -35,6 +35,7 @@
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
 #include "commands/followWaypoints.h"
+#include "subsystems/IntakeShooterSubsystem.h"
 
 using namespace pathplanner;
 
@@ -60,12 +61,13 @@ class RobotContainer
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
-    frc::XboxController m_driverController{0};
+    frc::XboxController m_driverController{1};
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
     LimelightPose m_limePose;
     TestMotor m_testMotor;
+    IntakeSubsystem m_intakeShoot;
 
     // frc::SendableChooser<frc2::Command*> m_chooser;
     //void ConfigureButtonBindings();
