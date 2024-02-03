@@ -4,8 +4,7 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem()
-{
+ClimberSubsystem::ClimberSubsystem(){
 
 }
 
