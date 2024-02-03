@@ -65,7 +65,7 @@ class RobotContainer
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    LimelightPose m_limePose;
+    LimelightSubsystem m_limePose;
     TestMotor m_testMotor;
     IntakeSubsystem m_intakeShoot;
 

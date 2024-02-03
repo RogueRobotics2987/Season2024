@@ -11,6 +11,7 @@
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
+  void Direction();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

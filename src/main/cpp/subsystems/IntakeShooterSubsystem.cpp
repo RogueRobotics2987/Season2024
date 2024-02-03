@@ -18,16 +18,6 @@ void IntakeSubsystem::Periodic() {
     case EMPTY:     // turn everything off
         frc::SmartDashboard::PutString("state: ", "EMPTY");
 
-        //m_intakeMotor1->Set(0.0); 
-        //m_intakeMotor2->Set(0.0);
-        //m_intakeMotor3->Set(0.0);
-
-        //m_magMotor1->Set(0.0);
-        //m_magMotor2->Set(0.0);
-
-        //m_shooterMotor1->Set(0.0);
-        //m_shooterMotor2->Set(0.0);   
-        
 
         if(orangeCheerio == true){
             state = PICKUP;   
@@ -38,15 +28,11 @@ void IntakeSubsystem::Periodic() {
     
     case PICKUP:    // start intake and magazine
         frc::SmartDashboard::PutString("state: ", "PICKUP");
-        //m_intakeMotor1->Set(0.5);
-        //m_intakeMotor2->Set(0.5);
-        //m_intakeMotor3->Set(0.5);   // TODO: switch direction based on robot direction
+        
 
-        if(detectiveOrange1 == true /*|| detectiveOrange2 == true*/){
-            //m_magMotor1->Set(0.5);
-            //m_magMotor2->Set(0.5);
+        if(detectiveOrange1 == true){
+
             frc::SmartDashboard::PutBoolean("detect cheerio?: ", detectiveOrange1);
-
         }
 
         /*if(orangeCheerio == false){
@@ -58,19 +44,8 @@ void IntakeSubsystem::Periodic() {
 
         break;
 
-    /*case MAGAZINE:
-
-        break;
-    */
     case LOADED:    // self explanitory
         frc::SmartDashboard::PutString("state: ", "LOADED");
-
-        /*m_intakeMotor1->Set(0.0);
-        m_intakeMotor2->Set(0.0);
-        m_intakeMotor3->Set(0.0);
-
-        m_magMotor1->Set(0.0);
-        m_magMotor2->Set(0.0);*/
 
         orangeCheerio = false;
 

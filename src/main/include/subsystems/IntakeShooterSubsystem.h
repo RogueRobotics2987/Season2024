@@ -7,16 +7,16 @@
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
 
-
 #include <frc/DigitalInput.h>
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/FunctionalCommand.h>
+
 #include <frc/smartdashboard/SmartDashboard.h> 
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
-#include <hal/can.h> 
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
@@ -38,7 +38,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   intakeState state = EMPTY;
 
 
-  rev::CANSparkMax* m_intakeMotor1 = new rev::CANSparkMax(1 /*m_intakeMotor1*/, rev::CANSparkMax::MotorType::kBrushless);
+  rev::CANSparkMax* m_intakeMotor1 = new rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax* m_intakeMotor2 = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushless);
   // intakeMotore3 == middle motor that picks up note
   rev::CANSparkMax* m_intakeMotor3 = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);
