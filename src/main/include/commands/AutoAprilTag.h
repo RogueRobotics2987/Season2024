@@ -9,7 +9,7 @@
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/LimelightPose.h"
+#include "subsystems/LimelightSubsystem.h"
 /*
  * An example command.
  *
@@ -22,7 +22,7 @@ class AutoAprilTag
 {
   public:
     AutoAprilTag(); 
-    AutoAprilTag(LimelightPose &limePose, DriveSubsystem &drivetrain);
+    AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain);
 
     void Initialize() override;
 
@@ -35,7 +35,7 @@ class AutoAprilTag
     double kp = -0.09927;
 
   private:
-    LimelightPose* m_limePose = nullptr;
+    LimelightSubsystem* m_limePose = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     double tx = 0;
     double tv = 0;

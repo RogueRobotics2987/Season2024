@@ -26,7 +26,7 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 
-#include "subsystems/LimelightPose.h"
+#include "subsystems/LimelightSubsystem.h"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
@@ -58,7 +58,7 @@ class RobotContainer
     frc::XboxController m_driverController{0};
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    LimelightPose m_limePose;
+    LimelightSubsystem m_limePose;
     // frc::SendableChooser<frc2::Command*> m_chooser;
     void ConfigureButtonBindings();
     std::unique_ptr<frc2::Command> onTheFly;

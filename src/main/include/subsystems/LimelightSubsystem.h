@@ -10,17 +10,23 @@
 
 #include "networktables/NetworkTableInstance.inc"
 
-class LimelightPose : public frc2::SubsystemBase
+class LimelightSubsystem : public frc2::SubsystemBase
 {
   public:
-    LimelightPose();
+    LimelightSubsystem();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
 
+    double GetAprilTagtx();
+    double GetNotetx();
+
     std::vector<double> botPose;
+
+    double AprilTagstx = 0;
+    double Notetx = 0;
 
  private:
     // Components (e.g. motor controllers and sensors) should generally be

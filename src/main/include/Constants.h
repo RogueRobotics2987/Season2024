@@ -22,16 +22,17 @@
  * they are needed.
  */
 namespace DriveConstants {
-    constexpr int kFrontLeftDriveMotorPort = 42;
-    constexpr int kRearLeftDriveMotorPort = 18;
-    constexpr int kFrontRightDriveMotorPort = 56;
-    constexpr int kRearRightDriveMotorPort = 46;
+    constexpr int kFrontLeftDriveMotorPort = 8;
+    constexpr int kRearLeftDriveMotorPort = 6;
+    constexpr int kFrontRightDriveMotorPort = 2;
+    constexpr int kRearRightDriveMotorPort = 4;
 
-    constexpr int kFrontLeftTurningMotorPort = 48;
-    constexpr int kRearLeftTurningMotorPort = 43;
-    constexpr int kFrontRightTurningMotorPort = 9;
-    constexpr int kRearRightTurningMotorPort = 47;
+    constexpr int kFrontLeftTurningMotorPort = 7;
+    constexpr int kRearLeftTurningMotorPort = 5;
+    constexpr int kFrontRightTurningMotorPort = 1;
+    constexpr int kRearRightTurningMotorPort = 3;
 
+    //TODO figure out the Encoder Nums
     constexpr int kFrontLeftTurningEncoderNumber = 13; 
     constexpr int kRearLeftTurningEncoderNumber = 16;
     constexpr int kFrontRightTurningEncoderNumber = 14;

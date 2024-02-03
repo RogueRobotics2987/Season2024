@@ -5,7 +5,7 @@
 #include "commands/AprilTagFollower.h"
 
 AprilTagFollower::AprilTagFollower(){}
-AprilTagFollower::AprilTagFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox) 
+AprilTagFollower::AprilTagFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox) 
 {
   m_limePose = &limePose;
   m_drivetrain = &drivetrain;
