@@ -26,7 +26,7 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 
-#include "subsystems/LimelightPose.h"
+#include "subsystems/LimelightSubsystem.h"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"

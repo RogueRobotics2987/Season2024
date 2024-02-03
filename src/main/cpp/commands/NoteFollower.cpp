@@ -5,7 +5,7 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
+NoteFollower::NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limePose = &limePose;

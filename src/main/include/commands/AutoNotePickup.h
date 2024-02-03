@@ -11,14 +11,14 @@
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/LimelightPose.h"
+#include "subsystems/LimelightSubsystem.h"
  
 class AutoNotePickup
     : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
 {
   public:
     AutoNotePickup();
-    AutoNotePickup(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    AutoNotePickup(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
     void Initialize() override;
@@ -34,7 +34,7 @@ class AutoNotePickup
     double kp = 0.09927;
 
   private:
-    LimelightPose* m_limePose = nullptr;
+    LimelightSubsystem* m_limePose = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
 };

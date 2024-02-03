@@ -11,7 +11,7 @@
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/LimelightPose.h"
+#include "subsystems/LimelightSubsystem.h"
 
 /**
  * An example command.
@@ -25,7 +25,7 @@ class NoteFollower
 {
   public:
     NoteFollower();
-    NoteFollower(LimelightPose &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
     void Initialize() override;
@@ -41,7 +41,7 @@ class NoteFollower
     double kp = 0.09927;
 
   private:
-    LimelightPose* m_limePose = nullptr;
+    LimelightSubsystem* m_limePose = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
 };

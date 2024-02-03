@@ -5,7 +5,7 @@
 #include "commands/AutoAprilTag.h"
 
 AutoAprilTag::AutoAprilTag(){}
-AutoAprilTag::AutoAprilTag(LimelightPose &limePose, DriveSubsystem &drivetrain)
+AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain)
 {
   m_limePose = &limePose;
   m_drivetrain = &drivetrain;
