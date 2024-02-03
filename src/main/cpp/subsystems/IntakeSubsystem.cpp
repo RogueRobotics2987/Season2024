@@ -4,7 +4,10 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem() = default;
+IntakeSubsystem::IntakeSubsystem() 
+{
+
+}
 
 // This method will be called once per scheduler run
 void IntakeSubsystem::Periodic() {

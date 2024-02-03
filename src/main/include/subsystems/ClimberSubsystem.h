@@ -17,7 +17,7 @@ class ClimberSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  rev::CANSparkMax* ClimberMoter;
+  rev::CANSparkMax ClimberMoter{12, rev::CANSparkMax::MotorType::kBrushless};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

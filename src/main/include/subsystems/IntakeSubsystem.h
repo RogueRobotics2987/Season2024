@@ -17,8 +17,13 @@ class IntakeSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  
 
  private:
+  rev::CANSparkMax BackIntake{9, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax Magazine{14, rev::CANSparkMax::MotorType::kBrushless};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

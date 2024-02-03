@@ -4,7 +4,14 @@
 
 #include "subsystems/ShooterSubsystem.h"
 
-ShooterSubsystem::ShooterSubsystem() = default;
+ShooterSubsystem::ShooterSubsystem() {
+    LeftShooter.SetInverted(true);
+}
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {}
+
+void ShooterSubsystem::StopShooter()
+    {
+
+    }

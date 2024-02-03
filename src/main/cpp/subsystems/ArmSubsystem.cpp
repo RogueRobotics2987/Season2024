@@ -4,7 +4,10 @@
 
 #include "subsystems/ArmSubsystem.h"
 
-ArmSubsystem::ArmSubsystem() = default;
+ArmSubsystem::ArmSubsystem() 
+{
+    
+}
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {}
