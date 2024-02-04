@@ -80,9 +80,6 @@ float RobotContainer::Deadzone(float x)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
   // m_drive.ZeroHeading();
-  m_drive.ResetOdometry({0_m, 0_m, 0_deg});
-
-  //Counter clock wise is positive, Clockwise is positive.
 
   std::vector<frc::Pose2d> twoNotePoses{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
@@ -116,15 +113,40 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(7.1_m, -0.95_m, frc::Rotation2d(0_deg))
   };
 
-    std::vector<frc::Pose2d> squareDance{
+  std::vector<frc::Pose2d> squareDance{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1.7_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2_m, 0.3_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2_m, 1.7_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1.7_m, 2_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(0.3_m, 2_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(0_m, 1.7_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2.5_m, 0_m, frc::Rotation2d(90_deg)),
+    frc::Pose2d(3_m, 0.5_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(3_m, 2.5_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(2.5_m, 3_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0.5_m, 3_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0_m, 2.5_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(0_m, 0.5_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))
+  };
+
+  std::vector<units::meters_per_second_t> squareDanceSpeeds{
+    0_mps,
+    1_mps,
+    1_mps,
+    1_mps,
+    1_mps,
+    1_mps,
+    1_mps,
+    1_mps,
+    0_mps
+  };
+
+  std::vector<units::meters_per_second_t> squareDanceCruiseSpeeds{
+    0_mps,
+    3_mps,
+    1_mps,
+    3_mps,
+    1_mps,
+    3_mps,
+    1_mps,
+    2_mps,
+    1_mps
   };
 
   std::vector<frc::Pose2d> theTwist{
@@ -135,8 +157,26 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   std::vector<frc::Pose2d> walkTheLine{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(3_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(4_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(5_m, 0_m, frc::Rotation2d(0_deg))
+  };
+
+  std::vector<units::meters_per_second_t> walkTheLineSpeeds{
+    0_mps,
+    1_mps,
+    2_mps,
+    1_mps,
+    0_mps
+  };
+
+  std::vector<units::meters_per_second_t> walkTheLineMaxSpeeds{
+    1_mps,
+    1_mps,
+    2_mps,
+    1_mps,
+    1_mps
   };
 
   std::vector<frc::Pose2d>  BPose1Shoot2{
@@ -155,17 +195,17 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   };
 
     std::vector<frc::Pose2d>  RPose1Shoot2{
-    frc::Pose2d(15.15_m, 7_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(13.65_m, 7_m, frc::Rotation2d(0_deg))
   };
 
     std::vector<frc::Pose2d>  RPose2Shoot2{
-    frc::Pose2d(15.15_m, 5.55_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(15.05_m, 5.55_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg))
   };
 
     std::vector<frc::Pose2d>  RPose3Shoot2{
-    frc::Pose2d(15.15_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg))
   };
 
@@ -175,13 +215,57 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   };
 
   std::vector<frc::Pose2d>  RPose1Shoot3{
-    frc::Pose2d(15.15_m, 7_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
   };
+
+  std::vector<frc::Pose2d> B_3_6{
+    frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+    frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(4.6_m, 3.35_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(6.6_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(8.15_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(4.6_m, 3.35_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(145_deg)),
+    frc::Pose2d(2.35_m, 3.6_m, frc::Rotation2d(145_deg)),
+    frc::Pose2d(2.2_m, 4.1_m, frc::Rotation2d(145_deg)), // auto rotate
+  };
+
+  std::vector<units::meters_per_second_t> B_3_6PointSpeed{
+    0_mps,
+    0_mps,
+    0_mps,
+    1_mps,
+    2_mps,
+    0.75_mps,
+    0_mps,
+    2_mps,
+    1_mps,
+    1_mps,
+    0_mps
+  };
+
+  std::vector<units::meters_per_second_t> B_3_6CruiseSpeed{
+    1_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    0.75_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    1_mps
+  };
+
+  m_drive.ResetOdometry(B_3_6[0]);  //Counter clock wise is positive, Clockwise is positive.
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, squareDance, 1_mps).ToPtr()
+    FollowWaypoints(m_drive, B_3_6, B_3_6PointSpeed, B_3_6CruiseSpeed).ToPtr()
   );  
 }

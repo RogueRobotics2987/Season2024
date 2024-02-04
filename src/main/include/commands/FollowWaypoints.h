@@ -24,7 +24,7 @@ class FollowWaypoints
 {
   public:
     FollowWaypoints();
-    FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, units::meters_per_second_t driveSpeed);
+    FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, std::vector<units::meters_per_second_t> driveSpeed, std::vector<units::meters_per_second_t> cruiseSpeed);
 
     void Initialize() override;
 
@@ -40,6 +40,9 @@ class FollowWaypoints
   private:
     DriveSubsystem* m_drivetrain = nullptr;
     std::list<frc::Pose2d> m_waypoints;
+    std::list<units::meters_per_second_t> m_driveSpeed;
+    std::list<units::meters_per_second_t> m_cruiseSpeed;
+    std::list<double> m_waypointDistance;
 
     bool finished = false;
     frc::Pose2d currentPose;
@@ -57,4 +60,7 @@ class FollowWaypoints
     frc::Pose2d lastPose;
     units::meters_per_second_t maxSpeed;
     double threshold = 0.1;
+    units::meters_per_second_t pointSpeed;
+    units::meters_per_second_t cruiseSpeed;
+    double currentDistance = 0;
 };
