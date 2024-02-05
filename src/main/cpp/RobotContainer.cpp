@@ -219,7 +219,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
   };
 
-  std::vector<frc::Pose2d> B_3_6{
+  std::vector<frc::Pose2d> B_3_6Waypoints{
     frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
@@ -261,11 +261,69 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     1_mps
   };
 
-  m_drive.ResetOdometry(B_3_6[0]);  //Counter clock wise is positive, Clockwise is positive.
+  std::vector<frc::Pose2d> R_3_6Waypoints{
+    frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.0_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(12.3_m, 3.4_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(10.75_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(9.5_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(8.9_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(10.75_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(11.6_m, 3.85_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(12.1_m, 3.2_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(13.3_m, 3_m, frc::Rotation2d(35_deg)),
+    frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(35_deg)) //rotation will be limelights auto adjust
+  };
+
+  std::vector<units::meters_per_second_t> R_3_6PointSpeed{
+    0_mps,
+    0_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    0_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    0_mps,
+  };
+
+  std::vector<units::meters_per_second_t> R_3_6CruiseSpeed{
+    1_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    1_mps,
+  };
+
+struct {             // Structure declaration
+  std::vector<frc::Pose2d> B_3_6Waypoints; // Member (int variable)
+  std::vector<units::meters_per_second_t> B_3_6PointSpeed; 
+  std::vector<units::meters_per_second_t> B_3_6CruiseSpeed;
+} B_3_6;       // Structure variable
+
+struct {             // Structure declaration
+  std::vector<frc::Pose2d> R_3_6Waypoints; // Member (int variable)
+  std::vector<units::meters_per_second_t> R_3_6PointSpeed; 
+  std::vector<units::meters_per_second_t> R_3_6CruiseSpeed;
+} R_3_6;       // Structure variable
+
+  m_drive.ResetOdometry(B_3_6.B_3_6Waypoints[0]);  //Counter clock wise is positive, Clockwise is positive.
+  m_drive.ResetOdometry(R_3_6.R_3_6Waypoints[0]);  
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, B_3_6, B_3_6PointSpeed, B_3_6CruiseSpeed).ToPtr()
+    FollowWaypoints(m_drive, B_3_6.B_3_6Waypoints, B_3_6.B_3_6PointSpeed, B_3_6.B_3_6CruiseSpeed).ToPtr()
   );  
 }
