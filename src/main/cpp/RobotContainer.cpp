@@ -261,6 +261,75 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     1_mps
   };
 
+    std::vector<frc::Pose2d> B_3_7Waypoints{
+    frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(5.15_m, 1.8_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+    frc::Pose2d(5.15_m, 1.8_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(6.9_m, 2.35_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(7.7_m, 2.45_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(5.15_m, 1.8_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.5_m, 3_m, frc::Rotation2d(145_deg)),
+    frc::Pose2d(2.35_m, 4_m, frc::Rotation2d(145_deg))
+  };
+
+  std::vector<units::meters_per_second_t> B_3_7PointSpeed{
+    0_mps,
+    0_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    0_mps,
+    2_mps,
+    1_mps,
+    0_mps
+  };
+
+  std::vector<units::meters_per_second_t> B_3_7CruiseSpeed{
+    1_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    1.5_mps
+  };
+
+  std::vector<frc::Pose2d> B_2_6Waypoints{
+    frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(4.0_m, 5.15_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+    frc::Pose2d(6.25_m, 4.25_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(7.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(5.5_m, 4.25_m, frc::Rotation2d(180_deg)),
+    frc::Pose2d(4.1_m, 5.4_m, frc::Rotation2d(145_deg)),
+    frc::Pose2d(1.9_m, 5.55_m, frc::Rotation2d(145_deg)),
+  };
+
+  std::vector<units::meters_per_second_t> B_2_6PointSpeed{
+    0_mps,
+    0_mps,
+    2_mps,
+    1_mps,
+    0_mps,
+    2_mps,
+    1.5_mps,
+    0_mps
+  };
+
+  std::vector<units::meters_per_second_t> B_2_6CruiseSpeed{
+    1_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    1_mps
+  };
+
   std::vector<frc::Pose2d> R_3_6Waypoints{
     frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(14.0_m, 4.1_m, frc::Rotation2d(0_deg)),
@@ -306,24 +375,48 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     1_mps,
   };
 
-struct {             // Structure declaration
-  std::vector<frc::Pose2d> B_3_6Waypoints; // Member (int variable)
-  std::vector<units::meters_per_second_t> B_3_6PointSpeed; 
-  std::vector<units::meters_per_second_t> B_3_6CruiseSpeed;
-} B_3_6;       // Structure variable
+  std::vector<frc::Pose2d> R_3_7Waypoints{
+    frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.0_m, 4.1_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+    frc::Pose2d(12.25_m, 1.9_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(9.7_m, 2.4_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(8.9_m, 2.4_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(12.25_m, 1.9_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(14.25_m, 3.6_m, frc::Rotation2d(0_deg))
+  };
 
-struct {             // Structure declaration
-  std::vector<frc::Pose2d> R_3_6Waypoints; // Member (int variable)
-  std::vector<units::meters_per_second_t> R_3_6PointSpeed; 
-  std::vector<units::meters_per_second_t> R_3_6CruiseSpeed;
-} R_3_6;       // Structure variable
+  std::vector<units::meters_per_second_t> R_3_7PointSpeed{
+    0_mps,
+    0_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    0_mps,
+    2_mps,
+    1.5_mps,
+    0_mps
+  };
 
-  m_drive.ResetOdometry(B_3_6.B_3_6Waypoints[0]);  //Counter clock wise is positive, Clockwise is positive.
-  m_drive.ResetOdometry(R_3_6.R_3_6Waypoints[0]);  
+  std::vector<units::meters_per_second_t> R_3_7CruiseSpeed{
+    1_mps,
+    2_mps,
+    2_mps,
+    2_mps,
+    1_mps,
+    1_mps,
+    2_mps,
+    2_mps,
+    1.5_mps
+  };
+
+  m_drive.ResetOdometry(B_3_6Waypoints[0]);  //Counter clock wise is positive, Clockwise is positive.
+  // m_drive.ResetOdometry(R_3_6Waypoints[0]);  
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, B_3_6.B_3_6Waypoints, B_3_6.B_3_6PointSpeed, B_3_6.B_3_6CruiseSpeed).ToPtr()
+    FollowWaypoints(m_drive, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed).ToPtr()
   );  
 }
