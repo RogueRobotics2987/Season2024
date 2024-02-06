@@ -4,7 +4,12 @@
 
 #include "commands/FollowWaypoints.h"
 
-FollowWaypoints::FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, std::vector<units::meters_per_second_t> driveSpeed, std::vector<units::meters_per_second_t> cruiseSpeed) 
+FollowWaypoints::FollowWaypoints(
+  DriveSubsystem &drivetrain,
+  std::vector<frc::Pose2d> waypoints,
+  std::vector<units::meters_per_second_t> driveSpeed,
+  std::vector<units::meters_per_second_t> cruiseSpeed
+) 
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drivetrain = &drivetrain;
@@ -124,7 +129,8 @@ void FollowWaypoints::Execute()
 
   lastPose = currentPose;
   
-  if(DebugConstants::debug == true){
+  if(DebugConstants::debug == true)
+  {
     frc::SmartDashboard::PutNumber("DesiredPoseX", (double)desiredPose.X());
     frc::SmartDashboard::PutNumber("DesiredPoseY", (double)desiredPose.Y());
     frc::SmartDashboard::PutNumber("DesiredAngle", (double)desiredPose.Rotation().Degrees());
