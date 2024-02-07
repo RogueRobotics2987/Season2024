@@ -81,6 +81,7 @@ class RobotContainer
       frc::Pose2d(2.2_m, 4.1_m, frc::Rotation2d(145_deg)) // auto rotate
     };
 
+    //point speed is the speed you want to be going at the specific waypoint
     std::vector<units::meters_per_second_t> B_3_6PointSpeed{
       0_mps,
       0_mps,
@@ -90,22 +91,23 @@ class RobotContainer
       0.75_mps,
       0_mps,
       2_mps,
-      1_mps,
+      1.5_mps,
       1_mps,
       0_mps
     };
 
+    //The cruise speed is the speed to get to that waypoint, so for the last item it would be the speed to get to that item.
     std::vector<units::meters_per_second_t> B_3_6CruiseSpeed{
       1_mps,
+      1_mps,
       2_mps,
       2_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      0.75_mps,
       2_mps,
       2_mps,
       1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
       1_mps
     };
 
@@ -139,7 +141,7 @@ class RobotContainer
       2_mps,
       2_mps,
       1_mps,
-      1_mps,
+      2_mps,
       2_mps,
       2_mps,
       1.5_mps
@@ -173,7 +175,7 @@ class RobotContainer
       1_mps,
       2_mps,
       2_mps,
-      1.5_mps,
+      2_mps,
       1_mps,
       2_mps,
       2_mps,
@@ -209,11 +211,11 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
 
     std::vector<units::meters_per_second_t> B_2_7CruiseSpeed{
       1_mps,
-      2_mps,
+      1_mps,
       2_mps,
       2_mps,
       1_mps,
-      1_mps,
+      2_mps,
       2_mps,
       2_mps,
       1_mps,
@@ -273,7 +275,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
 
     std::vector<units::meters_per_second_t> B_3_8CruiseSpeed{
       1_mps,
-      2_mps,
+      1_mps,
       2_mps,
       2_mps,
       1_mps,
@@ -310,13 +312,11 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
       2_mps,
       2_mps,
       1_mps,
-      1_mps,
+      2_mps,
       2_mps,
       1_mps,
       1_mps,
     };
-
-
 
     //Red Auto Paths
 
@@ -361,7 +361,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
       2_mps,
       2_mps,
       2_mps,
-      1_mps,
+      2_mps,
       1_mps,
     };
 
@@ -395,9 +395,9 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
       2_mps,
       2_mps,
       1_mps,
-      1_mps,
       2_mps,
       2_mps,
-      1.5_mps
+      2_mps,
+      1_mps
     };
 };
