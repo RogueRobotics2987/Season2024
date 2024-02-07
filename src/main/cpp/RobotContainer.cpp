@@ -219,12 +219,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
   };
 
-  m_drive.ResetOdometry({0_m, 0_m, 0_deg});  //Counter clock wise is positive, Clockwise is positive.
-  // m_drive.ResetOdometry(R_3_6Waypoints[0]);  
+  // m_drive.ResetOdometry({0_m, 0_m, 0_deg});  //Counter clock wise is positive, Clockwise is positive.
+  m_drive.ResetOdometry(B_1_4Waypoints[0]);  
 
   return frc2::cmd::Sequence(
     // AutoAprilTag(m_limePose,m_drive).ToPtr(),
     frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, m_limePose, squareDance, squareDanceSpeeds, squareDanceCruiseSpeeds, true).ToPtr()
+    FollowWaypoints(m_drive, m_limePose, B_1_4Waypoints, B_1_4PointSpeed, B_1_4CruiseSpeed, true).ToPtr()
   );  
 }

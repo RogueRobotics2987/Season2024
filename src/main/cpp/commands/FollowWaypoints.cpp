@@ -115,12 +115,12 @@ void FollowWaypoints::Execute()
     // robotSpeed = 1_mps;
     if(distanceTraveled >= currentDistance)
     {
-      robotSpeed = 0.1_mps;
+      robotSpeed = 0.5_mps;
     }
     else if((currentDistance-distanceTraveled) <= 0.65)
     {
       double x = (currentDistance-distanceTraveled) / 0.65;
-      robotSpeed = 1 * (x) * cruiseSpeed + pointSpeed + 0.1_mps; //0-100% of max speed aka Z
+      robotSpeed = 1 * (x) * cruiseSpeed + pointSpeed + 0.25_mps; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true)
       {
