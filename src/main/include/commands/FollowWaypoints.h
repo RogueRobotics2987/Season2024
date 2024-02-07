@@ -11,6 +11,7 @@
 #include <frc/trajectory/TrapezoidProfile.h>
 
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/LimelightPose.h"
 
 /**
  * An example command.
@@ -24,7 +25,14 @@ class FollowWaypoints
 {
   public:
     FollowWaypoints();
-    FollowWaypoints(DriveSubsystem &drivetrain, std::vector<frc::Pose2d> waypoints, std::vector<units::meters_per_second_t> driveSpeed, std::vector<units::meters_per_second_t> cruiseSpeed);
+    FollowWaypoints(
+      DriveSubsystem &drivetrain,
+      LimelightPose &limePose,
+      std::vector<frc::Pose2d> waypoints,
+      std::vector<units::meters_per_second_t> driveSpeed,
+      std::vector<units::meters_per_second_t> cruiseSpeed,
+      bool limeLight
+    );
 
     void Initialize() override;
 
@@ -39,6 +47,8 @@ class FollowWaypoints
 
   private:
     DriveSubsystem* m_drivetrain = nullptr;
+    LimelightPose* m_limePose = nullptr;
+
     std::list<frc::Pose2d> m_waypoints;
     std::list<units::meters_per_second_t> m_driveSpeed;
     std::list<units::meters_per_second_t> m_cruiseSpeed;
@@ -63,4 +73,8 @@ class FollowWaypoints
     units::meters_per_second_t pointSpeed;
     units::meters_per_second_t cruiseSpeed;
     double currentDistance = 0;
+    bool limeBool = false;
+    double tx = 0;
+    double tv = 0;
+    double kp = 0.09927/2;
 };

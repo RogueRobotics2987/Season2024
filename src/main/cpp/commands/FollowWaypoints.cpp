@@ -6,14 +6,19 @@
 
 FollowWaypoints::FollowWaypoints(
   DriveSubsystem &drivetrain,
+  LimelightPose &limePose,
   std::vector<frc::Pose2d> waypoints,
   std::vector<units::meters_per_second_t> driveSpeed,
-  std::vector<units::meters_per_second_t> cruiseSpeed
+  std::vector<units::meters_per_second_t> cruiseSpeed,
+  bool limeLight
 ) 
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drivetrain = &drivetrain;
+  m_limePose = &limePose;
   AddRequirements({m_drivetrain});
+  AddRequirements({m_limePose});
+
   m_waypoints.assign(waypoints.begin(), waypoints.end());
   m_driveSpeed.assign(driveSpeed.begin(), driveSpeed.end());
   m_cruiseSpeed.assign(cruiseSpeed.begin(), cruiseSpeed.end());
@@ -25,6 +30,8 @@ FollowWaypoints::FollowWaypoints(
     deltaX = fabs((double)waypoints[i].X() - (double)waypoints[i+1].X());
     m_waypointDistance.push_back(hypot(deltaX, deltaY));
   }
+
+  limeBool = limeLight;
 }
 
 // Called when the command is initially scheduled.
@@ -39,6 +46,9 @@ void FollowWaypoints::Initialize()
   cruiseSpeed = m_cruiseSpeed.front();
   m_cruiseSpeed.pop_front();
   lastPose = m_drivetrain->GetPose();
+
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -71,6 +81,24 @@ void FollowWaypoints::Execute()
     {
       finished = true;
     }
+  }
+
+  if(limeBool == true)
+  {
+    tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
+    tv = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0);
+    units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+
+    if( tx != -9999)
+    {
+      rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
+    }
+    else
+    {
+      rot = units::angular_velocity::radians_per_second_t(0);
+    }
+    
+    m_drivetrain->Drive(rot, false, false);
   }
 
   deltaX = fabs((double)lastPose.X() - (double)currentPose.X());
@@ -124,7 +152,7 @@ void FollowWaypoints::Execute()
     thetaDouble = thetaDouble * AutoConstants::kPThetaController;
 
     thetaVal = thetaDouble * 1_rad_per_s;
-    m_drivetrain->Drive(xVal, yVal, thetaVal, false, false);
+    m_drivetrain->Drive(xVal, yVal, false, false);
   }
 
   lastPose = currentPose;

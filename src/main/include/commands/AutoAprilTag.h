@@ -32,7 +32,7 @@ class AutoAprilTag
 
     bool IsFinished() override;
 
-    double kp = -0.09927;
+    double kp = 0.09927/2;
 
   private:
     LimelightPose* m_limePose = nullptr;

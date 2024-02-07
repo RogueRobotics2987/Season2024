@@ -72,6 +72,8 @@ void DriveSubsystem::Periodic()
   tempPose = GetPose();
   DrivePose = &tempPose;
 
+  periodicHelper();
+
   if(DebugConstants::debug == true)
   {
     frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
@@ -80,13 +82,46 @@ void DriveSubsystem::Periodic()
 }
 
 void DriveSubsystem::Drive(
-  units::meters_per_second_t xSpeed,
-  units::meters_per_second_t ySpeed,
-  units::radians_per_second_t rot,
-  bool fieldRelative,
-  bool noJoystickInput
+  units::meters_per_second_t xDriveSpeed,
+  units::meters_per_second_t yDriveSpeed,
+  units::radians_per_second_t rotDrive,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
 )
+{
+  //set local member variables for X,Y,Rot, field relative, noJoystick
+  xSpeed = xDriveSpeed;
+  ySpeed = yDriveSpeed;
+  rot = rotDrive;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
 
+void DriveSubsystem::Drive(
+  units::meters_per_second_t xDriveSpeed,
+  units::meters_per_second_t yDriveSpeed,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
+)
+{
+  xSpeed = xDriveSpeed;
+  ySpeed = yDriveSpeed;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
+
+void DriveSubsystem::Drive(
+  units::radians_per_second_t rotDrive,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
+)
+{
+  rot = rotDrive;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
+
+void DriveSubsystem::periodicHelper()
 {       
   if (DebugConstants::debug == true)
   {
