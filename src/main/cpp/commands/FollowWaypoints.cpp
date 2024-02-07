@@ -89,7 +89,7 @@ void FollowWaypoints::Execute()
     tv = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0);
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
 
-    if( tx != -9999)
+    if( tx != -9999 && (tx > 2.5 || tx < -2.5))
     {
       rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
     }
