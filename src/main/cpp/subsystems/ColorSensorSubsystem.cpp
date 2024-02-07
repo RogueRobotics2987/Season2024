@@ -8,10 +8,10 @@ ColorSensorSubsystem::ColorSensorSubsystem() = default;
 
 // This method will be called once per scheduler run
 void ColorSensorSubsystem::Periodic() {
-    detectiveOrange1 = colorInput.Get();
-    eatenCheerio = colorInput2.Get();
+    detectNoteIntake1 = colorInput.Get();
+    eatenNote = colorInput2.Get();
 
-    frc::SmartDashboard::PutBoolean("Intake colorSensor val: ", detectiveOrange1);
-    frc::SmartDashboard::PutBoolean("Mag colorSensor val: ", eatenCheerio);
+    frc::SmartDashboard::PutBoolean("Intake colorSensor val: ", detectNoteIntake1);
+    frc::SmartDashboard::PutBoolean("Mag colorSensor val: ", eatenNote);
 
 }

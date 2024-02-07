@@ -50,12 +50,12 @@ class StateMachine
   ShooterSubsystem m_shooter;
 
 
-  bool orangeCheerio = false;     // if auto/teleop want to pickup a note
+  bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
 
-  bool warmMilk = false;          // warmup shooter
-  bool spoon = false;             // activate shooter
+  bool warmUpShooter = false;     // warmup shooter (warmMilk)
+  bool moveNote2Shoot = false;    // move note into shooter
 
-  bool spillMilk = false;         // warmup dropper, move arm into position
-  bool micdrop = false;           // activate dropper
+  bool moveArm2Drop = false;      // warmup dropper (move arm into position)
+  bool dropNote = false;          // activate dropper
   
 };

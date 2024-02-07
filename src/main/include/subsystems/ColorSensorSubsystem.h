@@ -14,9 +14,9 @@ class ColorSensorSubsystem : public frc2::SubsystemBase {
  public:
   ColorSensorSubsystem();
 
-  bool detectiveOrange1 = false;  // color sensor on the __ of robot
-  bool detectiveOrange2 = false;  // color sensor on the __ of robot
-  bool eatenCheerio = false;      // color sensor on hood
+  bool detectNoteIntake1 = false;   // color sensor on the __ of robot
+  bool detectNoteIntake2 = false;   // color sensor on the __ of robot
+  bool eatenNote = false;      // color sensor between mag and shooter
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

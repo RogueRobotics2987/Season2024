@@ -13,7 +13,7 @@ void StateMachine::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute() {  
-  frc::SmartDashboard::PutBoolean("orangeCheerio: ", orangeCheerio);
+  frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
   switch (state) {
   case EMPTY:     // turn everything off
@@ -21,7 +21,7 @@ void StateMachine::Execute() {
 
     // stop all motors
 
-    if(orangeCheerio == true){
+    if(pickupNote == true){
         state = PICKUP;   
         frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     } 
@@ -33,17 +33,17 @@ void StateMachine::Execute() {
     
     // start intake motors, REMEMBER: middle motor changes direction
 
-    if(m_colorSensor.detectiveOrange1 == true /*|| detectiveOrange2 == true*/){
+    if(m_colorSensor.detectNoteIntake1 == true /*|| detectNoteIntake2 == true*/){
       // start magazine motor
 
-      frc::SmartDashboard::PutBoolean("detect cheerio?: ", m_colorSensor.detectiveOrange1);
+      frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor.detectNoteIntake1);
 
     }
 
-    /*if(orangeCheerio == false){
+    /*if(pickupNote == false){
         state = EMPTY;
 
-    } else if(eatenCheerio == true){
+    } else if(eatenNote == true){
         state = LOADED;
     }*/
 
@@ -55,13 +55,13 @@ void StateMachine::Execute() {
     // turn running motors off
 
 
-    orangeCheerio = false;
+    pickupNote = false;
 
 
-    if(warmMilk == true){
+    if(warmUpShooter == true){
         state = SHOOTER_WARMUP;
 
-    } else if(spillMilk == true){
+    } else if(moveArm2Drop == true){
         state = DROP_WARMUP;
         
     }
