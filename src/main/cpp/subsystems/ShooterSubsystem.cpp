@@ -5,7 +5,7 @@
 #include "subsystems/ShooterSubsystem.h"
 
 ShooterSubsystem::ShooterSubsystem() {
-    LeftShooter.SetInverted(true);
+    LeftShooter.Follow(RightShooter, true);
 }
 
 // This method will be called once per scheduler run
@@ -13,5 +13,20 @@ void ShooterSubsystem::Periodic() {}
 
 void ShooterSubsystem::StopShooter()
     {
-
+        RightShooter.Set(0.0);
     }
+
+void ShooterSubsystem::SetShooter() 
+    {
+        RightShooter.Set(1);
+    }
+
+void ShooterSubsystem::ReverseShooter()
+    {   
+        RightShooter.Set(-0.2);
+    }
+
+void ShooterSubsystem::SetActuator(double CurrentAngle, double DesiredAngle, double kp) 
+    {
+        ShooterActuator.Set((CurrentAngle - DesiredAngle) * kp); 
+    }   
