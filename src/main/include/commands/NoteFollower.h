@@ -8,6 +8,7 @@
 #include <frc/XboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <iostream>
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
@@ -39,6 +40,8 @@ class NoteFollower
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
     units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
     double kp = 0.09927;
+    double speedY = 0;
+    bool NoJoystickInput = false;
 
   private:
     LimelightSubsystem* m_limePose = nullptr;
