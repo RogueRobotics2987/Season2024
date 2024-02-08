@@ -16,7 +16,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
 
-  void defaultArmPos();
+  void dropNote();
+
+  // void defaultArmPos();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -28,8 +30,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
-  rev::SparkMaxAlternateEncoder* m_LowerArmEncoder = new rev::SparkMaxAlternateEncoder(LowerArm.GetAlternateEncoder(125));
-  rev::SparkMaxAlternateEncoder* m_UpperArmEncoder = new rev::SparkMaxAlternateEncoder(UpperArm.GetAlternateEncoder(34.375));  //placeholder, TODO: test
+  rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)};
+  rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
 
 
   double kpLowerArm = 0.0111;  //TODO: test

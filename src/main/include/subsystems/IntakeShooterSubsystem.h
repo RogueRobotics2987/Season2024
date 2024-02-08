@@ -18,9 +18,9 @@
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 
-class IntakeSubsystem : public frc2::SubsystemBase {
+class IntakeShooterSubsystem : public frc2::SubsystemBase {
  public:
-  IntakeSubsystem();
+  IntakeShooterSubsystem();
 
   frc2::CommandPtr Pickup();
   frc2::CommandPtr PickupStop();

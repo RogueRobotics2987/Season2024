@@ -4,10 +4,10 @@
 
 #include "subsystems/IntakeShooterSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem() = default;
+IntakeShooterSubsystem::IntakeShooterSubsystem() = default;
 
 // This method will be called once per scheduler run
-void IntakeSubsystem::Periodic() {
+void IntakeShooterSubsystem::Periodic() {
     detectiveOrange1 = colorInput.Get();
 
     frc::SmartDashboard::PutBoolean("color sensor val: ", detectiveOrange1);
@@ -83,13 +83,13 @@ void IntakeSubsystem::Periodic() {
 
 }
 
-frc2::CommandPtr IntakeSubsystem::Pickup(){
+frc2::CommandPtr IntakeShooterSubsystem::Pickup(){
     return this->RunOnce( [this] {
       orangeCheerio = true;
 
     });
 }
-frc2::CommandPtr IntakeSubsystem::PickupStop(){
+frc2::CommandPtr IntakeShooterSubsystem::PickupStop(){
     return this->RunOnce( [this] {
       orangeCheerio = false;
     });

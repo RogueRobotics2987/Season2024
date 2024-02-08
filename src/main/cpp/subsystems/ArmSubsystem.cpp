@@ -4,7 +4,7 @@
 
 #include "subsystems/ArmSubsystem.h"
 
-ArmSubsystem::ArmSubsystem() {}
+ArmSubsystem::ArmSubsystem()=default;
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {
@@ -13,7 +13,7 @@ void ArmSubsystem::Periodic() {
 
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){
-    double currAngle = m_LowerArmEncoder->GetPosition();    //TODO: double check if it gets angle
+    double currAngle = m_LowerArmEncoder.GetPosition();    //TODO: double check if it gets angle
 
     double error = desiredAngle - currAngle;
     kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
@@ -24,7 +24,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle){
 }
 
 void ArmSubsystem::setUpperArmAngle(double desiredAngle){
-    double currAngle = m_UpperArmEncoder->GetPosition();    //same as above 
+    double currAngle = m_UpperArmEncoder.GetPosition();    //same as above 
 
     double error = desiredAngle - currAngle;
     kiSumUpperArm = kiSumUpperArm + (kiUpperArm * error);
@@ -34,4 +34,6 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     UpperArm.Set(motorOutput);
 }
 
-
+void ArmSubsystem::dropNote(){
+    ArmWheels.Set(0.5);
+}

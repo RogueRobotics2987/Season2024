@@ -4,9 +4,7 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem(){
-
-}
+ClimberSubsystem::ClimberSubsystem()=default;
 
 // This method will be called once per scheduler run
 void ClimberSubsystem::Periodic() {}

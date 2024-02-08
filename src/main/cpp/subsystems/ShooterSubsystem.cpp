@@ -12,6 +12,6 @@ ShooterSubsystem::ShooterSubsystem() {
 void ShooterSubsystem::Periodic() {}
 
 void ShooterSubsystem::StopShooter()
-    {
+{
 
-    }
+}
