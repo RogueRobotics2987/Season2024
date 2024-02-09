@@ -21,6 +21,7 @@
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <iostream>
+#include <string>
 #include <pathplanner/lib/path/PathPlannerPath.h> 
 #include <pathplanner/lib/commands/FollowPathHolonomic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -60,12 +61,84 @@ class RobotContainer
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
     LimelightPose m_limePose;
-    // frc::SendableChooser<frc2::Command*> m_chooser;
+    frc::SendableChooser<std::string> m_chooser;
     void ConfigureButtonBindings();
-    std::unique_ptr<frc2::Command> onTheFly;
-    std::unique_ptr<frc2::Command> followOnTheFly;
+    std::string chosenAuto;
 
     //Blue auto Paths
+
+    std::vector<frc::Pose2d>  B_1Waypoints{
+      frc::Pose2d(1.5_m, 7_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_1PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_1CruiseSpeed{
+      1_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d>  B_2Waypoints{
+      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.90_m, 5.55_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_2PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_2CruiseSpeed{
+      1_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d>  B_3Waypoints{
+      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_3PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3CruiseSpeed{
+      1_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d>  B_1_2_3Waypoints{
+      frc::Pose2d(1.5_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_1_2_3PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      0_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_1_2_3CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps
+    };
+
 
     std::vector<frc::Pose2d> B_3_6Waypoints{
       frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
@@ -234,7 +307,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     std::vector<units::meters_per_second_t> B_1_4PointSpeed{
       0_mps,
       0_mps,
-      3_mps,
+      1.5_mps,
       0_mps,
       1_mps,
       0_mps
@@ -243,10 +316,10 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     std::vector<units::meters_per_second_t> B_1_4CruiseSpeed{
       1_mps,
       1.5_mps,
-      3_mps,
+      4_mps,
       1.5_mps,
-      3_mps,
-      1_mps
+      2_mps,
+      1.5_mps
     };
 
     std::vector<frc::Pose2d> B_3_8Waypoints{
@@ -319,6 +392,51 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     //Red Auto Paths
+
+    std::vector<frc::Pose2d>  R_1Waypoints{
+      frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_1PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_1CruiseSpeed{
+      2_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d>  R_2Waypoints{
+      frc::Pose2d(15.05_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2CruiseSpeed{
+      2_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d>  R_3Waypoints{
+      frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3PointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3CruiseSpeed{
+      2_mps,
+      2_mps
+    };
 
     std::vector<frc::Pose2d> R_3_6Waypoints{
       frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),

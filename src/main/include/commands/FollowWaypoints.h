@@ -77,4 +77,5 @@ class FollowWaypoints
     double tx = 0;
     double tv = 0;
     double kp = 0.09927/2;
+    double accumulatedError = 0;
 };

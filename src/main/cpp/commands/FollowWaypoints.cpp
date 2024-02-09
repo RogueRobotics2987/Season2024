@@ -49,6 +49,8 @@ void FollowWaypoints::Initialize()
 
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 
+  accumulatedError = 0;
+
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -83,24 +85,6 @@ void FollowWaypoints::Execute()
     }
   }
 
-  if(limeBool == true)
-  {
-    tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
-    tv = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0);
-    units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
-
-    if( tx != -9999 && (tx > 2.5 || tx < -2.5))
-    {
-      rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
-    }
-    else
-    {
-      rot = units::angular_velocity::radians_per_second_t(0);
-    }
-    
-    m_drivetrain->Drive(rot, false, false);
-  }
-
   deltaX = fabs((double)lastPose.X() - (double)currentPose.X());
   deltaY = fabs((double)lastPose.Y() - (double)currentPose.Y());
   distanceTraveled = distanceTraveled + hypot(deltaX, deltaY);
@@ -119,8 +103,9 @@ void FollowWaypoints::Execute()
     }
     else if((currentDistance-distanceTraveled) <= 0.65)
     {
-      double x = (currentDistance-distanceTraveled) / 0.65;
-      robotSpeed = 1 * (x) * cruiseSpeed + pointSpeed + 0.25_mps; //0-100% of max speed aka Z
+      accumulatedError += 5E-3 * (currentDistance - distanceTraveled);
+      double x = (currentDistance-distanceTraveled) / 0.8;
+      robotSpeed = 1 * (x) * cruiseSpeed + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true)
       {
@@ -129,7 +114,7 @@ void FollowWaypoints::Execute()
     }
     else if(distanceTraveled <= 0.5)
     {
-      double x = distanceTraveled / 0.5;
+      double x = distanceTraveled / 0.25;
       robotSpeed = 1 * x * cruiseSpeed + pointSpeed + 0.1_mps; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true)
@@ -153,6 +138,29 @@ void FollowWaypoints::Execute()
 
     thetaVal = thetaDouble * 1_rad_per_s;
     m_drivetrain->Drive(xVal, yVal, false, false);
+
+    if(limeBool == true)
+    {
+      tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
+      tv = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0);
+      units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+
+      if( tx != -9999 && (tx > 2.5 || tx < -2.5))
+      {
+        rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
+      }
+      else
+      {
+        rot = units::angular_velocity::radians_per_second_t(0);
+      }
+      
+      m_drivetrain->Drive(rot, false, false);
+    }
+    else
+    {
+      m_drivetrain->Drive(thetaVal, false, false);
+
+    }
   }
 
   lastPose = currentPose;
@@ -175,6 +183,9 @@ void FollowWaypoints::Execute()
     frc::SmartDashboard::PutNumber("lastPoseX", (double)lastPose.X());
     frc::SmartDashboard::PutNumber("lastPoseY", (double)lastPose.Y());
     frc::SmartDashboard::PutNumber("Threshold", threshold);
+    frc::SmartDashboard::PutNumber("accumulatedError", accumulatedError);
+    frc::SmartDashboard::PutNumber("cruiseSpeed", (double)cruiseSpeed);
+    frc::SmartDashboard::PutNumber("pointSpeed", (double)pointSpeed);
   }
 }
 

@@ -6,7 +6,25 @@ RobotContainer::RobotContainer()
 {
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
-  // frc::SmartDashboard::PutData(&m_chooser);
+
+  m_chooser.SetDefaultOption("B_1", "B_1");
+  m_chooser.AddOption("B_2", "B_2");
+  m_chooser.AddOption("B_3", "B_3");
+  m_chooser.AddOption("B_1_2_3", "B_1_2_3");
+  m_chooser.AddOption("B_3_6", "B_3_6");
+  m_chooser.AddOption("B_3_7", "B_3_7");
+  m_chooser.AddOption("B_2_6", "B_2_6");
+  m_chooser.AddOption("B_2_7", "B_2_7");
+  m_chooser.AddOption("B_1_4", "B_1_4");
+  m_chooser.AddOption("B_3_8", "B_3_8");
+  m_chooser.AddOption("B_2_5", "B_2_5");
+  m_chooser.AddOption("R_1", "R_1");
+  m_chooser.AddOption("R_2", "R_2");
+  m_chooser.AddOption("R_3", "R_3");
+  m_chooser.AddOption("R_3_6", "R_3_6");
+  m_chooser.AddOption("R_3_7", "R_3_7");
+
+  frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
   ConfigureButtonBindings();
@@ -80,6 +98,9 @@ float RobotContainer::Deadzone(float x)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
   // m_drive.ZeroHeading();
+
+  chosenAuto = m_chooser.GetSelected();
+
 
   std::vector<frc::Pose2d> twoNotePoses{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
@@ -157,74 +178,160 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   std::vector<frc::Pose2d> walkTheLine{
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg)),
-    // frc::Pose2d(4_m, 0_m, frc::Rotation2d(0_deg)),
-    // frc::Pose2d(5_m, 0_m, frc::Rotation2d(0_deg))
+    frc::Pose2d(4_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(5.5_m, 0_m, frc::Rotation2d(0_deg)),
+    frc::Pose2d(7_m, 0_m, frc::Rotation2d(0_deg))
   };
 
   std::vector<units::meters_per_second_t> walkTheLineSpeeds{
     0_mps,
     1_mps,
-    // 2_mps,
-    // 1_mps,
+    0_mps,
+    1_mps,
     0_mps
   };
 
   std::vector<units::meters_per_second_t> walkTheLineCruiseSpeeds{
     1_mps,
     1_mps,
-    // 2_mps,
-    // 1_mps,
+    1_mps,
+    1_mps,
     1_mps
   };
 
-  std::vector<frc::Pose2d>  BPose1Shoot2{
-    frc::Pose2d(1.25_m, 7_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(0_deg))
-  };
+  // std::vector<frc::Pose2d>  BPose1Shoot3{
+  //   frc::Pose2d(1.25_m, 7_m, frc::Rotation2d(0_deg)),
+  //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
+  // };
 
-    std::vector<frc::Pose2d>  BPose2Shoot2{
-    frc::Pose2d(1.25_m, 5.55_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2.90_m, 5.55_m, frc::Rotation2d(0_deg))
-  };
+  // std::vector<frc::Pose2d>  RPose1Shoot3{
+  //   frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
+  //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
+  // };
 
-    std::vector<frc::Pose2d>  BPose3Shoot2{
-    frc::Pose2d(1.25_m, 4.1_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(0_deg))
-  };
-
-    std::vector<frc::Pose2d>  RPose1Shoot2{
-    frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(13.65_m, 7_m, frc::Rotation2d(0_deg))
-  };
-
-    std::vector<frc::Pose2d>  RPose2Shoot2{
-    frc::Pose2d(15.05_m, 5.55_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg))
-  };
-
-    std::vector<frc::Pose2d>  RPose3Shoot2{
-    frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg))
-  };
-
-  std::vector<frc::Pose2d>  BPose1Shoot3{
-    frc::Pose2d(1.25_m, 7_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
-  };
-
-  std::vector<frc::Pose2d>  RPose1Shoot3{
-    frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
-    frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
-  };
-
-  // m_drive.ResetOdometry({0_m, 0_m, 0_deg});  //Counter clock wise is positive, Clockwise is positive.
-  m_drive.ResetOdometry(B_1_4Waypoints[0]);  
-
-  return frc2::cmd::Sequence(
-    // AutoAprilTag(m_limePose,m_drive).ToPtr(),
-    frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    FollowWaypoints(m_drive, m_limePose, B_1_4Waypoints, B_1_4PointSpeed, B_1_4CruiseSpeed, true).ToPtr()
-  );  
+  if(chosenAuto == "B_1")
+  {
+    m_drive.ResetOdometry(B_1Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_2")
+  { 
+    m_drive.ResetOdometry(B_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_2Waypoints, B_2PointSpeed, B_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_3")
+  { 
+    m_drive.ResetOdometry(B_3Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3Waypoints, B_3PointSpeed, B_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_1_2_3")
+  { 
+    m_drive.ResetOdometry(B_1_2_3Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_1_2_3Waypoints, B_1_2_3PointSpeed, B_1_2_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_3_7")
+  { 
+    m_drive.ResetOdometry(B_2_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3_7Waypoints, B_3_7PointSpeed, B_3_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_2_6")
+  { 
+    m_drive.ResetOdometry(B_2_6Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_2_6Waypoints, B_2_6PointSpeed, B_2_6CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_2_7")
+  { 
+    m_drive.ResetOdometry(B_2_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_2_7Waypoints, B_2_7PointSpeed, B_2_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_1_4")
+  { 
+    m_drive.ResetOdometry(B_1_4Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_1_4Waypoints, B_1_4PointSpeed, B_1_4CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_3_8")
+  { 
+    m_drive.ResetOdometry(B_3_8Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3_8Waypoints, B_3_8PointSpeed, B_3_8CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "B_2_5")
+  { 
+    m_drive.ResetOdometry(B_2_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_2_5Waypoints, B_2_5PointSpeed, B_2_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "R_1")
+  { 
+    m_drive.ResetOdometry(B_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_1Waypoints, R_1PointSpeed, R_1CruiseSpeed, false).ToPtr()
+    );  
+  }
+    else if(chosenAuto == "R_2")
+  { 
+    m_drive.ResetOdometry(R_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2Waypoints, R_2PointSpeed, R_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3")
+  { 
+    m_drive.ResetOdometry(R_3Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3Waypoints, R_3PointSpeed, R_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_6")
+  { 
+    m_drive.ResetOdometry(R_3_6Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_6Waypoints, R_3_6PointSpeed, R_3_6CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_7")
+  { 
+    m_drive.ResetOdometry(R_3_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_7Waypoints, R_3_7PointSpeed, R_3_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else
+  {
+    //Should never get to this case
+  }
 }
