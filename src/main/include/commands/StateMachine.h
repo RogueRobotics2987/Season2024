@@ -29,6 +29,7 @@ class StateMachine
     : public frc2::CommandHelper<frc2::Command, StateMachine> {
  public:
   StateMachine();
+  StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, IntakeSubsystem &intake, ShooterSubsystem &shooter);
 
   void Initialize() override;
 
@@ -43,11 +44,11 @@ class StateMachine
   intakeState state = EMPTY;
 
 
-  ArmSubsystem m_arm;
-  ClimberSubsystem m_climb;
-  ColorSensorSubsystem m_colorSensor;
-  IntakeSubsystem m_intake;
-  ShooterSubsystem m_shooter;
+  ArmSubsystem* m_arm = nullptr;
+  ClimberSubsystem* m_climb = nullptr;
+  ColorSensorSubsystem* m_colorSensor = nullptr;
+  IntakeSubsystem* m_intake = nullptr;
+  ShooterSubsystem* m_shooter = nullptr;
 
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)

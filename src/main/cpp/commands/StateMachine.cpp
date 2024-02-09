@@ -7,6 +7,18 @@
 StateMachine::StateMachine() {
   // Use addRequirements() here to declare subsystem dependencies.
 }
+StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, IntakeSubsystem &intake, ShooterSubsystem &shooter){
+  m_arm = &arm;
+  AddRequirements({m_arm});
+  m_climb = &climb;
+  AddRequirements({m_climb});
+  m_colorSensor = &color;
+  AddRequirements({m_colorSensor});
+  m_intake = &intake;
+  AddRequirements({m_intake});
+  m_shooter = &shooter;
+  AddRequirements({m_shooter});
+}
 
 // Called when the command is initially scheduled.
 void StateMachine::Initialize() {}
@@ -33,17 +45,17 @@ void StateMachine::Execute() {
     
     // start intake motors, REMEMBER: middle motor changes direction
 
-    if(m_colorSensor.detectNoteIntake1 == true /*|| detectNoteIntake2 == true*/){
+    if(m_colorSensor->detectNoteIntake1 == true /*|| detectNoteIntake2 == true*/){
       // start magazine motor
 
-      frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor.detectNoteIntake1);
+      frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
     }
 
     if(pickupNote == false){
       state = EMPTY;
 
-    } else if(m_colorSensor.eatenNote == true){
+    } else if(m_colorSensor->eatenNote == true){
       state = LOADED;
     }
 
@@ -102,12 +114,12 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
     //lift shooter and extend arm
-    if(m_arm.getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
+    if(m_arm->getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
       //lift shooter
 
-      m_arm.setLowerArmAngle(90);
+      m_arm->setLowerArmAngle(90);
 
-      m_arm.setUpperArmAngle(45);
+      m_arm->setUpperArmAngle(45);
     }
     /*turn on lower motor first
       turn on upper after it reaches safe point (90 degrees)
@@ -128,7 +140,7 @@ void StateMachine::Execute() {
     moveArm2Drop = false;
 
     //drop note
-    m_arm.dropNote();
+    m_arm->dropNote();
 
     timeDrop++;
 
