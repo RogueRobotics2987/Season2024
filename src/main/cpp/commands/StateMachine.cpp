@@ -40,12 +40,12 @@ void StateMachine::Execute() {
 
     }
 
-    /*if(orangeCheerio == false){
+    if(orangeCheerio == false){
         state = EMPTY;
 
-    } else if(eatenCheerio == true){
+    } else if(m_colorSensor.eatenCheerio == true){
         state = LOADED;
-    }*/
+    }
 
     break;
 
@@ -59,10 +59,10 @@ void StateMachine::Execute() {
 
 
     if(warmMilk == true){
-        state = SHOOTER_WARMUP;
+      state = SHOOTER_WARMUP;
 
     } else if(spillMilk == true){
-        state = DROP_WARMUP;
+      state = DROP_WARMUP;
         
     }
 
@@ -71,20 +71,67 @@ void StateMachine::Execute() {
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
+    //start shooter motors
+
+    if(warmMilk == false ){
+      state = LOADED;
+      
+    }else if(spoon == true){
+      state = SHOOT;
+    }
+
     break;
 
   case SHOOT:
     frc::SmartDashboard::PutString("state: ", "SHOOT");
+
+    //turn on the mag motors 
+    //keep shooter motors turned on
+    //swich states when timer have exceded 1.5 seconds
+    // runs 60 times a second  so we want 90 times
+
+    time++;
+
+    if(time>90){
+      state = EMPTY;
+      time = 0;
+    }
 
     break;
   
   case DROP_WARMUP:
     frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
+    //lift shooter
+    /* turn on the bottom mottor first
+       turn on upper one after it reaches safe point
+       17 is bottom motor 
+       18 is joint motor 
+       19 is drop motor
+    */
+
+    //extend the arm
+
+    if(micdrop == true){
+      state = DROP;
+    }
+
+
     break;
   
   case DROP:
     frc::SmartDashboard::PutString("state: ", "DROP");
+
+    //drop note, start upper arm motors
+
+    //timer, then switch state to EMPTY
+
+    timeDrop++;
+
+    if(timeDrop>90){
+      state = EMPTY;
+      timeDrop = 0;
+    }
 
     break;
   

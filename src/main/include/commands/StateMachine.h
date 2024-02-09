@@ -49,7 +49,8 @@ class StateMachine
   IntakeSubsystem m_intake;
   ShooterSubsystem m_shooter;
 
-
+  int time = 0;
+  int timeDrop = 0;
   bool orangeCheerio = false;     // if auto/teleop want to pickup a note
 
   bool warmMilk = false;          // warmup shooter

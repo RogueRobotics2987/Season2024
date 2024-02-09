@@ -41,7 +41,7 @@ class SwerveModuleSubsystem : public frc2::SubsystemBase
 
     rev::CANSparkMax* m_driveMotor;
     rev::CANSparkMax* m_turningMotor;
-
+    
     rev::SparkRelativeEncoder* m_driveEncoder;
     rev::SparkRelativeEncoder::Type m_EncoderType;
     int m_counts_per_rev;
