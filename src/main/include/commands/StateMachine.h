@@ -57,5 +57,8 @@ class StateMachine
 
   bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   bool dropNote = false;          // activate dropper
+
+  int time = 0;       //keep track of shooter iterations
+  int timeDrop = 0;   //keep track of dropper iterations
   
 };

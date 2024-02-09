@@ -18,6 +18,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void dropNote();
 
+  double getLowerEncoderPos();
+  double getUpperEncoderPos();
+
   // void defaultArmPos();
 
   /**
@@ -30,7 +33,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
-  rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)};
+  rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
   rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
 
 

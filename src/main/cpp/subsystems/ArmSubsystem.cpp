@@ -34,6 +34,16 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     UpperArm.Set(motorOutput);
 }
 
-void ArmSubsystem::dropNote(){
+void ArmSubsystem::dropNote(){      //FIX
+    //double lowArmAngle = m_LowerArmEncoder.GetPosition();
+
     ArmWheels.Set(0.5);
+}
+
+double ArmSubsystem::getLowerEncoderPos(){
+    return m_LowerArmEncoder.GetPosition();
+}
+
+double ArmSubsystem::getUpperEncoderPos(){
+    return m_UpperArmEncoder.GetPosition();
 }

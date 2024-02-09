@@ -4,12 +4,12 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem() {
+IntakeSubsystem::IntakeSubsystem(){
 
 }
 
 // This method will be called once per scheduler run
-void IntakeSubsystem::Periodic() {
+void IntakeSubsystem::Periodic(){
 
 }
 

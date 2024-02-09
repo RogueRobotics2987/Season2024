@@ -67,7 +67,7 @@ class RobotContainer
     DriveSubsystem m_drive;
     LimelightSubsystem m_limePose;
     TestMotor m_testMotor;
-    IntakeShooterSubsystem m_intakeShoot;
+    //IntakeShooterSubsystem m_intakeShoot;
 
     // frc::SendableChooser<frc2::Command*> m_chooser;
     //void ConfigureButtonBindings();

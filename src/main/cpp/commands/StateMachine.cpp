@@ -22,8 +22,8 @@ void StateMachine::Execute() {
     // stop all motors
 
     if(pickupNote == true){
-        state = PICKUP;   
-        frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
+      state = PICKUP;   
+      frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     } 
 
     break;
@@ -40,29 +40,26 @@ void StateMachine::Execute() {
 
     }
 
-    /*if(pickupNote == false){
-        state = EMPTY;
+    if(pickupNote == false){
+      state = EMPTY;
 
-    } else if(eatenNote == true){
-        state = LOADED;
-    }*/
+    } else if(m_colorSensor.eatenNote == true){
+      state = LOADED;
+    }
 
     break;
 
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
+    //pickupNote = false;
 
     // turn running motors off
 
-
-    pickupNote = false;
-
-
     if(warmUpShooter == true){
-        state = SHOOTER_WARMUP;
+      state = SHOOTER_WARMUP;
 
     } else if(moveArm2Drop == true){
-        state = DROP_WARMUP;
+      state = DROP_WARMUP;
         
     }
 
@@ -71,20 +68,76 @@ void StateMachine::Execute() {
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
+    //start shooter motors
+
+    if(warmUpShooter == false){
+      state = LOADED;
+
+    } else if(moveNote2Shoot == true){
+      state = SHOOT;
+    }
+
     break;
 
   case SHOOT:
     frc::SmartDashboard::PutString("state: ", "SHOOT");
+    warmUpShooter = false;
+
+    //turn on mag motors
+
+    //switch states when timer has exceded 1.5 seconds
+    //run 60 times a second
+    time++;
+
+    if(time >= 90){
+      state = EMPTY;
+
+      time = 0;
+      moveNote2Shoot = false;
+    }
 
     break;
   
   case DROP_WARMUP:
     frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
+    //lift shooter and extend arm
+    if(m_arm.getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
+      //lift shooter
+
+      m_arm.setLowerArmAngle(90);
+
+      m_arm.setUpperArmAngle(45);
+    }
+    /*turn on lower motor first
+      turn on upper after it reaches safe point (90 degrees)
+      17 = bottom; 18 = joint; 19 = drop???
+    */
+
+    if(moveArm2Drop == false){
+      state = LOADED;
+
+    } else if(dropNote == true){
+      state = DROP;
+    }
+
     break;
   
   case DROP:
     frc::SmartDashboard::PutString("state: ", "DROP");
+    moveArm2Drop = false;
+
+    //drop note
+    m_arm.dropNote();
+
+    timeDrop++;
+
+    if(timeDrop >= 90){
+      state = EMPTY;
+
+      timeDrop = 0;
+      dropNote = false;
+    }
 
     break;
   
