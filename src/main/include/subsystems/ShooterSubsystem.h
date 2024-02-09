@@ -6,7 +6,10 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
+#include "rev/SparkMaxRelativeEncoder.h"
 #include "ctre/Phoenix.h"
+#include <frc/DigitalInput.h>
+#include <Constants.h>
 
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:
@@ -17,9 +20,11 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   void Periodic() override;
   void StopShooter();
-  void SetShooter();
+  void SetShooter(double speed);
   void ReverseShooter();
-  void SetActuator(double CurrentAngle, double DesiredAngle, double kp);
+  void SetActuator(double DesiredAngle);
+  bool GetMagazineSensor();
+  bool IsTargeted();
 
 
  private:
@@ -27,7 +32,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
-  // ctre::phoenix::sensors::CANCoder ShooterEncoder;
+  rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  frc::DigitalInput MagazineSensor{1};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+  double kp = 0.0111;
+  double m_DesiredAngle = -999; //TODO find safe resting value
 };

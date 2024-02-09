@@ -5,13 +5,13 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
 {
   // Use addRequirements() here to declare subsystem dependencies.
-  m_limePose = &limePose;
+  m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
-  AddRequirements({m_limePose});
+  AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
 }
 
@@ -24,7 +24,7 @@ void NoteFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
-  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
+  double tx = m_limelight->GetNotetx();
   if(tx > 7 || tx < -7){
     rot = units::angular_velocity::radians_per_second_t((0 - tx) * kp);
   }
@@ -32,12 +32,14 @@ void NoteFollower::Execute()
   {
     rot = units::angular_velocity::radians_per_second_t(0);
   }
-  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1 && tx < 7 &&  tx > -7){
-    speedY = 0; 
+  speedY = Deadzone(m_Xbox->GetLeftY());
+
+  if((fabs(speedY) + fabs(rot.value())) < .05) 
+  {
     NoJoystickInput = true;
   }
-  else{
-    speedY = m_Xbox->GetLeftY();
+  else
+  {
     NoJoystickInput = false;
   }
 
@@ -51,4 +53,18 @@ void NoteFollower::End(bool interrupted) {}
 bool NoteFollower::IsFinished()
 {
   return false;
+}
+
+float NoteFollower::Deadzone(float x)
+{
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if (x >= 0.1){
+    x = x - 0.1;
+  }
+  else if (x <= -0.1){
+    x = x + 0.1;
+  }
+  return(x);
 }

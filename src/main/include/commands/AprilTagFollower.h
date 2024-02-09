@@ -25,7 +25,7 @@ class AprilTagFollower
 {
   public:
     AprilTagFollower(); 
-    AprilTagFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
     void Initialize() override;
 
@@ -41,7 +41,9 @@ class AprilTagFollower
     bool NoJoystickInput = false;
 
   private:
-    LimelightSubsystem* m_limePose = nullptr;
+    LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    float Deadzone(float x);
+
 };

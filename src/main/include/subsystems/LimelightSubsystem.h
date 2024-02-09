@@ -21,14 +21,17 @@ class LimelightSubsystem : public frc2::SubsystemBase
     void Periodic() override;
 
     double GetAprilTagtx();
+    double GetAprilTagty();
     double GetNotetx();
+    double GetNotety();
 
     std::vector<double> botPose;
 
-    double AprilTagstx = 0;
-    double Notetx = 0;
-
  private:
+  double AprilTagstx = 0;
+  double AprilTagsty = 0;
+  double Notetx = 0;
+  double Notety = 0;
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 };

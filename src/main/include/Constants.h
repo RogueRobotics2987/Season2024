@@ -113,3 +113,7 @@ namespace AutoConstants {
 namespace DebugConstants {
     constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
 }  
+
+namespace ShooterConstants {
+    constexpr double AngleThreshold = 4.5;
+}

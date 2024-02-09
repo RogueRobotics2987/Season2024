@@ -9,24 +9,40 @@ ShooterSubsystem::ShooterSubsystem() {
 }
 
 // This method will be called once per scheduler run
-void ShooterSubsystem::Periodic() {}
+void ShooterSubsystem::Periodic() 
+{
+    if(m_DesiredAngle != -999) //TODO find safe reting value
+    {
+        ShooterActuator.Set((ShooterEncoder.GetPosition() - m_DesiredAngle) * kp); 
+    }
+}
 
 void ShooterSubsystem::StopShooter()
-    {
-        RightShooter.Set(0.0);
-    }
+{
+    RightShooter.Set(0.0);
+}
 
-void ShooterSubsystem::SetShooter() 
-    {
-        RightShooter.Set(1);
-    }
+void ShooterSubsystem::SetShooter(double speed) 
+{
+    RightShooter.Set(speed);
+}
 
 void ShooterSubsystem::ReverseShooter()
-    {   
-        RightShooter.Set(-0.2);
-    }
+{   
+    RightShooter.Set(-0.2);
+}
 
-void ShooterSubsystem::SetActuator(double CurrentAngle, double DesiredAngle, double kp) 
-    {
-        ShooterActuator.Set((CurrentAngle - DesiredAngle) * kp); 
-    }   
+void ShooterSubsystem::SetActuator(double DesiredAngle) 
+{
+    m_DesiredAngle = DesiredAngle;
+}   
+
+bool ShooterSubsystem::GetMagazineSensor()
+{
+    return MagazineSensor.Get();
+}
+
+bool ShooterSubsystem::IsTargeted()
+{
+    return fabs(ShooterEncoder.GetPosition() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
+}

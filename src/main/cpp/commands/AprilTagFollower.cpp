@@ -5,12 +5,12 @@
 #include "commands/AprilTagFollower.h"
 
 AprilTagFollower::AprilTagFollower(){}
-AprilTagFollower::AprilTagFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox) 
+AprilTagFollower::AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox) 
 {
-  m_limePose = &limePose;
+  m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
-  AddRequirements({m_limePose});
+  AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
 }
 
@@ -23,27 +23,21 @@ void AprilTagFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AprilTagFollower::Execute()
 {
-  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+  double tx = m_limelight->GetAprilTagtx();
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
   // if(tx > 7 || tx < -7){
   rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
 
-  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1){
-    speedY = 0; 
-  }
-  else {
-    speedY = m_Xbox->GetLeftY();
-    NoJoystickInput = false;
-  }
-  if(m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1){
-    speedX = 0; 
-  }
-  else {
-    speedX = m_Xbox->GetLeftX();
-    NoJoystickInput = false;
-  }
-  if(m_Xbox->GetLeftY() < 0.1 && m_Xbox->GetLeftY() > -0.1 && m_Xbox->GetLeftX() < 0.1 && m_Xbox->GetLeftX() > -0.1 && tx < 7 &&  tx > -7){
+  speedY = Deadzone(m_Xbox->GetLeftY());
+
+  speedX = Deadzone(m_Xbox->GetLeftY());
+  if((fabs(speedY) + fabs(speedX) + fabs(rot.value())) < .05)
+  {
     NoJoystickInput = true;
+  }
+  else
+  {
+    NoJoystickInput = false;
   }
   // }
   // else{
@@ -59,4 +53,18 @@ void AprilTagFollower::End(bool interrupted) {}
 bool AprilTagFollower::IsFinished()
 {
   return false;
+}
+
+float AprilTagFollower::Deadzone(float x)
+{
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if (x >= 0.1){
+    x = x - 0.1;
+  }
+  else if (x <= -0.1){
+    x = x + 0.1;
+  }
+  return(x);
 }

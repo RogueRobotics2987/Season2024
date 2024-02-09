@@ -58,7 +58,7 @@ class RobotContainer
     frc::XboxController m_driverController{0};
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    LimelightSubsystem m_limePose;
+    LimelightSubsystem m_limelight;
     // frc::SendableChooser<frc2::Command*> m_chooser;
     void ConfigureButtonBindings();
     std::unique_ptr<frc2::Command> onTheFly;

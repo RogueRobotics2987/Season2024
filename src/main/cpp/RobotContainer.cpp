@@ -59,10 +59,10 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   //Limelight Note Detection
-  frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limePose, m_drive, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   //Limelight April Tag Detection, y
-  frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limePose, m_drive, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
 }
 
 

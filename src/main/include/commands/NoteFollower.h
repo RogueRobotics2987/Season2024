@@ -26,7 +26,7 @@ class NoteFollower
 {
   public:
     NoteFollower();
-    NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
     void Initialize() override;
@@ -44,7 +44,8 @@ class NoteFollower
     bool NoJoystickInput = false;
 
   private:
-    LimelightSubsystem* m_limePose = nullptr;
+    LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    float Deadzone(float x);
 };
