@@ -15,7 +15,7 @@ void ArmSubsystem::Periodic() {
         case INITAL:
             setLowerArmAngle(ArmConstants::LowerInitalAngle);
             setUpperArmAngle(ArmConstants::UpperInitalAngle);
-            if(m_Xbox->getr)
+            // if(m_Xbox->getr)
             state = LOWER_ARM_EXTEND_INITAL;
 
             break;
@@ -69,6 +69,8 @@ void ArmSubsystem::Periodic() {
 
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){
+    //frc::SmartDashboard::PutString("state function: ", "setLowerArmAngle");
+
     double currAngle = m_LowerArmEncoder.GetPosition();    //TODO: double check if it gets angle
 
     double error = desiredAngle - currAngle;
@@ -80,6 +82,8 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle){
 }
 
 void ArmSubsystem::setUpperArmAngle(double desiredAngle){
+    //frc::SmartDashboard::PutString("state function: ", "setUpperArmAngle");
+
     double currAngle = m_UpperArmEncoder.GetPosition();    //same as above 
 
     double error = desiredAngle - currAngle;
@@ -90,10 +94,17 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     UpperArm.Set(motorOutput);
 }
 
-void ArmSubsystem::dropNote(){      //FIX
+void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
+    //frc::SmartDashboard::PutString("state function: ", "dropNote");
+
     //double lowArmAngle = m_LowerArmEncoder.GetPosition();
 
-    ArmWheels.Set(0.5);
+    //ArmWheels.Set(0.5);
+}
+
+void ArmSubsystem::stopDrop(){      //stop armWheels
+    //frc::SmartDashboard::PutString("state function: ", "stopDrop");
+
 }
 
 double ArmSubsystem::getLowerEncoderPos(){

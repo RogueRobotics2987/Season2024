@@ -51,6 +51,7 @@ class RobotContainer
     RobotContainer();
     frc2::CommandPtr GetAutonomousCommand();
     frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
+    
     float Deadzone(float x); 
     frc2::CommandPtr onFlyGeneration();
 
@@ -60,13 +61,13 @@ class RobotContainer
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
-    frc::XboxController m_driverController{1};
+    frc::XboxController m_driverController{0};
+    frc::XboxController m_auxController{1};
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    LimelightSubsystem m_limelight;
     TestMotor m_testMotor;
-    //IntakeShooterSubsystem m_intakeShoot;
+    LimelightSubsystem m_limelight;
 
     // frc::SendableChooser<frc2::Command*> m_chooser;
     //void ConfigureButtonBindings();

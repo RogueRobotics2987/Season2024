@@ -40,7 +40,7 @@ class StateMachine
   bool IsFinished() override;
 
  private:
-  enum intakeState {EMPTY, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, DROP_WARMUP, DROP};
+  enum intakeState {EMPTY, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
   intakeState state = EMPTY;
 
 
@@ -56,8 +56,9 @@ class StateMachine
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
 
-  bool moveArm2Drop = false;      // warmup dropper (move arm into position)
-  bool dropNote = false;          // activate dropper
+  //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
+  //bool dropNote = false;          // activate dropper
+  bool waitForArm = false;        // waits for the armSubsystem/dropper state machine
 
   int time = 0;       //keep track of shooter iterations
   int timeDrop = 0;   //keep track of dropper iterations

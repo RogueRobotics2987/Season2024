@@ -11,6 +11,9 @@
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
+
 class ArmSubsystem : public frc2::SubsystemBase {
  public:
   ArmSubsystem(frc::XboxController &Xbox);
@@ -19,6 +22,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void setUpperArmAngle(double desiredAngle);
 
   void dropNote();
+  void stopDrop();
 
   double getLowerEncoderPos();
   double getUpperEncoderPos();

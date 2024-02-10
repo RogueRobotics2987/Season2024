@@ -19,12 +19,16 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
-  
+
   void StopShooter();
   void SetShooter(double speed);
+
   void ReverseShooter();
+  
   void SetActuator(double DesiredAngle);
-  bool GetMagazineSensor();
+
+  //bool GetMagazineSensor();
+  
   bool IsTargeted();
 
 
@@ -33,6 +37,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
+
   rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DigitalInput MagazineSensor{1};
   // Components (e.g. motor controllers and sensors) should generally be
