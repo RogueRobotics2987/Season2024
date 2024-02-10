@@ -120,7 +120,7 @@ float RobotContainer::Deadzone(float x)
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  // m_drive.ZeroHeading();
+  m_drive.ZeroHeading();
 
   chosenAuto = m_chooser.GetSelected();
 
@@ -257,7 +257,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_3Waypoints, B_3PointSpeed, B_3CruiseSpeed, false).ToPtr()
     );  
   }
-    else if(chosenAuto == "B_1_2_3")
+  else if(chosenAuto == "B_1_2_3")
   { 
     m_drive.ResetOdometry(B_1_2_3Waypoints[0]);
     return frc2::cmd::Sequence(
@@ -265,7 +265,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_1_2_3Waypoints, B_1_2_3PointSpeed, B_1_2_3CruiseSpeed, false).ToPtr()
     );  
   }
-    else if(chosenAuto == "B_3_7")
+  else if(chosenAuto == "B_3_6")
+  { 
+    m_drive.ResetOdometry(B_3_6Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, true).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_3_7")
   { 
     m_drive.ResetOdometry(B_2_7Waypoints[0]);
     return frc2::cmd::Sequence(
@@ -273,7 +281,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_3_7Waypoints, B_3_7PointSpeed, B_3_7CruiseSpeed, false).ToPtr()
     );  
   }
-    else if(chosenAuto == "B_2_6")
+  else if(chosenAuto == "B_2_6")
   { 
     m_drive.ResetOdometry(B_2_6Waypoints[0]);
     return frc2::cmd::Sequence(
@@ -281,7 +289,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_2_6Waypoints, B_2_6PointSpeed, B_2_6CruiseSpeed, false).ToPtr()
     );  
   }
-    else if(chosenAuto == "B_2_7")
+  else if(chosenAuto == "B_2_7")
   { 
     m_drive.ResetOdometry(B_2_7Waypoints[0]);
     return frc2::cmd::Sequence(
@@ -540,5 +548,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   else
   {
     //Should never get to this case
+    std::cout << "You should never see this error...." << std::endl;
   }
 }

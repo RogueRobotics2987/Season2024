@@ -78,4 +78,5 @@ class FollowWaypoints
     double tv = 0;
     double kp = 0.09927/2;
     double accumulatedError = 0;
+    units::meters_per_second_t lastPointSpeed = 0_mps;
 };

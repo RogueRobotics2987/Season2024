@@ -39,6 +39,7 @@ void FollowWaypoints::Initialize()
 {
   deltaX = 0;
   deltaY = 0;
+  lastPointSpeed = 0_mps;
   desiredPose = m_waypoints.front();
   m_waypoints.pop_front(); 
   pointSpeed = m_driveSpeed.front();
@@ -66,6 +67,7 @@ void FollowWaypoints::Execute()
     {
       desiredPose = m_waypoints.front();
       m_waypoints.pop_front();
+      lastPointSpeed = pointSpeed;
       pointSpeed = m_driveSpeed.front();
       m_driveSpeed.pop_front();
       cruiseSpeed = m_cruiseSpeed.front();
@@ -97,7 +99,7 @@ void FollowWaypoints::Execute()
   if(!finished)
   {
     // robotSpeed = 1_mps;
-    if(distanceTraveled >= currentDistance)
+    if((distanceTraveled + (distanceTraveled * 0.1)) >= currentDistance)
     {
       robotSpeed = 0.5_mps;
     }
@@ -105,7 +107,7 @@ void FollowWaypoints::Execute()
     {
       accumulatedError += 5E-3 * (currentDistance - distanceTraveled);
       double x = (currentDistance-distanceTraveled) / 0.8;
-      robotSpeed = 1 * (x) * cruiseSpeed + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
+      robotSpeed = 1 * x * (cruiseSpeed - pointSpeed) + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true)
       {
@@ -114,8 +116,8 @@ void FollowWaypoints::Execute()
     }
     else if(distanceTraveled <= 0.5)
     {
-      double x = distanceTraveled / 0.25;
-      robotSpeed = 1 * x * cruiseSpeed + pointSpeed + 0.1_mps; //0-100% of max speed aka Z
+      double x = distanceTraveled / 0.5;
+      robotSpeed = 1 * x * (cruiseSpeed - lastPointSpeed) + lastPointSpeed + 0.1_mps; //0-100% of max speed aka Z
 
       if(DebugConstants::debug == true)
       {
