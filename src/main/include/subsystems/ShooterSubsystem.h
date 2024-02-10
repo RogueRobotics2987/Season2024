@@ -16,8 +16,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   void Periodic() override;
   
-  void StopShooter();
   void SetShooter();
+  void StopShooter();
   void ReserveShooter();
 
  private:

@@ -9,9 +9,20 @@ ShooterSubsystem::ShooterSubsystem() {
 }
 
 // This method will be called once per scheduler run
-void ShooterSubsystem::Periodic() {}
+void ShooterSubsystem::Periodic() {
+    
+}
+
+
+void ShooterSubsystem::SetShooter(){
+
+}
 
 void ShooterSubsystem::StopShooter()
 {
+
+}
+
+void ShooterSubsystem::ReserveShooter(){
 
 }

@@ -13,6 +13,7 @@ void IntakeSubsystem::Periodic(){
 
 }
 
+
 void IntakeSubsystem::Direction(){  // get current val to tell which direction motors moving in
     /*float xVel = 1.0;
     float yVel = 0.0;
@@ -20,4 +21,20 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
     float robotDirection = 0.0;
 
     float*/ 
+}
+
+void IntakeSubsystem::runIntake(){
+
+}
+
+void IntakeSubsystem::stopIntake(){
+
+}
+
+void IntakeSubsystem::runMagazine(){
+
+}
+
+void IntakeSubsystem::stopIntake(){
+
 }
