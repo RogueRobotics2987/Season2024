@@ -826,6 +826,38 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
       1_mps
     };
 
+    std::vector<frc::Pose2d> B_3_5_2Waypoints{
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 3.2_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(4.3_m, 3.2_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.3_m, 5.8_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.8_m, 6.6_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_3_5_2PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_5_2CruiseSpeed{
+      1_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps
+    };
+
     //Red Auto Paths
 
 
