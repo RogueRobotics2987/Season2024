@@ -152,13 +152,12 @@ class RobotContainer
       frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.6_m, 3.45_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(6.6_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(8.15_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(5.6_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(6.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.15_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.6_m, 4.15_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.6_m, 3.5_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(3_m, 3_m, frc::Rotation2d(145_deg)),
-      frc::Pose2d(2.5_m, 3.5_m, frc::Rotation2d(145_deg)),
-      frc::Pose2d(2.3_m, 3.5_m, frc::Rotation2d(145_deg)) // auto rotate
     };
 
     //point speed is the speed you want to be going at the specific waypoint
@@ -166,29 +165,27 @@ class RobotContainer
       0_mps,
       0_mps,
       0_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
       2_mps,
-      2_mps,
-      1.75_mps,
-      0.5_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      1.5_mps,
-      0_mps
+      0.75_mps,
+      2.25_mps,
+      2.25_mps,
+      0_mps,
     };
 
     //The cruise speed is the speed to get to that waypoint, so for the last item it would be the speed to get to that item.
     std::vector<units::meters_per_second_t> B_3_6CruiseSpeed{
       1_mps,
-      1_mps,
-      1_mps,
-      2_mps,
-      2_mps,
-      3_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      2_mps,
+      1.25_mps,
+      1.25_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
+      3.25_mps,
+      2.25_mps,
+      2.25_mps,
       2_mps,
       1.5_mps
     };

@@ -270,7 +270,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     m_drive.ResetOdometry(B_3_6Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limePose, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, true).ToPtr()
+      FollowWaypoints(m_drive, m_limePose, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3_7")
