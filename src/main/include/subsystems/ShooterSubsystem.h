@@ -19,6 +19,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  
   void StopShooter();
   void SetShooter(double speed);
   void ReverseShooter();

@@ -5,10 +5,18 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc/DigitalInput.h>
+
 
 class ColorSensorSubsystem : public frc2::SubsystemBase {
  public:
   ColorSensorSubsystem();
+
+  bool detectNoteIntake1 = false;   // color sensor on the __ of robot
+  bool detectNoteIntake2 = false;   // color sensor on the __ of robot
+  bool eatenNote = false;      // color sensor between mag and shooter
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -18,4 +26,8 @@ class ColorSensorSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
+  frc::DigitalInput intakeColorSensor {0};   // 0 is a place holder for the DIO port
+  frc::DigitalInput magazineColorSensor {1};  // 1 is a place holder for the DIO port
+  
 };

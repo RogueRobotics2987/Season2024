@@ -12,12 +12,15 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
-m_drive.SetDefaultCommand(frc2::RunCommand(
+
+  m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
-      double safeX = Deadzone(m_driverController.GetLeftX());
-      double safeY =  Deadzone(m_driverController.GetLeftY());
-      double safeRot = Deadzone(m_driverController.GetRightX());
+      double safeX = DeadzoneCubed(m_driverController.GetLeftX());
+      double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
+      double safeRot = DeadzoneCubed(m_driverController.GetRightX());
+
+
       bool fieldOrientated;
 
       if (m_driverController.GetRawAxis(3)> 0.15){ //if the right trigger is pulled
@@ -47,15 +50,14 @@ m_drive.SetDefaultCommand(frc2::RunCommand(
 void RobotContainer::ConfigureButtonBindings()
 {
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
-  frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
+  //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
 
   //runs a basic autonomous
   frc2::JoystickButton(&m_driverController, 6).OnTrue(onFlyGeneration());
 
-  //Robot slides right (when front is away from the drivers)
+  // Robot slides right (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
-
-  //Robot slides left (when front is away from the drivers)
+  // Robot slides left (when front is away from the drivers)
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   //Limelight Note Detection
@@ -63,11 +65,21 @@ void RobotContainer::ConfigureButtonBindings()
 
   //Limelight April Tag Detection, y
   frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
+
+  // Run/stop test motor
+  frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
+  frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
+
+  //start PICKUP state
+  //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
+  //frc2::JoystickButton(&m_driverController, 5).ToggleOnFalse(m_intakeShoot.PickupStop());
+
 }
 
 
-float RobotContainer::Deadzone(float x)
-{
+float RobotContainer::DeadzoneCubed(float x){
+  x = x * x * x;  // exponetial curve, slow acceleration at begining
+
   if ((x < 0.1) &&  (x > -0.1)){
     x=0;
   }
@@ -77,8 +89,25 @@ float RobotContainer::Deadzone(float x)
   else if (x <= -0.1){
     x = x + 0.1;
   }
+
+  return(x);
+ 
+}
+
+float RobotContainer::Deadzone(float x){
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if (x >= 0.1){
+    x = x - 0.1;
+  }
+  else if (x <= -0.1){
+    x = x + 0.1;
+  }
+
   return(x);
 }
+
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {

@@ -30,10 +30,12 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
+#include "subsystems/TestMotor.h"
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
 #include "commands/followWaypoints.h"
+#include "subsystems/IntakeShooterSubsystem.h"
 
 using namespace pathplanner;
 
@@ -53,14 +55,22 @@ class RobotContainer
     float Deadzone(float x); 
     frc2::CommandPtr onFlyGeneration();
 
+    float DeadzoneCubed(float x);
+    void ConfigureButtonBindings();
+
+
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
-    frc::XboxController m_driverController{0};
+    frc::XboxController m_driverController{1};
+
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
     LimelightSubsystem m_limelight;
+    TestMotor m_testMotor;
+    //IntakeShooterSubsystem m_intakeShoot;
+
     // frc::SendableChooser<frc2::Command*> m_chooser;
-    void ConfigureButtonBindings();
+    //void ConfigureButtonBindings();
     std::unique_ptr<frc2::Command> onTheFly;
     std::unique_ptr<frc2::Command> followOnTheFly;
 };
