@@ -21,14 +21,27 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
     float robotDirection = 0.0;
 
     float*/ 
+    frontVal= FrontIntake.GetOutputCurrent();
+    backVal = BackIntake.GetOutputCurrent();
+
+    if (frontVal > 2.5){ // need to find actual value and put in constants 
+        CenterIntake. Set(0.5); // need to find actual speed
+    }else if (backVal > 2.5){
+        CenterIntake.Set(-0.5);
+    }
 }
 
 void IntakeSubsystem::runIntake(){
+    // need to make it so that these turn on with a button
+    FrontIntake.Set(0.5);
+    BackIntake.Set(-0.5);
 
 }
 
 void IntakeSubsystem::stopIntake(){
-
+    FrontIntake.Set(0.0);
+    BackIntake.Set(0.0);
+    CenterIntake.Set(0.0);
 }
 
 void IntakeSubsystem::runMagazine(){
