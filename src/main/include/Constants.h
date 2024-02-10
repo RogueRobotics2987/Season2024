@@ -117,3 +117,23 @@ namespace DebugConstants {
 namespace ShooterConstants {
     constexpr double AngleThreshold = 4.5;
 }
+
+namespace ArmConstants {
+    constexpr double LowerInitalAngle = 0;
+    constexpr double UpperInitalAngle = 0;
+    constexpr double LowerFirstExtentionAngle = 10;
+    constexpr double UpperFirstExtentionAngle = 0;
+    constexpr double UpperExtentionAngle = 10;
+    constexpr double LowerExtentionAngle = 10;
+    constexpr double LowerFinalExtentionAngle = 20;
+    constexpr double UpperFinalExtentionAngle = 10;
+    constexpr double LowerDropAngle = 20;
+    constexpr double UpperDropAngle = 20;
+    constexpr double UpperFirstRetractionAngle = 0;
+    constexpr double LowerFirstRetractionAngle = 0;
+    constexpr double LowerFullRetractedAngle = 0;
+    constexpr double UpperFullRetractedAngle = 0;
+
+    
+
+}

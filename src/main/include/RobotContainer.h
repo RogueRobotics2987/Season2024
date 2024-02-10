@@ -35,7 +35,6 @@
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
 #include "commands/followWaypoints.h"
-#include "subsystems/IntakeShooterSubsystem.h"
 
 using namespace pathplanner;
 
