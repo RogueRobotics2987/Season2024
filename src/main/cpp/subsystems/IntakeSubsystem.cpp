@@ -35,6 +35,6 @@ void IntakeSubsystem::runMagazine(){
 
 }
 
-void IntakeSubsystem::stopIntake(){
-
+void IntakeSubsystem::stopMagazine(){
+    
 }

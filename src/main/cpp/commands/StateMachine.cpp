@@ -94,7 +94,7 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
     //start shooter motors
-    m_shooter->SetShooter();
+    m_shooter->SetShooter(0.5);
 
 
     if(warmUpShooter == false){
