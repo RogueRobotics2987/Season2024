@@ -5,36 +5,45 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
 {
   // Use addRequirements() here to declare subsystem dependencies.
-  m_limePose = &limePose;
+  m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
-  AddRequirements({m_limePose});
+  AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
 }
 
 // Called when the command is initially scheduled.
 void NoteFollower::Initialize()
 {
-   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
+  //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
-  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
-
+  double tx = m_limelight->GetNotetx();
   if(tx > 7 || tx < -7){
-    rot = units::angular_velocity::radians_per_second_t((0 + tx) * kp);
+    rot = units::angular_velocity::radians_per_second_t((0 - tx) * kp);
   }
   else
   {
     rot = units::angular_velocity::radians_per_second_t(0);
   }
+  speedY = Deadzone(m_Xbox->GetLeftY());
 
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(m_Xbox->GetLeftY()), units::velocity::meters_per_second_t(0), rot, false, false);
+  if((fabs(speedY) + fabs(rot.value())) < .05) 
+  {
+    NoJoystickInput = true;
+  }
+  else
+  {
+    NoJoystickInput = false;
+  }
+
+  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rot, false, NoJoystickInput);
 }
 
 // Called once the command ends or is interrupted.
@@ -44,4 +53,18 @@ void NoteFollower::End(bool interrupted) {}
 bool NoteFollower::IsFinished()
 {
   return false;
+}
+
+float NoteFollower::Deadzone(float x)
+{
+  if ((x < 0.1) &&  (x > -0.1)){
+    x=0;
+  }
+  else if (x >= 0.1){
+    x = x - 0.1;
+  }
+  else if (x <= -0.1){
+    x = x + 0.1;
+  }
+  return(x);
 }

@@ -52,7 +52,7 @@ class RobotContainer
     RobotContainer();
     frc2::CommandPtr GetAutonomousCommand();
     frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
-    float Deadzone(float x);
+    float Deadzone(float x); 
     frc2::CommandPtr onFlyGeneration();
 
     float DeadzoneCubed(float x);
@@ -65,10 +65,11 @@ class RobotContainer
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    LimelightSubsystem m_limePose;
+    //LimelightSubsystem m_limePose;
     TestMotor m_testMotor;
     //IntakeShooterSubsystem m_intakeShoot;
 
+    LimelightSubsystem m_limelight;
     // frc::SendableChooser<frc2::Command*> m_chooser;
     //void ConfigureButtonBindings();
     std::unique_ptr<frc2::Command> onTheFly;

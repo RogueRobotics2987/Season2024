@@ -8,6 +8,7 @@
 #include <frc/XboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <iostream>
 
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
@@ -25,7 +26,7 @@ class NoteFollower
 {
   public:
     NoteFollower();
-    NoteFollower(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
 
 
     void Initialize() override;
@@ -39,9 +40,12 @@ class NoteFollower
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
     units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
     double kp = 0.09927;
+    double speedY = 0;
+    bool NoJoystickInput = false;
 
   private:
-    LimelightSubsystem* m_limePose = nullptr;
+    LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    float Deadzone(float x);
 };
