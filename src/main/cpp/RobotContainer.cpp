@@ -47,6 +47,9 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("R_2_6_5", "R_2_6_5");
   m_chooser.AddOption("R_2_5_6", "R_2_5_6");
   m_chooser.AddOption("R_3_2_1_4_5", "R_3_2_1_4_5");
+  m_chooser.AddOption("B_1_4_2", "B_1_4_2");
+  m_chooser.AddOption("B_2_6_3", "B_2_6_3");
+  m_chooser.AddOption("B_3_6_V2", "B_3_6_V2");
   frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
@@ -543,6 +546,30 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limePose, R_3_2_1_4_5Waypoints, R_3_2_1_4_5PointSpeed, R_3_2_1_4_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_1_4_2")
+  { 
+    m_drive.ResetOdometry(B_1_4_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_1_4_2Waypoints, B_1_4_2PointSpeed, B_1_4_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_2_6_3")
+  { 
+    m_drive.ResetOdometry(B_2_6_3Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_2_6_3Waypoints, B_2_6_3PointSpeed, B_2_6_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_3_6_V2")
+  { 
+    m_drive.ResetOdometry(B_3_6_V2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3_6_V2Waypoints, B_3_6_V2PointSpeed, B_3_6_V2CruiseSpeed, false).ToPtr()
     );  
   }
   else
