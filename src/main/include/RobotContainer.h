@@ -730,6 +730,131 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
       2_mps
     };
 
+    std::vector<frc::Pose2d> B_1_4_2Waypoints{
+      frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.3_m, 7.4_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(4.3_m, 6.4_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_1_4_2PointSpeed{
+      0_mps,
+      0_mps,
+      0_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_1_4_2CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> B_2_6_3Waypoints{
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.3_m, 4.9_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(5.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.3_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.8_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.3_m, 4.9_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.2_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_2_6_3PointSpeed{
+      0_mps,
+      0_mps,
+      1.5_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      1.5_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_2_6_3CruiseSpeed{
+      1_mps,
+      1.5_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> B_3_6_V2Waypoints{
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 2.9_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(4.4_m, 3.3_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.6_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.3_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.9_m, 4.2_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.3_m, 5_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(3.5_m, 5.3_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6_V2PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6_V2CruiseSpeed{
+      1_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> B_3_5_2Waypoints{
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 3.2_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(4.3_m, 3.2_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.9_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.3_m, 5.8_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.8_m, 6.6_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> B_3_5_2PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_5_2CruiseSpeed{
+      1_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps
+    };
+
     //Red Auto Paths
 
 
