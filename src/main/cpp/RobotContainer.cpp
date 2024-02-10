@@ -33,6 +33,20 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("B_2_5_6", "B_2_5_6");
   m_chooser.AddOption("B_3_2_1_4_5", "B_3_2_1_4_5");
   m_chooser.AddOption("R_1_2_3", "R_1_2_3");
+  m_chooser.AddOption("R_2_6", "R_2_6");
+  m_chooser.AddOption("R_2_7", "R_2_7");
+  m_chooser.AddOption("R_1_4", "R_1_4");
+  m_chooser.AddOption("R_3_8", "R_3_8");
+  m_chooser.AddOption("R_2_5", "R_2_5");
+  m_chooser.AddOption("R_3_2_1", "R_3_2_1");
+  m_chooser.AddOption("R_1_5", "R_1_5");
+  m_chooser.AddOption("R_3_7_8", "R_3_7_8");
+  m_chooser.AddOption("R_1_4_5", "R_1_4_5");
+  m_chooser.AddOption("R_2_6_7", "R_2_6_7");
+  m_chooser.AddOption("R_3_6_7", "R_3_6_7");
+  m_chooser.AddOption("R_2_6_5", "R_2_6_5");
+  m_chooser.AddOption("R_2_5_6", "R_2_5_6");
+  m_chooser.AddOption("R_3_2_1_4_5", "R_3_2_1_4_5");
   frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
@@ -409,6 +423,118 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limePose, R_1_2_3Waypoints, R_1_2_3PointSpeed, R_1_2_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+   else if(chosenAuto == "R_2_6")
+  { 
+    m_drive.ResetOdometry(R_2_6Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_6Waypoints, R_2_6PointSpeed, R_2_6CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_2_7")
+  { 
+    m_drive.ResetOdometry(R_2_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_7Waypoints, R_2_7PointSpeed, R_2_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_8")
+  { 
+    m_drive.ResetOdometry(R_3_8Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_8Waypoints, R_3_8PointSpeed, R_3_8CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_1_4")
+  { 
+    m_drive.ResetOdometry(R_1_4Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_1_4Waypoints, R_1_4PointSpeed, R_1_4CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_2_5")
+  { 
+    m_drive.ResetOdometry(R_2_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_5Waypoints, R_2_5PointSpeed, R_2_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_2_1")
+  { 
+    m_drive.ResetOdometry(R_3_2_1Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_2_1Waypoints, R_3_2_1PointSpeed, R_3_2_1CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_1_5")
+  { 
+    m_drive.ResetOdometry(R_1_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_1_5Waypoints, R_1_5PointSpeed, R_1_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_7_8")
+  { 
+    m_drive.ResetOdometry(R_3_7_8Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_7_8Waypoints, R_3_7_8PointSpeed, R_3_7_8CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_1_4_5")
+  { 
+    m_drive.ResetOdometry(R_1_4_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_1_4_5Waypoints, R_1_4_5PointSpeed, R_1_4_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_2_6_7")
+  { 
+    m_drive.ResetOdometry(R_2_6_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_6_7Waypoints, R_2_6_7PointSpeed, R_2_6_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_6_7")
+  { 
+    m_drive.ResetOdometry(R_3_6_7Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_6_7Waypoints, R_3_6_7PointSpeed, R_3_6_7CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_2_6_5")
+  { 
+    m_drive.ResetOdometry(R_2_6_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_6_5Waypoints, R_2_6_5PointSpeed, R_2_6_5CruiseSpeed, false).ToPtr()
+    );  
+  }
+   else if(chosenAuto == "R_2_5_6")
+  { 
+    m_drive.ResetOdometry(R_2_5_6Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_5_6Waypoints, R_2_5_6PointSpeed, R_2_5_6CruiseSpeed, false).ToPtr()
+    );  
+  }
+   else if(chosenAuto == "R_3_2_1_4_5")
+  { 
+    m_drive.ResetOdometry(R_3_2_1_4_5Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_2_1_4_5Waypoints, R_3_2_1_4_5PointSpeed, R_3_2_1_4_5CruiseSpeed, false).ToPtr()
     );  
   }
   else

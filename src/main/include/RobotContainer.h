@@ -74,7 +74,7 @@ class RobotContainer
 
 
     std::vector<frc::Pose2d>  B_1Waypoints{
-      frc::Pose2d(1.5_m, 7_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
     };
 
@@ -89,7 +89,7 @@ class RobotContainer
     };
 
     std::vector<frc::Pose2d>  B_2Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 5.55_m, frc::Rotation2d(180_deg))
     };
 
@@ -104,7 +104,7 @@ class RobotContainer
     };
 
     std::vector<frc::Pose2d>  B_3Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(180_deg))
     };
 
@@ -119,11 +119,11 @@ class RobotContainer
     };
 
     std::vector<frc::Pose2d>  B_1_2_3Waypoints{
-      frc::Pose2d(1.5_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg))
     };
 
@@ -147,7 +147,7 @@ class RobotContainer
 
 
     std::vector<frc::Pose2d> B_3_6Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
@@ -191,7 +191,7 @@ class RobotContainer
     };
 
     std::vector<frc::Pose2d> B_3_7Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.5_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(5.15_m, 1.8_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.15_m, 1.8_m, frc::Rotation2d(180_deg)),
@@ -227,7 +227,7 @@ class RobotContainer
     };
 
     std::vector<frc::Pose2d> B_2_6Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.4_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.0_m, 5.15_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(6.25_m, 4.25_m, frc::Rotation2d(180_deg)),
@@ -263,7 +263,7 @@ class RobotContainer
     };
 
 std::vector<frc::Pose2d> B_2_7Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.4_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.4_m, 4.9_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.4_m, 4.0_m, frc::Rotation2d(180_deg)),
@@ -302,7 +302,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
     
     std::vector<frc::Pose2d> B_1_4Waypoints{
-      frc::Pose2d(1.5_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(6.4_m, 7.5_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(7.35_m, 7.5_m, frc::Rotation2d(180_deg)),
@@ -329,7 +329,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     std::vector<frc::Pose2d> B_3_8Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.5_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.5_m, 3_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.2_m, 1.2_m, frc::Rotation2d(180_deg)),
@@ -365,7 +365,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     std::vector<frc::Pose2d> B_2_5Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.4_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(5.25_m, 6.2_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(7.3_m, 5.8_m, frc::Rotation2d(180_deg)),
@@ -398,7 +398,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     std::vector<frc::Pose2d> B_3_2_1Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
@@ -424,7 +424,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     std::vector<frc::Pose2d> B_1_5Waypoints{
-      frc::Pose2d(1.5_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(5.9_m, 6.4_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(8.3_m, 5.8_m, frc::Rotation2d(180_deg)),
@@ -451,7 +451,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
     std::vector<frc::Pose2d> B_3_7_8Waypoints{
-      frc::Pose2d(1.5_m, 4.10_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.10_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.10_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(5.9_m, 3.0_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.30_m, 1.75_m, frc::Rotation2d(180_deg)),
@@ -487,7 +487,7 @@ std::vector<frc::Pose2d> B_2_7Waypoints{
     };
 
 std::vector<frc::Pose2d> B_1_4_5Waypoints{
-      frc::Pose2d(1.5_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(8.3_m, 7.4_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.80_m, 6.5_m, frc::Rotation2d(180_deg)),
@@ -517,7 +517,7 @@ std::vector<frc::Pose2d> B_1_4_5Waypoints{
     };
 
 std::vector<frc::Pose2d> B_2_6_7Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.2_m, 4.8_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.9_m, 4.1_m, frc::Rotation2d(180_deg)),
@@ -560,7 +560,7 @@ std::vector<frc::Pose2d> B_2_6_7Waypoints{
     };
 
 std::vector<frc::Pose2d> B_3_6_7Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 3.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(4.3_m, 3.3_m, frc::Rotation2d(180_deg)),
@@ -607,7 +607,7 @@ std::vector<frc::Pose2d> B_3_6_7Waypoints{
     };
 
 std::vector<frc::Pose2d> B_2_6_5Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.4_m, 4.9_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(5.9_m, 4.1_m, frc::Rotation2d(180_deg)),
@@ -654,7 +654,7 @@ std::vector<frc::Pose2d> B_2_6_5Waypoints{
     };
 
 std::vector<frc::Pose2d> B_2_5_6Waypoints{
-      frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(5.8_m, 6.3_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(8.3_m, 5.8_m, frc::Rotation2d(180_deg)),
@@ -689,7 +689,7 @@ std::vector<frc::Pose2d> B_2_5_6Waypoints{
     };
 
 std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
-      frc::Pose2d(1.5_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(1.5_m, 5.55_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
@@ -742,7 +742,7 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
 
 
     std::vector<frc::Pose2d>  R_1Waypoints{
-      frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 7_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(13.65_m, 7_m, frc::Rotation2d(0_deg))
     };
 
@@ -757,7 +757,7 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
     };
 
     std::vector<frc::Pose2d>  R_2Waypoints{
-      frc::Pose2d(15.05_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg))
     };
 
@@ -772,7 +772,7 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
     };
 
     std::vector<frc::Pose2d>  R_3Waypoints{
-      frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg))
     };
 
@@ -787,7 +787,7 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
     };
 
     std::vector<frc::Pose2d> R_3_6Waypoints{
-      frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(14.0_m, 4.1_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(12.3_m, 3.4_m, frc::Rotation2d(0_deg)),
@@ -832,7 +832,7 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
     };
 
     std::vector<frc::Pose2d> R_3_7Waypoints{
-      frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(14.0_m, 4.1_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(14.0_m, 3_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
       frc::Pose2d(12.25_m, 1.9_m, frc::Rotation2d(0_deg)),
@@ -868,12 +868,12 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
     };
 
     std::vector<frc::Pose2d> R_1_2_3Waypoints{
-      frc::Pose2d(15.05_m, 7.0_m, frc::Rotation2d(0_deg)),
-      frc::Pose2d(13.7_m, 7.0_m, frc::Rotation2d(0_deg)),
-      frc::Pose2d(15.05_m, 5.55_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
-      frc::Pose2d(13.07_m, 5.55_m, frc::Rotation2d(0_deg)),
-      frc::Pose2d(15.05_m, 4.1_m, frc::Rotation2d(0_deg)),
-      frc::Pose2d(13.07_m, 4.1_m, frc::Rotation2d(0_deg))
+      frc::Pose2d(15.1_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg))
     };
 
     std::vector<units::meters_per_second_t> R_1_2_3PointSpeed{
@@ -891,6 +891,510 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
       1_mps,
       2_mps,
       1_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_6Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.55_m, 5.15_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(10.3_m, 4.25_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.85_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.05_m, 4.25_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.45_m, 5.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.15_m, 5.55_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6CruiseSpeed{
+      1_mps, 
+      2_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_7Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.15_m, 4.9_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(11.15_m, 4.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(9.35_m, 2.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.75_m, 2.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.15_m, 4.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 5.6_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.25_m, 5.6_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2_7PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_7CruiseSpeed{
+      1_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> R_3_8Waypoints{
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.05_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.05_m, 3_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(11.35_m, 1.2_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(9.35_m, 0.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.65_m, 0.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.35_m, 1.2_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.05_m, 3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 3.6_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_8PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      0_mps,
+      2_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_8CruiseSpeed{
+      1_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      1_mps,
+      2_mps,
+      1_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> R_1_4Waypoints{
+      frc::Pose2d(15.1_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.15_m, 7.5_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(9.2_m, 7.5_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.25_m, 7.0_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_1_4PointSpeed{
+      0_mps,
+      0_mps,
+      1.5_mps,
+      0_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_1_4CruiseSpeed{
+      1_mps,
+      1.5_mps,
+      4_mps,
+      1.5_mps,
+      2_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_5Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.15_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.3_m, 6.2_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(9.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.75_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 6.3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.45_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.25_m, 5.6_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2_5PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      1_mps,
+      0_mps,
+      2_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_5CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      1_mps,
+    };
+
+    std::vector<frc::Pose2d> R_3_2_1Waypoints{
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 7.00_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.00_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_2_1PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      0_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_2_1CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1_mps
+    };
+
+    std::vector<frc::Pose2d> R_1_5Waypoints{
+      frc::Pose2d(15.1_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 6.4_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(8.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 6.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 6.3_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_1_5PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_1_5CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps
+    };
+
+std::vector<frc::Pose2d> R_3_7_8Waypoints{
+      frc::Pose2d(15.1_m, 4.10_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.10_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 3.0_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(11.25_m, 1.75_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 2.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 0.80_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.25_m, 1.70_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 3.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 5.10_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_7_8PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      1_mps,
+      0_mps,
+      2_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_7_8CruiseSpeed{
+      1_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d> R_1_4_5Waypoints{
+      frc::Pose2d(15.1_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 7.4_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(10.75_m, 6.5_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 6.5_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 6.2_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_1_4_5PointSpeed{
+      0_mps,
+      0_mps,
+      0_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_1_4_5CruiseSpeed{
+      1_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_6_7Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.35_m, 4.8_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.35_m, 4.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 3.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 2.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 4.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 5.5_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6_7PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      1_mps,
+      1.5_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6_7CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d> R_3_6_7Waypoints{
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 3.1_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(12.25_m, 3.3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 4.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 2.5_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 4.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 5.1_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_6_7PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      1_mps,
+      2_mps,
+      0_mps,
+      1.5_mps,
+      1_mps,
+      1.5_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_6_7CruiseSpeed{
+      1_mps,
+      1_mps,
+      1.5_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_6_5Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.15_m, 4.9_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 5.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.35_m, 6.4_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(9.75_m, 5.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 6.3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.35_m, 6.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 5.55_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6_5PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      1.5_mps,
+      0_mps,
+      2_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_6_5CruiseSpeed{
+      1_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d> R_2_5_6Waypoints{
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 6.3_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(8.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.75_m, 6.3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 4.2_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.35_m, 4.9_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14.65_m, 5.5_m, frc::Rotation2d(0_deg)),
+    };
+
+    std::vector<units::meters_per_second_t> R_2_5_6PointSpeed{
+      0_mps,
+      0_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      0_mps,
+      1.5_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_2_5_6CruiseSpeed{
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps
+    };
+
+    std::vector<frc::Pose2d> R_3_2_1_4_5Waypoints{
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(15.1_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 7.0_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 7.50_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 6.2_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 5.8_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.65_m, 6.4_m, frc::Rotation2d(0_deg)),   
+      frc::Pose2d(12.25_m, 6.4_m, frc::Rotation2d(0_deg)),   
+      frc::Pose2d(14.65_m, 5.55_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_2_1_4_5PointSpeed{
+      0_mps,
+      0_mps,
+      0_mps,
+      0_mps,
+      0_mps,
+      0_mps,
+      0_mps,
+      1_mps,
+      0_mps,
+      2_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_2_1_4_5CruiseSpeed{
+      1_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      1_mps,
+      2_mps,
+      1.5_mps,
+      2_mps,
+      2_mps,
       2_mps
     };
 };
