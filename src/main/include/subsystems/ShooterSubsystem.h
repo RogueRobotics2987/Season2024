@@ -40,8 +40,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   //frc::DigitalInput MagazineSensor{1};
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+  
   double kp = 0.0111;
   double m_DesiredAngle = -999; //TODO find safe resting value
 };

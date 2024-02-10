@@ -47,8 +47,7 @@ RobotContainer::RobotContainer()
   ));
 }
 
-void RobotContainer::ConfigureButtonBindings()
-{
+void RobotContainer::ConfigureButtonBindings(){
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_drive.ZeroHeading());
 
