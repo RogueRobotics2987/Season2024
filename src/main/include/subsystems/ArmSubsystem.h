@@ -16,7 +16,7 @@
 
 class ArmSubsystem : public frc2::SubsystemBase {
  public:
-  ArmSubsystem(frc::XboxController &Xbox);
+  ArmSubsystem();
 
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
@@ -54,10 +54,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
   double kiSumLowerArm = 0.0;
   double kiSumUpperArm = 0.0;
 
-  enum armState {INITAL, LOWER_ARM_EXTEND_INITAL, UPPER_ARM_EXTEND_INITAL, ARM_FINAL, DROP, ARM_RETRACT_INITAL, ARM_RETRACT_FINAL};
-  armState state = INITAL;
-  frc::XboxController* m_Xbox = nullptr;
-  bool HasNote = false;
+  // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
+  // armState state = INITIAL;
+  // frc::XboxController* m_Xbox = nullptr;
+  // bool HasNote = false;
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

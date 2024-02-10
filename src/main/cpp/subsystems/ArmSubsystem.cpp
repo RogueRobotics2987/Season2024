@@ -4,67 +4,65 @@
 
 #include "subsystems/ArmSubsystem.h"
 
-ArmSubsystem::ArmSubsystem(frc::XboxController &Xbox)
-{
-    m_Xbox = &Xbox;
-}
+ArmSubsystem::ArmSubsystem()
+{}
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {
-    switch (state) {
-        case INITAL:
-            setLowerArmAngle(ArmConstants::LowerInitalAngle);
-            setUpperArmAngle(ArmConstants::UpperInitalAngle);
-            // if(m_Xbox->getr)
-            state = LOWER_ARM_EXTEND_INITAL;
+    // switch (state) {
+        // case INITAL:
+        //     setLowerArmAngle(ArmConstants::LowerInitalAngle);
+        //     setUpperArmAngle(ArmConstants::UpperInitalAngle);
+        //     // if(m_Xbox->getr)
+        //     state = LOWER_ARM_EXTEND_INITAL;
 
-            break;
+        //     break;
         
-        case LOWER_ARM_EXTEND_INITAL:
-            setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
-            setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
-            HasNote = true;
+        // case LOWER_ARM_EXTEND_INITAL:
+        //     setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
+        //     setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
+        //     HasNote = true;
 
-            break;
+        //     break;
 
-        case UPPER_ARM_EXTEND_INITAL:
-            setLowerArmAngle(ArmConstants::LowerExtentionAngle);
-            setUpperArmAngle(ArmConstants::UpperExtentionAngle);
+        // case UPPER_ARM_EXTEND_INITAL:
+        //     setLowerArmAngle(ArmConstants::LowerExtentionAngle);
+        //     setUpperArmAngle(ArmConstants::UpperExtentionAngle);
 
-            break;
+        //     break;
 
-        case ARM_FINAL:
-            setLowerArmAngle(ArmConstants::LowerFinalExtentionAngle);
-            setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
+        // case ARM_FINAL:
+        //     setLowerArmAngle(ArmConstants::LowerFinalExtentionAngle);
+        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
 
-            break;
+        //     break;
 
-        case DROP:
-            setLowerArmAngle(ArmConstants::LowerDropAngle);
-            setUpperArmAngle(ArmConstants::UpperDropAngle);
-            dropNote();
-            HasNote = false;
+        // case DROP:
+        //     setLowerArmAngle(ArmConstants::LowerDropAngle);
+        //     setUpperArmAngle(ArmConstants::UpperDropAngle);
+        //     dropNote();
+        //     HasNote = false;
 
-            break;
+        //     break;
 
-        case ARM_RETRACT_INITAL:
-            setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
-            setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
+        // case ARM_RETRACT_INITAL:
+        //     setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
+        //     setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
 
-            break;
+        //     break;
 
-        case ARM_RETRACT_FINAL:
-            setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-            setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
+        // case ARM_RETRACT_FINAL:
+        //     setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
+        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
 
-            break;
+        //     break;
 
-        default:
-        state = INITAL;
-        break;
+    //     default:
+    //     state = INITAL;
+    //     break;
 
 
-    }
+    // }
 }
 
 
@@ -115,11 +113,11 @@ double ArmSubsystem::getUpperEncoderPos(){
     return m_UpperArmEncoder.GetPosition();
 }
 
-bool ArmSubsystem::compareHasNote(bool Other){
-    if(Other && HasNote) {
-        return true;
-    }
-    else{
-        return false;
-    }
-}
+// bool ArmSubsystem::compareHasNote(bool Other){
+//     if(Other && HasNote) {
+//         return true;
+//     }
+//     else{
+//         return false;
+//     }
+// }
