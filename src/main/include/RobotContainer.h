@@ -167,7 +167,7 @@ class RobotContainer
       0_mps,
       2.25_mps,
       2.25_mps,
-      2.25_mps,
+      2_mps,
       2_mps,
       0.75_mps,
       2.25_mps,
