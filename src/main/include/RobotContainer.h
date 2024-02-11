@@ -75,7 +75,7 @@ class RobotContainer
 
     std::vector<frc::Pose2d>  B_1Waypoints{
       frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2.70_m, 7_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1PointSpeed{
@@ -90,7 +90,7 @@ class RobotContainer
 
     std::vector<frc::Pose2d>  B_2Waypoints{
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.90_m, 5.55_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2.70_m, 5.55_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_2PointSpeed{
@@ -105,26 +105,29 @@ class RobotContainer
 
     std::vector<frc::Pose2d>  B_3Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
     };
 
     std::vector<units::meters_per_second_t> B_3PointSpeed{
+      0_mps,
       0_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> B_3CruiseSpeed{
       1_mps,
-      1.5_mps
+      1.5_mps,
+      1_mps
     };
 
     std::vector<frc::Pose2d>  B_1_2_3Waypoints{
       frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.7_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.7_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1_2_3PointSpeed{
@@ -146,7 +149,7 @@ class RobotContainer
     };
 
 
-    std::vector<frc::Pose2d> B_3_6Waypoints{
+    std::vector<frc::Pose2d> B_3_6_Bottom_Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
@@ -161,7 +164,7 @@ class RobotContainer
     };
 
     //point speed is the speed you want to be going at the specific waypoint
-    std::vector<units::meters_per_second_t> B_3_6PointSpeed{
+    std::vector<units::meters_per_second_t> B_3_6_Bottom_PointSpeed{
       0_mps,
       0_mps,
       0_mps,
@@ -176,7 +179,7 @@ class RobotContainer
     };
 
     //The cruise speed is the speed to get to that waypoint, so for the last item it would be the speed to get to that item.
-    std::vector<units::meters_per_second_t> B_3_6CruiseSpeed{
+    std::vector<units::meters_per_second_t> B_3_6_Bottom_CruiseSpeed{
       1_mps,
       1.25_mps,
       1.25_mps,
@@ -788,37 +791,89 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
       1_mps
     };
 
-    std::vector<frc::Pose2d> B_3_6_V2Waypoints{
+    std::vector<frc::Pose2d> B_3_6_Top_Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.9_m, 2.9_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
-      frc::Pose2d(4.4_m, 3.3_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(5.6_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(8.3_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(4.9_m, 4.2_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(4.3_m, 5_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(3.5_m, 5.3_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.6_m, 3.45_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(6.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.15_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.2_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.6_m, 5_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.2_m, 5.6_m, frc::Rotation2d(180_deg))
     };
 
-    std::vector<units::meters_per_second_t> B_3_6_V2PointSpeed{
+    std::vector<units::meters_per_second_t> B_3_6_Top_PointSpeed{
       0_mps,
       0_mps,
+      0.5_mps,
+      2.25_mps,
+      2.25_mps,
+      2_mps,
+      2_mps,
+      0.75_mps,
+      2.25_mps,
+      2.25_mps,
+      0_mps,
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6_Top_CruiseSpeed{
       1_mps,
-      2_mps,
-      2_mps,
-      0_mps,
-      2_mps,
       1.5_mps,
+      1.5_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
+      3.25_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
+      1.5_mps
+    };
+
+    std::vector<frc::Pose2d> B_3_6_2Waypoints{
+      frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
+      frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.6_m, 3.45_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(6.6_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.15_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(5.2_m, 4.15_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.6_m, 5_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(4.2_m, 5.6_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(3.8_m, 5.6_m, frc::Rotation2d(180_deg))      
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6_2PointSpeed{
+      0_mps,
+      0_mps,
+      0.5_mps,
+      2.25_mps,
+      2.25_mps,
+      2_mps,
+      2_mps,
+      0.75_mps,
+      2.25_mps,
+      2.25_mps,
+      0.5_mps,
       0_mps
     };
 
-    std::vector<units::meters_per_second_t> B_3_6_V2CruiseSpeed{
+    std::vector<units::meters_per_second_t> B_3_6_2CruiseSpeed{
       1_mps,
-      1_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      2_mps,
+      1.5_mps,
+      1.5_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
+      3.25_mps,
+      2.25_mps,
+      2.25_mps,
+      2.25_mps,
       1.5_mps,
       1_mps
     };

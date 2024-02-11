@@ -7,50 +7,51 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
 
-  m_chooser.SetDefaultOption("B_1", "B_1");
-  m_chooser.AddOption("B_2", "B_2");
-  m_chooser.AddOption("B_3", "B_3");
-  m_chooser.AddOption("B_1_2_3", "B_1_2_3");
-  m_chooser.AddOption("B_3_6", "B_3_6");
-  m_chooser.AddOption("B_3_7", "B_3_7");
-  m_chooser.AddOption("B_2_6", "B_2_6");
-  m_chooser.AddOption("B_2_7", "B_2_7");
-  m_chooser.AddOption("B_1_4", "B_1_4");
-  m_chooser.AddOption("B_3_8", "B_3_8");
-  m_chooser.AddOption("B_2_5", "B_2_5");
-  m_chooser.AddOption("R_1", "R_1");
-  m_chooser.AddOption("R_2", "R_2");
-  m_chooser.AddOption("R_3", "R_3");
-  m_chooser.AddOption("R_3_6", "R_3_6");
-  m_chooser.AddOption("R_3_7", "R_3_7");
-  m_chooser.AddOption("B_3_2_1", "B_3_2_1");
-  m_chooser.AddOption("B_1_5", "B_1_5");
-  m_chooser.AddOption("B_3_7_8", "B_3_7_8");
-  m_chooser.AddOption("B_1_4_5", "B_1_4_5");
-  m_chooser.AddOption("B_2_6_7", "B_2_6_7");
-  m_chooser.AddOption("B_3_6_7", "B_3_6_7");
-  m_chooser.AddOption("B_2_6_5", "B_2_6_5");
-  m_chooser.AddOption("B_2_5_6", "B_2_5_6");
-  m_chooser.AddOption("B_3_2_1_4_5", "B_3_2_1_4_5");
-  m_chooser.AddOption("R_1_2_3", "R_1_2_3");
-  m_chooser.AddOption("R_2_6", "R_2_6");
-  m_chooser.AddOption("R_2_7", "R_2_7");
-  m_chooser.AddOption("R_1_4", "R_1_4");
-  m_chooser.AddOption("R_3_8", "R_3_8");
-  m_chooser.AddOption("R_2_5", "R_2_5");
-  m_chooser.AddOption("R_3_2_1", "R_3_2_1");
-  m_chooser.AddOption("R_1_5", "R_1_5");
-  m_chooser.AddOption("R_3_7_8", "R_3_7_8");
-  m_chooser.AddOption("R_1_4_5", "R_1_4_5");
-  m_chooser.AddOption("R_2_6_7", "R_2_6_7");
-  m_chooser.AddOption("R_3_6_7", "R_3_6_7");
-  m_chooser.AddOption("R_2_6_5", "R_2_6_5");
-  m_chooser.AddOption("R_2_5_6", "R_2_5_6");
-  m_chooser.AddOption("R_3_2_1_4_5", "R_3_2_1_4_5");
-  m_chooser.AddOption("B_1_4_2", "B_1_4_2");
-  m_chooser.AddOption("B_2_6_3", "B_2_6_3");
-  m_chooser.AddOption("B_3_6_V2", "B_3_6_V2");
-  m_chooser.AddOption("B_3_5_2", "B_3_5_2");
+  m_chooser.SetDefaultOption("Blue_1", "B_1");
+  m_chooser.AddOption("Blue_2", "B_2");
+  m_chooser.AddOption("Blue_3", "B_3");
+  m_chooser.AddOption("Blue_1_2_3", "B_1_2_3");
+  m_chooser.AddOption("Blue_3_6_Bottom", "B_3_6_Bottom");
+  m_chooser.AddOption("Blue_3_7", "B_3_7");
+  m_chooser.AddOption("Blue_2_6", "B_2_6");
+  m_chooser.AddOption("Blue_2_7", "B_2_7");
+  m_chooser.AddOption("Blue_1_4", "B_1_4");
+  m_chooser.AddOption("Blue_3_8", "B_3_8");
+  m_chooser.AddOption("Blue_2_5", "B_2_5");
+  m_chooser.AddOption("Red_1", "R_1");
+  m_chooser.AddOption("Red_2", "R_2");
+  m_chooser.AddOption("Red_3", "R_3");
+  m_chooser.AddOption("Red_3_6", "R_3_6");
+  m_chooser.AddOption("Red_3_7", "R_3_7");
+  m_chooser.AddOption("Blue_3_2_1", "B_3_2_1");
+  m_chooser.AddOption("Blue_1_5", "B_1_5");
+  m_chooser.AddOption("Blue_3_7_8", "B_3_7_8");
+  m_chooser.AddOption("Blue_1_4_5", "B_1_4_5");
+  m_chooser.AddOption("Blue_2_6_7", "B_2_6_7");
+  m_chooser.AddOption("Blue_3_6_7", "B_3_6_7");
+  m_chooser.AddOption("Blue_2_6_5", "B_2_6_5");
+  m_chooser.AddOption("Blue_2_5_6", "B_2_5_6");
+  m_chooser.AddOption("Blue_3_2_1_4_5", "B_3_2_1_4_5");
+  m_chooser.AddOption("Red_1_2_3", "R_1_2_3");
+  m_chooser.AddOption("Red_2_6", "R_2_6");
+  m_chooser.AddOption("Red_2_7", "R_2_7");
+  m_chooser.AddOption("Red_1_4", "R_1_4");
+  m_chooser.AddOption("Red_3_8", "R_3_8");
+  m_chooser.AddOption("Red_2_5", "R_2_5");
+  m_chooser.AddOption("Red_3_2_1", "R_3_2_1");
+  m_chooser.AddOption("Red_1_5", "R_1_5");
+  m_chooser.AddOption("Red_3_7_8", "R_3_7_8");
+  m_chooser.AddOption("Red_1_4_5", "R_1_4_5");
+  m_chooser.AddOption("Red_2_6_7", "R_2_6_7");
+  m_chooser.AddOption("Red_3_6_7", "R_3_6_7");
+  m_chooser.AddOption("Red_2_6_5", "R_2_6_5");
+  m_chooser.AddOption("Red_2_5_6", "R_2_5_6");
+  m_chooser.AddOption("Red_3_2_1_4_5", "R_3_2_1_4_5");
+  m_chooser.AddOption("Blue_1_4_2", "B_1_4_2");
+  m_chooser.AddOption("Blue_2_6_3", "B_2_6_3");
+  m_chooser.AddOption("Blue_3_6_Top", "B_3_6_Top");
+  m_chooser.AddOption("Blue_3_5_2", "B_3_5_2");
+  m_chooser.AddOption("Blue_3_6_2", "B_3_6_2");
   frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
@@ -269,12 +270,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_1_2_3Waypoints, B_1_2_3PointSpeed, B_1_2_3CruiseSpeed, false).ToPtr()
     );  
   }
-  else if(chosenAuto == "B_3_6")
+  else if(chosenAuto == "B_3_6_Bottom")
   { 
-    m_drive.ResetOdometry(B_3_6Waypoints[0]);
+    m_drive.ResetOdometry(B_3_6_Bottom_Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limePose, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, false).ToPtr()
+      FollowWaypoints(m_drive, m_limePose, B_3_6_Bottom_Waypoints, B_3_6_Bottom_PointSpeed, B_3_6_Bottom_CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3_7")
@@ -565,12 +566,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limePose, B_2_6_3Waypoints, B_2_6_3PointSpeed, B_2_6_3CruiseSpeed, false).ToPtr()
     );  
   }
-  else if(chosenAuto == "B_3_6_V2")
+  else if(chosenAuto == "B_3_6_Top")
   { 
-    m_drive.ResetOdometry(B_3_6_V2Waypoints[0]);
+    m_drive.ResetOdometry(B_3_6_Top_Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limePose, B_3_6_V2Waypoints, B_3_6_V2PointSpeed, B_3_6_V2CruiseSpeed, false).ToPtr()
+      FollowWaypoints(m_drive, m_limePose, B_3_6_Top_Waypoints, B_3_6_Top_PointSpeed, B_3_6_Top_CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3_5_2")
@@ -579,6 +580,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limePose, B_3_5_2Waypoints, B_3_5_2PointSpeed, B_3_5_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "B_3_6_2")
+  { 
+    m_drive.ResetOdometry(B_3_6_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, B_3_6_2Waypoints, B_3_6_2PointSpeed, B_3_6_2CruiseSpeed, false).ToPtr()
     );  
   }
   else
