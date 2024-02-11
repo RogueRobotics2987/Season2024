@@ -15,6 +15,8 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/FunctionalCommand.h>
 
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h> 
 
 
@@ -29,7 +31,8 @@ class StateMachine
     : public frc2::CommandHelper<frc2::Command, StateMachine> {
  public:
   StateMachine();
-  StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, IntakeSubsystem &intake, ShooterSubsystem &shooter);
+  StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
+               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox);
 
   void Initialize() override;
 
@@ -49,6 +52,9 @@ class StateMachine
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
+
+  frc::XboxController* m_driverController = nullptr;
+  frc::XboxController* m_auxController = nullptr;
 
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)

@@ -4,10 +4,12 @@
 
 #include "commands/StateMachine.h"
 
-StateMachine::StateMachine() {
-  // Use addRequirements() here to declare subsystem dependencies.
-}
-StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, IntakeSubsystem &intake, ShooterSubsystem &shooter){
+StateMachine::StateMachine() {}
+
+StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
+                           IntakeSubsystem &intake, ShooterSubsystem &shooter, 
+                           frc::XboxController &driveXbox, frc::XboxController &auxXbox)
+{
   m_arm = &arm;
   AddRequirements({m_arm});
   m_climb = &climb;
@@ -18,6 +20,9 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
   AddRequirements({m_intake});
   m_shooter = &shooter;
   AddRequirements({m_shooter});
+
+  m_driverController = &driveXbox;
+  m_auxController = &auxXbox;
 }
 
 // Called when the command is initially scheduled.
@@ -27,6 +32,17 @@ void StateMachine::Initialize() {}
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
+  if(m_driverController->GetRawButtonPressed(5)){     //TODO: trace code
+    pickupNote = true;
+  }
+  if(m_driverController->GetRawButtonPressed(6)){
+    moveNote2Shoot = true;
+  }
+  if(m_driverController->GetRawAxis(3)){  // TODO: find alt; cannot toggle axis
+
+  }
+  
+
   switch (state) {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
@@ -34,7 +50,7 @@ void StateMachine::Execute() {
     // stop all motors
     m_arm->stopDrop();
     m_intake->stopIntake();
-    m_intake->stopMagazine();
+    m_shooter->stopMagazine();
     m_shooter->StopShooter();
 
 
@@ -53,7 +69,7 @@ void StateMachine::Execute() {
 
     //if(m_colorSensor->detectNoteIntake1 == true /*|| detectNoteIntake2 == true*/){  //what is happening here?
       // start magazine motor?
-      m_intake->runMagazine();
+      m_shooter->runMagazine();
 
       frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
@@ -76,7 +92,7 @@ void StateMachine::Execute() {
 
     // turn running motors off
     m_intake->stopIntake();
-    m_intake->stopMagazine();
+    m_shooter->stopMagazine();
 
 
     if(warmUpShooter == true){
@@ -117,7 +133,7 @@ void StateMachine::Execute() {
     warmUpShooter = false;
 
     //turn on mag motors
-    m_intake->runMagazine();
+    m_shooter->runMagazine();
 
 
     //switch states when timer has exceded 1.5 seconds
