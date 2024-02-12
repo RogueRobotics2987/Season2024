@@ -39,3 +39,11 @@ void ShooterSubsystem::SetActuator(double DesiredAngle) {
 bool ShooterSubsystem::IsTargeted(){
     return fabs(ShooterEncoder.GetPosition() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
 }
+
+void ShooterSubsystem::runMagazine(){
+    MagazineMotor.Set(0.5);
+}
+
+void ShooterSubsystem::stopMagazine(){
+    MagazineMotor.Set(0.0);
+}

@@ -15,17 +15,12 @@ void IntakeSubsystem::Periodic(){
 
 
 void IntakeSubsystem::Direction(){  // get current val to tell which direction motors moving in
-    /*float xVel = 1.0;
-    float yVel = 0.0;
-    float robotRotation = 0.0;
-    float robotDirection = 0.0;
-
-    float*/ 
     frontVal= FrontIntake.GetOutputCurrent();
     backVal = BackIntake.GetOutputCurrent();
 
     if (frontVal > 2.5){ // need to find actual value and put in constants 
         CenterIntake. Set(0.5); // need to find actual speed
+
     }else if (backVal > 2.5){
         CenterIntake.Set(-0.5);
     }
@@ -42,12 +37,4 @@ void IntakeSubsystem::stopIntake(){
     FrontIntake.Set(0.0);
     BackIntake.Set(0.0);
     CenterIntake.Set(0.0);
-}
-
-void IntakeSubsystem::runMagazine(){
-
-}
-
-void IntakeSubsystem::stopMagazine(){
-    
 }

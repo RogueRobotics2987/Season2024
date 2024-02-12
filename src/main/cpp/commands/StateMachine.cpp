@@ -4,10 +4,12 @@
 
 #include "commands/StateMachine.h"
 
-StateMachine::StateMachine() {
-  // Use addRequirements() here to declare subsystem dependencies.
-}
-StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, IntakeSubsystem &intake, ShooterSubsystem &shooter){
+StateMachine::StateMachine() {}
+
+StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
+                           IntakeSubsystem &intake, ShooterSubsystem &shooter, 
+                           frc::XboxController &driveXbox, frc::XboxController &auxXbox)
+{
   m_arm = &arm;
   AddRequirements({m_arm});
   m_climb = &climb;
@@ -18,6 +20,9 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
   AddRequirements({m_intake});
   m_shooter = &shooter;
   AddRequirements({m_shooter});
+
+  m_driverController = &driveXbox;
+  m_auxController = &auxXbox;
 }
 
 // Called when the command is initially scheduled.
@@ -27,6 +32,17 @@ void StateMachine::Initialize() {}
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
+  if(m_driverController->GetRawButtonPressed(5)){     //TODO: trace code
+    pickupNote = true;
+  }
+  if(m_driverController->GetRawButtonPressed(6)){
+    moveNote2Shoot = true;
+  }
+  if(m_driverController->GetRawAxis(3)){  // TODO: find alt; cannot toggle axis
+
+  }
+  
+
   switch (state) {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
@@ -34,7 +50,7 @@ void StateMachine::Execute() {
     // stop all motors
     m_arm->stopDrop();
     m_intake->stopIntake();
-    m_intake->stopMagazine();
+    m_shooter->stopMagazine();
     m_shooter->StopShooter();
 
 
@@ -78,10 +94,14 @@ void StateMachine::Execute() {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
 
-    } else if(moveArm2Drop == true){
+    } else if(waitForArm == true){
+      state = WAIT;
+      frc::SmartDashboard::PutString("state: ", "changing to WAIT");
+
+    }/*else if(moveArm2Drop == true){
       state = DROP_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP_WARMUP");
-    }
+    }*/
 
     break;
 
@@ -108,7 +128,7 @@ void StateMachine::Execute() {
     warmUpShooter = false;
 
     //turn on mag motors
-    m_intake->runMagazine();
+    m_shooter->runMagazine();
 
 
     //switch states when timer has exceded 1.5 seconds
@@ -124,52 +144,57 @@ void StateMachine::Execute() {
     }
 
     break;
-  
-  case DROP_WARMUP:
-    frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
-    //lift shooter and extend arm
-    if(m_arm->getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
-      //lift shooter
-
-      m_arm->setLowerArmAngle(90); //translate to angle in function
-
-      m_arm->setUpperArmAngle(45);
-    }
-    /*turn on lower motor first
-      turn on upper after it reaches safe point (90 degrees)
-      17 = bottom; 18 = joint; 19 = drop???
-    */
-
-    if(moveArm2Drop == false){
-      state = LOADED;
-      frc::SmartDashboard::PutString("state: ", "changing to LOADED");
-
-    } else if(dropNote == true){
-      state = DROP;
-      frc::SmartDashboard::PutString("state: ", "changing to DROP");
-    }
+  case WAIT:
+    frc::SmartDashboard::PutString("state: ", "WAIT");
 
     break;
   
-  case DROP:
-    frc::SmartDashboard::PutString("state: ", "DROP");
-    moveArm2Drop = false;
+  // case DROP_WARMUP:
+  //   frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
-    //drop note
-    m_arm->dropNote();
+  //   //lift shooter and extend arm
+  //   if(m_arm->getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
+  //     //lift shooter
 
-    timeDrop++;
+  //     m_arm->setLowerArmAngle(90);
 
-    if(timeDrop >= 90){
-      state = EMPTY;
-      frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
+  //     m_arm->setUpperArmAngle(45);
+  //   }
+  //   /*turn on lower motor first
+  //     turn on upper after it reaches safe point (90 degrees)
+  //     17 = bottom; 18 = joint; 19 = drop???
+  //   */
 
-      timeDrop = 0;
-      dropNote = false;
-    }
+  //   if(moveArm2Drop == false){
+  //     state = LOADED;
+  //     frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
-    break;
+  //   } else if(dropNote == true){
+  //     state = DROP;
+  //     frc::SmartDashboard::PutString("state: ", "changing to DROP");
+  //   }
+
+  //   break;
+  
+  // case DROP:
+  //   frc::SmartDashboard::PutString("state: ", "DROP");
+  //   moveArm2Drop = false;
+
+  //   //drop note
+  //   m_arm->dropNote();
+
+  //   timeDrop++;
+
+  //   if(timeDrop >= 90){
+  //     state = EMPTY;
+  //     frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
+
+  //     timeDrop = 0;
+  //     dropNote = false;
+  //   }
+
+  //   break;
   
   default:
     state = EMPTY;
