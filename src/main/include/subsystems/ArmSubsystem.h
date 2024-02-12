@@ -7,6 +7,9 @@
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
 #include "rev/AbsoluteEncoder.h"
+#include <Constants.h> 
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -23,6 +26,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double getLowerEncoderPos();
   double getUpperEncoderPos();
+
+  bool compareHasNote(bool other);
 
   // void defaultArmPos();
 
@@ -48,6 +53,11 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double kiSumLowerArm = 0.0;
   double kiSumUpperArm = 0.0;
+
+  // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
+  // armState state = INITIAL;
+  // frc::XboxController* m_Xbox = nullptr;
+  // bool HasNote = false;
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

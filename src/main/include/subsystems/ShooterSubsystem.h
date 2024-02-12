@@ -8,7 +8,7 @@
 #include "rev/CANSparkMax.h"
 #include "rev/SparkMaxRelativeEncoder.h"
 #include "ctre/Phoenix.h"
-//#include <frc/DigitalInput.h>
+#include <frc/DigitalInput.h>
 #include <Constants.h>
 
 class ShooterSubsystem : public frc2::SubsystemBase {
@@ -45,8 +45,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
   rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
-  //frc::DigitalInput MagazineSensor{1};
-
+  frc::DigitalInput MagazineSensor{1};
+  // Components (e.g. motor controllers and sensors) should generally be
+  // declared private and exposed only through public methods.
   double kp = 0.0111;
   double m_DesiredAngle = -999; //TODO find safe resting value
 };
