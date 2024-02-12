@@ -43,7 +43,7 @@ class StateMachine
   bool IsFinished() override;
 
  private:
-  enum intakeState {EMPTY, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
+  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
   intakeState state = EMPTY;
 
 
@@ -58,6 +58,8 @@ class StateMachine
 
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
+
+  bool emptyIntake = false;       // self explainitory
 
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter

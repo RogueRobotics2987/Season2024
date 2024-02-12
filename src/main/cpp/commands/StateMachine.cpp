@@ -39,9 +39,16 @@ void StateMachine::Execute() {
     moveNote2Shoot = true;
   }
   if(m_driverController->GetRawAxis(3)){  // TODO: find alt; cannot toggle axis
+    warmUpShooter = true;
+  }
+  //if(m_driverController->GetPOV(0) || m_driverController->GetPOV(180)){
+
+  //}
+  if(m_auxController->GetPOV(0)){
+    emptyIntake = true;
 
   }
-  
+
 
   switch (state) {
   case EMPTY:     // turn everything off
@@ -61,6 +68,16 @@ void StateMachine::Execute() {
 
     break;
 
+  case SPIT_OUT:
+    frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
+
+    //reverse intake
+
+    if(m_colorSensor->detectNoteIntake1 == true){
+      state = EMPTY;
+    }
+
+    break;
   case PICKUP:    // start intake and magazine
     frc::SmartDashboard::PutString("state: ", "PICKUP");
     
@@ -70,9 +87,14 @@ void StateMachine::Execute() {
     
     frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
+
     if(pickupNote == false){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
+
+    } else if(emptyIntake == true){
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
 
     } else if(m_colorSensor->eatenNote == true){
       state = LOADED;

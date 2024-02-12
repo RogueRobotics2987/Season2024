@@ -52,7 +52,7 @@ void RobotContainer::ConfigureButtonBindings(){
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
   // start/stop Intake
-  frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
+  //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
   //frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
 
   // shoot
