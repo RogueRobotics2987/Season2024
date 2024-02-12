@@ -50,14 +50,9 @@ void StateMachine::Execute() {
     
     // start intake motors, REMEMBER: middle motor changes direction
     m_intake->runIntake();
-
-    //if(m_colorSensor->detectNoteIntake1 == true /*|| detectNoteIntake2 == true*/){  //what is happening here?
-      // start magazine motor?
-      m_intake->runMagazine();
-
-      frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
-
-    //}
+    //m_arm-> //DC
+    
+    frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
     if(pickupNote == false){
       state = EMPTY;
@@ -76,7 +71,7 @@ void StateMachine::Execute() {
 
     // turn running motors off
     m_intake->stopIntake();
-    m_intake->stopMagazine();
+    //m_intake->stopMagazine(); // double check
 
 
     if(warmUpShooter == true){
@@ -137,7 +132,7 @@ void StateMachine::Execute() {
     if(m_arm->getLowerEncoderPos() < 25 /*&&/|| shooter is at okay angle*/){   //double check algorithm
       //lift shooter
 
-      m_arm->setLowerArmAngle(90);
+      m_arm->setLowerArmAngle(90); //translate to angle in function
 
       m_arm->setUpperArmAngle(45);
     }
