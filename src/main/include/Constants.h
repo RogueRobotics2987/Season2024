@@ -125,19 +125,23 @@ namespace ArmConstants {
     // constexpr double UpperInitialAngle = 0;
     constexpr double LowerFirstExtentionAngle = 10;
     constexpr double UpperFirstExtentionAngle = 0;
+
     constexpr double UpperExtentionAngle = 10;
     constexpr double LowerExtentionAngle = 10;
+    
     constexpr double LowerTrapExtentionAngle = 20;
     constexpr double UpperTrapExtentionAngle = 10;
+    
     constexpr double LowerAmpExtentionAngle = 20;
     constexpr double UpperAmpExtentionAngle = 10;
+    
     // constexpr double LowerDropAngle = 20;
     // constexpr double UpperDropAngle = 20;
+    
     constexpr double UpperFirstRetractionAngle = 0;
     constexpr double LowerFirstRetractionAngle = 0;
+    
     constexpr double LowerFullRetractedAngle = 0;
     constexpr double UpperFullRetractedAngle = 0;
-
-    
 
 }
