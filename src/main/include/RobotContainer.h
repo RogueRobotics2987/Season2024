@@ -1615,4 +1615,39 @@ std::vector<frc::Pose2d> R_3_7_8Waypoints{
       2_mps,
       1.5_mps
     };
+
+    std::vector<frc::Pose2d> R_3_6_V2Waypoints{
+      frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.65_m, 2.9_m, frc::Rotation2d(0_deg)), // auto rotate TODO change later
+      frc::Pose2d(12.15_m, 3.3_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(10.95_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(8.25_m, 4.1_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(11.65_m, 4.2_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(12.25_m, 5_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(13.05_m, 5.3_m, frc::Rotation2d(0_deg))
+    };
+
+    std::vector<units::meters_per_second_t> R_3_6_V2PointSpeed{
+      0_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      0_mps,
+      2_mps,
+      1.5_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> R_3_6_V2CruiseSpeed{
+      1_mps,
+      1_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      2_mps,
+      1.5_mps,
+      1_mps
+    };
 };
