@@ -51,6 +51,9 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("B_2_6_3", "B_2_6_3");
   m_chooser.AddOption("B_3_6_V2", "B_3_6_V2");
   m_chooser.AddOption("B_3_5_2", "B_3_5_2");
+  m_chooser.AddOption("R_1_4_2", "R_1_4_2");
+  m_chooser.AddOption("R_2_6_3", "R_2_6_3");
+  m_chooser.AddOption("R_3_5_2", "R_3_5_2");
   frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
@@ -579,6 +582,30 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limePose, B_3_5_2Waypoints, B_3_5_2PointSpeed, B_3_5_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_1_4_2")
+  { 
+    m_drive.ResetOdometry(R_1_4_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_1_4_2Waypoints, R_1_4_2PointSpeed, R_1_4_2CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_2_6_3")
+  { 
+    m_drive.ResetOdometry(R_2_6_3Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_2_6_3Waypoints, R_2_6_3PointSpeed, R_2_6_3CruiseSpeed, false).ToPtr()
+    );  
+  }
+  else if(chosenAuto == "R_3_5_2")
+  { 
+    m_drive.ResetOdometry(R_3_5_2Waypoints[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      FollowWaypoints(m_drive, m_limePose, R_3_5_2Waypoints, R_3_5_2PointSpeed, R_3_5_2CruiseSpeed, false).ToPtr()
     );  
   }
   else
