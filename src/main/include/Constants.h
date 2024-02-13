@@ -32,7 +32,6 @@ namespace DriveConstants {
     constexpr int kFrontRightTurningMotorPort = 1;
     constexpr int kRearRightTurningMotorPort = 3;
 
-    //TODO figure out the Encoder Nums
     constexpr int kFrontLeftTurningEncoderNumber = 20; 
     constexpr int kRearLeftTurningEncoderNumber = 23;
     constexpr int kFrontRightTurningEncoderNumber = 21;

@@ -58,11 +58,11 @@ void RobotContainer::ConfigureButtonBindings(){
   // shoot
   //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
 
-  frc2::JoystickButton(&m_driverController, 1).OnTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_driverController, 1).OnTrue(m_testMotor.Move());
 
-  frc2::JoystickButton(&m_driverController, 2).OnTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_driverController, 2).OnTrue(m_testMotor.Move());
   
-  frc2::JoystickButton(&m_driverController, 3);
+  // frc2::JoystickButton(&m_driverController, 3);
 
   // Run/stop test motor
   // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
@@ -71,8 +71,8 @@ void RobotContainer::ConfigureButtonBindings(){
   // arm pose presets
   //frc2::JoystickButton(&m_auxController, 4).WhileTrue(m_testMotor.Move());
   //frc2::JoystickButton(&m_auxController, 2).WhileTrue(m_testMotor.Move());
-  frc2::JoystickButton(&m_auxController, 1).WhileTrue(m_testMotor.Move());
-  frc2::JoystickButton(&m_auxController, 3).WhileTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_auxController, 1).WhileTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_auxController, 3).WhileTrue(m_testMotor.Move());
 
   // shoot
   //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
