@@ -35,7 +35,7 @@ void AutoAprilTag::Execute()
     rot = units::angular_velocity::radians_per_second_t(0);
   }
   
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), rot, false, false);
+  m_drivetrain->Drive(rot, false, false);
 }
 
 // Called once the command ends or is interrupted.
@@ -46,7 +46,7 @@ bool AutoAprilTag::IsFinished()
 {
   if(tv > 0 && fabs(tx)< 0.5)
   {
-    return true;
+    return false;
   }
   else
   {

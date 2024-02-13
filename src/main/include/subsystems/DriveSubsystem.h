@@ -45,10 +45,20 @@ class DriveSubsystem : public frc2::SubsystemBase
      *                      the field.
      * @param noJoystickinput if there is no joystick input, the wheels will go to the 45 degree (X) position
      */
-    void Drive(units::meters_per_second_t xSpeed,
-              units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
-              bool fieldRelative, bool noJoystickInput);
+    void periodicHelper();
 
+    //maintain your fieldRelative and noJoystickInput true and false the same the entire time your using it
+    void Drive(units::meters_per_second_t xDriveSpeed,
+              units::meters_per_second_t yDriveSpeed, units::radians_per_second_t rotDrive,
+              bool driveFieldRelative, bool driveNoJoystickInput);
+
+    void Drive(units::meters_per_second_t xDriveSpeed,
+          units::meters_per_second_t yDriveSpeed,
+          bool driveFieldRelative, bool driveNoJoystickInput);
+
+    void Drive(units::radians_per_second_t rotDrive,
+              bool driveFieldRelative, bool driveNoJoystickInput);
+        
     /**
      * Resets the drive encoders to currently read a position of 0.
      */
@@ -107,7 +117,6 @@ class DriveSubsystem : public frc2::SubsystemBase
 
     frc::Pose2d* GetDrivePosePtr();
     frc::ChassisSpeeds getRobotRelativeSpeeds();
-    frc2::CommandPtr FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path);
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -133,4 +142,10 @@ class DriveSubsystem : public frc2::SubsystemBase
 
     int numAT = 0;
     bool fieldOrientated = false;
+
+    units::meters_per_second_t xSpeed = 0_mps;
+    units::meters_per_second_t ySpeed = 0_mps;
+    units::radians_per_second_t rot = 0_rad_per_s;
+    bool fieldRelative = true;
+    bool noJoystickInput = false;
 };

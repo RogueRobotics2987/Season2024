@@ -2,85 +2,59 @@
 
 using namespace DriveConstants;
 
-DriveSubsystem::DriveSubsystem():
-  m_frontLeft {
-    kFrontLeftDriveMotorPort,
-    m_EncoderType,
-    kFrontLeftDriveCPR,
-    kFrontLeftTurningMotorPort,
-    kFrontLeftDriveEncoderReversed,
-    kFrontLeftTurningEncoderNumber,
-    kFrontLeftTurningEncoderReversed
-  },
-  m_frontRight {
-    kFrontRightDriveMotorPort,
-    m_EncoderType,
-    kFrontRightDriveCPR,
-    kFrontRightTurningMotorPort,
-    kFrontRightDriveEncoderReversed,
-    kFrontRightTurningEncoderNumber,
-    kFrontRightTurningEncoderReversed
-  },
-  m_rearLeft {
-    kRearLeftDriveMotorPort,
-    m_EncoderType,
-    kRearLeftDriveCPR,
-    kRearLeftTurningMotorPort,
-    kRearLeftDriveEncoderReversed,
-    kRearLeftTurningEncoderNumber,
-    kRearLeftTurningEncoderReversed
-  },
-  m_rearRight {
-    kRearRightDriveMotorPort,
-    m_EncoderType,
-    kRearRightDriveCPR,
-    kRearRightTurningMotorPort,
-    kRearRightDriveEncoderReversed,
-    kRearRightTurningEncoderNumber,
-    kRearRightTurningEncoderReversed
-  },
-  m_odometry {
-    kDriveKinematics,
-    frc::Rotation2d(m_gyro.GetRotation2d()),
-    {
-      m_frontLeft.GetPosition(),
-      m_frontRight.GetPosition(),
-      m_rearLeft.GetPosition(),
-      m_rearRight.GetPosition()
+DriveSubsystem::DriveSubsystem()
+  :
+    m_frontLeft {
+      kFrontLeftDriveMotorPort,
+      m_EncoderType,
+      kFrontLeftDriveCPR,
+      kFrontLeftTurningMotorPort,
+      kFrontLeftDriveEncoderReversed,
+      kFrontLeftTurningEncoderNumber,
+      kFrontLeftTurningEncoderReversed
     },
-    frc::Pose2d{}
-  } 
-{
-  // m_gyro.SetAngleAdjustment(180); //Determines the front of the robot to via gyro returns
 
-  AutoBuilder::configureHolonomic(
-    [this](){ return GetPose(); }, // Robot pose supplier
-    [this](frc::Pose2d pose){ ResetOdometry(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-    [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-      PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
-      PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
-      AutoConstants::kMaxSpeed, // Max module speed, in m/s
-      ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-      ReplanningConfig() // Default path replanning config. See the API for the options here
-    ),
-    []()
-    {
-      // Boolean supplier that controls when the path will be mirrored for the red alliance
-      // This will flip the path being followed to the red side of the field.
-      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-      auto alliance = frc::DriverStation::GetAlliance();
+    m_frontRight {
+      kFrontRightDriveMotorPort,
+      m_EncoderType,
+      kFrontRightDriveCPR,
+      kFrontRightTurningMotorPort,
+      kFrontRightDriveEncoderReversed,
+      kFrontRightTurningEncoderNumber,
+      kFrontRightTurningEncoderReversed
+    },
 
-      if (alliance)
+    m_rearLeft {
+      kRearLeftDriveMotorPort,
+      m_EncoderType,
+      kRearLeftDriveCPR,
+      kRearLeftTurningMotorPort,
+      kRearLeftDriveEncoderReversed,
+      kRearLeftTurningEncoderNumber,
+      kRearLeftTurningEncoderReversed
+    },
+
+    m_rearRight {
+      kRearRightDriveMotorPort,
+      m_EncoderType,
+      kRearRightDriveCPR,
+      kRearRightTurningMotorPort,
+      kRearRightDriveEncoderReversed,
+      kRearRightTurningEncoderNumber,
+      kRearRightTurningEncoderReversed
+    },
+
+    m_odometry {
+      kDriveKinematics,
+      frc::Rotation2d(m_gyro.GetRotation2d()),
       {
-        return alliance.value() == frc::DriverStation::Alliance::kRed;
-      }
-      return false;
-    },
-    this // Reference to this subsystem to set requirements
-  );
-}
+        m_frontLeft.GetPosition(),
+        m_frontRight.GetPosition(),
+        m_rearLeft.GetPosition(),
+        m_rearRight.GetPosition()
+      },
+      frc::Pose2d{}
+    } {}
 
 void DriveSubsystem::Periodic(){
   // Implementation of subsystem periodic method goes here.
@@ -88,8 +62,8 @@ void DriveSubsystem::Periodic(){
     frc::Rotation2d(m_gyro.GetRotation2d()),
       {
         m_frontLeft.GetPosition(),
-        m_rearLeft.GetPosition(),
         m_frontRight.GetPosition(),
+        m_rearLeft.GetPosition(),
         m_rearRight.GetPosition()
       }
   );
@@ -97,18 +71,57 @@ void DriveSubsystem::Periodic(){
   tempPose = GetPose();
   DrivePose = &tempPose;
 
-  // frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
-  // frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
+  periodicHelper();
+
+  if(DebugConstants::debug == true)
+  {
+    frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
+    frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
+  }
 }
 
 void DriveSubsystem::Drive(
-  units::meters_per_second_t xSpeed,
-  units::meters_per_second_t ySpeed,
-  units::radians_per_second_t rot,
-  bool fieldRelative,
-  bool noJoystickInput
+  units::meters_per_second_t xDriveSpeed,
+  units::meters_per_second_t yDriveSpeed,
+  units::radians_per_second_t rotDrive,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
 )
-{  
+{
+  //set local member variables for X,Y,Rot, field relative, noJoystick
+  xSpeed = xDriveSpeed;
+  ySpeed = yDriveSpeed;
+  rot = rotDrive;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
+
+void DriveSubsystem::Drive(
+  units::meters_per_second_t xDriveSpeed,
+  units::meters_per_second_t yDriveSpeed,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
+)
+{
+  xSpeed = xDriveSpeed;
+  ySpeed = yDriveSpeed;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
+
+void DriveSubsystem::Drive(
+  units::radians_per_second_t rotDrive,
+  bool driveFieldRelative,
+  bool driveNoJoystickInput
+)
+{
+  rot = rotDrive;
+  fieldRelative = driveFieldRelative;
+  noJoystickInput = driveNoJoystickInput;
+}
+
+void DriveSubsystem::periodicHelper()
+{       
   if (DebugConstants::debug == true)
   {
     frc::SmartDashboard::PutNumber("ROT value: ", rot.value());
@@ -249,43 +262,17 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
     m_rearRight.GetState()
   );
 
-  frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
-  frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);
-  frc::SmartDashboard::PutNumber("angular chassis speed", (double)angular);
+  if(DebugConstants::debug == true)
+  {
+    frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
+    frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);
+    frc::SmartDashboard::PutNumber("angular chassis speed", (double)angular);
+  }
 
   return {forward, sideways, angular};
 }
 
-frc2::CommandPtr DriveSubsystem::FollowPathCommand(std::shared_ptr<pathplanner::PathPlannerPath> path){
-  return FollowPathHolonomic(
-    path,
-    [this](){ return GetPose(); }, // Robot pose supplier
-    [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx, speeds.vy, speeds.omega, false, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-      PIDConstants(AutoConstants::kPXController, 0.0 , 0.0), // Translation PID constants
-      PIDConstants(AutoConstants::kPThetaController, 0.0 , 0.0), // Rotation PID constants
-      AutoConstants::kMaxSpeed, // Max module speed, in m/s
-      ModuleConstants::kModuleRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-      ReplanningConfig() // Default path replanning config. See the API for the options here
-    ),
-    []()
-    {
-      // Boolean supplier that controls when the path will be mirrored for the red alliance
-      // This will flip the path being followed to the red side of the field.
-      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-      auto alliance = frc::DriverStation::GetAlliance();
-
-      if (alliance)
-      {
-        return alliance.value() == frc::DriverStation::Alliance::kRed;
-      }
-        return false;
-      },
-      { this }// Reference to this subsystem to set requirements
-  ).ToPtr();
-}
-
-DriveSubsystem::~DriveSubsystem(){
+DriveSubsystem::~DriveSubsystem()
+{
   delete DrivePose;
 }
