@@ -33,10 +33,10 @@ namespace DriveConstants {
     constexpr int kRearRightTurningMotorPort = 3;
 
     //TODO figure out the Encoder Nums
-    constexpr int kFrontLeftTurningEncoderNumber = 13; 
-    constexpr int kRearLeftTurningEncoderNumber = 16;
-    constexpr int kFrontRightTurningEncoderNumber = 14;
-    constexpr int kRearRightTurningEncoderNumber = 15;
+    constexpr int kFrontLeftTurningEncoderNumber = 20; 
+    constexpr int kRearLeftTurningEncoderNumber = 23;
+    constexpr int kFrontRightTurningEncoderNumber = 21;
+    constexpr int kRearRightTurningEncoderNumber = 22;
 
     constexpr bool kFrontLeftTurningEncoderReversed = false;
     constexpr bool kRearLeftTurningEncoderReversed = false;
@@ -115,9 +115,10 @@ namespace DebugConstants {
 }  
 
 namespace ShooterConstants {
-    constexpr double AngleThreshold = 4.5;
-    constexpr double RestingAngle = 0;
-    constexpr double RaisedArmAngle = 90;
+    constexpr double AngleThreshold = 0.027;
+    constexpr double RestingAngle = 0.043;
+    constexpr double RaisedShooterAngle = 0.477;
+    constexpr double EncoderOffSet = -0.0265;
 }
 
 namespace ArmConstants {

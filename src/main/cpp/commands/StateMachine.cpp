@@ -167,7 +167,7 @@ void StateMachine::Execute() {
     break;
 
   case RAISE_SHOOTER:
-    m_shooter->SetActuator(ShooterConstants::RaisedArmAngle);
+    m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second

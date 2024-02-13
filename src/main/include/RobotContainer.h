@@ -30,11 +30,14 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
-#include "subsystems/TestMotor.h"
+// #include "subsystems/TestMotor.h"
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
 #include "commands/followWaypoints.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+// #include "subsystems/ArmSubsystem.h"
 
 using namespace pathplanner;
 
@@ -66,11 +69,18 @@ class RobotContainer
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    TestMotor m_testMotor;
+    // TestMotor m_testMotor;
     LimelightSubsystem m_limelight;
+    ShooterSubsystem m_shooter;
+    IntakeSubsystem m_intake;
+    // ArmSubsystem m_arm;
+
+    
 
     // frc::SendableChooser<frc2::Command*> m_chooser;
     //void ConfigureButtonBindings();
     std::unique_ptr<frc2::Command> onTheFly;
     std::unique_ptr<frc2::Command> followOnTheFly;
+
+
 };

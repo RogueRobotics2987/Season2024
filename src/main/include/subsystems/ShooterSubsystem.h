@@ -10,7 +10,8 @@
 #include "ctre/Phoenix.h"
 #include <frc/DigitalInput.h>
 #include <Constants.h>
-
+#include "networktables/NetworkTableInstance.inc"
+#include <frc/smartdashboard/SmartDashboard.h>
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
@@ -31,6 +32,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   bool IsTargeted();
 
+  double GetEncoderOffSet();
+
 
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
@@ -42,6 +45,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc::DigitalInput MagazineSensor{1};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 0.0111;
-  double m_DesiredAngle = -999; //TODO find safe resting value
+  double kp = 0.0111/10;
+  double m_DesiredAngle = 0; //TODO find safe resting value
 };

@@ -66,8 +66,8 @@ void RobotContainer::ConfigureButtonBindings(){
   frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   // Run/stop test motor
-  frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
+  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
 
   //start PICKUP state
   //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());

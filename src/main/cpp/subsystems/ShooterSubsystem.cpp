@@ -10,9 +10,9 @@ ShooterSubsystem::ShooterSubsystem() {
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
-    if(m_DesiredAngle != -999) {    //TODO find safe retiring value
-        ShooterActuator.Set((ShooterEncoder.GetPosition() - m_DesiredAngle) * kp); 
-    }
+        ShooterActuator.Set((GetEncoderOffSet() - m_DesiredAngle) * kp); 
+
+    frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetEncoderOffSet());
 }
 
 
@@ -37,5 +37,9 @@ void ShooterSubsystem::SetActuator(double DesiredAngle) {
 }*/
 
 bool ShooterSubsystem::IsTargeted(){
-    return fabs(ShooterEncoder.GetPosition() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
+    return fabs(GetEncoderOffSet() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
+}
+
+double ShooterSubsystem::GetEncoderOffSet(){
+    return ShooterEncoder.GetPosition() + ShooterConstants::EncoderOffSet;
 }

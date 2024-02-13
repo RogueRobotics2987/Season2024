@@ -6,6 +6,9 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
+#include <frc/Servo.h>
+//#include "networktables/NetworkTableInstance.inc"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 class ClimberSubsystem : public frc2::SubsystemBase {
  public:
@@ -15,9 +18,10 @@ class ClimberSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  void startClimber();
+  void stopClimber();
 
  private:
   rev::CANSparkMax ClimberMoter{12, rev::CANSparkMax::MotorType::kBrushless};
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+  
 };
