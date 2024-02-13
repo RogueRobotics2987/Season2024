@@ -43,7 +43,7 @@ void StateMachine::Execute() {
     }
 
   }
-  if(m_driverController->GetRawButtonPressed(6)){
+  if(m_driverController->GetRawButtonPressed(6) || m_auxController->GetRawButtonPressed(8)){
     if(moveNote2Shoot == false){
       moveNote2Shoot = true;
 
