@@ -28,13 +28,14 @@ void ShooterSubsystem::ReverseShooter(){
     RightShooter.Set(-0.2);
 }
 
+
 void ShooterSubsystem::SetActuator(double DesiredAngle) {
     m_DesiredAngle = DesiredAngle;
 }   
 
-/*bool ShooterSubsystem::GetMagazineSensor(){
+bool ShooterSubsystem::GetMagazineSensor(){
     return MagazineSensor.Get();
-}*/
+}
 
 bool ShooterSubsystem::IsTargeted(){
     return fabs(GetEncoderOffSet() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
@@ -42,4 +43,12 @@ bool ShooterSubsystem::IsTargeted(){
 
 double ShooterSubsystem::GetEncoderOffSet(){
     return ShooterEncoder.GetPosition() + ShooterConstants::EncoderOffSet;
+}
+
+void ShooterSubsystem::runMagazine(){
+    MagazineMotor.Set(0.5);
+}
+
+void ShooterSubsystem::stopMagazine(){
+    MagazineMotor.Set(0.0);
 }

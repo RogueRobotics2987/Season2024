@@ -20,7 +20,7 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
 
     if (frontVal > 2.5){ // need to find actual value and put in constants 
         CenterIntake. Set(0.5); // need to find actual speed
-        
+
     }else if (backVal > 2.5){
         CenterIntake.Set(-0.5);
     }
@@ -37,12 +37,4 @@ void IntakeSubsystem::stopIntake(){
     FrontIntake.Set(0.0);
     BackIntake.Set(0.0);
     CenterIntake.Set(0.0);
-}
-
-void IntakeSubsystem::runMagazine(){
-
-}
-
-void IntakeSubsystem::stopMagazine(){
-
 }

@@ -28,20 +28,25 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   void SetActuator(double DesiredAngle);
 
-  //bool GetMagazineSensor();
+  bool GetMagazineSensor();
   
   bool IsTargeted();
 
   double GetEncoderOffSet();
+  void runMagazine();
+  void stopMagazine();
+
 
 
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+
+  rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
-  rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DigitalInput MagazineSensor{1};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

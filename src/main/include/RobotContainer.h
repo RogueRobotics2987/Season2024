@@ -54,7 +54,7 @@ class RobotContainer
     RobotContainer();
     frc2::CommandPtr GetAutonomousCommand();
     frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
-    
+
     float Deadzone(float x); 
     frc2::CommandPtr onFlyGeneration();
 
