@@ -34,7 +34,7 @@ void StateMachine::Execute() {
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
   // BUTTONS!!!
-  if(m_driverController->GetRawButtonPressed(5)){     //TODO: trace code
+  if(m_driverController->GetRawButtonPressed(5)){
     if(pickupNote == false){
       pickupNote = true;
 
@@ -52,7 +52,7 @@ void StateMachine::Execute() {
     }
 
   }
-  if(m_driverController->GetRawAxis(3)){  // TODO: find alt; cannot toggle axis
+  if(m_driverController->GetRawAxis(3)){  
     if(warmUpShooter == false){
       warmUpShooter = true;
 
