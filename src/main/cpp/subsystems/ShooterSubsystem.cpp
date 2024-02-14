@@ -10,11 +10,18 @@ ShooterSubsystem::ShooterSubsystem() {
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
-        ShooterActuator.Set((GetEncoderOffSet() - m_DesiredAngle) * kp); 
+    //  ShooterActuator.Set((GetEncoderOffSet() - m_DesiredAngle) * kp); 
 
     frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetEncoderOffSet());
+    frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetDistance());
 }
 
+void ShooterSubsystem::JoystickActuator(double pos){
+    if(fabs(pos) > .15){
+        m_DesiredAngle += pos*.1;
+    }
+
+}
 
 void ShooterSubsystem::StopShooter(){
     RightShooter.Set(0.0);
@@ -42,7 +49,7 @@ bool ShooterSubsystem::IsTargeted(){
 }
 
 double ShooterSubsystem::GetEncoderOffSet(){
-    return ShooterEncoder.GetPosition() + ShooterConstants::EncoderOffSet;
+    return ShooterEncoder.GetDistance() - ShooterConstants::EncoderOffSet;
 }
 
 void ShooterSubsystem::runMagazine(){
@@ -63,4 +70,9 @@ void ShooterSubsystem::driveActuator(double speed){
     else{
         ShooterActuator.Set(0.0);
     }
+}
+
+void ShooterSubsystem::setRestingActuatorPosition(){
+    //ShooterActuator.Set(GetEncoderOffSet() * kp);
+    m_DesiredAngle = ShooterConstants::EncoderOffSet; 
 }

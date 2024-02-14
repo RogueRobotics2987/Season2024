@@ -94,7 +94,8 @@ void StateMachine::Execute() {
   switch (state) {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
-    m_shooter->driveActuator(m_auxController->GetRightY());
+    // m_shooter->driveActuator(m_auxController->GetRightY());
+    m_shooter->setRestingActuatorPosition();
 
     // stop all motors
     m_arm->stopDrop();
