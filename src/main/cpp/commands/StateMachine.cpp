@@ -41,7 +41,6 @@ void StateMachine::Execute() {
     } else {
       pickupNote = false;
     }
-
   }
   if(m_driverController->GetRawButtonPressed(6) || m_auxController->GetRawButtonPressed(8)){
     if(moveNote2Shoot == false){
@@ -85,12 +84,17 @@ void StateMachine::Execute() {
     }
 
   }
+        if(m_auxController->GetRawButtonPressed(8)){
+
+        }
+
 
 
   // state machine
   switch (state) {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
+    m_shooter->driveActuator(m_auxController->GetRightY());
 
     // stop all motors
     m_arm->stopDrop();
@@ -102,6 +106,7 @@ void StateMachine::Execute() {
 
 
     if(pickupNote == true){
+      
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     } 
@@ -128,6 +133,7 @@ void StateMachine::Execute() {
     break;
 
   case PICKUP:    // start intake and magazine
+     m_shooter->driveActuator(m_auxController->GetRightY());
     frc::SmartDashboard::PutString("state: ", "PICKUP");
     
     // start intake motors, REMEMBER: middle motor changes direction

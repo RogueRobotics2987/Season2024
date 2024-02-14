@@ -52,3 +52,15 @@ void ShooterSubsystem::runMagazine(){
 void ShooterSubsystem::stopMagazine(){
     MagazineMotor.Set(0.0);
 }
+
+void ShooterSubsystem::driveActuator(double speed){
+    if(speed > 0.1){
+        ShooterActuator.Set(0.05);
+    }
+    else if(speed < -0.1){
+        ShooterActuator.Set(-0.05);
+    }
+    else{
+        ShooterActuator.Set(0.0);
+    }
+}

@@ -35,6 +35,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double GetEncoderOffSet();
   void runMagazine();
   void stopMagazine();
+  void driveActuator(double speed);
 
 
 
