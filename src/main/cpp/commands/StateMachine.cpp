@@ -140,17 +140,16 @@ void StateMachine::Execute() {
     if(pickupNote == false){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
-
-    } else if(emptyIntake == true){
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-
-    } else if(m_shooter->GetMagazineSensor() == true){
-      state = LOADED;
-      frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
+    // else if(emptyIntake == true){
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
 
-
+    // } else if(m_shooter->GetMagazineSensor() == true){
+    //   state = LOADED;
+    //   frc::SmartDashboard::PutString("state: ", "changing to LOADED");
+    // }
+    
     break;
 
   case LOADED:    // self explanitory

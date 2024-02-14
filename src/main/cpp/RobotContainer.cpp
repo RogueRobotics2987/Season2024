@@ -53,6 +53,7 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
+  // frc2::CommandScheduler::GetInstance().Schedule(m_StateMachine);
 
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
@@ -93,8 +94,8 @@ void RobotContainer::ConfigureButtonBindings(){
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
   // start/stop Intake
-  //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
-  //frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
+  // frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
 
   // shoot
   //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
@@ -117,11 +118,6 @@ void RobotContainer::ConfigureButtonBindings(){
 
   // shoot
   //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
-
-
-
-  // //runs a basic autonomous
-  // frc2::JoystickButton(&m_driverController, 6).OnTrue(onFlyGeneration());
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -176,6 +172,17 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
+frc2::CommandPtr RobotContainer::GetStateMachine(){
+  return StateMachine(
+      m_arm, 
+      m_climb,
+      m_color, 
+      m_intake,
+      m_shooter, 
+      m_driverController,
+      m_auxController
+    ).ToPtr();
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {

@@ -22,12 +22,6 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <iostream>
 #include <string>
-#include <pathplanner/lib/path/PathPlannerPath.h> 
-#include <pathplanner/lib/commands/FollowPathHolonomic.h>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
-#include <pathplanner/lib/util/PIDConstants.h>
-#include <pathplanner/lib/util/ReplanningConfig.h>
 
 #include "subsystems/LimelightSubsystem.h"
 #include "Constants.h"
@@ -39,10 +33,11 @@
 #include "commands/AutoAprilTag.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
-// #include "subsystems/ArmSubsystem.h"
+#include "subsystems/ArmSubsystem.h"
 #include "commands/FollowWaypoints.h"
-
-using namespace pathplanner;
+#include "commands/StateMachine.h"
+#include "subsystems/ClimberSubsystem.h"
+#include "subsystems/ColorSensorSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -63,6 +58,7 @@ class RobotContainer
 
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
+    frc2::CommandPtr GetStateMachine();
 
 
   private:
@@ -76,7 +72,9 @@ class RobotContainer
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
-    // ArmSubsystem m_arm;
+    ArmSubsystem m_arm;
+    ClimberSubsystem m_climb;
+    ColorSensorSubsystem m_color;
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;

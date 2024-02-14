@@ -77,7 +77,10 @@ void DriveSubsystem::Periodic(){
   {
     frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
     frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
-  }
+    frc::SmartDashboard::PutBoolean("GyroConnection",  m_gyro.IsConnected());
+    frc::SmartDashboard::PutBoolean("GyroCalibrating",  m_gyro.IsCalibrating());
+    frc::SmartDashboard::PutString("GyroFirmware", m_gyro.GetFirmwareVersion());
+    }
 }
 
 void DriveSubsystem::Drive(
