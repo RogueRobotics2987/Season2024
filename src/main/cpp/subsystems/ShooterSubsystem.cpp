@@ -12,7 +12,10 @@ ShooterSubsystem::ShooterSubsystem() {
 void ShooterSubsystem::Periodic() {
         ShooterActuator.Set((GetEncoderOffSet() - m_DesiredAngle) * kp); 
 
-    frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetEncoderOffSet());
+    if(DebugConstants::debug == true){
+        frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
+        frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetEncoderOffSet());
+    }
 }
 
 

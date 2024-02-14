@@ -7,8 +7,12 @@
 IntakeSubsystem::IntakeSubsystem(){}
 
 // This method will be called once per scheduler run
-void IntakeSubsystem::Periodic(){
-
+void IntakeSubsystem::Periodic()
+{
+    if(DebugConstants::debug == true){
+        frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
+        frc::SmartDashboard::PutBoolean("ColorBack", intakeColorSensorRear.Get());
+    }
 }
 
 
@@ -17,10 +21,10 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
     // backVal = BackIntake.GetOutputCurrent();
 
     if (intakeColorSensorFront.Get()){ // need to find actual value and put in constants 
-        CenterIntake. Set(0.25); // need to find actual speed
+        CenterIntake. Set(-0.25); // need to find actual speed
 
     }else if (intakeColorSensorRear.Get()){
-        CenterIntake.Set(-0.25);
+        CenterIntake.Set(0.25);
     }
 }
 
