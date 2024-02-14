@@ -34,55 +34,38 @@ void StateMachine::Execute() {
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
   // BUTTONS!!!
-  if(m_driverController->GetRawButtonPressed(5)){     //TODO: trace code
-    if(pickupNote == false){
-      pickupNote = true;
-
-    } else {
-      pickupNote = false;
-    }
+  if(m_driverController->GetRawButtonPressed(5))
+  { 
+    //TODO: trace code
+    pickupNote = !pickupNote;
   }
-  if(m_driverController->GetRawButtonPressed(6) || m_auxController->GetRawButtonPressed(8)){
-    if(moveNote2Shoot == false){
+  if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/){
       moveNote2Shoot = true;
-
-    } else {
-      moveNote2Shoot = false;
-    }
-
   }
-  if(m_driverController->GetRawAxis(3)){  // TODO: find alt; cannot toggle axis
-    if(warmUpShooter == false){
-      warmUpShooter = true;
-
-    } else {
-      warmUpShooter = false;
-    }
-
+  else{
+      moveNote2Shoot = false;
+  }
+  if(m_driverController->GetRawButtonPressed(6)){ 
+    warmUpShooter = !warmUpShooter;
   }
   if(m_auxController->GetPOV(0)){
     emptyIntake = true;
-
   }
   if(m_auxController->GetRawButtonPressed(2)){
     if(placeInAmp == false){
       placeInAmp = true;
       placeInTrap = false;
-
     } else {
       placeInAmp = false;
     }
-
   }
   if(m_auxController->GetRawButtonPressed(4)){
     if(placeInTrap == false){
       placeInTrap = true;
-      placeInTrap = false;
-
+      placeInAmp = false;
     } else {
       placeInTrap = false;
     }
-
   }
         if(m_auxController->GetRawButtonPressed(8)){
 
@@ -124,12 +107,11 @@ void StateMachine::Execute() {
 
     //reverse intake
 
-    if(m_colorSensor->detectNoteIntake1 == true){
+    if(m_colorSensor->detectNoteIntake1 == true)
+    {
       state = EMPTY;
-
       emptyIntake = false;
     }
-
 
     break;
 
@@ -139,6 +121,8 @@ void StateMachine::Execute() {
     
     // start intake motors, REMEMBER: middle motor changes direction
     m_intake->runIntake();
+    m_intake->Direction();
+
     //m_arm-> //DC
     
     frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
@@ -151,11 +135,11 @@ void StateMachine::Execute() {
     // else if(emptyIntake == true){
     //   state = SPIT_OUT;
     //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-
-    // } else if(m_shooter->GetMagazineSensor() == true){
-    //   state = LOADED;
-    //   frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     // }
+     else if(m_shooter->GetMagazineSensor() == true){
+      state = LOADED;
+      frc::SmartDashboard::PutString("state: ", "changing to LOADED");
+    }
     
     break;
 
@@ -165,8 +149,6 @@ void StateMachine::Execute() {
 
     // turn running motors off
     m_intake->stopIntake();
-    //m_intake->stopMagazine(); // double check
-
 
     if(warmUpShooter == true){
       state = SHOOTER_WARMUP;
@@ -191,7 +173,6 @@ void StateMachine::Execute() {
     //start shooter motors
     m_shooter->SetShooter(0.5);
 
-
     if(warmUpShooter == false){
       state = LOADED;
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
@@ -201,7 +182,6 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to SHOOT");
     }
 
-
     break;
 
   case SHOOT:
@@ -210,7 +190,6 @@ void StateMachine::Execute() {
 
     //turn on mag motors
     m_shooter->runMagazine();
-
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
@@ -224,10 +203,7 @@ void StateMachine::Execute() {
       moveNote2Shoot = false;
     }
 
-
     break;
-
-
 
   //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
 
@@ -254,7 +230,7 @@ void StateMachine::Execute() {
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -272,7 +248,7 @@ void StateMachine::Execute() {
 
     m_arm->setLowerArmAngle(ArmConstants::LowerExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperExtentionAngle);
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -301,7 +277,7 @@ void StateMachine::Execute() {
     m_arm->setLowerArmAngle(ArmConstants::LowerTrapExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
 
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -320,7 +296,7 @@ void StateMachine::Execute() {
     m_arm->setLowerArmAngle(ArmConstants::LowerAmpExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperAmpExtentionAngle);
 
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -337,7 +313,7 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "DROP");
 
     m_arm->dropNote();
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -355,7 +331,7 @@ void StateMachine::Execute() {
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
@@ -373,7 +349,7 @@ void StateMachine::Execute() {
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
-    //switch states when timer has exceded 1.5 seconds
+    //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 

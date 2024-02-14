@@ -53,8 +53,6 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
-  // frc2::CommandScheduler::GetInstance().Schedule(m_StateMachine);
-
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
@@ -614,6 +612,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   else
   {
     //Should never get to this case
-    std::cout << "You should never see this error...." << std::endl;
+    std::cout << "You should never see this error.... bottom of robot container" << std::endl;
+
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr()
+    );
   }
 }

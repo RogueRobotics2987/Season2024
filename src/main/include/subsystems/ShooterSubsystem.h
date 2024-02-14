@@ -54,7 +54,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
-  frc::DigitalInput MagazineSensor{1};
+  frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   double kp = 2;
