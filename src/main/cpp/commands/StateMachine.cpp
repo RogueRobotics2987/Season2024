@@ -118,7 +118,7 @@ void StateMachine::Execute() {
 
     //reverse intake
 
-    if(m_colorSensor->detectNoteIntake1 == true){
+    if(m_intake->detectNoteIntake1 == true){
       state = EMPTY;
 
       emptyIntake = false;
@@ -134,7 +134,7 @@ void StateMachine::Execute() {
     m_intake->runIntake();
     //m_arm-> //DC
     
-    frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
+    //frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
 
     if(pickupNote == false){

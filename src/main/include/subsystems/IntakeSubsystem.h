@@ -7,6 +7,10 @@
 #include <frc2/command/SubsystemBase.h>
 #include "rev/CANSparkMax.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DigitalInput.h>
+
+
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
@@ -16,6 +20,9 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void runIntake();
   void stopIntake();
 
+  bool detectNoteIntake1 = false;   // color sensor on the __ of robot
+  bool detectNoteIntake2 = false;
+
  
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -24,6 +31,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   
 
  private:
+
+ frc::DigitalInput intakeColorSensor1 {6};
+ frc::DigitalInput intakeColorSensor2 {5};
+
   double frontVal = 0.0;
   double backVal = 0.0;
 
