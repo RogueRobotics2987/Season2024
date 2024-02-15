@@ -117,7 +117,7 @@ namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 0.043;
     constexpr double RaisedShooterAngle = 0.477;
-    constexpr double EncoderOffSet = -0.0265;
+    constexpr double EncoderOffSet = -.2;
 }
 
 namespace ArmConstants {

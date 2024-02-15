@@ -27,7 +27,7 @@ class ColorSensorSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  //frc::DigitalInput intakeColorSensor {6};   // 0 is a place holder for the DIO port
-  frc::DigitalInput magazineColorSensor {7};  // 1 is a place holder for the DIO port
+  // frc::DigitalInput intakeColorSensor {6};   // 0 is a place holder for the DIO port
+  // frc::DigitalInput magazineColorSensor {7};  // 1 is a place holder for the DIO port
   
 };
