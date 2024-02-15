@@ -53,7 +53,6 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
-
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
@@ -93,8 +92,8 @@ void RobotContainer::ConfigureButtonBindings(){
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
   // start/stop Intake
-  //frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
-  //frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
+  // frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
+  // frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
 
   // shoot
   //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
@@ -117,11 +116,6 @@ void RobotContainer::ConfigureButtonBindings(){
 
   // shoot
   //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
-
-
-
-  // //runs a basic autonomous
-  // frc2::JoystickButton(&m_driverController, 6).OnTrue(onFlyGeneration());
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -176,6 +170,17 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
+frc2::CommandPtr RobotContainer::GetStateMachine(){
+  return StateMachine(
+      m_arm, 
+      m_climb,
+      m_color, 
+      m_intake,
+      m_shooter, 
+      m_driverController,
+      m_auxController
+    ).ToPtr();
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
@@ -607,6 +612,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   else
   {
     //Should never get to this case
-    std::cout << "You should never see this error...." << std::endl;
+    std::cout << "You should never see this error.... bottom of robot container" << std::endl;
+
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr()
+    );
   }
 }

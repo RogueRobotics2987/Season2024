@@ -49,6 +49,8 @@ void Robot::TeleopInit()
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
   }
+  m_stateMachine = m_container.GetStateMachine();
+  m_stateMachine->Schedule();
 }
 
 /**

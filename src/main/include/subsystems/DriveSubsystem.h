@@ -8,19 +8,9 @@
 #include <frc/DriverStation.h>
 #include <frc2/command/CommandPtr.h>
 #include <iostream>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
-#include <pathplanner/lib/commands/FollowPathHolonomic.h>
-#include <pathplanner/lib/util/PIDConstants.h>
-#include <pathplanner/lib/util/ReplanningConfig.h>
-#include <pathplanner/lib/commands/FollowPathCommand.h>
-#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
-#include <pathplanner/lib/util/PIDConstants.h>
 
 #include "Constants.h"
 #include "SwerveModuleSubsystem.h"
-
-using namespace pathplanner;
 
 class DriveSubsystem : public frc2::SubsystemBase 
 {
@@ -127,7 +117,7 @@ class DriveSubsystem : public frc2::SubsystemBase
     SwerveModuleSubsystem m_rearRight;
 
     // The gyro sensor
-    AHRS m_gyro{frc::SerialPort::kMXP};
+    AHRS m_gyro{frc::I2C::kMXP}; //Do not use Serial Port 
 
     // Odometry class for tracking robot pose
     // 4 defines the number of modules

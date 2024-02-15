@@ -12,6 +12,7 @@
 #include <Constants.h>
 #include "networktables/NetworkTableInstance.inc"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DutyCycleEncoder.h>
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
@@ -20,6 +21,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+
+  void JoystickActuator(double pos);
 
   void StopShooter();
   void SetShooter(double speed);
@@ -35,6 +38,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double GetEncoderOffSet();
   void runMagazine();
   void stopMagazine();
+  void driveActuator(double speed);
+  void setRestingActuatorPosition();
 
 
 
@@ -42,14 +47,16 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
-  rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  // rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  frc::DutyCycleEncoder ShooterEncoder{8};
+
 
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
-  frc::DigitalInput MagazineSensor{1};
+  frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 0.0111/10;
+  double kp = 2;
   double m_DesiredAngle = 0; //TODO find safe resting value
 };

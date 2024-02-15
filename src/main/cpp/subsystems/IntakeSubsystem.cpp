@@ -4,33 +4,34 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem(){
-
-}
+IntakeSubsystem::IntakeSubsystem(){}
 
 // This method will be called once per scheduler run
-void IntakeSubsystem::Periodic(){
-
+void IntakeSubsystem::Periodic()
+{
+    if(DebugConstants::debug == true){
+        frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
+        frc::SmartDashboard::PutBoolean("ColorBack", intakeColorSensorRear.Get());
+    }
 }
 
 
 void IntakeSubsystem::Direction(){  // get current val to tell which direction motors moving in
-    frontVal= FrontIntake.GetOutputCurrent();
-    backVal = BackIntake.GetOutputCurrent();
+    // frontVal= FrontIntake.GetOutputCurrent();
+    // backVal = BackIntake.GetOutputCurrent();
 
-    if (frontVal > 2.5){ // need to find actual value and put in constants 
-        CenterIntake. Set(0.5); // need to find actual speed
+    if (intakeColorSensorFront.Get()){ // need to find actual value and put in constants 
+        CenterIntake. Set(-0.25); // need to find actual speed
 
-    }else if (backVal > 2.5){
-        CenterIntake.Set(-0.5);
+    }else if (intakeColorSensorRear.Get()){
+        CenterIntake.Set(0.25);
     }
 }
 
 void IntakeSubsystem::runIntake(){
     // need to make it so that these turn on with a button
-    FrontIntake.Set(0.5);
-    BackIntake.Set(-0.5);
-
+    FrontIntake.Set(0.25);
+    BackIntake.Set(-0.25);
 }
 
 void IntakeSubsystem::stopIntake(){

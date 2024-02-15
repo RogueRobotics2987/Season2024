@@ -5,7 +5,10 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc/DigitalInput.h>
+
 #include "rev/CANSparkMax.h"
+#include "DriveSubsystem.h"
 
 
 class IntakeSubsystem : public frc2::SubsystemBase {
@@ -27,9 +30,15 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   double frontVal = 0.0;
   double backVal = 0.0;
 
+  DriveSubsystem* m_drivetrain;
+
   rev::CANSparkMax BackIntake{9, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
+
+  frc::DigitalInput intakeColorSensorFront {1};   // 0 is a place holder for the DIO port
+  frc::DigitalInput intakeColorSensorRear {2};   // 0 is a place holder for the DIO port
+
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
