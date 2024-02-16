@@ -8,7 +8,7 @@ StateMachine::StateMachine() {}
 
 StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
                            IntakeSubsystem &intake, ShooterSubsystem &shooter, 
-                           frc::XboxController &driveXbox, frc::XboxController &auxXbox)
+                           frc::XboxController &driveXbox, frc::XboxController &auxXbox)//LimelightSubsystem &limelight, DriveSubsystem &drivetrain)
 {
   m_arm = &arm;
   AddRequirements({m_arm});
@@ -20,6 +20,10 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
   AddRequirements({m_intake});
   m_shooter = &shooter;
   AddRequirements({m_shooter});
+  // m_limelight = &limelight;
+  // AddRequirements({m_limelight});
+  // m_drivetrain = &drivetrain;
+  // AddRequirements({m_drivetrain});
 
   m_driverController = &driveXbox;
   m_auxController = &auxXbox;
@@ -59,6 +63,10 @@ void StateMachine::Execute() {
   if(m_driverController->GetRawButtonPressed(6)){ 
     warmUpShooter = !warmUpShooter;
   }
+
+  // if(m_driverController->GetRawButtonPressed(4)){
+  //   huntingNote = !huntingNote;
+  // }
 
   if(m_auxController->GetPOV(0)){
     emptyIntake = true;
@@ -108,6 +116,12 @@ void StateMachine::Execute() {
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     } 
+
+    // if(huntingNote == true){
+    //   state = NOTE_HUNTING;
+    //   frc::SmartDashboard::PutString("state: ", "changing to Hunting Note");
+
+    // }
 
     /*if(placeInTrap || placeInAmp){
       state = RAISE_SHOOTER;
@@ -428,6 +442,43 @@ void StateMachine::Execute() {
 
     break;
 
+  //  case NOTE_HUNTING:
+
+  //   m_intake->runIntake();
+  //   m_intake->Direction();
+  //   m_arm->runArmWheels(0.4);
+  //     m_shooter->runMagazine(0.4); 
+
+  //  tx = m_limelight->GetNotetx();
+  // if(tx > 7 || tx < -7){
+  //   rot = units::angular_velocity::radians_per_second_t((0 - tx) * kp);
+  // }
+  // else
+  // {
+  //   rot = units::angular_velocity::radians_per_second_t(0);
+  // }
+  // speedY = Deadzone(m_driverController->GetLeftY());
+
+  // if((fabs(speedY) + fabs(rot.value())) < .05) 
+  // {
+  //   NoJoystickInput = true;
+  // }
+  // else
+  // {
+  //   NoJoystickInput = false;
+  // }
+
+  // m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY) * 6.7, units::velocity::meters_per_second_t(0), rot, false, NoJoystickInput);
+
+  // if(m_shooter->GetMagazineSensor() == true){
+  //     state = LOADED;
+  //     frc::SmartDashboard::PutString("state: ", "changing to LOADED");
+  //   }
+
+  // break;
+
+
+
   // case DROP_WARMUP:
   //   frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
 
@@ -480,10 +531,26 @@ void StateMachine::Execute() {
   }
 }
 
+
+
 // Called once the command ends or is interrupted.
 void StateMachine::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool StateMachine::IsFinished() {
-  return false;
-}
+// bool StateMachine::IsFinished() {
+//   return false;
+// }
+
+// float StateMachine::Deadzone(float x)
+// {
+//   if ((x < 0.1) &&  (x > -0.1)){
+//     x=0;
+//   }
+//   else if (x >= 0.1){
+//     x = x - 0.1;
+//   }
+//   else if (x <= -0.1){
+//     x = x + 0.1;
+//   }
+//   return(x);
+// }
