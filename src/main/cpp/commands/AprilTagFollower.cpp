@@ -25,7 +25,7 @@ void AprilTagFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AprilTagFollower::Execute()
 {
-  double tx = m_limelight->GetAprilTagtx();
+  double tx = m_limelight->GetAprilTagtx() - 5;
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
   // if(tx > 7 || tx < -7){
   rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
