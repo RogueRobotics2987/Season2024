@@ -112,8 +112,8 @@ double ArmSubsystem::getUpperEncoderPos(){
     return m_UpperArmEncoder.GetPosition();
 }
 
-void ArmSubsystem::runArmWheels(){
-   ArmWheels.Set(-0.45);
+void ArmSubsystem::runArmWheels(double speed){
+   ArmWheels.Set(-speed);
 }
 void ArmSubsystem::stopArmWheels(){
     ArmWheels.Set(0.0);
@@ -126,3 +126,7 @@ void ArmSubsystem::stopArmWheels(){
 //         return false;
 //     }
 // }
+
+void ArmSubsystem::StopWheels(){
+    ArmWheels.Set(0.0);
+}

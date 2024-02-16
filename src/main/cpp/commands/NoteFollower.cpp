@@ -27,6 +27,7 @@
 //   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
 // }
 
+
 // // Called repeatedly when this Command is scheduled to run
 // void NoteFollower::Execute() 
 // {
@@ -35,6 +36,7 @@
 //   m_shooter->runMagazine();
 //   m_arm->runArmWheels();
   
+
 
 //   double tx = m_limelight->GetNotetx();
 //   if(tx > 7 || tx < -7){

@@ -21,18 +21,17 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
     // backVal = BackIntake.GetOutputCurrent();
 
     if (intakeColorSensorFront.Get()){ // need to find actual value and put in constants 
-        CenterIntake.Set(-0.45); // need to find actual speed
+        CenterIntake.Set(-0.4); // need to find actual speed
 
     }else if (intakeColorSensorRear.Get()){
-        CenterIntake.Set(0.45);
+        CenterIntake.Set(0.4);
     }
 }
 
 void IntakeSubsystem::runIntake(){
     // need to make it so that these turn on with a button
-    FrontIntake.Set(0.45);
-    BackIntake.Set(-0.45);
-    
+    FrontIntake.Set(0.4);
+    BackIntake.Set(-0.4);
 }
 
 void IntakeSubsystem::stopIntake(){
