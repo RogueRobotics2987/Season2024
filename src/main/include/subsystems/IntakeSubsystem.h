@@ -18,9 +18,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   void runIntake();
   void stopIntake();
-  bool getColorFront();
-  bool getColorRear();
-
+  bool GetIntakeFront();
+  bool GetIntakeRear();
  
   /**
    * Will be called periodically whenever the CommandScheduler runs.

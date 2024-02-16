@@ -182,6 +182,10 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
     ).ToPtr();
 }
 
+void RobotContainer::SetRanAuto(bool ranAuto){
+  m_drive.SetRanAuto(ranAuto);
+}
+
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
   m_drive.ZeroHeading();

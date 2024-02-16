@@ -39,18 +39,23 @@ void StateMachine::Execute() {
     //TODO: trace code
     pickupNote = !pickupNote;
   }
+
   if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/){
       moveNote2Shoot = true;
   }
+
   else{
       moveNote2Shoot = false;
   }
+
   if(m_driverController->GetRawButtonPressed(6)){ 
     warmUpShooter = !warmUpShooter;
   }
+
   if(m_auxController->GetPOV(0)){
     emptyIntake = true;
   }
+
   if(m_auxController->GetRawButtonPressed(2)){
     if(placeInAmp == false){
       placeInAmp = true;
@@ -59,6 +64,7 @@ void StateMachine::Execute() {
       placeInAmp = false;
     }
   }
+  
   if(m_auxController->GetRawButtonPressed(4)){ 
     if(placeInTrap == false){
       placeInTrap = true;
@@ -67,9 +73,10 @@ void StateMachine::Execute() {
       placeInTrap = false;
     }
   }
-        if(m_auxController->GetRawButtonPressed(8)){
 
-        }
+  if(m_auxController->GetRawButtonPressed(8)){
+
+  }
 
 
 
@@ -116,17 +123,20 @@ void StateMachine::Execute() {
     break;
 
   case PICKUP:    // start intake and magazine
-     m_shooter->driveActuator(m_auxController->GetRightY());
+    m_shooter->driveActuator(m_auxController->GetRightY());
     frc::SmartDashboard::PutString("state: ", "PICKUP");
     
     // start intake motors, REMEMBER: middle motor changes direction
     m_intake->runIntake();
     m_intake->Direction();
 
+    if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear()){
+      m_shooter->runMagazine();  //TODO test this function, might not have behaved correctly first test
+    }
+
     //m_arm-> //DC
     
-    frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
-
+    // frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
     if(pickupNote == false){
       state = EMPTY;
@@ -136,7 +146,7 @@ void StateMachine::Execute() {
     //   state = SPIT_OUT;
     //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     // }
-     else if(m_shooter->GetMagazineSensor() == true){
+    else if(m_shooter->GetMagazineSensor() == true){
       state = LOADED;
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
