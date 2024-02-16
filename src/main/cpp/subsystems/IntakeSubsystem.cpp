@@ -30,9 +30,8 @@ void IntakeSubsystem::Direction(){  // get current val to tell which direction m
 
 void IntakeSubsystem::runIntake(){
     // need to make it so that these turn on with a button
-    FrontIntake.Set(0.25);
-    BackIntake.Set(-0.25);
-    ArmMotor.Set(0.25);
+    FrontIntake.Set(0.5);
+    BackIntake.Set(-0.5);
 }
 
 void IntakeSubsystem::stopIntake(){

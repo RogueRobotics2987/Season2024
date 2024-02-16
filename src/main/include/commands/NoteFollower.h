@@ -15,6 +15,8 @@
 #include "subsystems/LimelightSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/ArmSubsystem.h"
 
 /**
  * An example command.
@@ -28,7 +30,7 @@ class NoteFollower
 {
   public:
     NoteFollower();
-    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem & intake);
+    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem & intake, ShooterSubsystem & shooter, ArmSubsystem & arm);
 
 
     void Initialize() override;
@@ -50,5 +52,7 @@ class NoteFollower
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
     IntakeSubsystem* m_intake = nullptr;
+    ShooterSubsystem* m_shooter = nullptr;
+    ArmSubsystem* m_arm = nullptr;
     float Deadzone(float x);
 };

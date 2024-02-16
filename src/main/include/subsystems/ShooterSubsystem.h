@@ -46,7 +46,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
-  // rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
 
 

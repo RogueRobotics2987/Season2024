@@ -5,16 +5,20 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem &intake)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem &intake, ShooterSubsystem &shooter, ArmSubsystem & arm)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
   m_intake = &intake;
+  m_shooter = &shooter;
+  m_arm = &arm;
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
-  AddRequirements({m_intake});  
+  AddRequirements({m_intake});
+  AddRequirements({m_shooter});
+  AddRequirements({m_arm});
 }
 
 // Called when the command is initially scheduled.
@@ -28,6 +32,7 @@ void NoteFollower::Execute()
 {
   m_intake->runIntake();
   m_intake->Direction();
+  m_shooter->runMagazine();
 
   double tx = m_limelight->GetNotetx();
   if(tx > 7 || tx < -7){
@@ -57,12 +62,13 @@ void NoteFollower::End(bool interrupted) {}
 // Returns true when the command should end.
 bool NoteFollower::IsFinished()
 {
-  // if(m_intake->getColorFront() || m_intake->getColorRear()){
-  //   return true;
+   if(m_shooter->GetMagazineSensor()){
+    m_intake->stopIntake();
+    return true;
     
-  // }else{
+  }else{
     return false;
- // }
+ }
 }
 
 float NoteFollower::Deadzone(float x)
