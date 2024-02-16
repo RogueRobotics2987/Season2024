@@ -123,7 +123,7 @@ void RobotContainer::ConfigureButtonBindings(){
   // frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   // //Limelight Note Detection
-  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
+  //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
   frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
@@ -178,7 +178,9 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       m_intake,
       m_shooter, 
       m_driverController,
-      m_auxController
+      m_auxController,
+      m_limelight,
+      m_drive
     ).ToPtr();
 }
 
