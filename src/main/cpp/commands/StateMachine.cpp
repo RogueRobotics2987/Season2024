@@ -136,9 +136,6 @@ void StateMachine::Execute() {
       m_shooter->runMagazine(0.4);  //TODO test this function, might not have behaved correctly first test
     }
 
-    //m_arm-> //DC
-    
-    // frc::SmartDashboard::PutBoolean("detect note?: ", m_colorSensor->detectNoteIntake1);
 
     if(pickupNote == false){
       state = EMPTY;
