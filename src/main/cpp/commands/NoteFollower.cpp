@@ -30,8 +30,8 @@ void NoteFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
-  m_intake->runIntake();
-  m_intake->Direction();
+  m_intake->runIntake(0.4);
+  m_intake->Direction(0.4);
 
   if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear()){
       m_arm->runArmWheels(0.4);
