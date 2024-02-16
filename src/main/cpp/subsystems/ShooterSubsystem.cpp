@@ -4,10 +4,7 @@
 
 #include "subsystems/ShooterSubsystem.h"
 
-ShooterSubsystem::ShooterSubsystem() {
-    LeftShooter.Follow(RightShooter, true);
-    frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
-}
+ShooterSubsystem::ShooterSubsystem() {}
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
@@ -15,9 +12,19 @@ void ShooterSubsystem::Periodic() {
         frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
         frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
-        frc::SmartDashboard::GetNumber("ShooterDesired", m_DesiredAngle);
-        //TODO test that shooter will update and move to desired angle from smart dashboard
+        frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
+        // frc::SmartDashboard::PutNumber("TestAngle", testAngle);        
     }
+
+    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle){
+        m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
+    }
+    else if(m_DesiredAngle <= ShooterConstants::RestingAngle){
+        m_DesiredAngle = ShooterConstants::RestingAngle;
+    }
+
+    ShooterActuator.Set((DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue()) * kp) * -1); 
+
 }
 
 void ShooterSubsystem::JoystickActuator(double pos){
@@ -28,14 +35,17 @@ void ShooterSubsystem::JoystickActuator(double pos){
 
 void ShooterSubsystem::StopShooter(){
     RightShooter.Set(0.0);
+    LeftShooter.Set(0.0);
 }
 
-void ShooterSubsystem::SetShooter(double speed) {
-    RightShooter.Set(speed);
+void ShooterSubsystem::SetShooter(double speedRight, double speedLeft) {
+    RightShooter.Set(speedRight);
+    LeftShooter.Set(speedLeft);
 }
 
 void ShooterSubsystem::ReverseShooter(){   
     RightShooter.Set(-0.2);
+    LeftShooter.Set(0.2);
 }
 
 
@@ -66,8 +76,8 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     return Pose;
 }
 
-void ShooterSubsystem::runMagazine(){
-    MagazineMotor.Set(0.5);
+void ShooterSubsystem::runMagazine(double speed){
+    MagazineMotor.Set(speed);
 }
 
 void ShooterSubsystem::stopMagazine(){
@@ -88,8 +98,6 @@ void ShooterSubsystem::driveActuator(double speed){
 
 void ShooterSubsystem::setRestingActuatorPosition(){
     m_DesiredAngle = ShooterConstants::RestingAngle; 
-    //the -1 Flips polarity so motor will move the correct way
-    ShooterActuator.Set((DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue()) * kp) * -1); 
 }
 
 double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)

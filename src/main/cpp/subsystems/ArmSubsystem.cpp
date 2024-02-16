@@ -121,3 +121,11 @@ double ArmSubsystem::getUpperEncoderPos(){
 //         return false;
 //     }
 // }
+
+void ArmSubsystem::IntakeMove(double speed){
+    return ArmWheels.Set(-speed);
+}
+
+void ArmSubsystem::StopWheels(){
+    ArmWheels.Set(0.0);
+}

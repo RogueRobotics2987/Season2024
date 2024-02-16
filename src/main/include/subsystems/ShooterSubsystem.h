@@ -25,7 +25,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void JoystickActuator(double pos);
 
   void StopShooter();
-  void SetShooter(double speed);
+  void SetShooter(double speedRight, double speedLeft);
 
   void ReverseShooter();
   
@@ -36,7 +36,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   bool IsTargeted();
 
   double GetOffSetEncoderValue();
-  void runMagazine();
+  void runMagazine(double speed);
   void stopMagazine();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
@@ -58,5 +58,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   double kp = 0.01;
-  double m_DesiredAngle = 0; 
+  double m_DesiredAngle = 40; 
+  double testAngle = 40;
 };
