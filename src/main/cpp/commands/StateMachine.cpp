@@ -537,9 +537,9 @@ void StateMachine::Execute() {
 void StateMachine::End(bool interrupted) {}
 
 // Returns true when the command should end.
-// bool StateMachine::IsFinished() {
-//   return false;
-// }
+bool StateMachine::IsFinished() {
+  return false;
+}
 
 // float StateMachine::Deadzone(float x)
 // {
