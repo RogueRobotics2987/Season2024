@@ -43,7 +43,7 @@ class NoteFollower
 
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
     units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
-    double kp = 0.0248175;//0.009927;
+    double kp = 0.02206;//0.0248175;//0.009927;
     double speedY = 0;
     bool NoJoystickInput = false;
 

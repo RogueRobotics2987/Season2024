@@ -99,7 +99,6 @@ void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
 
     //ArmWheels.Set(0.5);
 }
-
 void ArmSubsystem::stopDrop(){      //stop armWheels
     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
 
@@ -113,6 +112,12 @@ double ArmSubsystem::getUpperEncoderPos(){
     return m_UpperArmEncoder.GetPosition();
 }
 
+void ArmSubsystem::runArmWheels(){
+   ArmWheels.Set(-0.45);
+}
+void ArmSubsystem::stopArmWheels(){
+    ArmWheels.Set(0.0);
+}
 // bool ArmSubsystem::compareHasNote(bool Other){
 //     if(Other && HasNote) {
 //         return true;

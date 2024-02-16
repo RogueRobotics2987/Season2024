@@ -33,6 +33,8 @@ void NoteFollower::Execute()
   m_intake->runIntake();
   m_intake->Direction();
   m_shooter->runMagazine();
+  m_arm->runArmWheels();
+  
 
   double tx = m_limelight->GetNotetx();
   if(tx > 7 || tx < -7){
@@ -64,6 +66,8 @@ bool NoteFollower::IsFinished()
 {
    if(m_shooter->GetMagazineSensor()){
     m_intake->stopIntake();
+    m_shooter->stopMagazine();
+    m_arm->stopArmWheels();
     return true;
     
   }else{

@@ -123,7 +123,7 @@ void StateMachine::Execute() {
     break;
 
   case PICKUP:    // start intake and magazine
-    m_shooter->driveActuator(m_auxController->GetRightY());
+   // m_shooter->driveActuator(m_auxController->GetRightY());
     frc::SmartDashboard::PutString("state: ", "PICKUP");
     
     // start intake motors, REMEMBER: middle motor changes direction
