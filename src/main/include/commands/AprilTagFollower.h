@@ -36,7 +36,7 @@ class AprilTagFollower
 
     bool IsFinished() override;
 
-    double kp = -0.09927;
+    double kp = 0.02206;
     double speedX = 0;
     double speedY = 0;
     bool NoJoystickInput = false;

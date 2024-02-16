@@ -132,7 +132,7 @@ void StateMachine::Execute() {
     m_intake->Direction();
 
     if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear()){
-      m_arm->IntakeMove(0.4);
+      m_arm->runArmWheels(0.4);
       m_shooter->runMagazine(0.4);  //TODO test this function, might not have behaved correctly first test
     }
 
@@ -205,7 +205,7 @@ void StateMachine::Execute() {
 
     //turn on mag motors
     m_shooter->runMagazine(1);
-    m_arm->IntakeMove(1);
+    m_arm->runArmWheels(1);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
