@@ -64,8 +64,8 @@ void StateMachine::Execute() {
       placeInAmp = false;
     }
   }
-
-  if(m_auxController->GetRawButtonPressed(4)){
+  
+  if(m_auxController->GetRawButtonPressed(4)){ 
     if(placeInTrap == false){
       placeInTrap = true;
       placeInAmp = false;

@@ -32,6 +32,7 @@ void IntakeSubsystem::runIntake(){
     // need to make it so that these turn on with a button
     FrontIntake.Set(0.25);
     BackIntake.Set(-0.25);
+    ArmMotor.Set(0.25);
 }
 
 void IntakeSubsystem::stopIntake(){
