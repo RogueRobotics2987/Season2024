@@ -14,12 +14,12 @@
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
-  void Direction();
-  void runIntake();
+  void Direction(double speed);
+  void runIntake(double speed);
   void stopIntake();
   bool GetIntakeFront();
   bool GetIntakeRear();
- 
+  void spitOutIntake();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

@@ -142,12 +142,12 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "PICKUP");
     
     // start intake motors, REMEMBER: middle motor changes direction
-    m_intake->runIntake();
-    m_intake->Direction();
+    m_intake->runIntake(0.25);
+    m_intake->Direction(0.25);
 
     if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear()){
-      m_arm->runArmWheels(0.4);
-      m_shooter->runMagazine(0.4);  //TODO test this function, might not have behaved correctly first test
+      m_arm->runArmWheels(0.25);
+      m_shooter->runMagazine(0.25);  //TODO test this function, might not have behaved correctly first test
     }
 
     //m_arm-> //DC
@@ -200,13 +200,27 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
     //start shooter motors
-    m_shooter->SetShooter(1, 0.8);
+    m_shooter->SetShooter(1, -0.8);
+
+    if(time<10){
+      m_shooter->runMagazine(-0.2);
+      m_arm->runArmWheels(-0.2);
+      m_intake->spitOutIntake();
+    }
+    else{
+      m_shooter->stopMagazine();
+      m_arm->stopArmWheels();
+      m_intake->stopIntake();
+    }
+
+    time++;
 
     if(warmUpShooter == false){
       state = LOADED;
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
     } else if(moveNote2Shoot == true){
+      time = 0;
       state = SHOOT;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOT");
     }
@@ -220,6 +234,8 @@ void StateMachine::Execute() {
     //turn on mag motors
     m_shooter->runMagazine(1);
     m_arm->runArmWheels(1);
+    m_intake->runIntake(1);
+    m_intake->Direction(1);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second

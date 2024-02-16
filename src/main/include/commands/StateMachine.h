@@ -88,5 +88,4 @@ class StateMachine
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
   int timeDrop = 0;   //keep track of dropper iterations
-  
-};
+  };

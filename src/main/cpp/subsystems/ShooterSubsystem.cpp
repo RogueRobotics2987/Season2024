@@ -29,7 +29,7 @@ void ShooterSubsystem::Periodic() {
 
 void ShooterSubsystem::JoystickActuator(double pos){
     if(fabs(pos) > .15){
-        m_DesiredAngle += pos*.1;
+        m_DesiredAngle += pos*.2;
     }
 }
 
