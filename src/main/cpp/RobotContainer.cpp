@@ -91,32 +91,6 @@ void RobotContainer::ConfigureButtonBindings(){
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
-  // start/stop Intake
-  // frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
-
-  // shoot
-  //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 1).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 2).OnTrue(m_testMotor.Move());
-  
-  // frc2::JoystickButton(&m_driverController, 3);
-
-  // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
-
-  // arm pose presets
-  //frc2::JoystickButton(&m_auxController, 4).WhileTrue(m_testMotor.Move());
-  //frc2::JoystickButton(&m_auxController, 2).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 1).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 3).WhileTrue(m_testMotor.Move());
-
-  // shoot
-  //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
-
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
   // // Robot slides left (when front is away from the drivers)
@@ -127,10 +101,6 @@ void RobotContainer::ConfigureButtonBindings(){
 
   // //Limelight April Tag Detection, y
   frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
-
-  // // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
 
   // //start PICKUP state
   // //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
@@ -146,10 +116,10 @@ float RobotContainer::DeadzoneCubed(float x){
     x=0;
   }
   else if (x >= 0.1){
-    x = x - 0.1;
+    x = x ;//- 0.1;
   }
   else if (x <= -0.1){
-    x = x + 0.1;
+    x = x ;//+ 0.1;
   }
 
   return(x);
