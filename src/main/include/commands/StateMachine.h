@@ -34,8 +34,8 @@ class StateMachine
  public:
   StateMachine();
   StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, LimelightSubsystem &limelight, 
-               DriveSubsystem &drivetrain);
+               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox);// LimelightSubsystem &limelight, 
+              // DriveSubsystem &drivetrain);
 
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
   units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
@@ -63,13 +63,13 @@ class StateMachine
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
-  LimelightSubsystem* m_limelight = nullptr;
-  DriveSubsystem* m_drivetrain = nullptr;
+ // LimelightSubsystem* m_limelight = nullptr;
+  // DriveSubsystem* m_drivetrain = nullptr;
 
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;
 
-  bool huntingNote = false;
+  // bool huntingNote = false;
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
 
