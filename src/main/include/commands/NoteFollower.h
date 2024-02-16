@@ -13,6 +13,8 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "Constants.h"
 
 /**
  * An example command.
@@ -26,7 +28,7 @@ class NoteFollower
 {
   public:
     NoteFollower();
-    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem & intake);
 
 
     void Initialize() override;
@@ -39,7 +41,7 @@ class NoteFollower
 
     units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
     units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
-    double kp = 0.09927;
+    double kp = 0.0248175;//0.009927;
     double speedY = 0;
     bool NoJoystickInput = false;
 
@@ -47,5 +49,6 @@ class NoteFollower
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    IntakeSubsystem* m_intake = nullptr;
     float Deadzone(float x);
 };

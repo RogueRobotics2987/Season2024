@@ -32,10 +32,19 @@ void IntakeSubsystem::runIntake(){
     // need to make it so that these turn on with a button
     FrontIntake.Set(0.25);
     BackIntake.Set(-0.25);
+    ArmMotor.Set(0.25);
 }
 
 void IntakeSubsystem::stopIntake(){
     FrontIntake.Set(0.0);
     BackIntake.Set(0.0);
     CenterIntake.Set(0.0);
+}
+
+bool IntakeSubsystem::getColorFront(){
+    return intakeColorSensorFront.Get();
+}
+
+bool IntakeSubsystem::getColorRear(){
+   return intakeColorSensorRear.Get();
 }

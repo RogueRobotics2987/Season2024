@@ -42,7 +42,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void setRestingActuatorPosition();
 
 
-
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};

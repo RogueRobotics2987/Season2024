@@ -5,14 +5,16 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, IntakeSubsystem &intake)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
+  m_intake = &intake;
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
+  AddRequirements({m_intake});  
 }
 
 // Called when the command is initially scheduled.
@@ -24,6 +26,9 @@ void NoteFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
+  m_intake->runIntake();
+  m_intake->Direction();
+
   double tx = m_limelight->GetNotetx();
   if(tx > 7 || tx < -7){
     rot = units::angular_velocity::radians_per_second_t((0 - tx) * kp);
@@ -43,7 +48,7 @@ void NoteFollower::Execute()
     NoJoystickInput = false;
   }
 
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rot, false, NoJoystickInput);
+  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY) * 6.7, units::velocity::meters_per_second_t(0), rot, false, NoJoystickInput);
 }
 
 // Called once the command ends or is interrupted.
@@ -52,7 +57,12 @@ void NoteFollower::End(bool interrupted) {}
 // Returns true when the command should end.
 bool NoteFollower::IsFinished()
 {
-  return false;
+  // if(m_intake->getColorFront() || m_intake->getColorRear()){
+  //   return true;
+    
+  // }else{
+    return false;
+ // }
 }
 
 float NoteFollower::Deadzone(float x)
