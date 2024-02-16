@@ -29,7 +29,7 @@ void ShooterSubsystem::Periodic() {
 
 void ShooterSubsystem::JoystickActuator(double pos){
     if(fabs(pos) > .15){
-        m_DesiredAngle += pos*.2;
+        m_DesiredAngle += pos*.3;
     }
 }
 
@@ -98,6 +98,10 @@ void ShooterSubsystem::driveActuator(double speed){
 
 void ShooterSubsystem::setRestingActuatorPosition(){
     m_DesiredAngle = ShooterConstants::RestingAngle; 
+}
+
+void ShooterSubsystem::SetIntakePose(){
+    m_DesiredAngle = 30;
 }
 
 double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)

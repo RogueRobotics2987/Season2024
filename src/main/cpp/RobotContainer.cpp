@@ -56,9 +56,9 @@ RobotContainer::RobotContainer()
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
-      double safeX = DeadzoneCubed(m_driverController.GetLeftX());
-      double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
-      double safeRot = DeadzoneCubed(m_driverController.GetRightX());
+      double safeX = Deadzone(m_driverController.GetLeftX());
+      double safeY =  Deadzone(m_driverController.GetLeftY());
+      double safeRot = Deadzone(m_driverController.GetRightX());
 
 
       bool fieldOrientated;
@@ -112,13 +112,13 @@ void RobotContainer::ConfigureButtonBindings(){
 float RobotContainer::DeadzoneCubed(float x){
   x = x * x * x;  // exponetial curve, slow acceleration at begining
 
-  if ((x < 0.1) &&  (x > -0.1)){
+  if ((x < 0.001) &&  (x > -0.001)){
     x=0;
   }
-  else if (x >= 0.1){
+  else if (x >= 0.001){
     x = x ;//- 0.1;
   }
-  else if (x <= -0.1){
+  else if (x <= -0.001){
     x = x ;//+ 0.1;
   }
 

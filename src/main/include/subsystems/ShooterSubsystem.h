@@ -41,6 +41,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void driveActuator(double speed);
   void setRestingActuatorPosition();
   double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+  void SetIntakePose();
 
 
  private:
