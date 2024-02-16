@@ -35,11 +35,12 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   bool IsTargeted();
 
-  double GetEncoderOffSet();
+  double GetOffSetEncoderValue();
   void runMagazine();
   void stopMagazine();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
 
 
@@ -57,6 +58,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 2;
-  double m_DesiredAngle = 0; //TODO find safe resting value
+  double kp = 0.01;
+  double m_DesiredAngle = 0; 
 };

@@ -18,6 +18,9 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   void runIntake();
   void stopIntake();
+  bool GetIntakeFront();
+  bool GetIntakeRear();
+
 
  
   /**
