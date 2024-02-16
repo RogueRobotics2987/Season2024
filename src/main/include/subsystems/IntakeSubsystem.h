@@ -18,7 +18,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   void runIntake();
   void stopIntake();
-
+  bool GetIntakeFront();
+  bool GetIntakeRear();
  
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -35,6 +36,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax BackIntake{9, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
+
 
   frc::DigitalInput intakeColorSensorFront {1};   // 0 is a place holder for the DIO port
   frc::DigitalInput intakeColorSensorRear {2};   // 0 is a place holder for the DIO port

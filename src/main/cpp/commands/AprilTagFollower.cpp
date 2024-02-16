@@ -5,13 +5,15 @@
 #include "commands/AprilTagFollower.h"
 
 AprilTagFollower::AprilTagFollower(){}
-AprilTagFollower::AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox) 
+AprilTagFollower::AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, ShooterSubsystem &shooter) 
 {
   m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_Xbox = &Xbox;
+  m_shooter = &shooter;
   AddRequirements({m_limelight});
-  AddRequirements({m_drivetrain});
+  AddRequirements({m_drivetrain});  
+  AddRequirements({m_shooter});
 }
 
 // Called when the command is initially scheduled.
@@ -44,6 +46,7 @@ void AprilTagFollower::Execute()
   // rot = units::angular_velocity::radians_per_second_t(0);
   // }
   m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rot, false, NoJoystickInput);
+  //m_shooter->SetActuator(m_shooter->GetCurrentCommand);
 }
 
 // Called once the command ends or is interrupted.

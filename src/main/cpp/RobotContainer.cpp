@@ -123,10 +123,10 @@ void RobotContainer::ConfigureButtonBindings(){
   // frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   // //Limelight Note Detection
-  // frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  // frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
 
   // // Run/stop test motor
   // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
@@ -180,6 +180,10 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       m_driverController,
       m_auxController
     ).ToPtr();
+}
+
+void RobotContainer::SetRanAuto(bool ranAuto){
+  m_drive.SetRanAuto(ranAuto);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()

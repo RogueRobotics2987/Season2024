@@ -58,8 +58,17 @@ DriveSubsystem::DriveSubsystem()
 
 void DriveSubsystem::Periodic(){
   // Implementation of subsystem periodic method goes here.
+
+  if(ranAuto == true){ //TODO test this. have not had a chance to test yet
+    orientationOffset = frc::Rotation2d(3.14159265359_rad);
+    //used to set field oriented in autonomous when we arent facing the correct way
+  }
+  else{
+    orientationOffset = frc::Rotation2d(0_rad);
+  }
+
   m_odometry.Update(
-    frc::Rotation2d(m_gyro.GetRotation2d()),
+    frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())),
       {
         m_frontLeft.GetPosition(),
         m_frontRight.GetPosition(),
@@ -136,7 +145,7 @@ void DriveSubsystem::periodicHelper()
         xSpeed,
         ySpeed, 
         rot, 
-        frc::Rotation2d(m_gyro.GetRotation2d())
+        frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())
       ) 
     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
@@ -198,12 +207,13 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
 }
 
 units::degree_t DriveSubsystem::GetHeading(){
-  return m_gyro.GetRotation2d().Degrees();
+  return m_gyro.GetRotation2d().Degrees() + orientationOffset.Degrees();
 }
 
 frc2::CommandPtr DriveSubsystem::ZeroHeading(){
   return this->RunOnce(
     [this] {
+      SetRanAuto(false);
       m_gyro.Reset();
     }
   );
@@ -273,6 +283,10 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
   }
 
   return {forward, sideways, angular};
+}
+
+void DriveSubsystem::SetRanAuto(bool ranAuto){
+  this-> ranAuto = ranAuto;
 }
 
 DriveSubsystem::~DriveSubsystem()

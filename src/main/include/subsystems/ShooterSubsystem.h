@@ -35,19 +35,19 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   bool IsTargeted();
 
-  double GetEncoderOffSet();
+  double GetOffSetEncoderValue();
   void runMagazine();
   void stopMagazine();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
-
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
 
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
-  // rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
 
 
@@ -57,6 +57,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 2;
-  double m_DesiredAngle = 0; //TODO find safe resting value
+  double kp = 0.01;
+  double m_DesiredAngle = 0; 
 };
