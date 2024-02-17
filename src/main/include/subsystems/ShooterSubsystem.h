@@ -22,10 +22,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  void JoystickActuator(double pos);
+  void JoystickActuator(double pos, bool magParallel);
 
   void StopShooter();
-  void SetShooter(double speed);
+  void SetShooter(double speedRight, double speedLeft);
 
   void ReverseShooter();
   
@@ -35,28 +35,38 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   bool IsTargeted();
 
-  double GetEncoderOffSet();
-  void runMagazine();
+  double GetOffSetEncoderValue();
+  void runMagazine(double speed);
   void stopMagazine();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+  void SetIntakePose();
 
+  void spinMag();
+  void SetMagPos(double val);
+  void ResetMagEncoder();
 
 
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
-  // rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
+  //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
 
 
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  rev::SparkPIDController MagazinePID = MagazineMotor.GetPIDController();
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
   frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 2;
-  double m_DesiredAngle = 0; //TODO find safe resting value
+  double kp = 0.02;
+  double m_DesiredAngle = 40; 
+  double testAngle = 40;
+
+  double shooterWheelsPos = 0.0;
 };

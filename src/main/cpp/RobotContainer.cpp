@@ -91,46 +91,16 @@ void RobotContainer::ConfigureButtonBindings(){
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
-  // start/stop Intake
-  // frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
-
-  // shoot
-  //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 1).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 2).OnTrue(m_testMotor.Move());
-  
-  // frc2::JoystickButton(&m_driverController, 3);
-
-  // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
-
-  // arm pose presets
-  //frc2::JoystickButton(&m_auxController, 4).WhileTrue(m_testMotor.Move());
-  //frc2::JoystickButton(&m_auxController, 2).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 1).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 3).WhileTrue(m_testMotor.Move());
-
-  // shoot
-  //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
-
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
   // // Robot slides left (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   // //Limelight Note Detection
-  // frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  // frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
-
-  // // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
+  frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
 
   // //start PICKUP state
   // //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
@@ -142,14 +112,14 @@ void RobotContainer::ConfigureButtonBindings(){
 float RobotContainer::DeadzoneCubed(float x){
   x = x * x * x;  // exponetial curve, slow acceleration at begining
 
-  if ((x < 0.1) &&  (x > -0.1)){
+  if ((x < 0.001) &&  (x > -0.001)){
     x=0;
   }
-  else if (x >= 0.1){
-    x = x - 0.1;
+  else if (x >= 0.001){
+    x = x ;//- 0.1;
   }
-  else if (x <= -0.1){
-    x = x + 0.1;
+  else if (x <= -0.001){
+    x = x ;//+ 0.1;
   }
 
   return(x);
@@ -179,7 +149,13 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       m_shooter, 
       m_driverController,
       m_auxController
+      // m_limelight,
+      // m_drive
     ).ToPtr();
+}
+
+void RobotContainer::SetRanAuto(bool ranAuto){
+  m_drive.SetRanAuto(ranAuto);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()

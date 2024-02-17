@@ -96,6 +96,8 @@ class DriveSubsystem : public frc2::SubsystemBase
     frc2::CommandPtr SetDriveSlow(bool m_bool);
     void ConfigMotorControllers();
     frc2::CommandPtr Twitch(bool direction);
+    void SetRanAuto(bool ranAuto);
+
 
     frc::SwerveDriveKinematics<4> kDriveKinematics
     {
@@ -138,4 +140,7 @@ class DriveSubsystem : public frc2::SubsystemBase
     units::radians_per_second_t rot = 0_rad_per_s;
     bool fieldRelative = true;
     bool noJoystickInput = false;
+
+    bool ranAuto = false;
+    frc::Rotation2d orientationOffset = 0_rad;
 };
