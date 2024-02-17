@@ -39,7 +39,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
  private:
   rev::CANSparkMax LowerArm{17, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
-  // rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
   rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
   rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
@@ -54,8 +54,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   double kiSumLowerArm = 0.0;
   double kiSumUpperArm = 0.0;
 
-  // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
-  // armState state = INITIAL;
   // frc::XboxController* m_Xbox = nullptr;
   // bool HasNote = false;
 

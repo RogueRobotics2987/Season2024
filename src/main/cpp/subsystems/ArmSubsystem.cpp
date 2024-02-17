@@ -9,60 +9,7 @@ ArmSubsystem::ArmSubsystem()
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {
-    // switch (state) {
-        // case INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerInitalAngle);
-        //     setUpperArmAngle(ArmConstants::UpperInitalAngle);
-        //     // if(m_Xbox->getr)
-        //     state = LOWER_ARM_EXTEND_INITAL;
-
-        //     break;
-        
-        // case LOWER_ARM_EXTEND_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
-        //     HasNote = true;
-
-        //     break;
-
-        // case UPPER_ARM_EXTEND_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperExtentionAngle);
-
-        //     break;
-
-        // case ARM_FINAL:
-        //     setLowerArmAngle(ArmConstants::LowerFinalExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
-
-        //     break;
-
-        // case DROP:
-        //     setLowerArmAngle(ArmConstants::LowerDropAngle);
-        //     setUpperArmAngle(ArmConstants::UpperDropAngle);
-        //     dropNote();
-        //     HasNote = false;
-
-        //     break;
-
-        // case ARM_RETRACT_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
-
-        //     break;
-
-        // case ARM_RETRACT_FINAL:
-        //     setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
-
-        //     break;
-
-    //     default:
-    //     state = INITAL;
-    //     break;
-
-
-    // }
+    
 }
 
 
@@ -102,7 +49,7 @@ void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
 
 void ArmSubsystem::stopDrop(){      //stop armWheels
     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
-
+    //ArmWheels.Set(0.0);
 }
 
 double ArmSubsystem::getLowerEncoderPos(){
