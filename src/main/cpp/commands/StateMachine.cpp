@@ -67,12 +67,19 @@ void StateMachine::Execute() {
   // if(m_driverController->GetRawButtonPressed(4)){
   //   huntingNote = !huntingNote;
   // }
+/*
+  if(m_auxController->GetPOV(0) == 0)
+  {
+    pov0 = !pov0;
+  }
+  */
 
-  if(m_auxController->GetPOV(0))
+ if(m_auxController->GetRawButtonPressed(2))
   {
     pov0 = !pov0;
   }
 
+/*
   if(m_auxController->GetRawButtonPressed(2)){
     if(placeInAmp == false){
       placeInAmp = true;
@@ -81,7 +88,7 @@ void StateMachine::Execute() {
       placeInAmp = false;
     }
   }
-  
+  */
   if(m_auxController->GetRawButtonPressed(4)){ 
     if(placeInTrap == false){
       placeInTrap = true;
