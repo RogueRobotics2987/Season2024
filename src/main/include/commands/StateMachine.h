@@ -81,6 +81,8 @@ class StateMachine
   bool placeInTrap = false;
   bool placeInAmp = true;
 
+  bool pov0 = false; // spit out note when button pov0 is pressed
+
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
   //bool waitForArm = false;        // waits for the armSubsystem/dropper state machine

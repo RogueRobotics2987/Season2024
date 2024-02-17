@@ -68,8 +68,9 @@ void StateMachine::Execute() {
   //   huntingNote = !huntingNote;
   // }
 
-  if(m_auxController->GetPOV(0)){
-    emptyIntake = true;
+  if(m_auxController->GetPOV(0))
+  {
+    pov0 = !pov0;
   }
 
   if(m_auxController->GetRawButtonPressed(2)){
@@ -112,10 +113,15 @@ void StateMachine::Execute() {
     m_shooter->SetIntakePose();
 
     if(pickupNote == true){
-      
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
-    } 
+    }
+    
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
 
     // if(huntingNote == true){
     //   state = NOTE_HUNTING;
@@ -133,12 +139,13 @@ void StateMachine::Execute() {
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
 
-    //reverse intake
-
-    if(m_colorSensor->detectNoteIntake1 == true)
-    {
+    m_shooter->runMagazine(-0.2);
+    m_arm->runArmWheels(-0.2);
+    m_intake->spitOutIntake();
+    
+    if(pov0 == false){
       state = EMPTY;
-      emptyIntake = false;
+      frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
 
     break;
@@ -158,7 +165,6 @@ void StateMachine::Execute() {
       m_shooter->runMagazine(0.25);  //TODO test this function, might not have behaved correctly first test
     }
 
-
     if(pickupNote == false){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
@@ -176,6 +182,12 @@ void StateMachine::Execute() {
       m_shooter->StopShooter();
 
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
+    }
+
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     }
     
     break;
@@ -215,6 +227,13 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
 
     } 
+
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
+
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
     //   frc::SmartDashboard::PutString("state: ", "changing to RAISE_SHOOTER");
@@ -270,8 +289,6 @@ void StateMachine::Execute() {
 
   //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
 
-
-
   case RAISE_SHOOTER:
     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
 
@@ -284,7 +301,6 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
       time = 0;
     }
-
 
     break;
 
