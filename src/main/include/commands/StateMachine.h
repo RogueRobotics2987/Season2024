@@ -57,6 +57,13 @@ class StateMachine
     UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
   intakeState state = EMPTY;
 
+  std::vector<double> RedDistVector;
+  std::vector<double> BlueDistVector;
+
+  double blueDist = 0;
+  double redDist = 0;
+
+  int apriltagID = 0;
 
   ArmSubsystem* m_arm = nullptr;
   ClimberSubsystem* m_climb = nullptr;

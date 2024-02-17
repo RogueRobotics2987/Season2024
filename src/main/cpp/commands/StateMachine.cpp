@@ -45,6 +45,15 @@ void StateMachine::Initialize()
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
+  RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
+  BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
+
+  blueDist = BlueDistVector[0];
+  redDist = RedDistVector[0];
+
+  apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
+
+
   // BUTTONS!!!
   if(m_driverController->GetRawButtonPressed(5))
   { 
@@ -103,6 +112,7 @@ void StateMachine::Execute() {
   }
 
   m_shooter->JoystickActuator(m_auxController->GetRightY());
+  m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   // state machine
   switch (state) {
@@ -228,6 +238,15 @@ void StateMachine::Execute() {
     m_arm->StopWheels();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
+
+    if(apriltagID == 3 || apriltagID == 4)
+    {
+      m_shooter->ApriltagShooterTheta(redDist);
+    }
+    else if(apriltagID == 7 || apriltagID == 8)
+    {
+      m_shooter->ApriltagShooterTheta(blueDist);
+    }
 
     if(warmUpShooter == true){
       state = SHOOTER_WARMUP;

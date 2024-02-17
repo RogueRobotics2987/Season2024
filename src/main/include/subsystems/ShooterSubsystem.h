@@ -42,6 +42,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void setRestingActuatorPosition();
   double DistanceBetweenAngles(double targetAngle, double sourceAngle);
   void SetIntakePose();
+  void ApriltagShooterTheta(double dist);
+  void AngleTrimAdjust(bool buttonUp, bool buttonDown);
 
 
  private:
@@ -61,4 +63,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double kp = 0.01;
   double m_DesiredAngle = 40; 
   double testAngle = 40;
+
+  double angleTrim = 15;
 };
