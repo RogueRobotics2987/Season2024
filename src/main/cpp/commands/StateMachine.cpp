@@ -127,7 +127,7 @@ void StateMachine::Execute() {
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
 
-    //reverse intake
+    m_intake->spitOutIntake();
 
     if(m_colorSensor->detectNoteIntake1 == true)
     {
@@ -507,6 +507,7 @@ void StateMachine::Execute() {
   //   }
 
   //   break;
+
   
   default:
     state = EMPTY;
@@ -519,10 +520,10 @@ void StateMachine::Execute() {
 // Called once the command ends or is interrupted.
 void StateMachine::End(bool interrupted) {}
 
-// Returns true when the command should end.
-// bool StateMachine::IsFinished() {
-//   return false;
-// }
+//Returns true when the command should end.
+bool StateMachine::IsFinished() {
+  return false;
+}
 
 // float StateMachine::Deadzone(float x)
 // {
