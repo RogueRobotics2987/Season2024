@@ -27,7 +27,6 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
-// #include "subsystems/TestMotor.h"
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
@@ -69,7 +68,6 @@ class RobotContainer
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    // TestMotor m_testMotor;
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;

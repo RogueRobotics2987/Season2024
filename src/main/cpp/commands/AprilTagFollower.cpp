@@ -31,8 +31,8 @@ void AprilTagFollower::Execute()
   rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
 
   speedY = Deadzone(m_Xbox->GetLeftY());
-
   speedX = Deadzone(m_Xbox->GetLeftY());
+
   if((fabs(speedY) + fabs(speedX) + fabs(rot.value())) < .05)
   {
     NoJoystickInput = true;
@@ -45,6 +45,7 @@ void AprilTagFollower::Execute()
   // else{
   // rot = units::angular_velocity::radians_per_second_t(0);
   // }
+  
   m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rot, false, NoJoystickInput);
   //m_shooter->SetActuator(m_shooter->GetCurrentCommand);
 }

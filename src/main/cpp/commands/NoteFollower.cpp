@@ -26,6 +26,9 @@
 // {
 //   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
 // }
+
+// Called repeatedly when this Command is scheduled to run
+
 // // Called repeatedly when this Command is scheduled to run
 // void NoteFollower::Execute() 
 // {

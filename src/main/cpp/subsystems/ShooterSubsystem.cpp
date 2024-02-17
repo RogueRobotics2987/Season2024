@@ -13,7 +13,7 @@ void ShooterSubsystem::Periodic() {
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
         frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
         frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
-        // frc::SmartDashboard::PutNumber("TestAngle", testAngle);        
+        frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
     }
 
     if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle){
@@ -29,7 +29,7 @@ void ShooterSubsystem::Periodic() {
 
 void ShooterSubsystem::JoystickActuator(double pos){
     if(fabs(pos) > .15){
-        m_DesiredAngle += pos*.2;
+        m_DesiredAngle += pos*.3;
     }
 }
 
@@ -98,6 +98,23 @@ void ShooterSubsystem::driveActuator(double speed){
 
 void ShooterSubsystem::setRestingActuatorPosition(){
     m_DesiredAngle = ShooterConstants::RestingAngle; 
+}
+
+void ShooterSubsystem::SetIntakePose(){
+    m_DesiredAngle = 30;
+}
+
+void ShooterSubsystem::ApriltagShooterTheta(double dist){
+    m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
+}
+
+void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
+    if(buttonUp){
+        angleTrim++;
+    }
+    else if(buttonDown){
+        angleTrim--;
+    }
 }
 
 double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)

@@ -34,8 +34,8 @@ void Robot::AutonomousInit()
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
-    ranAuto = true; 
-    m_container.SetRanAuto(ranAuto);
+    // ranAuto = true; 
+    // m_container.SetRanAuto(ranAuto);
   }
 }
 
