@@ -4,10 +4,19 @@
 
 #include "subsystems/ShooterSubsystem.h"
 
-ShooterSubsystem::ShooterSubsystem() {}
+ShooterSubsystem::ShooterSubsystem() {
+
+    MagazineMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    MagazinePID.SetP(1);
+
+}
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
+    //MagazinePID.SetReference(shooterWheelsPos/1.4, rev::CANSparkMax::ControlType::kPosition);
+    frc::SmartDashboard::PutNumber("goal magPos", shooterWheelsPos);
+    frc::SmartDashboard::PutNumber("Actual Mag Pos", MagazineEncoder.GetPosition());
+
     if(DebugConstants::debug == true){
         frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
@@ -27,9 +36,12 @@ void ShooterSubsystem::Periodic() {
 
 }
 
-void ShooterSubsystem::JoystickActuator(double pos){
+void ShooterSubsystem::JoystickActuator(double pos, bool magParallel){
     if(fabs(pos) > .15){
-        m_DesiredAngle += pos*.3;
+        m_DesiredAngle += pos * 0.3;
+        if(magParallel){
+            SetMagPos(pos*.3);
+        }
     }
 }
 
@@ -50,7 +62,11 @@ void ShooterSubsystem::ReverseShooter(){
 
 
 void ShooterSubsystem::SetActuator(double DesiredAngle) {
+    double diff = m_DesiredAngle - DesiredAngle;
+    shooterWheelsPos -= diff/132;
+
     m_DesiredAngle = DesiredAngle;
+    //spinMag();
 }   
 
 bool ShooterSubsystem::GetMagazineSensor(){
@@ -123,3 +139,22 @@ double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double source
   return a;
 }
 
+void ShooterSubsystem::spinMag(){
+    //MagazinePID.SetReference(shooterWheelsPos * 60, rev::CANSparkMax::ControlType::kPosition);
+    //shooterWheelsPos += DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+    //MagazinePID.SetReference(shooterWheelsPos * 0.1, rev::CANSparkMax::ControlType::kPosition);
+    MagazineMotor.Set(DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue()) * 0.1);
+}
+
+void ShooterSubsystem::SetMagPos(double val){
+    if(m_DesiredAngle <= ShooterConstants::RaisedShooterAngle || m_DesiredAngle >= ShooterConstants::RestingAngle){
+        shooterWheelsPos -= (val * 0.3)/132;
+    }
+        
+    //spinMag();
+}
+
+void ShooterSubsystem::ResetMagEncoder(){
+    MagazineEncoder.SetPosition(0.0);
+    shooterWheelsPos = 0.0;
+}

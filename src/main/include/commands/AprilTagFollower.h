@@ -46,6 +46,7 @@ class AprilTagFollower
     DriveSubsystem* m_drivetrain = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    
     float Deadzone(float x);
 
 };
