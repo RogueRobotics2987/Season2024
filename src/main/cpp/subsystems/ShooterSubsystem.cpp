@@ -4,26 +4,37 @@
 
 #include "subsystems/ShooterSubsystem.h"
 
-ShooterSubsystem::ShooterSubsystem() {}
+ShooterSubsystem::ShooterSubsystem() {
+    // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
+}
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
-    if(DebugConstants::debug == true){
+
+    double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+
+    if(DebugConstants::debug == true)
+    {
         frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
         frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
         frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
         frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
+        // m_DesiredAngle = frc::SmartDashboard::GetNumber("SetAngle", m_DesiredAngle);
     }
 
-    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle){
+    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle)
+    {
         m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
     }
-    else if(m_DesiredAngle <= ShooterConstants::RestingAngle){
+    else if(m_DesiredAngle <= ShooterConstants::RestingAngle)
+    {
         m_DesiredAngle = ShooterConstants::RestingAngle;
     }
 
-    ShooterActuator.Set((DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue()) * kp) * -1); 
+    double angleOutput = ((angleError * ShooterConstants::kp)) + accumulatedError;
+
+    ShooterActuator.Set(-angleOutput); 
 
 }
 
@@ -101,7 +112,7 @@ void ShooterSubsystem::setRestingActuatorPosition(){
 }
 
 void ShooterSubsystem::SetIntakePose(){
-    m_DesiredAngle = 30;
+    m_DesiredAngle = ShooterConstants::RestingAngle;
 }
 
 void ShooterSubsystem::ApriltagShooterTheta(double dist){
@@ -116,6 +127,19 @@ void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
         angleTrim--;
     }
 }
+
+void ShooterSubsystem::zeroIntergralVal(){
+    accumulatedError = 0;
+}
+
+void ShooterSubsystem::accumulateError(){
+    double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+
+    if(accumulatedError < 0.15){
+        accumulatedError += ShooterConstants::ki * angleError;
+    }
+}
+
 
 double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
 {
