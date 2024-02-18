@@ -57,6 +57,13 @@ class StateMachine
     UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
   intakeState state = EMPTY;
 
+  std::vector<double> RedDistVector;
+  std::vector<double> BlueDistVector;
+
+  double blueDist = 0;
+  double redDist = 0;
+
+  int apriltagID = 0;
 
   ArmSubsystem* m_arm = nullptr;
   ClimberSubsystem* m_climb = nullptr;
@@ -82,6 +89,8 @@ class StateMachine
   bool placeInAmp = false;
 
   bool startDrop = false;
+
+  bool pov0 = false; // spit out note when button pov0 is pressed
 
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper

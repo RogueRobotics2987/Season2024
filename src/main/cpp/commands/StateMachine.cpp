@@ -32,6 +32,7 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
 // Called when the command is initially scheduled.
 void StateMachine::Initialize()
 {
+  m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
   if(m_shooter->GetMagazineSensor()){
@@ -45,8 +46,21 @@ void StateMachine::Initialize()
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
+  RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
+  BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
+
+  blueDist = BlueDistVector[0];
+  redDist = RedDistVector[0];
+
+  apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
+
+  m_shooter->accumulateError();
+
+
   // BUTTONS!!!
-  if(m_driverController->GetRawButtonPressed(5)){   // left bumper
+  if(m_driverController->GetRawButtonPressed(5))
+  { 
+    //TODO: trace code
     pickupNote = !pickupNote;
   }
 
@@ -58,34 +72,39 @@ void StateMachine::Execute() {
       moveNote2Shoot = false;
   }
 
-  if(m_driverController->GetRawButtonPressed(6)){   // right bumper
+  if(m_driverController->GetRawButtonPressed(6)){ 
     warmUpShooter = !warmUpShooter;
   }
 
   // if(m_driverController->GetRawButtonPressed(4)){
   //   huntingNote = !huntingNote;
   // }
+/*
+  if(m_auxController->GetPOV(0) == 0)
+  {
+    pov0 = !pov0;
+  }
+  */
 
-  if(m_auxController->GetPOV(0)){
-    emptyIntake = true;
+ if(m_auxController->GetRawButtonPressed(2))
+  {
+    pov0 = !pov0;
   }
 
-  if(m_auxController->GetRawButtonPressed(2)){    // button B
-
+/*
+  if(m_auxController->GetRawButtonPressed(2)){
     if(placeInAmp == false){
       placeInAmp = true;
       placeInTrap = false;
-
     } else {
       placeInAmp = false;
     }
   }
-  
+  */
   if(m_auxController->GetRawButtonPressed(4)){ 
     if(placeInTrap == false){
       placeInTrap = true;
       placeInAmp = false;
-
     } else {
       placeInTrap = false;
     }
@@ -94,9 +113,11 @@ void StateMachine::Execute() {
   if(m_auxController->GetRawButtonPressed(8)){
 
   }
-  
-  m_shooter->JoystickActuator(m_auxController->GetRightY(), false);
 
+  if(fabs(m_auxController->GetRightY()) > 0.15){
+  m_shooter->JoystickActuator(m_auxController->GetRightY());
+  }
+  m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   // state machine
   switch (state) {
@@ -106,19 +127,23 @@ void StateMachine::Execute() {
     m_arm->stopDrop();
     m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
-
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
     m_arm->StopWheels();
 
-    //m_shooter->SetIntakePose();
+    m_shooter->SetIntakePose();
 
     if(pickupNote == true){
-      
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
-    } 
+    }
+    
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
 
     // if(huntingNote == true){
     //   state = NOTE_HUNTING;
@@ -136,12 +161,13 @@ void StateMachine::Execute() {
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
 
-    //reverse intake
-
-    if(m_colorSensor->detectNoteIntake1 == true) //double check sensor
-    {
+    m_shooter->runMagazine(-0.2);
+    m_arm->runArmWheels(-0.2);
+    m_intake->spitOutIntake();
+    
+    if(pov0 == false){
       state = EMPTY;
-      emptyIntake = false;
+      frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
 
     break;
@@ -161,7 +187,6 @@ void StateMachine::Execute() {
       m_shooter->runMagazine(0.25);  //TODO test this function, might not have behaved correctly first test
     }
 
-
     if(pickupNote == false){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
@@ -180,13 +205,19 @@ void StateMachine::Execute() {
 
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
+
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
     
     break;
 
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
 
-    if(time<3){
+    if(time<7){
       m_shooter->runMagazine(-0.2);
       m_arm->runArmWheels(-0.2);
       m_intake->spitOutIntake();
@@ -195,9 +226,6 @@ void StateMachine::Execute() {
       m_shooter->stopMagazine();
       m_arm->stopArmWheels();
       m_intake->stopIntake();
-
-      m_shooter->ResetMagEncoder();
-
       time = 0;
       state = LOADED;
     }
@@ -208,25 +236,35 @@ void StateMachine::Execute() {
     
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
-    pickupNote = false;
+    //pickupNote = false;
 
     // turn running motors off
     m_intake->stopIntake();
     m_arm->StopWheels();
-    //m_shooter->stopMagazine();
+    m_shooter->stopMagazine();
     m_shooter->StopShooter();
 
-    if(fabs(m_auxController->GetRightY()) >= 0.05){
-      m_shooter->JoystickActuator(m_auxController->GetRightY(), true);
-      //m_shooter->SetMagPos(m_auxController->GetRightY());
+    if(apriltagID == 3 || apriltagID == 4)
+    {
+      m_shooter->ApriltagShooterTheta(redDist);
     }
-    m_shooter->spinMag();
+    else if(apriltagID == 7 || apriltagID == 8)
+    {
+      m_shooter->ApriltagShooterTheta(blueDist);
+    }
 
     if(warmUpShooter == true){
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
 
     } 
+
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
+
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
     //   frc::SmartDashboard::PutString("state: ", "changing to RAISE_SHOOTER");
@@ -244,19 +282,6 @@ void StateMachine::Execute() {
 
     //start shooter motors
     m_shooter->SetShooter(1, -0.8);
-
-
-    if(fabs(m_auxController->GetRightY()) >= 0.05){
-      m_shooter->JoystickActuator(m_auxController->GetRightY(), true);
-      //m_shooter->SetMagPos(m_auxController->GetRightY());
-    }
-    m_shooter->spinMag();
-
-    if(warmUpShooter == true){
-      state = SHOOTER_WARMUP;
-      frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
-
-    } 
 
     if(warmUpShooter == false){
       state = LOADED;
@@ -283,11 +308,9 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 90){
+    if(time >= 60){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
-
-      m_shooter->stopMagazine();
 
       time = 0;
       moveNote2Shoot = false;
@@ -296,8 +319,6 @@ void StateMachine::Execute() {
     break;
 
   //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
-
-
 
   case RAISE_SHOOTER:
     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
@@ -311,7 +332,6 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
       time = 0;
     }
-
 
     break;
 

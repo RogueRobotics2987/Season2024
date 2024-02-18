@@ -53,6 +53,7 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
+  //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
@@ -100,7 +101,10 @@ void RobotContainer::ConfigureButtonBindings(){
   //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+
+  //TODO adjust deadzone so the robot will not be at an angle when aiming, also implement this fucntion into the state machine
+  // frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(AutoAprilTag(m_limelight, m_drive).ToPtr());
 
   // //start PICKUP state
   // //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());

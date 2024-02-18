@@ -22,7 +22,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  void JoystickActuator(double pos, bool magParallel);
+  void JoystickActuator(double pos);
 
   void StopShooter();
   void SetShooter(double speedRight, double speedLeft);
@@ -42,10 +42,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void setRestingActuatorPosition();
   double DistanceBetweenAngles(double targetAngle, double sourceAngle);
   void SetIntakePose();
-
-  void spinMag();
-  void SetMagPos(double val);
-  void ResetMagEncoder();
+  void ApriltagShooterTheta(double dist);
+  void AngleTrimAdjust(bool buttonUp, bool buttonDown);
+  void zeroIntergralVal();
+  void accumulateError();
 
 
  private:
@@ -57,16 +57,14 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
 
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
-  rev::SparkRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-  rev::SparkPIDController MagazinePID = MagazineMotor.GetPIDController();
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
   frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 0.02;
   double m_DesiredAngle = 40; 
   double testAngle = 40;
 
-  double shooterWheelsPos = 0.0;
+  double angleTrim = 15;
+  double accumulatedError = 0;
 };
