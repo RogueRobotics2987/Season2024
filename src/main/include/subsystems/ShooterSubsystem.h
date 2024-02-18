@@ -44,6 +44,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void SetIntakePose();
   void ApriltagShooterTheta(double dist);
   void AngleTrimAdjust(bool buttonUp, bool buttonDown);
+  void zeroIntergralVal();
+  void accumulateError();
 
 
  private:
@@ -60,9 +62,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc::DigitalInput MagazineSensor{3};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  double kp = 0.01;
   double m_DesiredAngle = 40; 
   double testAngle = 40;
 
   double angleTrim = 15;
+  double accumulatedError = 0;
 };

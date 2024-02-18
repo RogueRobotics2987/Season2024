@@ -32,6 +32,7 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
 // Called when the command is initially scheduled.
 void StateMachine::Initialize()
 {
+  m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
   if(m_shooter->GetMagazineSensor()){
@@ -52,6 +53,8 @@ void StateMachine::Execute() {
   redDist = RedDistVector[0];
 
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
+
+  m_shooter->accumulateError();
 
 
   // BUTTONS!!!
@@ -111,7 +114,9 @@ void StateMachine::Execute() {
 
   }
 
+  if(fabs(m_auxController->GetRightY()) > 0.15){
   m_shooter->JoystickActuator(m_auxController->GetRightY());
+  }
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   // state machine
@@ -134,11 +139,11 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
     
-    if(pov0 == true)
-    {
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    }
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
 
     // if(huntingNote == true){
     //   state = NOTE_HUNTING;
@@ -201,11 +206,11 @@ void StateMachine::Execute() {
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
 
-    if(pov0 == true)
-    {
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    }
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
     
     break;
 
@@ -254,11 +259,11 @@ void StateMachine::Execute() {
 
     } 
 
-    if(pov0 == true)
-    {
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    }
+    // if(pov0 == true)
+    // {
+    //   state = SPIT_OUT;
+    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    // }
 
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
@@ -303,7 +308,7 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 90){
+    if(time >= 60){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
 
