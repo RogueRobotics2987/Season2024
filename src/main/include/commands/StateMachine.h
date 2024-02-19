@@ -21,11 +21,9 @@
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h> 
 
-#include "PhotonVersion.h"
 #include "photon/PhotonUtils.h"
-#include "photon/PhotonPoseEstimator.h"
-#include "photon/PhotonTargetSortMode.h"
 #include "photon/PhotonCamera.h"
+#include "photon/PhotonPoseEstimator.h"
 
 /**
  * An example command.
@@ -93,8 +91,6 @@ class StateMachine
   bool placeInTrap = false;
   bool placeInAmp = true;
 
-
-  bool hasTarget = result.HasTarget();
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
   units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
@@ -107,5 +103,8 @@ class StateMachine
   float Deadzone(float x);
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
+  std::vector<double> FIDS;
+  double targetData = 0;
+
   int timeDrop = 0;   //keep track of dropper iterations
   };

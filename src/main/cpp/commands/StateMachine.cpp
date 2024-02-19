@@ -35,7 +35,8 @@ void StateMachine::Initialize()
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
-  if(m_shooter->GetMagazineSensor()){
+  if(m_shooter->GetMagazineSensor())
+  {
     state = LOADED;
   }
 
@@ -43,31 +44,76 @@ void StateMachine::Initialize()
 
 
 // Called repeatedly when this Command is scheduled to run
-void StateMachine::Execute() {  
+void StateMachine::Execute()
+{  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
+  FIDS.clear();
 
 // Define Camera
 // Find out what we need to do to get strgest tag id
 // calculate camra tangent get camera dx and dy and get tan of that
+  photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
   photon::PhotonPipelineResult result = camera.GetLatestResult();
   bool hasTarget = result.HasTargets();
-  if(result.HasTargets()){
+
+  frc::SmartDashboard::PutBoolean("hasTarget", hasTarget);
+
+  if(hasTarget)
+  {
+    //TODO clean up variable names to make them more understandable in this if statement
+    std::span<const photon::PhotonTrackedTarget> tempTargets = result.GetTargets();
+    std::vector<photon::PhotonTrackedTarget> myTargets;
+    myTargets.assign(tempTargets.begin(), tempTargets.end());
+    myTargets.front().GetYaw();
+
+    for(unsigned int i = 0; i < myTargets.size(); i++)
+    {
+      FIDS.emplace_back(myTargets.at(i).GetFiducialId());
+
+      if(myTargets.at(i).GetFiducialId() == 4)
+      {
+        //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
+        frc::SmartDashboard::PutNumber("TargetDataYaw", myTargets.at(i).GetYaw());
+        frc::SmartDashboard::PutNumber("TargetDataPitch", myTargets.at(i).GetPitch());
+      }
+    }
+
+    photon::PhotonTrackedTarget target = result.GetBestTarget();
+    
     units::meter_t range = photon::PhotonUtils::CalculateDistanceToTarget(
       CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
-      units::degree_t{result.GetBestTarget().GetPitch()});
+    units::degree_t{target.GetPitch()});
+  
+    frc::SmartDashboard::PutNumber("DistanceToTarget", range.value());
+
+    double yaw = target.GetYaw();
+    int targetID = target.GetFiducialId();
+
+    frc::SmartDashboard::PutNumberArray("Targets", FIDS);
+
+    frc::SmartDashboard::PutNumber("TargetID", targetID);
+    frc::SmartDashboard::PutNumber("TargetYaw", yaw);
 
   }
 
+  if (result.MultiTagResult().result.isPresent) {
+    wpi::SmallVector<int16_t, 32U> fieldToCamera = result.MultiTagResult().fiducialIdsUsed;
+    std::vector<double> temp;
+    temp.assign(fieldToCamera.begin(), fieldToCamera.end());
+    frc::SmartDashboard::PutNumberArray("MegaPoseID", temp);
 
+    frc::Transform3d multi = result.MultiTagResult().result.best;
 
-  RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
-  BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
-
-  blueDist = BlueDistVector[0];
-  redDist = RedDistVector[0];
-
-  apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
-
+    frc::SmartDashboard::PutNumber("MegaPoseRoll", (multi.Rotation().X().value() * (180/3.14159)));
+    frc::SmartDashboard::PutNumber("MegaPosePitch", (multi.Rotation().Y().value() * (180/3.14159)));
+    frc::SmartDashboard::PutNumber("MegaPoseYaw", (multi.Rotation().Z().value()  * (180/3.14159)));
+    frc::SmartDashboard::PutNumber("MegaPoseX", multi.X().value());
+    frc::SmartDashboard::PutNumber("MegaPoseY", multi.Y().value());
+    frc::SmartDashboard::PutNumber("MegaPoseZ", multi.Z().value());
+    // frc::SmartDashboard::PutNumber("MegaPoseTranslation", multi.Translation());
+  }
+  
+  
 
   // RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
   // BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
@@ -87,7 +133,8 @@ void StateMachine::Execute() {
     pickupNote = !pickupNote;
   }
 
-  if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/){
+  if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/)
+  {
       moveNote2Shoot = true;
   }
 
@@ -95,7 +142,8 @@ void StateMachine::Execute() {
       moveNote2Shoot = false;
   }
 
-  if(m_driverController->GetRawButtonPressed(6)){ 
+  if(m_driverController->GetRawButtonPressed(6))
+  { 
     warmUpShooter = !warmUpShooter;
   }
 
@@ -124,7 +172,8 @@ void StateMachine::Execute() {
     }
   }
   */
-  if(m_auxController->GetRawButtonPressed(4)){ 
+  if(m_auxController->GetRawButtonPressed(4))
+  { 
     if(placeInTrap == false){
       placeInTrap = true;
       placeInAmp = false;
@@ -133,17 +182,21 @@ void StateMachine::Execute() {
     }
   }
 
-  if(m_auxController->GetRawButtonPressed(8)){
+  if(m_auxController->GetRawButtonPressed(8))
+  {
 
   }
 
-  if(fabs(m_auxController->GetRightY()) > 0.15){
-  m_shooter->JoystickActuator(m_auxController->GetRightY());
+  if(fabs(m_auxController->GetRightY()) > 0.15)
+  {
+    m_shooter->JoystickActuator(m_auxController->GetRightY());
   }
+
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   // state machine
-  switch (state) {
+  switch (state)
+  {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
@@ -157,7 +210,8 @@ void StateMachine::Execute() {
 
     m_shooter->SetIntakePose();
 
-    if(pickupNote == true){
+    if(pickupNote == true)
+    {
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
@@ -188,7 +242,8 @@ void StateMachine::Execute() {
     m_arm->runArmWheels(-0.2);
     m_intake->spitOutIntake();
     
-    if(pov0 == false){
+    if(pov0 == false)
+    {
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
@@ -205,12 +260,14 @@ void StateMachine::Execute() {
     m_intake->runIntake(0.25);
     m_intake->Direction(0.25);
 
-    if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear()){
+    if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
+    {
       m_arm->runArmWheels(0.25);
       m_shooter->runMagazine(0.25);  //TODO test this function, might not have behaved correctly first test
     }
 
-    if(pickupNote == false){
+    if(pickupNote == false)
+    {
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
@@ -218,7 +275,8 @@ void StateMachine::Execute() {
     //   state = SPIT_OUT;
     //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     // }
-    else if(m_shooter->GetMagazineSensor()){
+    else if(m_shooter->GetMagazineSensor())
+    {
       state = BACKUP;
       pickupNote = false;
       m_intake->stopIntake();
@@ -240,12 +298,14 @@ void StateMachine::Execute() {
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
 
-    if(time<7){
+    if(time<7)
+    {
       m_shooter->runMagazine(-0.2);
       m_arm->runArmWheels(-0.2);
       m_intake->spitOutIntake();
     }
-    else{
+    else
+    {
       m_shooter->stopMagazine();
       m_arm->stopArmWheels();
       m_intake->stopIntake();
@@ -276,7 +336,8 @@ void StateMachine::Execute() {
       m_shooter->ApriltagShooterTheta(blueDist);
     }
 
-    if(warmUpShooter == true){
+    if(warmUpShooter == true)
+    {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
 
@@ -306,11 +367,14 @@ void StateMachine::Execute() {
     //start shooter motors
     m_shooter->SetShooter(1, -0.8);
 
-    if(warmUpShooter == false){
+    if(warmUpShooter == false)
+    {
       state = LOADED;
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
-    } else if(moveNote2Shoot == true){
+    } 
+    else if(moveNote2Shoot == true)
+    {
       state = SHOOT;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOT");
     }
@@ -331,7 +395,8 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
 
@@ -350,7 +415,8 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 90){
+    if(time >= 90)
+    {
       state = LOWER_ARM_EXTEND_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
       time = 0;
@@ -367,7 +433,8 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = UPPER_ARM_EXTEND_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to UPPER_ARM_EXTEND_INITIAL");
       time = 0;
@@ -385,7 +452,8 @@ void StateMachine::Execute() {
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       if(placeInTrap){
         state = ARM_TRAP;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_TRAP");
