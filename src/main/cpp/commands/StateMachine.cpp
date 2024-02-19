@@ -46,6 +46,20 @@ void StateMachine::Initialize()
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
+// Define Camera
+// Find out what we need to do to get strgest tag id
+// calculate camra tangent get camera dx and dy and get tan of that
+  photon::PhotonPipelineResult result = camera.GetLatestResult();
+  bool hasTarget = result.HasTargets();
+  if(result.HasTargets()){
+    units::meter_t range = photon::PhotonUtils::CalculateDistanceToTarget(
+      CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
+      units::degree_t{result.GetBestTarget().GetPitch()});
+
+  }
+
+
+
   RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
   BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
 
@@ -53,6 +67,15 @@ void StateMachine::Execute() {
   redDist = RedDistVector[0];
 
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
+
+
+  // RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
+  // BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
+
+  // blueDist = BlueDistVector[0];
+  // redDist = RedDistVector[0];
+
+  // apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
   m_shooter->accumulateError();
 
