@@ -37,6 +37,7 @@ void StateMachine::Initialize()
 
   if(m_shooter->GetMagazineSensor()){
     state = LOADED;
+    magEncoderPos = m_shooter->GetCurrMagEncoderVal();
   }
 
 }
@@ -58,22 +59,24 @@ void StateMachine::Execute() {
 
 
   // BUTTONS!!!
-  if(m_driverController->GetRawButtonPressed(5)){   // left bumper
+  if(m_driverController->GetRawButtonPressed(5))
+  { 
+    //TODO: trace code
     pickupNote = !pickupNote;
   }
 
-  if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/){
-      moveNote2Shoot = true;
-  }
-
-  else{
-      moveNote2Shoot = false;
-  }
-
-  if(m_driverController->GetRawButtonPressed(6)){   // right bumper
+  if(m_driverController->GetRawButtonPressed(6)){ 
     warmUpShooter = !warmUpShooter;
   }
 
+  if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/){
+    moveNote2Shoot = true;
+
+  } else{
+    moveNote2Shoot = false;
+  }
+
+  
   // if(m_driverController->GetRawButtonPressed(4)){
   //   huntingNote = !huntingNote;
   // }
@@ -89,21 +92,20 @@ void StateMachine::Execute() {
     pov0 = !pov0;
   }
 
-  if(m_auxController->GetRawButtonPressed(2)){    // button B
-
+/*
+  if(m_auxController->GetRawButtonPressed(2)){
     if(placeInAmp == false){
       placeInAmp = true;
       placeInTrap = false;
-
     } else {
       placeInAmp = false;
     }
   }
+  */
   if(m_auxController->GetRawButtonPressed(4)){ 
     if(placeInTrap == false){
       placeInTrap = true;
       placeInAmp = false;
-
     } else {
       placeInTrap = false;
     }
@@ -112,11 +114,13 @@ void StateMachine::Execute() {
   if(m_auxController->GetRawButtonPressed(8)){
 
   }
-  
+
   if(fabs(m_auxController->GetRightY()) > 0.15){
-  m_shooter->JoystickActuator(m_auxController->GetRightY());
+    m_shooter->JoystickActuator(m_auxController->GetRightY());
   }
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
+
+
 
   // state machine
   switch (state) {
@@ -124,15 +128,14 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
     m_arm->stopDrop();
-    m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
-
+    //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
+    //m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
     m_arm->StopWheels();
 
-    //m_shooter->SetIntakePose();
+    m_shooter->SetIntakePose();
 
     if(pickupNote == true){
       state = PICKUP;   
@@ -196,8 +199,11 @@ void StateMachine::Execute() {
     //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     // }
     else if(m_shooter->GetMagazineSensor()){
-      state = BACKUP;
+      state = LOADED;
       pickupNote = false;
+
+      magEncoderPos = m_shooter->GetCurrMagEncoderVal();
+
       m_intake->stopIntake();
       m_arm->StopWheels();
       m_shooter->stopMagazine();
@@ -217,18 +223,15 @@ void StateMachine::Execute() {
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
 
-    if(time<3){
+    if(time<7){
       m_shooter->runMagazine(-0.2);
       m_arm->runArmWheels(-0.2);
       m_intake->spitOutIntake();
     }
     else{
-      m_shooter->stopMagazine();
+      magEncoderPos = m_shooter->GetCurrMagEncoderVal();
       m_arm->stopArmWheels();
       m_intake->stopIntake();
-
-      m_shooter->ResetMagEncoder();
-
       time = 0;
       state = LOADED;
     }
@@ -239,12 +242,12 @@ void StateMachine::Execute() {
     
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
-    pickupNote = false;
+    //pickupNote = false;
 
     // turn running motors off
     m_intake->stopIntake();
     m_arm->StopWheels();
-    //m_shooter->stopMagazine();
+    m_shooter->holdMagazine(magEncoderPos);
     m_shooter->StopShooter();
 
     if(apriltagID == 3 || apriltagID == 4)
@@ -255,9 +258,6 @@ void StateMachine::Execute() {
     {
       m_shooter->ApriltagShooterTheta(blueDist);
     }
-
-    m_shooter->spinMag();
-    m_arm->FollowShooter(m_shooter->GetAngleError());
 
     if(warmUpShooter == true){
       state = SHOOTER_WARMUP;
@@ -289,16 +289,11 @@ void StateMachine::Execute() {
     //start shooter motors
     m_shooter->SetShooter(1, -0.8);
 
-    m_shooter->spinMag();
-
-    if(warmUpShooter == true){
-      state = SHOOTER_WARMUP;
-      frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
-
-    } 
+    m_shooter->holdMagazine(magEncoderPos);
 
     if(warmUpShooter == false){
       state = LOADED;
+      magEncoderPos = m_shooter->GetCurrMagEncoderVal();
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
     } else if(moveNote2Shoot == true){
@@ -325,8 +320,6 @@ void StateMachine::Execute() {
     if(time >= 60){
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
-
-      m_shooter->stopMagazine();
 
       time = 0;
       moveNote2Shoot = false;

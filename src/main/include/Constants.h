@@ -110,17 +110,16 @@ namespace AutoConstants {
 } 
 
 namespace DebugConstants {
-    constexpr bool debug = true; //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
 }  
 
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
-    constexpr double RestingAngle = 40; //also the low angle TODO will change for updated offfset
+    constexpr double RestingAngle = 32; //also the low angle. TODO will change for updated offfset
     constexpr double RaisedShooterAngle = 94;
     constexpr double EncoderOffSet = 0.03787;
-    // constexpr double ki = 0.001;
-    constexpr double ki = 0.0004;
-    constexpr double kp = 0.01;
+    constexpr double ki = 0.0004;   //0.001
+    constexpr double kp = 0.02;
 }
 
 namespace ArmConstants {
