@@ -86,7 +86,9 @@ class StateMachine
   bool moveNote2Shoot = false;    // move note into shooter
 
   bool placeInTrap = false;
-  bool placeInAmp = true;
+  bool placeInAmp = false;
+
+  bool startDrop = false;
 
   bool pov0 = false; // spit out note when button pov0 is pressed
 

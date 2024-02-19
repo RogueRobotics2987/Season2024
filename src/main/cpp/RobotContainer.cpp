@@ -57,9 +57,9 @@ RobotContainer::RobotContainer()
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
-      double safeX = Deadzone(m_driverController.GetLeftX());
-      double safeY =  Deadzone(m_driverController.GetLeftY());
-      double safeRot = Deadzone(m_driverController.GetRightX());
+      double safeX = DeadzoneCubed(m_driverController.GetLeftX());
+      double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
+      double safeRot = DeadzoneCubed(m_driverController.GetRightX());
 
 
       bool fieldOrientated;
@@ -319,7 +319,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "B_3_7")
   { 
-    m_drive.ResetOdometry(B_2_7Waypoints[0]);
+    m_drive.ResetOdometry(B_3_7Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, B_3_7Waypoints, B_3_7PointSpeed, B_3_7CruiseSpeed, false).ToPtr()
@@ -367,7 +367,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
     else if(chosenAuto == "R_1")
   { 
-    m_drive.ResetOdometry(B_2Waypoints[0]);
+    m_drive.ResetOdometry(R_1Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, R_1Waypoints, R_1PointSpeed, R_1CruiseSpeed, false).ToPtr()

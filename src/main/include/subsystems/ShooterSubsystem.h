@@ -47,6 +47,12 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void zeroIntergralVal();
   void accumulateError();
 
+  void spinMag();
+  void SetMagPos(double val);
+  void ResetMagEncoder();
+  double GetAngleError();
+  void FollowShooter();
+
 
  private:
   rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
@@ -57,6 +63,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
 
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  rev::SparkPIDController MagazinePID = MagazineMotor.GetPIDController();
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
 
   frc::DigitalInput MagazineSensor{3};
@@ -67,4 +75,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double angleTrim = 15;
   double accumulatedError = 0;
+
+  double shooterWheelsPos = 0.0;
 };
