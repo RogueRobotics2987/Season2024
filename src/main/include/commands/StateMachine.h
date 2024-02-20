@@ -56,7 +56,7 @@ class StateMachine
 
  private:
   //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
-  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, LOWER_ARM_EXTEND_INITIAL, 
+  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, LOWER_ARM_EXTEND_INITIAL, 
     UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
   intakeState state = EMPTY;
 
@@ -107,4 +107,6 @@ class StateMachine
   double targetData = 0;
 
   int timeDrop = 0;   //keep track of dropper iterations
+
+  double magEncoderPos = 0.0;
   };

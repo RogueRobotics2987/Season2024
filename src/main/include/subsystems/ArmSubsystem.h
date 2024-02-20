@@ -27,6 +27,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void runArmWheels(double speed);
   void stopArmWheels();
+  void FollowShooter(double error);
 
   double getLowerEncoderPos();
   double getUpperEncoderPos();
@@ -58,8 +59,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   double kiSumLowerArm = 0.0;
   double kiSumUpperArm = 0.0;
 
-  // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
-  // armState state = INITIAL;
   // frc::XboxController* m_Xbox = nullptr;
   // bool HasNote = false;
 

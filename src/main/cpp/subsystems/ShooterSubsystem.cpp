@@ -6,10 +6,14 @@
 
 ShooterSubsystem::ShooterSubsystem() {
     // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
+    //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
+    magPIDController.SetP(magKp);
+
 }
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
+    //tempKp = frc::SmartDashboard::GetNumber("shooter actuator kp", tempKp);
 
     double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
 
@@ -35,6 +39,7 @@ void ShooterSubsystem::Periodic() {
     double angleOutput = ((angleError * ShooterConstants::kp)) + accumulatedError;
 
     ShooterActuator.Set(-angleOutput); 
+    //MagazineMotor.Set(magMotorSpeed);
 
 }
 
@@ -93,6 +98,17 @@ void ShooterSubsystem::runMagazine(double speed){
 
 void ShooterSubsystem::stopMagazine(){
     MagazineMotor.Set(0.0);
+}
+
+void ShooterSubsystem::holdMagazine(double pos){
+    magPIDController.SetReference(pos, rev::ControlType::kPosition);
+
+}
+
+double ShooterSubsystem::GetCurrMagEncoderVal(){
+    double currEncoderVal = MagazineEncoder.GetPosition();
+
+    return currEncoderVal;
 }
 
 void ShooterSubsystem::driveActuator(double speed){
@@ -159,4 +175,3 @@ double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double source
 
   return a;
 }
-
