@@ -13,7 +13,7 @@ void ShooterSubsystem::Periodic() {
 
     double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
 
-    if(DebugConstants::debug == true)
+    if(DebugConstants::debugShooter == true)
     {
         frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());

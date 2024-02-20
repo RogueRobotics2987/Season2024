@@ -110,7 +110,17 @@ namespace AutoConstants {
 } 
 
 namespace DebugConstants {
-    constexpr bool debug = false; //change this to true to debug and put most things to the smartdashboard
+    //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debugShooter = false; 
+    constexpr bool debugArm = false; 
+    constexpr bool debugClimber = false; 
+    constexpr bool debugDrive = false; 
+    constexpr bool debugIntake = false; 
+    constexpr bool debugLimelight = false; 
+    constexpr bool debugSwerveModules = false; 
+    constexpr bool debugStateMachine = false; 
+    constexpr bool debugDriveStateMachine = false; 
+    constexpr bool debugAuto = false; 
 }  
 
 namespace ShooterConstants {

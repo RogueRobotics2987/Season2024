@@ -91,7 +91,7 @@ void FollowWaypoints::Execute()
   deltaY = fabs((double)lastPose.Y() - (double)currentPose.Y());
   distanceTraveled = distanceTraveled + hypot(deltaX, deltaY);
 
-  if(DebugConstants::debug == true)
+  if(DebugConstants::debugAuto == true)
   {
     frc::SmartDashboard::PutNumber("Hypot(X,Y)", hypot(deltaX, deltaY));
   }
@@ -109,7 +109,7 @@ void FollowWaypoints::Execute()
       double x = (currentDistance-distanceTraveled) / 0.8;
       robotSpeed = 1 * x * (cruiseSpeed - pointSpeed) + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
 
-      if(DebugConstants::debug == true)
+      if(DebugConstants::debugAuto == true)
       {
         frc::SmartDashboard::PutNumber("Xvalue2", x);
       }
@@ -119,7 +119,7 @@ void FollowWaypoints::Execute()
       double x = distanceTraveled / 0.5;
       robotSpeed = 1 * x * (cruiseSpeed - lastPointSpeed) + lastPointSpeed + 0.1_mps; //0-100% of max speed aka Z
 
-      if(DebugConstants::debug == true)
+      if(DebugConstants::debugAuto == true)
       {
         frc::SmartDashboard::PutNumber("Xvalue1", x);
       }
@@ -167,7 +167,7 @@ void FollowWaypoints::Execute()
 
   lastPose = currentPose;
   
-  if(DebugConstants::debug == true)
+  if(DebugConstants::debugAuto == true)
   {
     frc::SmartDashboard::PutNumber("DesiredPoseX", (double)desiredPose.X());
     frc::SmartDashboard::PutNumber("DesiredPoseY", (double)desiredPose.Y());

@@ -9,7 +9,7 @@ IntakeSubsystem::IntakeSubsystem(){}
 // This method will be called once per scheduler run
 void IntakeSubsystem::Periodic()
 {
-    if(DebugConstants::debug == true){
+    if(DebugConstants::debugIntake == true){
         frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
         frc::SmartDashboard::PutBoolean("ColorBack", intakeColorSensorRear.Get());
     }
