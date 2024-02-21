@@ -10,6 +10,7 @@
 #include <Constants.h> 
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
+#include <frc/DutyCycleEncoder.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -20,6 +21,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
+  void setSpeed(double speed);
   void StopWheels();
 
   void dropNote();
@@ -45,8 +47,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
-  rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
+  // rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
   rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
+  frc::DutyCycleEncoder m_LowerArmEncoder{7};
 
 
   double kpLowerArm = 0.0111;  //TODO: test

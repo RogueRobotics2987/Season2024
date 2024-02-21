@@ -69,7 +69,7 @@ void ArmSubsystem::Periodic() {
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){
     //frc::SmartDashboard::PutString("state function: ", "setLowerArmAngle");
 
-    double currAngle = m_LowerArmEncoder.GetPosition();    //TODO: double check if it gets angle
+    double currAngle = m_LowerArmEncoder.GetAbsolutePosition();    //TODO: double check if it gets angle
 
     double error = desiredAngle - currAngle;
     kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
@@ -92,6 +92,10 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     UpperArm.Set(motorOutput);
 }
 
+void ArmSubsystem::setSpeed(double speed){
+    LowerArm.Set(speed);
+}
+
 void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
     //frc::SmartDashboard::PutString("state function: ", "dropNote");
 
@@ -105,7 +109,7 @@ void ArmSubsystem::stopDrop(){      //stop armWheels
 }
 
 double ArmSubsystem::getLowerEncoderPos(){
-    return m_LowerArmEncoder.GetPosition();
+    return m_LowerArmEncoder.GetAbsolutePosition();
 }
 
 double ArmSubsystem::getUpperEncoderPos(){
