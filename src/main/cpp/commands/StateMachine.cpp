@@ -137,7 +137,7 @@ void StateMachine::Execute() {
     m_shooter->StopShooter();
     m_arm->StopWheels();
 
-    m_shooter->SetIntakePose();
+    m_shooter->SetIntakePose(); //temporarily turned off to test
 
     if(pickupNote == true){
       state = PICKUP;   

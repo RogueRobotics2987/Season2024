@@ -34,8 +34,11 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double getLowerEncoderPos();
   double getUpperEncoderPos();
+  
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
   bool compareHasNote(bool other);
+
 
   // void defaultArmPos();
 

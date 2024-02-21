@@ -13,37 +13,60 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
+
+    
+
+    if(m_UpperDesired > ArmConstants::UpperArmSoftLimitHigh){
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitHigh;
+    }
+    else if(m_UpperDesired < ArmConstants::UpperArmSoftLimitLow){
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitLow;
+    }
+
+    if(m_LowerDesired > ArmConstants::LowerArmSoftLimitHigh){
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
+    }
+    else if(m_LowerDesired < ArmConstants::LowerArmSoftLimitLow){
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
+    }
+
+    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * -1); //TEST THAT THE POLARITY OF THIS STATEMENT IS CORRECT
+    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
 }
 
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){
     //frc::SmartDashboard::PutString("state function: ", "setLowerArmAngle");
 
-    double currAngle = m_LowerArmEncoder.GetAbsolutePosition();    //TODO: double check if it gets angle
+    m_LowerDesired = desiredAngle;
 
-    double error = desiredAngle - currAngle;
-    kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
+    // double currAngle = m_LowerArmEncoder.GetAbsolutePosition();    //TODO: double check if it gets angle
 
-    double motorOutput = error * kpLowerArm + kiSumLowerArm;
+    // double error = desiredAngle - currAngle;
+    // kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
 
-    LowerArm.Set(motorOutput);
+    // double motorOutput = error * kpLowerArm + kiSumLowerArm;
+
+    // LowerArm.Set(motorOutput);
 }
 
 void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     //frc::SmartDashboard::PutString("state function: ", "setUpperArmAngle");
 
-    double currAngle = m_UpperArmEncoder.GetAbsolutePosition();    //same as above 
+    m_UpperDesired = desiredAngle;
 
-    double error = desiredAngle - currAngle;
-    kiSumUpperArm = kiSumUpperArm + (kiUpperArm * error);
+    // double currAngle = m_UpperArmEncoder.GetAbsolutePosition();    //same as above 
 
-    double motorOutput = error * kpUpperArm + kiSumUpperArm;
+    // double error = desiredAngle - currAngle;
+    // kiSumUpperArm = kiSumUpperArm + (kiUpperArm * error);
 
-    UpperArm.Set(motorOutput);
+    // double motorOutput = error * kpUpperArm + kiSumUpperArm;
+
+    // UpperArm.Set(motorOutput);
 }
 
 void ArmSubsystem::setSpeed(double speed){
-    LowerArm.Set(speed);
+    UpperArm.Set(speed);
 }
 
 void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
@@ -115,4 +138,23 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
     Pose *= 132;
 
     return Pose;
+}
+
+double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
 }

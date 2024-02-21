@@ -101,7 +101,7 @@ void ShooterSubsystem::setRestingActuatorPosition(){
 }
 
 void ShooterSubsystem::SetIntakePose(){
-    m_DesiredAngle = 30;
+    m_DesiredAngle = 90;
 }
 
 void ShooterSubsystem::ApriltagShooterTheta(double dist){
