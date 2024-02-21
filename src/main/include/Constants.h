@@ -137,7 +137,11 @@ namespace ArmConstants {
     
     // constexpr double LowerDropAngle = 20;
     // constexpr double UpperDropAngle = 20;
-    
+
+    /*TODO find angles that are actually correct. absolute encoder values are nowhere near correct right now.
+        check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
+        if you need help talk to kaden before he leaves on wednesday 2/21
+    */
     constexpr double UpperFirstRetractionAngle = 0;
     constexpr double LowerFirstRetractionAngle = 0;
     

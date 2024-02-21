@@ -69,7 +69,7 @@ void ArmSubsystem::Periodic() {
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){
     //frc::SmartDashboard::PutString("state function: ", "setLowerArmAngle");
 
-    double currAngle = m_LowerArmEncoder.GetPosition();    //TODO: double check if it gets angle
+    double currAngle = m_LowerArmEncoder.GetPositionOffset();    //TODO: double check if it gets angle
 
     double error = desiredAngle - currAngle;
     kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
@@ -104,9 +104,9 @@ void ArmSubsystem::stopDrop(){      //stop armWheels
 
 }
 
-double ArmSubsystem::getLowerEncoderPos(){
-    return m_LowerArmEncoder.GetPosition();
-}
+// double ArmSubsystem::getLowerEncoderPos(){
+//     return m_LowerArmEncoder.GetPosition();
+// }
 
 double ArmSubsystem::getUpperEncoderPos(){
     return m_UpperArmEncoder.GetPosition();
@@ -129,4 +129,18 @@ void ArmSubsystem::stopArmWheels(){
 
 void ArmSubsystem::StopWheels(){
     ArmWheels.Set(0.0);
+}
+
+double ArmSubsystem::GetOffSetEncoderValue(){
+    double Pose = 0;
+    Pose = m_LowerArmEncoder.GetAbsolutePosition() - .192;
+
+    if(Pose < 0){
+        Pose += 1;
+    }
+
+    Pose = fabs(Pose - 1);
+   // Pose *= 132;
+
+    return Pose;
 }

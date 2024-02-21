@@ -51,6 +51,8 @@ void StateMachine::Execute() {
   blueDist = BlueDistVector[0];
   redDist = RedDistVector[0];
 
+  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->GetOffSetEncoderValue());
+
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
 
