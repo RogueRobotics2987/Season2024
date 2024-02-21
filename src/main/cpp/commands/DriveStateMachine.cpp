@@ -6,12 +6,14 @@
 
 DriveStateMachine::DriveStateMachine() {}
   
-DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox) {
+DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &message) {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drive = &drive;
   AddRequirements(m_drive);
   m_limelight = &limelight;
   AddRequirements(m_limelight);
+  m_messager = &message;
+
 
   m_driverController = &driveXbox;
   m_auxController = &auxXbox;
@@ -78,6 +80,11 @@ void DriveStateMachine::Execute() {
     case NOTE_FOLLOW:
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
 
+      if(m_messager->GetMessage().compare("Pickup") != 0)
+      {
+        drive_state = NONE;
+      }
+
       if(txNote > 7 || txNote < -7)
       {
         rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
@@ -99,6 +106,12 @@ void DriveStateMachine::Execute() {
 
     case APRIL_FOLLOW:
       txApril = m_limelight->GetAprilTagtx() - 5;
+
+    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))
+      {
+        drive_state = NONE;
+      }
+
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       // if(tx > 7 || tx < -7){
       rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);

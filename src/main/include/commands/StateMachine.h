@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "../cpp/CommandMessenger.cpp"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
@@ -37,7 +38,7 @@ class StateMachine
  public:
   StateMachine();
   StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox);// LimelightSubsystem &limelight, 
+               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);// LimelightSubsystem &limelight, 
               // DriveSubsystem &drivetrain);
 
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
@@ -73,6 +74,7 @@ class StateMachine
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
+  CommandMessenger* m_messager;
  // LimelightSubsystem* m_limelight = nullptr;
   // DriveSubsystem* m_drivetrain = nullptr;
 
@@ -103,8 +105,12 @@ class StateMachine
   float Deadzone(float x);
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
-  std::vector<double> FIDS;
+  std::vector<double> targetIDs;
+  std::vector<photon::PhotonTrackedTarget> myTargets;
   double targetData = 0;
+  photon::PhotonTrackedTarget filteredTarget;
+  int filteredTargetID = -1;
+  units::meter_t filteredRange;
 
   int timeDrop = 0;   //keep track of dropper iterations
 

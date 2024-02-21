@@ -8,7 +8,7 @@ StateMachine::StateMachine() {}
 
 StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
                            IntakeSubsystem &intake, ShooterSubsystem &shooter, 
-                           frc::XboxController &driveXbox, frc::XboxController &auxXbox)//LimelightSubsystem &limelight, DriveSubsystem &drivetrain)
+                           frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &message)//LimelightSubsystem &limelight, DriveSubsystem &drivetrain)
 {
   m_arm = &arm;
   AddRequirements({m_arm});
@@ -20,6 +20,7 @@ StateMachine::StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSens
   AddRequirements({m_intake});
   m_shooter = &shooter;
   AddRequirements({m_shooter});
+  m_messager = &message;
   // m_limelight = &limelight;
   // AddRequirements({m_limelight});
   // m_drivetrain = &drivetrain;
@@ -48,7 +49,7 @@ void StateMachine::Initialize()
 void StateMachine::Execute()
 {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
-  FIDS.clear();
+  targetIDs.clear();
 
 // Define Camera
 // Find out what we need to do to get strgest tag id
@@ -63,19 +64,24 @@ void StateMachine::Execute()
   {
     //TODO clean up variable names to make them more understandable in this if statement
     std::span<const photon::PhotonTrackedTarget> tempTargets = result.GetTargets();
-    std::vector<photon::PhotonTrackedTarget> myTargets;
     myTargets.assign(tempTargets.begin(), tempTargets.end());
-    myTargets.front().GetYaw();
 
     for(unsigned int i = 0; i < myTargets.size(); i++)
     {
-      FIDS.emplace_back(myTargets.at(i).GetFiducialId());
+      targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
 
       if(myTargets.at(i).GetFiducialId() == 4)
       {
+        filteredTarget = myTargets.at(i);
+        filteredTargetID = filteredTarget.GetFiducialId();
         //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
-        frc::SmartDashboard::PutNumber("TargetDataYaw", myTargets.at(i).GetYaw());
-        frc::SmartDashboard::PutNumber("TargetDataPitch", myTargets.at(i).GetPitch());
+        frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
+        frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
+
+        units::meter_t filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
+          CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
+        units::degree_t{filteredTarget.GetPitch()});
+        frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
       }
     }
 
@@ -90,7 +96,7 @@ void StateMachine::Execute()
     double yaw = target.GetYaw();
     int targetID = target.GetFiducialId();
 
-    frc::SmartDashboard::PutNumberArray("Targets", FIDS);
+    frc::SmartDashboard::PutNumberArray("Targets", targetIDs);
 
     frc::SmartDashboard::PutNumber("TargetID", targetID);
     frc::SmartDashboard::PutNumber("TargetYaw", yaw);
@@ -125,6 +131,7 @@ void StateMachine::Execute()
   // apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
   m_shooter->accumulateError();
+  m_shooter->SetShooterAngle();
 
 
   // BUTTONS!!!
@@ -202,6 +209,7 @@ void StateMachine::Execute()
   {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
+    m_messager->setMessage("Empty");
     // stop all motors
     m_arm->stopDrop();
     //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
@@ -240,6 +248,8 @@ void StateMachine::Execute()
 
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
+      m_messager->setMessage("SpitOut");
+
 
     m_shooter->runMagazine(-0.2);
     m_arm->runArmWheels(-0.2);
@@ -256,6 +266,7 @@ void StateMachine::Execute()
   case PICKUP:    // start intake and magazine
     // m_shooter->driveActuator(m_auxController->GetRightY());
     frc::SmartDashboard::PutString("state: ", "PICKUP");
+    m_messager->setMessage("Pickup");
 
     m_shooter->SetIntakePose();
     
@@ -303,6 +314,8 @@ void StateMachine::Execute()
 
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
+    m_messager->setMessage("Backup");
+
 
     if(time<7)
     {
@@ -325,6 +338,8 @@ void StateMachine::Execute()
     
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
+    m_messager->setMessage("Loaded");
+
     //pickupNote = false;
 
     // turn running motors off
@@ -333,13 +348,9 @@ void StateMachine::Execute()
     m_shooter->holdMagazine(magEncoderPos);
     m_shooter->StopShooter();
 
-    if(apriltagID == 3 || apriltagID == 4)
+    if(filteredTargetID == 7 || filteredTargetID == 4)
     {
-      m_shooter->ApriltagShooterTheta(redDist);
-    }
-    else if(apriltagID == 7 || apriltagID == 8)
-    {
-      m_shooter->ApriltagShooterTheta(blueDist);
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
     if(warmUpShooter == true)
@@ -369,6 +380,8 @@ void StateMachine::Execute()
 
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
+    m_messager->setMessage("ShooterWarmup");
+
 
     //start shooter motors
     m_shooter->SetShooter(1, -0.8);
@@ -390,6 +403,8 @@ void StateMachine::Execute()
 
   case SHOOT:
     frc::SmartDashboard::PutString("state: ", "SHOOT");
+    m_messager->setMessage("Shoot");
+
     warmUpShooter = false;
 
     //turn on mag motors
@@ -417,6 +432,8 @@ void StateMachine::Execute()
 
   case RAISE_SHOOTER:
     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+    m_messager->setMessage("RaiseShooter");
+
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
@@ -433,6 +450,8 @@ void StateMachine::Execute()
 
   case LOWER_ARM_EXTEND_INITIAL:
     frc::SmartDashboard::PutString("state: ", "LOWER_ARM_EXTEND_INITAL");
+    m_messager->setMessage("LowerArmExtendInitial");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
@@ -452,6 +471,8 @@ void StateMachine::Execute()
 
   case UPPER_ARM_EXTEND_INITIAL:
     frc::SmartDashboard::PutString("state: ", "UPPER_ARM_EXTEND_INITAL");
+    m_messager->setMessage("UpperArmExtendInitial");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperExtentionAngle);
@@ -481,6 +502,8 @@ void StateMachine::Execute()
 
   case ARM_TRAP:
     frc::SmartDashboard::PutString("state: ", "ARM_TRAP");
+    m_messager->setMessage("AmpTrap");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerTrapExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
@@ -500,6 +523,8 @@ void StateMachine::Execute()
 
   case ARM_AMP:
     frc::SmartDashboard::PutString("state: ", "ARM_AMP");
+    m_messager->setMessage("ArmAmp");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerAmpExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperAmpExtentionAngle);
@@ -519,6 +544,8 @@ void StateMachine::Execute()
 
   case DROP:
     frc::SmartDashboard::PutString("state: ", "DROP");
+    m_messager->setMessage("Drop");
+
 
     m_arm->dropNote();
     //switch states when timer has exceded 1.0 seconds
@@ -536,6 +563,8 @@ void StateMachine::Execute()
 
   case ARM_RETRACT_INITIAL:
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_INITAL");
+    m_messager->setMessage("ArmRetractInital");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
@@ -554,6 +583,8 @@ void StateMachine::Execute()
 
   case ARM_RETRACT_FINAL:
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_FINAL");
+    m_messager->setMessage("ArmRetractFinal");
+
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
@@ -572,6 +603,8 @@ void StateMachine::Execute()
   
   case DROP_SHOOTER:
     frc::SmartDashboard::PutString("state: ", "DROP_SHOOTER");
+    m_messager->setMessage("DropShooter");
+
 
     m_shooter->SetActuator(ShooterConstants::RestingAngle);
     // if(m_Xbox->getr)

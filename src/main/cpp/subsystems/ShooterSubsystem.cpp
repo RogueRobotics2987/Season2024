@@ -8,14 +8,27 @@ ShooterSubsystem::ShooterSubsystem() {
     // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
     //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
     magPIDController.SetP(magKp);
-
+    LeftShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    RightShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    LeftShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    RightShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    LeftShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    RightShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    LeftShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    RightShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    LeftShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    RightShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
 }
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
     //tempKp = frc::SmartDashboard::GetNumber("shooter actuator kp", tempKp);
 
-    double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
 
     if(DebugConstants::debugShooter == true)
     {
@@ -26,20 +39,6 @@ void ShooterSubsystem::Periodic() {
         frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
         // m_DesiredAngle = frc::SmartDashboard::GetNumber("SetAngle", m_DesiredAngle);
     }
-
-    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle)
-    {
-        m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
-    }
-    else if(m_DesiredAngle <= ShooterConstants::RestingAngle)
-    {
-        m_DesiredAngle = ShooterConstants::RestingAngle;
-    }
-
-    double angleOutput = ((angleError * ShooterConstants::kp)) + accumulatedError;
-
-    ShooterActuator.Set(-angleOutput); 
-    //MagazineMotor.Set(magMotorSpeed);
 
 }
 
@@ -132,7 +131,8 @@ void ShooterSubsystem::SetIntakePose(){
 }
 
 void ShooterSubsystem::ApriltagShooterTheta(double dist){
-    m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
+    // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
+    m_DesiredAngle = 86.51 * exp(-0.316 * dist);
 }
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
@@ -174,4 +174,23 @@ double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double source
   }
 
   return a;
+}
+
+void ShooterSubsystem::SetShooterAngle(){
+
+    double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+
+    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle)
+    {
+        m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
+    }
+    else if(m_DesiredAngle <= ShooterConstants::RestingAngle)
+    {
+        m_DesiredAngle = ShooterConstants::RestingAngle;
+    }
+
+    double angleOutput = ((angleError * ShooterConstants::kp)) + accumulatedError;
+
+    ShooterActuator.Set(-angleOutput); 
+    //MagazineMotor.Set(magMotorSpeed);
 }

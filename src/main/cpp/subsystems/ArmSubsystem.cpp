@@ -5,13 +5,22 @@
 #include "subsystems/ArmSubsystem.h"
 
 ArmSubsystem::ArmSubsystem()
-{}
+{
+    ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500); 
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+}
 
 // This method will be called once per scheduler run
-void ArmSubsystem::Periodic() {
-    ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-    
-}
+void ArmSubsystem::Periodic() {}
 
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle){

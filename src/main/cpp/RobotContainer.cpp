@@ -152,7 +152,8 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       m_intake,
       m_shooter, 
       m_driverController,
-      m_auxController
+      m_auxController,
+      driveShooterMessager
       // m_limelight,
       // m_drive
     ).ToPtr();

@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include "../cpp/CommandMessenger.cpp"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "networktables/NetworkTableInstance.inc"
@@ -25,7 +26,7 @@ class DriveStateMachine
     : public frc2::CommandHelper<frc2::Command, DriveStateMachine> {
  public:
   DriveStateMachine();
-  DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox);
+  DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);
 
   void Initialize() override;
 
@@ -43,6 +44,7 @@ class DriveStateMachine
 
   DriveSubsystem* m_drive;
   LimelightSubsystem* m_limelight;
+  CommandMessenger* m_messager;
 
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;

@@ -15,6 +15,7 @@
 #include <frc/DutyCycleEncoder.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <math.h>
 
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:
@@ -55,6 +56,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void AngleTrimAdjust(bool buttonUp, bool buttonDown);
   void zeroIntergralVal();
   void accumulateError();
+  void SetShooterAngle();
 
 
  private:

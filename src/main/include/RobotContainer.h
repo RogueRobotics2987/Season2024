@@ -24,6 +24,7 @@
 #include <string>
 
 #include "subsystems/LimelightSubsystem.h"
+#include "../cpp/CommandMessenger.cpp"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
@@ -77,6 +78,8 @@ class RobotContainer
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
+
+    CommandMessenger driveShooterMessager;
 
     //Blue auto Paths
 
