@@ -19,7 +19,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
  public:
   ArmSubsystem();
 
-  double GetOffSetEncoderValue();
+  double GetOffSetEncoderValueLower();
+  double GetOffSetEncoderValueUpper();
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
   void setSpeed(double speed);
@@ -49,7 +50,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
   // rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
-  rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
+  frc::DutyCycleEncoder m_UpperArmEncoder{6};  //placeholder, TODO: test
   frc::DutyCycleEncoder m_LowerArmEncoder{7};
 
 
@@ -61,6 +62,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double kiSumLowerArm = 0.0;
   double kiSumUpperArm = 0.0;
+
+  double m_LowerDesired = 0;
+  double m_UpperDesired = 0;
 
   // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
   // armState state = INITIAL;

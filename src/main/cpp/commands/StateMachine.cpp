@@ -52,7 +52,7 @@ void StateMachine::Execute() {
   blueDist = BlueDistVector[0];
   redDist = RedDistVector[0];
 
-  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->GetOffSetEncoderValue());
+  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->GetOffSetEncoderValueLower());
 
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
@@ -130,8 +130,8 @@ void StateMachine::Execute() {
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
     m_arm->stopDrop();
-    m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
+    // m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
@@ -444,8 +444,8 @@ void StateMachine::Execute() {
   case ARM_RETRACT_INITIAL:
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_INITAL");
 
-    m_arm->setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
+    // m_arm->setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
@@ -462,8 +462,8 @@ void StateMachine::Execute() {
   case ARM_RETRACT_FINAL:
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_FINAL");
 
-    m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
+    // m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;

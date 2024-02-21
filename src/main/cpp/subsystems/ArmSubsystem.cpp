@@ -9,60 +9,10 @@ ArmSubsystem::ArmSubsystem()
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {
-    // switch (state) {
-        // case INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerInitalAngle);
-        //     setUpperArmAngle(ArmConstants::UpperInitalAngle);
-        //     // if(m_Xbox->getr)
-        //     state = LOWER_ARM_EXTEND_INITAL;
-
-        //     break;
-        
-        // case LOWER_ARM_EXTEND_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
-        //     HasNote = true;
-
-        //     break;
-
-        // case UPPER_ARM_EXTEND_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperExtentionAngle);
-
-        //     break;
-
-        // case ARM_FINAL:
-        //     setLowerArmAngle(ArmConstants::LowerFinalExtentionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
-
-        //     break;
-
-        // case DROP:
-        //     setLowerArmAngle(ArmConstants::LowerDropAngle);
-        //     setUpperArmAngle(ArmConstants::UpperDropAngle);
-        //     dropNote();
-        //     HasNote = false;
-
-        //     break;
-
-        // case ARM_RETRACT_INITAL:
-        //     setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
-
-        //     break;
-
-        // case ARM_RETRACT_FINAL:
-        //     setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-        //     setUpperArmAngle(ArmConstants::UpperFinalExtentionAngle);
-
-        //     break;
-
-    //     default:
-    //     state = INITAL;
-    //     break;
-
-
-    // }
+    frc::SmartDashboard::PutNumber("LowerArmEncoderValue", m_LowerArmEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
+    frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
+    frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
 }
 
 
@@ -82,7 +32,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle){
 void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     //frc::SmartDashboard::PutString("state function: ", "setUpperArmAngle");
 
-    double currAngle = m_UpperArmEncoder.GetPosition();    //same as above 
+    double currAngle = m_UpperArmEncoder.GetAbsolutePosition();    //same as above 
 
     double error = desiredAngle - currAngle;
     kiSumUpperArm = kiSumUpperArm + (kiUpperArm * error);
@@ -113,13 +63,14 @@ double ArmSubsystem::getLowerEncoderPos(){
 }
 
 double ArmSubsystem::getUpperEncoderPos(){
-    return m_UpperArmEncoder.GetPosition();
+    return m_UpperArmEncoder.GetAbsolutePosition();
 }
 
 void ArmSubsystem::runArmWheels(double speed){
    ArmWheels.Set(-speed);
 }
-void ArmSubsystem::stopArmWheels(){
+void ArmSubsystem::stopArmWheels()
+{
     ArmWheels.Set(0.0);
 }
 // bool ArmSubsystem::compareHasNote(bool Other){
@@ -131,20 +82,37 @@ void ArmSubsystem::stopArmWheels(){
 //     }
 // }
 
-void ArmSubsystem::StopWheels(){
+void ArmSubsystem::StopWheels()
+{
     ArmWheels.Set(0.0);
 }
 
-double ArmSubsystem::GetOffSetEncoderValue(){
+double ArmSubsystem::GetOffSetEncoderValueLower()
+{
     double Pose = 0;
-    Pose = m_LowerArmEncoder.GetAbsolutePosition() - .192;
+    Pose = m_LowerArmEncoder.GetAbsolutePosition() - 0.20;
 
     if(Pose < 0){
         Pose += 1;
     }
 
     Pose = fabs(Pose - 1);
-   // Pose *= 132;
+    Pose *= 132;
+
+    return Pose;
+}
+
+double ArmSubsystem::GetOffSetEncoderValueUpper()
+{
+    double Pose = 0;
+    Pose = m_UpperArmEncoder.GetAbsolutePosition() + .48;
+
+    if(Pose < 0){
+        Pose += 1;
+    }
+
+    Pose = fabs(Pose - 1);
+    Pose *= 132;
 
     return Pose;
 }

@@ -142,10 +142,10 @@ namespace ArmConstants {
         check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
         if you need help talk to kaden before he leaves on wednesday 2/21
     */
-    constexpr double UpperFirstRetractionAngle = 0;
-    constexpr double LowerFirstRetractionAngle = 0;
+    constexpr double UpperArmSoftLimitLow = 2;
+    constexpr double LowerArmSoftLimitLow = 1;
     
-    constexpr double LowerFullRetractedAngle = 0;
-    constexpr double UpperFullRetractedAngle = 0;
+    constexpr double UpperArmSoftLimitHigh = 67;
+    constexpr double LowerArmSoftLimitHigh = 41;
 
 }
