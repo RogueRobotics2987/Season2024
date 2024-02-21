@@ -14,7 +14,7 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
 
-    
+    frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
 
     if(m_UpperDesired > ArmConstants::UpperArmSoftLimitHigh){
         m_UpperDesired = ArmConstants::UpperArmSoftLimitHigh;
@@ -30,7 +30,9 @@ void ArmSubsystem::Periodic() {
         m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
     }
 
-    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * -1); //TEST THAT THE POLARITY OF THIS STATEMENT IS CORRECT
+    frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
+
+    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // tested
     UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
 }
 
@@ -65,21 +67,22 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle){
     // UpperArm.Set(motorOutput);
 }
 
-void ArmSubsystem::setSpeed(double speed){
-    UpperArm.Set(speed);
+void ArmSubsystem::setVoltage(double speed){ 
+    LowerArm.Set(speed);
 }
 
-void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
-    //frc::SmartDashboard::PutString("state function: ", "dropNote");
+// void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
+//     //frc::SmartDashboard::PutString("state function: ", "dropNote");
 
-    //double lowArmAngle = m_LowerArmEncoder.GetPosition();
+//     //double lowArmAngle = m_LowerArmEncoder.GetPosition();
 
-    //ArmWheels.Set(0.5);
-}
-void ArmSubsystem::stopDrop(){      //stop armWheels
-    //frc::SmartDashboard::PutString("state function: ", "stopDrop");
+//     //ArmWheels.Set(0.5);
+// }
 
-}
+// void ArmSubsystem::stopDrop(){      //stop armWheels
+//     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
+
+// }
 
 double ArmSubsystem::getLowerEncoderPos(){
     return m_LowerArmEncoder.GetAbsolutePosition();
@@ -105,10 +108,10 @@ void ArmSubsystem::stopArmWheels()
 //     }
 // }
 
-void ArmSubsystem::StopWheels()
-{
-    ArmWheels.Set(0.0);
-}
+// void ArmSubsystem::StopWheels()
+// {
+//     ArmWheels.Set(0.0);
+// }
 
 double ArmSubsystem::GetOffSetEncoderValueLower()
 {

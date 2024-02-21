@@ -21,13 +21,16 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double GetOffSetEncoderValueLower();
   double GetOffSetEncoderValueUpper();
+  
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
-  void setSpeed(double speed);
-  void StopWheels();
 
-  void dropNote();
-  void stopDrop();
+  void setVoltage(double speed);
+
+  //void StopWheels();
+
+  //void dropNote();
+  //void stopDrop();
 
   void runArmWheels(double speed);
   void stopArmWheels();

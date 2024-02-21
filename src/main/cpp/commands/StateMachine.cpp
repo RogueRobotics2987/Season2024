@@ -56,13 +56,17 @@ void StateMachine::Execute() {
 
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
+  frc::SmartDashboard::PutNumber("angle test value", angleTest);
 
   // BUTTONS!!!
   if(m_driverController->GetRawButton(1)){
-    m_arm->setSpeed(0.3);
+
+    m_arm->setLowerArmAngle(angleTest);
   }
   else{
-    m_arm->setSpeed(0.0);
+
+    m_arm->setLowerArmAngle(0);
+
   }
 
   if(m_driverController->GetRawButtonPressed(5))
@@ -129,13 +133,13 @@ void StateMachine::Execute() {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
-    m_arm->stopDrop();
+    //m_arm->stopDrop();
     // m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
-    m_arm->StopWheels();
+    m_arm->stopArmWheels();
 
     m_shooter->SetIntakePose(); //temporarily turned off to test
 
@@ -204,7 +208,7 @@ void StateMachine::Execute() {
       state = BACKUP;
       pickupNote = false;
       m_intake->stopIntake();
-      m_arm->StopWheels();
+      m_arm->stopArmWheels();
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
@@ -245,7 +249,7 @@ void StateMachine::Execute() {
 
     // turn running motors off
     m_intake->stopIntake();
-    m_arm->StopWheels();
+    m_arm->stopArmWheels();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
 
@@ -427,7 +431,8 @@ void StateMachine::Execute() {
   case DROP:
     frc::SmartDashboard::PutString("state: ", "DROP");
 
-    m_arm->dropNote();
+    //m_arm->dropNote();
+    m_arm->runArmWheels(0.5); //temp speed value
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
