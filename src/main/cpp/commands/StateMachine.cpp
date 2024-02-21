@@ -43,6 +43,7 @@ void StateMachine::Initialize()
 
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute() {  
+  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->getLowerEncoderPos());
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
   RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
@@ -57,6 +58,13 @@ void StateMachine::Execute() {
 
 
   // BUTTONS!!!
+  if(m_driverController->GetRawButton(1)){
+    m_arm->setSpeed(0.3);
+  }
+  else{
+    m_arm->setSpeed(0.0);
+  }
+
   if(m_driverController->GetRawButtonPressed(5))
   { 
     //TODO: trace code
