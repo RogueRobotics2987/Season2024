@@ -27,10 +27,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void setVoltage(double speed);
 
-  //void StopWheels();
+  void StopWheels();
 
-  //void dropNote();
-  //void stopDrop();
+  void dropNote();
+  void stopDrop();
 
   void runArmWheels(double speed);
   void stopArmWheels();

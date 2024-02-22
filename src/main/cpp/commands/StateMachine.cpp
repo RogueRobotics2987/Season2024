@@ -43,7 +43,6 @@ void StateMachine::Initialize()
 
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute() {  
-  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->getLowerEncoderPos());
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
 
   RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
@@ -52,21 +51,16 @@ void StateMachine::Execute() {
   blueDist = BlueDistVector[0];
   redDist = RedDistVector[0];
 
-  frc::SmartDashboard::PutNumber("Lower Arm Encoder: ", m_arm->GetOffSetEncoderValueLower());
-
   apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
-  frc::SmartDashboard::PutNumber("angle test value", angleTest);
+  // frc::SmartDashboard::PutNumber("angle test value", angleTest);
 
   // BUTTONS!!!
   if(m_driverController->GetRawButton(1)){
-
-    m_arm->setLowerArmAngle(angleTest);
+    m_arm->setVoltage(0.1);
   }
   else{
-
-    m_arm->setLowerArmAngle(0);
-
+    m_arm->setVoltage(0);
   }
 
   if(m_driverController->GetRawButtonPressed(5))
@@ -141,7 +135,7 @@ void StateMachine::Execute() {
     m_shooter->StopShooter();
     m_arm->stopArmWheels();
 
-    m_shooter->SetIntakePose(); //temporarily turned off to test
+    m_shooter->SetIntakePose(); //temporarily adjusted to test
 
     if(pickupNote == true){
       state = PICKUP;   
