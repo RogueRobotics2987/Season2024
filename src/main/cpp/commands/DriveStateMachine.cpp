@@ -14,10 +14,8 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
   AddRequirements(m_limelight);
   m_messager = &message;
 
-
   m_driverController = &driveXbox;
   m_auxController = &auxXbox;
-
 }
 
 // Called when the command is initially scheduled.
@@ -59,9 +57,8 @@ void DriveStateMachine::Execute() {
     }
   }
 
-
-
-  switch (drive_state) {
+  switch (drive_state) 
+  {
     case NONE:
       // not sure what should happen
 
@@ -74,13 +71,12 @@ void DriveStateMachine::Execute() {
         standard = false;
       }
 
-
       break;
 
     case NOTE_FOLLOW:
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
 
-      if(m_messager->GetMessage().compare("Pickup") != 0)
+      if(m_messager->GetMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
       {
         drive_state = NONE;
       }
@@ -105,9 +101,9 @@ void DriveStateMachine::Execute() {
       break;
 
     case APRIL_FOLLOW:
-      txApril = m_limelight->GetAprilTagtx() - 5;
+      txApril = m_limelight->GetAprilTagtx() - 5;   // what is this number?
 
-    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))
+    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
       {
         drive_state = NONE;
       }
