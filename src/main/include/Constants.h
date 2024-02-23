@@ -116,7 +116,7 @@ namespace DebugConstants {
     constexpr bool debugClimber = false; 
     constexpr bool debugDrive = false; 
     constexpr bool debugIntake = false; 
-    constexpr bool debugLimelight = false; 
+    constexpr bool debugLimelight = true; 
     constexpr bool debugSwerveModules = false; 
     constexpr bool debugStateMachine = false; 
     constexpr bool debugDriveStateMachine = false; 
@@ -159,8 +159,8 @@ namespace ArmConstants {
     
     constexpr double UpperArmSoftLimitHigh = 67;
     constexpr double LowerArmSoftLimitHigh = 41;
+
     constexpr double LowerArmOffset = 0.865;
     constexpr double UpperArmOffset = 0.15;
-
 
 }

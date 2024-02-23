@@ -144,11 +144,11 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-frc2::CommandPtr RobotContainer::GetStateMachine(){
+frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine(){
   return StateMachine(
       m_arm, 
       m_climb,
-      m_color, 
+      m_color, //can remove?
       m_intake,
       m_shooter, 
       m_driverController,
@@ -157,6 +157,48 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       // m_limelight,
       // m_drive
     ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
+  return DriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager
+  ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
+  return AutoAuxilaryStateMachine(
+      m_arm, 
+      m_climb, //can remove?
+      m_color, //can remove.
+      m_intake,
+      m_shooter, 
+      m_driverController,
+      m_auxController,
+      driveShooterMessager
+      // m_limelight,
+      // m_drive
+    ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
+
+  m_drive.ResetOdometry(B_1Waypoints[0]);
+
+  return AutoDriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager,
+    B_1Waypoints,
+    B_1PointSpeed,
+    B_1CruiseSpeed,
+    true
+  ).ToPtr();
 }
 
 void RobotContainer::SetRanAuto(bool ranAuto){
