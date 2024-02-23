@@ -136,12 +136,12 @@ void StateMachine::Execute()
   // frc::SmartDashboard::PutNumber("angle test value", angleTest);
 
   // BUTTONS!!!
-  if(m_driverController->GetRawButton(1)){
-    m_arm->setVoltage(0.1);
-  }
-  else{
-    m_arm->setVoltage(0);
-  }
+  // if(m_driverController->GetRawButton(1)){
+  //   m_arm->setVoltage(0.1);
+  // }
+  // else{
+  //   m_arm->setVoltage(0);
+  // }
 
   if(m_driverController->GetRawButtonPressed(5))
   { 
@@ -256,7 +256,7 @@ void StateMachine::Execute()
 
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
-      m_messager->setMessage("SpitOut");
+    m_messager->setMessage("SpitOut");
 
 
     m_shooter->runMagazine(-0.2);

@@ -20,7 +20,7 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
 
 // Called when the command is initially scheduled.
 void DriveStateMachine::Initialize() {
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
 
 }
 
@@ -30,29 +30,29 @@ void DriveStateMachine::Execute() {
   if(m_driverController->GetRawButtonPressed(5)){
     //noteFollowState = true;
     runIntake = true;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
     runShooterWarmup = false;
   } 
 
   if(m_driverController->GetRawButtonPressed(6)){
     runShooterWarmup = true;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline", 1);
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 1);
     runIntake = false;
   }
 
-  if(m_driverController->GetRawAxis(3) > 0.05){
-    standard = true;
-  }
+  // if(m_driverController->GetRawAxis(3) > 0.05){
+  //   standard = true;
+  // }
 
 
   if(m_driverController->GetRawButtonPressed(1) && runIntake == true){
-    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) ==1){
+    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) ==1){
       noteFollowState = !noteFollowState;
     }
   }
 
   if(m_driverController->GetRawButtonPressed(2) && runShooterWarmup == true){
-    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) ==1){
+    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) ==1){
       aprilFollowState = true;
     }
   }
@@ -60,7 +60,8 @@ void DriveStateMachine::Execute() {
   switch (drive_state) 
   {
     case NONE:
-      
+      frc::SmartDashboard::PutString("drive state", "NONE");
+
       m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
 
       if(noteFollowState == true){
@@ -75,9 +76,11 @@ void DriveStateMachine::Execute() {
       break;
 
     case NOTE_FOLLOW:
-      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 1){
+      frc::SmartDashboard::PutString("drive state", "NOTE_FOLLOW");
 
-        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) == 1){
+
+        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
 
         if(txNote > 7 || txNote < -7)
         {
@@ -113,6 +116,8 @@ void DriveStateMachine::Execute() {
       break;
 
     case APRIL_FOLLOW:
+      frc::SmartDashboard::PutString("drive state", "APRIL_FOLLOW");
+      
       if(m_limelight->PhotonHasTarget() == true){
 
         txApril = m_limelight->PhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
