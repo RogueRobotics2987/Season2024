@@ -134,7 +134,7 @@ void ShooterSubsystem::SetIntakePose(){
 
 void ShooterSubsystem::ApriltagShooterTheta(double dist){
     // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
-    m_DesiredAngle = 86.51 * exp(-0.316 * dist);
+    m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
 }
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){

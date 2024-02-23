@@ -6,9 +6,15 @@
 
 AutoAuxilaryStateMachine::AutoAuxilaryStateMachine() {}
 
-AutoAuxilaryStateMachine::AutoAuxilaryStateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-                           IntakeSubsystem &intake, ShooterSubsystem &shooter, 
-                           frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &message)//LimelightSubsystem &limelight, DriveSubsystem &drivetrain)
+AutoAuxilaryStateMachine::AutoAuxilaryStateMachine(
+  ArmSubsystem &arm,
+  ClimberSubsystem &climb,
+  ColorSensorSubsystem &color, 
+  IntakeSubsystem &intake,
+  ShooterSubsystem &shooter, 
+  frc::XboxController &driveXbox,
+  frc::XboxController &auxXbox,
+  CommandMessenger &message)
 {
   m_arm = &arm;
   AddRequirements({m_arm});
@@ -21,10 +27,6 @@ AutoAuxilaryStateMachine::AutoAuxilaryStateMachine(ArmSubsystem &arm, ClimberSub
   m_shooter = &shooter;
   AddRequirements({m_shooter});
   m_messager = &message;
-  // m_limelight = &limelight;
-  // AddRequirements({m_limelight});
-  // m_drivetrain = &drivetrain;
-  // AddRequirements({m_drivetrain});
 
   m_driverController = &driveXbox;
   m_auxController = &auxXbox;
@@ -53,9 +55,9 @@ void AutoAuxilaryStateMachine::Execute()
   //For the Shooter Apriltag test
   targetIDs.clear();
 
-// Define Camera
-// Find out what we need to do to get strgest tag id
-// calculate camra tangent get camera dx and dy and get tan of that
+  // Define Camera
+  // Find out what we need to do to get strgest tag id
+  // calculate camra tangent get camera dx and dy and get tan of that
   photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
   photon::PhotonPipelineResult result = camera.GetLatestResult();
   bool hasTarget = result.HasTargets();
@@ -72,7 +74,7 @@ void AutoAuxilaryStateMachine::Execute()
     {
       targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
 
-      if(myTargets.at(i).GetFiducialId() == 4)
+      if(myTargets.at(i).GetFiducialId() == 4 || myTargets.at(i).GetFiducialId() == 7)
       {
         filteredTarget = myTargets.at(i);
         filteredTargetID = filteredTarget.GetFiducialId();
@@ -96,11 +98,11 @@ void AutoAuxilaryStateMachine::Execute()
       CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
     units::degree_t{target.GetPitch()});
   
-
     double yaw = target.GetYaw();
     int targetID = target.GetFiducialId();
 
-    if(DebugConstants::debugLimelight == true){
+    if(DebugConstants::debugLimelight == true)
+    {
         frc::SmartDashboard::PutNumber("DistanceToTarget", range.value());
         frc::SmartDashboard::PutNumberArray("Targets", targetIDs);
         frc::SmartDashboard::PutNumber("TargetID", targetID);
@@ -108,14 +110,16 @@ void AutoAuxilaryStateMachine::Execute()
     }
   }
 
-  if (result.MultiTagResult().result.isPresent) {
+  if (result.MultiTagResult().result.isPresent)
+  {
     wpi::SmallVector<int16_t, 32U> fieldToCamera = result.MultiTagResult().fiducialIdsUsed;
     std::vector<double> temp;
     temp.assign(fieldToCamera.begin(), fieldToCamera.end());
 
     frc::Transform3d multi = result.MultiTagResult().result.best;
 
-    if(DebugConstants::debugLimelight == true){
+    if(DebugConstants::debugLimelight == true)
+    {
         frc::SmartDashboard::PutNumberArray("MegaPoseID", temp);
         frc::SmartDashboard::PutNumber("MegaPoseRoll", (multi.Rotation().X().value() * (180/3.14159)));
         frc::SmartDashboard::PutNumber("MegaPosePitch", (multi.Rotation().Y().value() * (180/3.14159)));
@@ -261,12 +265,10 @@ void AutoAuxilaryStateMachine::Execute()
       state = RAISE_SHOOTER;
     }*/
 
-
     break;
 
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
-
 
     m_shooter->runMagazine(-0.2);
     m_arm->runArmWheels(-0.2);
@@ -330,7 +332,6 @@ void AutoAuxilaryStateMachine::Execute()
 
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
-
 
     if(time<7)
     {
@@ -397,7 +398,6 @@ void AutoAuxilaryStateMachine::Execute()
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
-
     //start shooter motors
     m_shooter->SetShooter(0.8, 0.8);
 
@@ -445,7 +445,6 @@ void AutoAuxilaryStateMachine::Execute()
     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
     // m_messager->setMessage("RaiseShooter");
 
-
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
     time++;
@@ -463,7 +462,6 @@ void AutoAuxilaryStateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "LOWER_ARM_EXTEND_INITAL");
     // m_messager->setMessage("LowerArmExtendInitial");
 
-
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
     //switch states when timer has exceded 1.0 seconds
@@ -477,13 +475,11 @@ void AutoAuxilaryStateMachine::Execute()
       time = 0;
     }
 
-
     break;
 
   case UPPER_ARM_EXTEND_INITIAL:
     frc::SmartDashboard::PutString("state: ", "UPPER_ARM_EXTEND_INITAL");
     // m_messager->setMessage("UpperArmExtendInitial");
-
 
     m_arm->setLowerArmAngle(ArmConstants::LowerExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperExtentionAngle);
@@ -508,13 +504,11 @@ void AutoAuxilaryStateMachine::Execute()
       time = 0;
     }
 
-
     break;
 
   case ARM_TRAP:
     frc::SmartDashboard::PutString("state: ", "ARM_TRAP");
     // m_messager->setMessage("AmpTrap");
-
 
     m_arm->setLowerArmAngle(ArmConstants::LowerTrapExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
@@ -523,19 +517,18 @@ void AutoAuxilaryStateMachine::Execute()
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = DROP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP");
       time = 0;
     }
-
 
     break;
 
   case ARM_AMP:
     frc::SmartDashboard::PutString("state: ", "ARM_AMP");
     // m_messager->setMessage("ArmAmp");
-
 
     m_arm->setLowerArmAngle(ArmConstants::LowerAmpExtentionAngle);
     m_arm->setUpperArmAngle(ArmConstants::UpperAmpExtentionAngle);
@@ -544,12 +537,12 @@ void AutoAuxilaryStateMachine::Execute()
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = DROP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP");
       time = 0;
     }
-
 
     break;
 
@@ -557,18 +550,17 @@ void AutoAuxilaryStateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "DROP");
     // m_messager->setMessage("Drop");
 
-
     m_arm->dropNote();
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 120){
+    if(time >= 120)
+    {
       state = ARM_RETRACT_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_INITIAL");
       time = 0;
     }
-
 
     break;
 
@@ -576,19 +568,18 @@ void AutoAuxilaryStateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_INITAL");
     // m_messager->setMessage("ArmRetractInital");
 
-
     // m_arm->setLowerArmAngle(ArmConstants::LowerFirstRetractionAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFirstRetractionAngle);
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = ARM_RETRACT_FINAL;
       frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_FINAL");
       time = 0;
     }
-
 
     break;
 
@@ -596,19 +587,18 @@ void AutoAuxilaryStateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "ARM_RETRACT_FINAL");
     // m_messager->setMessage("ArmRetractFinal");
 
-
     // m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 60)
+    {
       state = DROP_SHOOTER;
       frc::SmartDashboard::PutString("state: ", "changing to DROP_SHOOTER");
       time = 0;
     }
-
 
     break;
   
@@ -616,14 +606,14 @@ void AutoAuxilaryStateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "DROP_SHOOTER");
     // m_messager->setMessage("DropShooter");
 
-
     m_shooter->SetActuator(ShooterConstants::RestingAngle);
     // if(m_Xbox->getr)
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 90){
+    if(time >= 90)
+    {
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
       time = 0;
@@ -665,8 +655,6 @@ void AutoAuxilaryStateMachine::Execute()
   //   }
 
   // break;
-
-
 
   // case DROP_WARMUP:
   //   frc::SmartDashboard::PutString("state: ", "DROP_WARMUP");
@@ -720,13 +708,12 @@ void AutoAuxilaryStateMachine::Execute()
   }
 }
 
-
-
 // Called once the command ends or is interrupted.
 void AutoAuxilaryStateMachine::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool AutoAuxilaryStateMachine::IsFinished() {
+bool AutoAuxilaryStateMachine::IsFinished()
+{
   return false;
 }
 

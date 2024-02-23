@@ -79,7 +79,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double m_DesiredAngle = 40; 
   double testAngle = 40;
 
-  double angleTrim = 15;
+  double angleTrim = 0;
   double accumulatedError = 0;
 
   double magMotorSpeed = 0.0;

@@ -43,7 +43,8 @@ AutoDriveStateMachine::AutoDriveStateMachine(
 }
 
 // Called when the command is initially scheduled.
-void AutoDriveStateMachine::Initialize() {
+void AutoDriveStateMachine::Initialize()
+{
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 
   m_messager->setMessage("Empty");
@@ -66,11 +67,9 @@ void AutoDriveStateMachine::Initialize() {
 }
 
 // Called repeatedly when this Command is scheduled to run
-void AutoDriveStateMachine::Execute() {
-
+void AutoDriveStateMachine::Execute()
+ {
     frc::SmartDashboard::PutString("Message", m_messager->GetMessage());
-
-
   switch (drive_state) 
   {
     case NONE:
@@ -90,7 +89,7 @@ void AutoDriveStateMachine::Execute() {
         standard = false;
       }
 
-      break;
+    break;
 
     case NOTE_FOLLOW:
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
@@ -112,17 +111,18 @@ void AutoDriveStateMachine::Execute() {
       m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(0), rotNote, false, false);
 
 
-      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0){
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0)
+      {
         drive_state = NONE;
         noteFollowState = false;
       }
       
-      break;
+    break;
 
     case APRIL_FOLLOW:
       txApril = m_limelight->GetAprilTagtx() - 5;   // what is this number?
 
-    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
+      if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
       {
         drive_state = NONE;
       }
@@ -145,154 +145,152 @@ void AutoDriveStateMachine::Execute() {
       
       m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
 
-
       if(standard == true){
         drive_state = NONE;
         aprilFollowState = false;
       }
 
-      break;
+    break;
 
     case PATH_FOLLOW:  
+      currentPose = m_drive->GetPose();
 
-        currentPose = m_drive->GetPose();
+      if((fabs((double)currentPose.X() - (double)desiredPose.X()) < threshold) 
+          && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
+          /*&& ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5)*/)
+      {
+        m_messager->setMessage("TurnOnIntake");\
 
-        if((fabs((double)currentPose.X() - (double)desiredPose.X()) < threshold) 
-            && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
-            /*&& ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5)*/)
+        if(m_waypoints.size() > 0) 
         {
-            m_messager->setMessage("TurnOnIntake");
-            if(m_waypoints.size() > 0) 
-            {
-                desiredPose = m_waypoints.front();
-                m_waypoints.pop_front();
-                lastPointSpeed = pointSpeed;
-                pointSpeed = m_driveSpeed.front();
-                m_driveSpeed.pop_front();
-                cruiseSpeed = m_cruiseSpeed.front();
-                m_cruiseSpeed.pop_front();
-                currentDistance = m_waypointDistance.front();
-                m_waypointDistance.pop_front();
-                distanceTraveled = 0;
+          desiredPose = m_waypoints.front();
+          m_waypoints.pop_front();
+          lastPointSpeed = pointSpeed;
+          pointSpeed = m_driveSpeed.front();
+          m_driveSpeed.pop_front();
+          cruiseSpeed = m_cruiseSpeed.front();
+          m_cruiseSpeed.pop_front();
+          currentDistance = m_waypointDistance.front();
+          m_waypointDistance.pop_front();
+          distanceTraveled = 0;
 
-                if(m_waypoints.size() == 0)
-                {
-                    threshold = 0.05;
-                }
-            }
-            else
-            {
-                    finished = true;
-                    m_drive->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
-                    distanceTraveled = 0;
-                    totalDistance = 0;
-                    deltaX = 0;
-                    deltaY = 0;
-                    threshold = 0.1;
-            }
+          if(m_waypoints.size() == 0)
+          {
+              threshold = 0.05;
+          }
         }
+        else
+        {
+          finished = true;
+          m_drive->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
+          distanceTraveled = 0;
+          totalDistance = 0;
+          deltaX = 0;
+          deltaY = 0;
+          threshold = 0.1;
+        }
+      }
 
-        deltaX = fabs((double)lastPose.X() - (double)currentPose.X());
-        deltaY = fabs((double)lastPose.Y() - (double)currentPose.Y());
-        distanceTraveled = distanceTraveled + hypot(deltaX, deltaY);
+      deltaX = fabs((double)lastPose.X() - (double)currentPose.X());
+      deltaY = fabs((double)lastPose.Y() - (double)currentPose.Y());
+      distanceTraveled = distanceTraveled + hypot(deltaX, deltaY);
+
+      if(DebugConstants::debugAuto == true)
+      {
+          frc::SmartDashboard::PutNumber("Hypot(X,Y)", hypot(deltaX, deltaY));
+      }
+
+      if(!finished)
+      {
+        // robotSpeed = 1_mps;
+        if((distanceTraveled + (distanceTraveled * 0.1)) >= currentDistance)
+        {
+        robotSpeed = 0.5_mps;
+        }
+        else if((currentDistance-distanceTraveled) <= 0.65)
+        {
+        accumulatedError += 5E-3 * (currentDistance - distanceTraveled);
+        double x = (currentDistance-distanceTraveled) / 0.8;
+        robotSpeed = 1 * x * (cruiseSpeed - pointSpeed) + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
 
         if(DebugConstants::debugAuto == true)
         {
-            frc::SmartDashboard::PutNumber("Hypot(X,Y)", hypot(deltaX, deltaY));
+            frc::SmartDashboard::PutNumber("Xvalue2", x);
         }
-
-        if(!finished)
+        }
+        else if(distanceTraveled <= 0.5)
         {
-            // robotSpeed = 1_mps;
-            if((distanceTraveled + (distanceTraveled * 0.1)) >= currentDistance)
-            {
-            robotSpeed = 0.5_mps;
-            }
-            else if((currentDistance-distanceTraveled) <= 0.65)
-            {
-            accumulatedError += 5E-3 * (currentDistance - distanceTraveled);
-            double x = (currentDistance-distanceTraveled) / 0.8;
-            robotSpeed = 1 * x * (cruiseSpeed - pointSpeed) + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
+        double x = distanceTraveled / 0.5;
+        robotSpeed = 1 * x * (cruiseSpeed - lastPointSpeed) + lastPointSpeed + 0.1_mps; //0-100% of max speed aka Z
 
-            if(DebugConstants::debugAuto == true)
-            {
-                frc::SmartDashboard::PutNumber("Xvalue2", x);
-            }
-            }
-            else if(distanceTraveled <= 0.5)
-            {
-            double x = distanceTraveled / 0.5;
-            robotSpeed = 1 * x * (cruiseSpeed - lastPointSpeed) + lastPointSpeed + 0.1_mps; //0-100% of max speed aka Z
-
-            if(DebugConstants::debugAuto == true)
-            {
-                frc::SmartDashboard::PutNumber("Xvalue1", x);
-            }
-            }
-            else{
-            robotSpeed = cruiseSpeed;
-            }
-
-
-            alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
-            alpha = alpha - (double)currentPose.Rotation().Radians();
-            xVal = robotSpeed * cos(alpha);
-            yVal = robotSpeed * sin(alpha);
-
-            thetaDouble = (DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), ((double)currentPose.Rotation().Degrees())));
-            thetaDouble = thetaDouble * (3.14/180.0);
-            thetaDouble = thetaDouble * AutoConstants::kPThetaController;
-
-            thetaVal = thetaDouble * 1_rad_per_s;
-            m_drive->Drive(xVal, yVal, false, false);
-
-            if(apriltagBool == true)
-            {
-            txApril = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
-            units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
-
-            if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
-            {
-                rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
-            }
-            else
-            {
-                rot = units::angular_velocity::radians_per_second_t(0);
-            }
-            
-            m_drive->Drive(rot, false, false);
-            }
-            else
-            {
-            m_drive->Drive(thetaVal, false, false);
-
-            }
+        if(DebugConstants::debugAuto == true)
+        {
+            frc::SmartDashboard::PutNumber("Xvalue1", x);
+        }
+        }
+        else{
+        robotSpeed = cruiseSpeed;
         }
 
-        lastPose = currentPose;
+        alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
+        alpha = alpha - (double)currentPose.Rotation().Radians();
+        xVal = robotSpeed * cos(alpha);
+        yVal = robotSpeed * sin(alpha);
+
+        thetaDouble = (DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), ((double)currentPose.Rotation().Degrees())));
+        thetaDouble = thetaDouble * (3.14/180.0);
+        thetaDouble = thetaDouble * AutoConstants::kPThetaController;
+
+        thetaVal = thetaDouble * 1_rad_per_s;
+        m_drive->Drive(xVal, yVal, false, false);
+
+        if(apriltagBool == true)
+        {
+        txApril = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
+        units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+
+        if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
+        {
+            rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+        }
+        else
+        {
+            rot = units::angular_velocity::radians_per_second_t(0);
+        }
         
-        if(DebugConstants::debugAuto == true)
-        {
-            frc::SmartDashboard::PutNumber("DesiredPoseX", (double)desiredPose.X());
-            frc::SmartDashboard::PutNumber("DesiredPoseY", (double)desiredPose.Y());
-            frc::SmartDashboard::PutNumber("DesiredAngle", (double)desiredPose.Rotation().Degrees());
-            frc::SmartDashboard::PutNumber("CurrentPoseX", (double)currentPose.X());
-            frc::SmartDashboard::PutNumber("CurrentPoseY", (double)currentPose.Y());
-            frc::SmartDashboard::PutNumber("CurrentAngle", (double)currentPose.Rotation().Degrees());
-            frc::SmartDashboard::PutNumber("AutoDriveAlpha", (double)alpha);
-            frc::SmartDashboard::PutNumber("AutoDriveYval", (double)yVal);
-            frc::SmartDashboard::PutNumber("AutoDriveXval", (double)xVal);
-            frc::SmartDashboard::PutNumber("robotSpeed", (double)robotSpeed);
-            frc::SmartDashboard::PutNumber("currentDistance", (double)currentDistance);
-            frc::SmartDashboard::PutNumber("distanceTraveled", (double)distanceTraveled);
-            frc::SmartDashboard::PutNumber("percentDistanceTraveled", (double)(distanceTraveled/currentDistance));
-            frc::SmartDashboard::PutNumber("lastPoseX", (double)lastPose.X());
-            frc::SmartDashboard::PutNumber("lastPoseY", (double)lastPose.Y());
-            frc::SmartDashboard::PutNumber("Threshold", threshold);
-            frc::SmartDashboard::PutNumber("accumulatedError", accumulatedError);
-            frc::SmartDashboard::PutNumber("cruiseSpeed", (double)cruiseSpeed);
-            frc::SmartDashboard::PutNumber("pointSpeed", (double)pointSpeed);
+        m_drive->Drive(rot, false, false);
         }
+        else
+        {
+        m_drive->Drive(thetaVal, false, false);
+
+        }
+      }
+
+      lastPose = currentPose;
+      
+      if(DebugConstants::debugAuto == true)
+      {
+          frc::SmartDashboard::PutNumber("DesiredPoseX", (double)desiredPose.X());
+          frc::SmartDashboard::PutNumber("DesiredPoseY", (double)desiredPose.Y());
+          frc::SmartDashboard::PutNumber("DesiredAngle", (double)desiredPose.Rotation().Degrees());
+          frc::SmartDashboard::PutNumber("CurrentPoseX", (double)currentPose.X());
+          frc::SmartDashboard::PutNumber("CurrentPoseY", (double)currentPose.Y());
+          frc::SmartDashboard::PutNumber("CurrentAngle", (double)currentPose.Rotation().Degrees());
+          frc::SmartDashboard::PutNumber("AutoDriveAlpha", (double)alpha);
+          frc::SmartDashboard::PutNumber("AutoDriveYval", (double)yVal);
+          frc::SmartDashboard::PutNumber("AutoDriveXval", (double)xVal);
+          frc::SmartDashboard::PutNumber("robotSpeed", (double)robotSpeed);
+          frc::SmartDashboard::PutNumber("currentDistance", (double)currentDistance);
+          frc::SmartDashboard::PutNumber("distanceTraveled", (double)distanceTraveled);
+          frc::SmartDashboard::PutNumber("percentDistanceTraveled", (double)(distanceTraveled/currentDistance));
+          frc::SmartDashboard::PutNumber("lastPoseX", (double)lastPose.X());
+          frc::SmartDashboard::PutNumber("lastPoseY", (double)lastPose.Y());
+          frc::SmartDashboard::PutNumber("Threshold", threshold);
+          frc::SmartDashboard::PutNumber("accumulatedError", accumulatedError);
+          frc::SmartDashboard::PutNumber("cruiseSpeed", (double)cruiseSpeed);
+          frc::SmartDashboard::PutNumber("pointSpeed", (double)pointSpeed);
+      }
 
       if(finished == true){
         drive_state = NONE;
@@ -313,20 +311,24 @@ void AutoDriveStateMachine::Execute() {
 void AutoDriveStateMachine::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool AutoDriveStateMachine::IsFinished() {
+bool AutoDriveStateMachine::IsFinished()
+{
   return false;
 }
 
 
 float AutoDriveStateMachine::Deadzone(float x)
 {
-  if ((x < 0.1) &&  (x > -0.1)){
+  if ((x < 0.1) &&  (x > -0.1))
+  {
     x=0;
   }
-  else if (x >= 0.1){
+  else if (x >= 0.1)
+  {
     x = x - 0.1;
   }
-  else if (x <= -0.1){
+  else if (x <= -0.1)
+  {
     x = x + 0.1;
   }
   return(x);
