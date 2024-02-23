@@ -154,9 +154,15 @@ frc2::CommandPtr RobotContainer::GetStateMachine(){
       m_driverController,
       m_auxController,
       driveShooterMessager
-      // m_limelight,
-      // m_drive
     ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
+  return DriveStateMachine(
+    m_drive, m_limelight, 
+    m_driverController, m_auxController, 
+    driveShooterMessager
+  ).ToPtr();
 }
 
 void RobotContainer::SetRanAuto(bool ranAuto){

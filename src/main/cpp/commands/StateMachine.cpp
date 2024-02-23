@@ -173,10 +173,10 @@ void StateMachine::Execute()
   }
   */
 
- if(m_auxController->GetRawButtonPressed(2))
-  {
-    pov0 = !pov0;
-  }
+//  if(m_auxController->GetRawButtonPressed(2))
+//   {
+//     pov0 = !pov0;
+//   }
 
 /*
   if(m_auxController->GetRawButtonPressed(2)){
