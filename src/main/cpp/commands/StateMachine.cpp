@@ -44,6 +44,8 @@ void StateMachine::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute() {  
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
+  
+
 
   RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
   BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));

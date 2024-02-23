@@ -32,7 +32,8 @@ void ArmSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
-    // LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // tested
+
+    // LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // questionably tested
     // UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
 }
 
@@ -44,7 +45,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle){
 
     // double currAngle = m_LowerArmEncoder.GetAbsolutePosition();    //TODO: double check if it gets angle
 
-    // double error = desiredAngle - currAngle;
+    // double error = desiredAngle - currAngle; 
     // kiSumLowerArm = kiSumLowerArm + (kiLowerArm * error);
 
     // double motorOutput = error * kpLowerArm + kiSumLowerArm;
@@ -116,14 +117,14 @@ void ArmSubsystem::StopWheels()
 double ArmSubsystem::GetOffSetEncoderValueLower()
 {
     double Pose = 0;
-    Pose = m_LowerArmEncoder.GetAbsolutePosition() - 0.20;
+    Pose = m_LowerArmEncoder.GetAbsolutePosition() - ArmConstants::LowerArmOffset;
 
     if(Pose < 0){
         Pose += 1;
     }
 
-    Pose = fabs(Pose - 1);
-    Pose *= 132;
+    Pose = fabs(Pose - 1);  //This is the invert
+    Pose *= 360;
 
     return Pose;
 }
@@ -131,14 +132,14 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
 double ArmSubsystem::GetOffSetEncoderValueUpper()
 {
     double Pose = 0;
-    Pose = m_UpperArmEncoder.GetAbsolutePosition() + .48;
+    Pose = m_UpperArmEncoder.GetAbsolutePosition() - ArmConstants::UpperArmOffset;
 
     if(Pose < 0){
         Pose += 1;
     }
 
-    Pose = fabs(Pose - 1);
-    Pose *= 132;
+    // Pose = fabs(Pose - 1); //This is the invert
+    Pose *= 272.72;
 
     return Pose;
 }
