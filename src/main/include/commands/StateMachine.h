@@ -115,4 +115,4 @@ class StateMachine
   int timeDrop = 0;   //keep track of dropper iterations
 
   double magEncoderPos = 0.0;
-  };
+};

@@ -15,21 +15,37 @@ void LimelightSubsystem::Periodic()
     //TODO Coment this back in eventually once limelights are put onto the robot
 
 
-    AprilTagstx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
-    AprilTagsty = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("ty",0.0);
+    //AprilTagstx = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+    //AprilTagsty = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("ty",0.0);
     Notetx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
     Notety = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty",0.0);
+    auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
+    auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
+
+    //std::cout << threeDPose.alue << std::endl;
+
+    double distanceToTagInMeters = threeDPose[0];
+    frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
+    frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
     
-    
-    // frc::SmartDashboard::PutNumber("BOTPOSE1", botPose[0]);
-    // frc::SmartDashboard::PutNumber("BOTPOSE2", botPose[1]);
-    // frc::SmartDashboard::PutNumber("BOTPOSE3", botPose[2]);
+
+}
+
+bool LimelightSubsystem::PhotonHasTarget(){
+    bool hasTarget = result.HasTargets();
+    return hasTarget;
+}
+
+double LimelightSubsystem::PhotonYaw(){
+    double yaw = result.GetBestTarget().GetYaw();
+    return yaw;
 }
 
 double LimelightSubsystem::GetAprilTagtx()
 {
     return AprilTagstx;
 }
+
 
 double LimelightSubsystem::GetAprilTagty()
 {

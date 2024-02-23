@@ -111,7 +111,7 @@ namespace AutoConstants {
 
 namespace DebugConstants {
     //change this to true to debug and put most things to the smartdashboard
-    constexpr bool debugShooter = false; 
+    constexpr bool debugShooter = true; 
     constexpr bool debugArm = false; 
     constexpr bool debugClimber = false; 
     constexpr bool debugDrive = false; 
@@ -125,9 +125,9 @@ namespace DebugConstants {
 
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
-    constexpr double RestingAngle = 32; //also the low angle. TODO will change for updated offfset
+    constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
     constexpr double RaisedShooterAngle = 94;
-    constexpr double EncoderOffSet = 0.13; //-0.2494; //0.15707963267;//0.03787;
+    constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0004;   //0.001
     constexpr double kp = 0.02;
 }
@@ -149,11 +149,18 @@ namespace ArmConstants {
     
     // constexpr double LowerDropAngle = 20;
     // constexpr double UpperDropAngle = 20;
+
+    /*TODO find angles that are actually correct. absolute encoder values are nowhere near correct right now.
+        check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
+        if you need help talk to kaden before he leaves on wednesday 2/21
+    */
+    constexpr double UpperArmSoftLimitLow = 2;
+    constexpr double LowerArmSoftLimitLow = 1;
     
-    constexpr double UpperFirstRetractionAngle = 0;
-    constexpr double LowerFirstRetractionAngle = 0;
-    
-    constexpr double LowerFullRetractedAngle = 0;
-    constexpr double UpperFullRetractedAngle = 0;
+    constexpr double UpperArmSoftLimitHigh = 67;
+    constexpr double LowerArmSoftLimitHigh = 41;
+    constexpr double LowerArmOffset = 0.865;
+    constexpr double UpperArmOffset = 0.15;
+
 
 }
