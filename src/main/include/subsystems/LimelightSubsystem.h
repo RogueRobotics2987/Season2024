@@ -8,7 +8,15 @@
 #include <frc2/command/SubsystemBase.h>
 #include <iostream>
 
+#include <frc/controller/PIDController.h>
+#include <units/angle.h>
+#include <units/length.h>
+
 #include "networktables/NetworkTableInstance.inc"
+
+#include "photon/PhotonUtils.h"
+#include "photon/PhotonCamera.h"
+#include "photon/PhotonPoseEstimator.h"
 
 class LimelightSubsystem : public frc2::SubsystemBase
 {
@@ -25,9 +33,15 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double GetNotetx();
     double GetNotety();
 
+    bool PhotonHasTarget();
+    double PhotonYaw();
+
     std::vector<double> botPose;
 
  private:
+  photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
+  photon::PhotonPipelineResult result = camera.GetLatestResult();
+
   double AprilTagstx = 0;
   double AprilTagsty = 0;
   double Notetx = 0;

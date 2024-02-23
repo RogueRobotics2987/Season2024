@@ -47,7 +47,7 @@ void DriveStateMachine::Execute() {
 
   if(m_driverController->GetRawButtonPressed(1) && runIntake == true){
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) ==1){
-      noteFollowState = true;
+      noteFollowState = !noteFollowState;
     }
   }
 
@@ -60,7 +60,8 @@ void DriveStateMachine::Execute() {
   switch (drive_state) 
   {
     case NONE:
-      // not sure what should happen
+      
+      m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
 
       if(noteFollowState == true){
         drive_state = NOTE_FOLLOW;
@@ -74,58 +75,76 @@ void DriveStateMachine::Execute() {
       break;
 
     case NOTE_FOLLOW:
-      txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 1){
+
+        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+
+        if(txNote > 7 || txNote < -7)
+        {
+          rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
+        }
+        else
+        {
+          rotNote = units::angular_velocity::radians_per_second_t(0);
+        }
+        
+        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(0), rotNote, false, false);
+
+      } else {
+        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
+      }
+    
+
+      // if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0){
+      //   drive_state = NONE;
+      //   noteFollowState = false;
+      // }
 
       if(m_messager->GetMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
       {
         drive_state = NONE;
-      }
-
-      if(txNote > 7 || txNote < -7)
-      {
-        rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
-      }
-      else
-      {
-        rotNote = units::angular_velocity::radians_per_second_t(0);
-      }
-      
-      m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(0), rotNote, false, false);
-
-
-      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0){
-        drive_state = NONE;
         noteFollowState = false;
+      }
+
+      if(noteFollowState == false){
+         drive_state = NONE;
       }
       
       break;
 
     case APRIL_FOLLOW:
-      txApril = m_limelight->GetAprilTagtx() - 5;   // what is this number?
+      if(m_limelight->PhotonHasTarget() == true){
 
-    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
+        txApril = m_limelight->PhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+
+        //rotApril = units::angular_velocity::radians_per_second_t(0);
+        // if(tx > 7 || tx < -7){
+        rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+
+        speedY = Deadzone(m_driverController->GetLeftY());
+        speedX = Deadzone(m_driverController->GetLeftY());
+
+        if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
+        {
+          NoJoystickInput = true;
+        }
+        else
+        {
+          NoJoystickInput = false;
+        }
+        
+        m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+
+      } else {
+        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
+      }
+    
+
+      if(m_messager->GetMessage().compare("ShooterWarmup") != 0)
       {
         drive_state = NONE;
+        aprilFollowState = false;
       }
-
-      //rotApril = units::angular_velocity::radians_per_second_t(0);
-      // if(tx > 7 || tx < -7){
-      rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
-
-      speedY = Deadzone(m_driverController->GetLeftY());
-      speedX = Deadzone(m_driverController->GetLeftY());
-
-      if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
-      {
-        NoJoystickInput = true;
-      }
-      else
-      {
-        NoJoystickInput = false;
-      }
-      
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
-
 
       if(standard == true){
         drive_state = NONE;
