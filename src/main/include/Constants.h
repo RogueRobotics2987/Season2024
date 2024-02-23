@@ -110,14 +110,26 @@ namespace AutoConstants {
 } 
 
 namespace DebugConstants {
-    constexpr bool debug = true; //change this to true to debug and put most things to the smartdashboard
+    //change this to true to debug and put most things to the smartdashboard
+    constexpr bool debugShooter = true; 
+    constexpr bool debugArm = false; 
+    constexpr bool debugClimber = false; 
+    constexpr bool debugDrive = false; 
+    constexpr bool debugIntake = false; 
+    constexpr bool debugLimelight = true; 
+    constexpr bool debugSwerveModules = false; 
+    constexpr bool debugStateMachine = false; 
+    constexpr bool debugDriveStateMachine = false; 
+    constexpr bool debugAuto = false; 
 }  
 
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
-    constexpr double RestingAngle = 25; //also the low angle TODO will change for updated offfset
+    constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
     constexpr double RaisedShooterAngle = 94;
-    constexpr double EncoderOffSet = 0.13;
+    constexpr double EncoderOffSet = 0.13; //0.03787;
+    constexpr double ki = 0.0004;   //0.001
+    constexpr double kp = 0.02;
 }
 
 namespace ArmConstants {
@@ -154,8 +166,8 @@ namespace ArmConstants {
     
     constexpr double UpperArmSoftLimitHigh = 67;
     constexpr double LowerArmSoftLimitHigh = 41;
-    constexpr double LowerArmOffset = 0.865 ;
-    constexpr double UpperArmOffset = 0.15;
 
+    constexpr double LowerArmOffset = 0.865;
+    constexpr double UpperArmOffset = 0.15;
 
 }

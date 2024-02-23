@@ -53,12 +53,13 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
+  //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
-      double safeX = Deadzone(m_driverController.GetLeftX());
-      double safeY =  Deadzone(m_driverController.GetLeftY());
-      double safeRot = Deadzone(m_driverController.GetRightX());
+      double safeX = DeadzoneCubed(m_driverController.GetLeftX());
+      double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
+      double safeRot = DeadzoneCubed(m_driverController.GetRightX());
 
 
       bool fieldOrientated;
@@ -100,8 +101,9 @@ void RobotContainer::ConfigureButtonBindings(){
   //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
 
+  //TODO adjust deadzone so the robot will not be at an angle when aiming, also implement this fucntion into the state machine
   // frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(AutoAprilTag(m_limelight, m_drive).ToPtr());
 
   // //start PICKUP state
@@ -142,18 +144,61 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-frc2::CommandPtr RobotContainer::GetStateMachine(){
+frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine(){
   return StateMachine(
       m_arm, 
       m_climb,
-      m_color, 
+      m_color, //can remove?
       m_intake,
       m_shooter, 
       m_driverController,
-      m_auxController
+      m_auxController,
+      driveShooterMessager
       // m_limelight,
       // m_drive
     ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
+  return DriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager
+  ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
+  return AutoAuxilaryStateMachine(
+      m_arm, 
+      m_climb, //can remove?
+      m_color, //can remove.
+      m_intake,
+      m_shooter, 
+      m_driverController,
+      m_auxController,
+      driveShooterMessager
+      // m_limelight,
+      // m_drive
+    ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
+
+  m_drive.ResetOdometry(B_1Waypoints[0]);
+
+  return AutoDriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager,
+    B_1Waypoints,
+    B_1PointSpeed,
+    B_1CruiseSpeed,
+    true
+  ).ToPtr();
 }
 
 void RobotContainer::SetRanAuto(bool ranAuto){
@@ -317,7 +362,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "B_3_7")
   { 
-    m_drive.ResetOdometry(B_2_7Waypoints[0]);
+    m_drive.ResetOdometry(B_3_7Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, B_3_7Waypoints, B_3_7PointSpeed, B_3_7CruiseSpeed, false).ToPtr()
@@ -365,7 +410,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
     else if(chosenAuto == "R_1")
   { 
-    m_drive.ResetOdometry(B_2Waypoints[0]);
+    m_drive.ResetOdometry(R_1Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, R_1Waypoints, R_1PointSpeed, R_1CruiseSpeed, false).ToPtr()

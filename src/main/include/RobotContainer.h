@@ -24,6 +24,7 @@
 #include <string>
 
 #include "subsystems/LimelightSubsystem.h"
+#include "../cpp/CommandMessenger.cpp"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
@@ -35,6 +36,9 @@
 #include "subsystems/ArmSubsystem.h"
 #include "commands/FollowWaypoints.h"
 #include "commands/StateMachine.h"
+#include "commands/DriveStateMachine.h"
+#include "commands/AutoDriveStateMachine.h"
+#include "commands/AutoAuxilaryStateMachine.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
 
@@ -58,8 +62,10 @@ class RobotContainer
 
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
-    frc2::CommandPtr GetStateMachine();
-
+    frc2::CommandPtr GetAuxilaryStateMachine();
+    frc2::CommandPtr GetDriveStateMachine();
+    frc2::CommandPtr GetAutoAuxilaryStateMachine();
+    frc2::CommandPtr GetAutoDriveStateMachine();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -78,6 +84,8 @@ class RobotContainer
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
 
+    CommandMessenger driveShooterMessager;
+
     //Blue auto Paths
 
 
@@ -87,16 +95,19 @@ class RobotContainer
 
 
     std::vector<frc::Pose2d>  B_1Waypoints{
-      frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)), //added second line for test
+      frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> B_1CruiseSpeed{
+      1_mps,
       1_mps,
       1.5_mps
     };

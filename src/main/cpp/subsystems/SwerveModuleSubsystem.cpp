@@ -109,7 +109,7 @@ void SwerveModuleSubsystem::SetDesiredState(const frc::SwerveModuleState& refere
     units::radian_t( m_turningEncoder->GetPosition() /* * 78.73*/ + m_wheelOffset), referenceState.angle.Radians()
   );
  
-  if (DebugConstants::debug == true)
+  if (DebugConstants::debugSwerveModules == true)
   {
     frc::SmartDashboard::PutNumber("Drive Output " + std::to_string(m_driveMotor->GetDeviceId()), driveOutput);
     frc::SmartDashboard::PutNumber("SwerveModule Drive Velocity " + std::to_string(m_driveMotor->GetDeviceId()), m_driveEncoder->GetVelocity());

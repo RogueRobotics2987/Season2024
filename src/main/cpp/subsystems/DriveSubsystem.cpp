@@ -82,7 +82,7 @@ void DriveSubsystem::Periodic(){
 
   periodicHelper();
 
-  if(DebugConstants::debug == true)
+  if(DebugConstants::debugDrive == true)
   {
     frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
     frc::SmartDashboard::PutNumber("DrivePosePtrRot", (double)DrivePose->Rotation().Degrees());
@@ -134,7 +134,7 @@ void DriveSubsystem::Drive(
 
 void DriveSubsystem::periodicHelper()
 {       
-  if (DebugConstants::debug == true)
+  if (DebugConstants::debugDrive == true)
   {
     frc::SmartDashboard::PutNumber("ROT value: ", rot.value());
   }
@@ -178,7 +178,7 @@ void DriveSubsystem::periodicHelper()
     br.angle = (units::angle::degree_t)(0);
   }
 
-  if (DebugConstants::debug == true){
+  if (DebugConstants::debugDrive == true){
     frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
     frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
     frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
@@ -275,7 +275,7 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
     m_rearRight.GetState()
   );
 
-  if(DebugConstants::debug == true)
+  if(DebugConstants::debugDrive == true)
   {
     frc::SmartDashboard::PutNumber("Forward chassis speed", (double)forward);
     frc::SmartDashboard::PutNumber("Sideways chassis speed", (double)sideways);

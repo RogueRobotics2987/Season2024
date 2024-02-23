@@ -5,7 +5,19 @@
 #include "subsystems/ArmSubsystem.h"
 
 ArmSubsystem::ArmSubsystem()
-{}
+{
+    ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500); 
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+}
 
 // This method will be called once per scheduler run
 void ArmSubsystem::Periodic() {
@@ -82,7 +94,7 @@ void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
 
 void ArmSubsystem::stopDrop(){      //stop armWheels
     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
-
+    //ArmWheels.Set(0.0);
 }
 
 double ArmSubsystem::getLowerEncoderPos(){
@@ -161,4 +173,6 @@ double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngl
   }
 
   return a;
+void ArmSubsystem::FollowShooter(double error){
+    ArmWheels.Set(error * 0.035);
 }

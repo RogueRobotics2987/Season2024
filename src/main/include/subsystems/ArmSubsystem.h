@@ -34,6 +34,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void runArmWheels(double speed);
   void stopArmWheels();
+  void FollowShooter(double error);
 
   double getLowerEncoderPos();
   double getUpperEncoderPos();
