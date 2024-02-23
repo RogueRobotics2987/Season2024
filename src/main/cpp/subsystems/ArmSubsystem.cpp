@@ -33,8 +33,8 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
 
-    // LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // questionably tested
-    // UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
+    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // questionably tested
+    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
 }
 
 

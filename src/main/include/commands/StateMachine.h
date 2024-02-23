@@ -53,8 +53,8 @@ class StateMachine
 
  private:
   //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
-  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, LOWER_ARM_EXTEND_INITIAL, 
-    UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
+  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, 
+    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
   intakeState state = EMPTY;
 
   std::vector<double> RedDistVector;
@@ -85,8 +85,9 @@ class StateMachine
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
 
+  bool placeInForwardAmp = false;
+  bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
-  bool placeInAmp = true;
 
   bool pov0 = false; // spit out note when button pov0 is pressed
 

@@ -121,33 +121,40 @@ namespace ShooterConstants {
 }
 
 namespace ArmConstants {
-    // constexpr double LowerInitialAngle = 0;
-    // constexpr double UpperInitialAngle = 0;
-    constexpr double LowerFirstExtentionAngle = 10;
-    constexpr double UpperFirstExtentionAngle = 0;
+    constexpr double LowerInitialAngle = 0;
+    constexpr double UpperInitialAngle = 0;
 
-    constexpr double UpperExtentionAngle = 10;
-    constexpr double LowerExtentionAngle = 10;
+    constexpr double LowerFirstExtentionAngle = 30;
+    constexpr double UpperFirstExtentionAngle = 0;
     
-    constexpr double LowerTrapExtentionAngle = 20;
-    constexpr double UpperTrapExtentionAngle = 10;
+    constexpr double LowerForwardAmpExtentionAngle = 76;
+    constexpr double UpperForwardAmpExtentionAngle = 138;
+
+    constexpr double LowerBackwardAmpExtentionAngle = 50;
+    constexpr double UpperBackwardAmpExtentionAngle = 206;
     
-    constexpr double LowerAmpExtentionAngle = 20;
-    constexpr double UpperAmpExtentionAngle = 10;
+    constexpr double LowerTrapExtentionAngle = 95;
+    constexpr double UpperTrapExtentionAngle = 150;
+
+    constexpr double LowerClimbingExtentionAngle = 90;
+    constexpr double UpperClimbingExtentionAngle = 0;
+
+    constexpr double LowerFirstRetractionAngle = 90;
+    constexpr double UpperFirstRetractionAngle = 0;
     
     // constexpr double LowerDropAngle = 20;
     // constexpr double UpperDropAngle = 20;
 
     /*TODO find angles that are actually correct. absolute encoder values are nowhere near correct right now.
         check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
-        if you need help talk to kaden before he leaves on wednesday 2/21
+        if you need help talk to kaden before he leaves on wednesday 2/21 
     */
     constexpr double UpperArmSoftLimitLow = 2;
     constexpr double LowerArmSoftLimitLow = 1;
     
     constexpr double UpperArmSoftLimitHigh = 67;
     constexpr double LowerArmSoftLimitHigh = 41;
-    constexpr double LowerArmOffset = 0.865;
+    constexpr double LowerArmOffset = 0.865 ;
     constexpr double UpperArmOffset = 0.15;
 
 
