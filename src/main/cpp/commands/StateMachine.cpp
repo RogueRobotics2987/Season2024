@@ -59,6 +59,7 @@ void StateMachine::Execute()
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
   targetIDs.clear();
 
+  //TODO: is this going to interfear with the limelight subsystem?
 // Define Camera
 // Find out what we need to do to get strgest tag id
 // calculate camra tangent get camera dx and dy and get tan of that

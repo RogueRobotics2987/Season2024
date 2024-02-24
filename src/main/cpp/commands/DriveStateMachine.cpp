@@ -27,9 +27,10 @@ void DriveStateMachine::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void DriveStateMachine::Execute() 
 {
-  frc::SmartDashboard::PutBoolean("runIntake - ds", runIntake);
-  frc::SmartDashboard::PutBoolean("runShooterWarmup - ds", runShooterWarmup);
   frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
+  frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
+  frc::SmartDashboard::PutString("drive messenger", m_messager->GetDriveMessage());
+  frc::SmartDashboard::PutString("aux messenger", m_messager->GetAuxMessage());
   
   //Buttons
   // if(m_driverController->GetRawButtonPressed(5))
@@ -66,6 +67,7 @@ void DriveStateMachine::Execute()
   {
     case NONE:
       frc::SmartDashboard::PutString("drive state", "NONE");
+      m_messager->SetDriveMessage("any");
 
       speedY = Deadzone(m_driverController->GetLeftY());
       speedX = Deadzone(m_driverController->GetLeftX());
@@ -102,14 +104,14 @@ void DriveStateMachine::Execute()
       {
         txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
 
-        if(txNote > 7 || txNote < -7)
-        {
+        //if(txNote > 7 || txNote < -7)
+        //{
           rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
-        }
-        else
-        {
-          rotNote = units::angular_velocity::radians_per_second_t(0);
-        }
+        // }
+        // else
+        // {
+        //   rotNote = units::angular_velocity::radians_per_second_t(0);
+        // }
 
         speedY = Deadzone(m_driverController->GetLeftY());
 
@@ -159,14 +161,17 @@ void DriveStateMachine::Execute()
 
     case APRIL_FOLLOW:
       frc::SmartDashboard::PutString("drive state", "APRIL_FOLLOW");
+      //frc::SmartDashboard::Put
+      m_messager->SetDriveMessage("ShooterWarmup");
       
       if(m_limelight->PhotonHasTarget() == true)
       {
         txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+        frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
         //rotApril = units::angular_velocity::radians_per_second_t(0);
         //if(txApril > 7 || txApril < -7){
-          rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+          rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
         //}
 
         speedY = Deadzone(m_driverController->GetLeftY());
