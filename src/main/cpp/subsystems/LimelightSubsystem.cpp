@@ -79,6 +79,10 @@ double LimelightSubsystem::PhotonYaw(){
     return yaw;
 }
 
+double LimelightSubsystem::FilteredPhotonYaw(){
+    return filteredTarget.GetYaw();
+}
+
 double LimelightSubsystem::GetNotetx()
 {
     return Notetx;
@@ -89,7 +93,4 @@ double LimelightSubsystem::GetNotety()
     return Notety;
 }
 
-double LimelightSubsystem::FilteredPhotonYaw(){
-    return filteredTarget.GetYaw();
-}
 

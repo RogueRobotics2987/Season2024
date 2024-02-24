@@ -162,7 +162,7 @@ void DriveStateMachine::Execute()
       
       if(m_limelight->PhotonHasTarget() == true)
       {
-        txApril = m_limelight->PhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
 
         //rotApril = units::angular_velocity::radians_per_second_t(0);
         //if(txApril > 7 || txApril < -7){
