@@ -328,8 +328,23 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     B_1.Command = B_1Command;
     B_1.limelightFollow = B_1LimelightPath;
 
+    AutoPaths::AutoPath B_12;
+    B_12.PointSpeed = B_1PointSpeed;
+    B_12.CruiseSpeed = B_1CruiseSpeed;
+    B_12.Waypoints = B_1Waypoints;
+    B_12.Command = B_1Command;
+    B_12.limelightFollow = B_1LimelightPath; 
+    
+    // AutoPaths::AutoPath B_13;
+    // B_13.PointSpeed = B_1PointSpeed;
+    // B_13.CruiseSpeed = B_1CruiseSpeed;
+    // B_13.Waypoints = B_1Waypoints;
+    // B_13.Command = B_1Command;
+    // B_13.limelightFollow = B_1LimelightPath;
+
     path.push_back(B_1);
-    path.push_back(B_1);
+    path.push_back(B_12);
+    // path.push_back(B_13);
 
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 

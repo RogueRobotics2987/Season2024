@@ -27,6 +27,12 @@ AutoDriveStateMachine::AutoDriveStateMachine(
 
   paths.assign(path.begin(), path.end());
 
+  frc::SmartDashboard::PutStringArray("m_command", paths.front().Command);
+
+  std::cout << "paths Size " << paths.size() << std::endl;
+  std::cout << "paths Point Size 0 " << path[0].Waypoints.size() << std::endl;
+  std::cout << "paths Point Size 1 " << path[1].Waypoints.size() << std::endl;
+  std::cout << "paths Point Size 2 " << path[2].Waypoints.size() << std::endl;
   // apriltagBool = paths.front().limelightFollow[0];
 }
 
@@ -35,7 +41,7 @@ void AutoDriveStateMachine::Initialize()
 {
   // nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 
-  m_messager->SetDriveMessage("Loaded"); //change message(?)
+  m_messager->SetDriveMessage("Shoot"); //change message(?)
 
   // deltaX = 0;
   // deltaY = 0;
@@ -50,28 +56,35 @@ void AutoDriveStateMachine::Initialize()
 
 // Called repeatedly when this Command is scheduled to run
 void AutoDriveStateMachine::Execute()
- {
+{
     // frc::SmartDashboard::PutString("Message", m_messager->GetMessage());
-  switch (drive_state) 
-  {
+
+    // std::cout << "Aux Message " << m_messager->GetAuxMessage() << std::endl;
+
+    switch (drive_state) 
+    {
     case NONE:
       // not sure what should happen
-
+      if(m_messager->GetAuxMessage().compare("NextPath") != 0){
+        // std::cout << m_messager->GetAuxMessage() << " AutoDrive65" << std::endl;
+      }
       if(m_messager->GetAuxMessage().compare("NextPath") == 0)
       {
         pathFollowState = true;
       }
 
+      // std::cout << pathFollowState << " pathFollowState" << std::endl;
+      // std::cout << "PathsIsEmpty? " << paths.empty() << std::endl;
+
       if(noteFollowState == true){
         drive_state = NOTE_FOLLOW;
         standard = false;
-
       }
       else if(aprilFollowState == true){
         drive_state = APRIL_FOLLOW;
         standard = false;
       }
-      else if(pathFollowState == true && paths.empty() != true){
+      else if(pathFollowState == true && paths.empty() == false){
         drive_state = PRE_PATH_FOLLOW;
         standard = false;
       }
@@ -141,6 +154,12 @@ void AutoDriveStateMachine::Execute()
 
     case PRE_PATH_FOLLOW:
 
+      m_waypoints.clear();
+      m_driveSpeed.clear();
+      m_cruiseSpeed.clear();
+      m_command.clear();
+      m_limefollowAuto.clear();
+
       m_waypoints.assign(paths.front().Waypoints.begin(), paths.front().Waypoints.end());
       m_driveSpeed.assign(paths.front().PointSpeed.begin(), paths.front().PointSpeed.end());
       m_cruiseSpeed.assign(paths.front().CruiseSpeed.begin(), paths.front().CruiseSpeed.end());
@@ -159,16 +178,40 @@ void AutoDriveStateMachine::Execute()
       deltaY = 0;
       accumulatedError = 0;
       lastPointSpeed = 0_mps;
+      
+      std::cout << paths.size() << " pathsSize" << std::endl;
+
+      std::cout << m_waypoints.size() << " waypointsVectorSize" << std::endl;
+
       desiredPose = m_waypoints.front();
-      m_waypoints.pop_front();
+
+      if(m_waypoints.empty() == false){
+        m_waypoints.pop_front();
+      }
+
       pointSpeed = m_driveSpeed.front();
-      m_driveSpeed.pop_front();
+
+      if(m_driveSpeed.empty() == false){
+        m_driveSpeed.pop_front();
+      }
+
       cruiseSpeed = m_cruiseSpeed.front();
-      m_cruiseSpeed.pop_front();
+
+      if(m_cruiseSpeed.empty() == false){
+        m_cruiseSpeed.pop_front();
+      }
+
       command = m_command.front();
-      m_command.pop_front();
+      
+      if(m_command.empty() == false){
+        m_command.pop_front();
+      }
+
       apriltagBool = m_limefollowAuto.front();
-      m_limefollowAuto.pop_front();
+
+      if(m_limefollowAuto.empty() == false){
+        m_limefollowAuto.pop_front();
+      }
 
       lastPose = m_drive->GetPose();
 
@@ -184,9 +227,6 @@ void AutoDriveStateMachine::Execute()
           && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
           /*&& ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5)*/)
       {
-        if(command.compare("Intake") == 0){ //TODO COME BACK TO THIS
-          m_messager->SetDriveMessage("TurnOnIntake");
-        }
 
         if(m_waypoints.size() > 0) 
         {
@@ -199,11 +239,20 @@ void AutoDriveStateMachine::Execute()
           m_cruiseSpeed.pop_front();
           currentDistance = m_waypointDistance.front();
           m_waypointDistance.pop_front();
+          command = m_command.front();
+          m_command.pop_front();
+          apriltagBool = m_limefollowAuto.front();
+          m_limefollowAuto.pop_front();
           distanceTraveled = 0;
 
           if(m_waypoints.size() == 0)
           {
               threshold = 0.05;
+          }
+
+          // std::cout << "command msg " << command << std::endl;  
+          if(command.compare("Intake") == 0){ 
+            m_messager->SetDriveMessage("TurnOnIntake");
           }
         }
         else
@@ -323,7 +372,13 @@ void AutoDriveStateMachine::Execute()
         drive_state = NONE;
         pathFollowState = false;
         m_messager->SetDriveMessage("Shoot");
-        paths.pop_front();
+        finished = false;
+
+        std::cout << "paths Size " << paths.size() << std::endl;
+
+          paths.pop_front();
+          std::cout << "paths Size " << paths.size() << std::endl;
+
       }
 
       break;

@@ -73,7 +73,7 @@ class AutoDriveStateMachine
   bool noteFollowState = false;
   bool aprilFollowState = false;
   bool standard = false;
-  bool pathFollowState = true;
+  bool pathFollowState = false;
 
   bool runIntake = false;
   bool runShooterWarmup = false;

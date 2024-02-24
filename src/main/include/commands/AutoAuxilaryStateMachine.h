@@ -112,6 +112,8 @@ class AutoAuxilaryStateMachine
   int filteredTargetID = -1;
   units::meter_t filteredRange = 0_m;
 
+  std::string lastMessage;
+
   int timeDrop = 0;   //keep track of dropper iterations
 
   double magEncoderPos = 0.0;

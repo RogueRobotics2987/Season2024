@@ -40,7 +40,7 @@ void AutoAuxilaryStateMachine::Initialize()
 
   if(m_shooter->GetMagazineSensor())
   {
-    state = LOADED;
+    state = BACKUP;
     magEncoderPos = m_shooter->GetCurrMagEncoderVal();
   }
 
@@ -152,6 +152,13 @@ void AutoAuxilaryStateMachine::Execute()
 //     pickupNote = !pickupNote;
 //   }
 
+  if(lastMessage.compare(m_messager->GetDriveMessage()) != 0)
+  {
+    std::cout << m_messager->GetDriveMessage() << std::endl;
+    lastMessage = m_messager->GetDriveMessage();
+  }
+ 
+
   if(m_messager->GetDriveMessage().compare("TurnOnIntake") == 0)
   {
     pickupNote = true;
@@ -225,7 +232,7 @@ void AutoAuxilaryStateMachine::Execute()
 
 //   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
-
+// std::cout << "Drive Message " << m_messager->GetDriveMessage() << std::endl;
 
   // state machine
   switch (state)
@@ -333,6 +340,10 @@ void AutoAuxilaryStateMachine::Execute()
   case BACKUP:
     frc::SmartDashboard::PutString("state: ", "BACKUP");
 
+    // if(m_messager->GetDriveMessage().compare("InitShoot") == 0){
+    //   m_messager->SetDriveMessage("Shoot");
+    // }
+
     if(time<7)
     {
       m_shooter->runMagazine(-0.2);
@@ -357,6 +368,10 @@ void AutoAuxilaryStateMachine::Execute()
 
     pickupNote = false;
 
+    // if(m_messager->GetDriveMessage().compare("InitShoot") == 0){
+    //   state = BACKUP;
+    // }
+
     // turn running motors off
     m_intake->stopIntake();
     m_arm->StopWheels();
@@ -370,7 +385,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
-    if(fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") != 0)
+    if(fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0)
     {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
@@ -414,7 +429,6 @@ void AutoAuxilaryStateMachine::Execute()
 
   case SHOOT:
     frc::SmartDashboard::PutString("state: ", "SHOOT");
-    // m_messager->setMessage("Shoot");
 
     warmUpShooter = false;
 
@@ -443,11 +457,11 @@ void AutoAuxilaryStateMachine::Execute()
 
   case NEXT_PATH:
     frc::SmartDashboard::PutString("state: ", "NEXT PATH");
-
+    std::cout << "NextPath: AutoAux452" << std::endl;
 
     m_messager->SetAuxMessage("NextPath");
 
-    // pickupNote = false; //check if this value breaks auto?
+    pickupNote = false;
     state = EMPTY;
 
   break;
