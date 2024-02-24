@@ -90,7 +90,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose;
+    return Pose + 6;
 }
 
 void ShooterSubsystem::runMagazine(double speed){
@@ -134,15 +134,18 @@ void ShooterSubsystem::SetIntakePose(){
 
 void ShooterSubsystem::ApriltagShooterTheta(double dist){
     // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
-    m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
+    frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+    //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
+   // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
+   m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
 }
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
     if(buttonUp){
-        angleTrim++;
+        angleTrim = angleTrim + 0.25;
     }
     else if(buttonDown){
-        angleTrim--;
+        angleTrim= angleTrim - 0.25;
     }
 }
 

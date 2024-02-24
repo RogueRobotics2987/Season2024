@@ -36,6 +36,8 @@ void StateMachine::Initialize()
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
+  frc::SmartDashboard::PutNumber("Driver Angle", 20);
+
   if(m_shooter->GetMagazineSensor())
   {
     state = LOADED;
@@ -47,7 +49,13 @@ void StateMachine::Initialize()
 
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute()
-{  
+{ 
+  //double Driver_Angle = frc::SmartDashboard::GetNumber("Driver Angle", 30 );
+  // if (frc::SmartDashboard::GetNumber("Driver Angle", 20 )< 20){
+
+  // }else if (frc::SmartDashboard::GetNumber("Driver Angle", 20 )>21 && frc::SmartDashboard::GetNumber("Driver Angle", 20 )<90){
+  //    m_shooter->SetActuator(frc::SmartDashboard::GetNumber("Driver Angle", 20 ));
+  // }
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
   targetIDs.clear();
 
@@ -133,8 +141,16 @@ void StateMachine::Execute()
   m_shooter->accumulateError();
   m_shooter->SetShooterAngle();
 
+  // frc::SmartDashboard::PutNumber("angle test value", angleTest);
 
   // BUTTONS!!!
+  // if(m_driverController->GetRawButton(1)){
+  //   m_arm->setVoltage(0.1);
+  // }
+  // else{
+  //   m_arm->setVoltage(0);
+  // }
+
   if(m_driverController->GetRawButtonPressed(5))
   { 
     //TODO: trace code
@@ -211,15 +227,15 @@ void StateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     m_messager->SetAuxMessage("Empty");
     // stop all motors
-    m_arm->stopDrop();
-    //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
-    //m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
+    //m_arm->stopDrop();
+    // m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
-    m_arm->StopWheels();
+    m_arm->stopArmWheels();
 
-    m_shooter->SetIntakePose();
+    m_shooter->SetIntakePose(); 
 
     if(pickupNote == true)
     {
@@ -297,7 +313,7 @@ void StateMachine::Execute()
       magEncoderPos = m_shooter->GetCurrMagEncoderVal();
 
       m_intake->stopIntake();
-      m_arm->StopWheels();
+      m_arm->stopArmWheels();
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
@@ -344,13 +360,15 @@ void StateMachine::Execute()
 
     // turn running motors off
     m_intake->stopIntake();
-    m_arm->StopWheels();
-    m_shooter->holdMagazine(magEncoderPos);
+    //m_shooter->holdMagazine(magEncoderPos);
+    m_arm->stopArmWheels();
+    m_shooter->stopMagazine();
     m_shooter->StopShooter();
 
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
-      // m_shooter->ApriltagShooterTheta(filteredRange.value());
+      //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
     if(warmUpShooter == true)
@@ -382,9 +400,15 @@ void StateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
     m_messager->SetAuxMessage("ShooterWarmup");
 
+    if(filteredTargetID == 7 || filteredTargetID == 4)
+    {
+      //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
+    }
+
 
     //start shooter motors
-    m_shooter->SetShooter(0.8, 0.8);
+    m_shooter->SetShooter(0.75, 0.75);
 
     if(warmUpShooter == false)
     {
@@ -547,7 +571,8 @@ void StateMachine::Execute()
     m_messager->SetAuxMessage("Drop");
 
 
-    m_arm->dropNote();
+    //m_arm->dropNote();
+    m_arm->runArmWheels(0.5); //temp speed value
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
@@ -702,6 +727,7 @@ void StateMachine::Execute()
   //   }
 
   //   break;
+
   
   default:
     state = EMPTY;

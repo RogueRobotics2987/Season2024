@@ -26,55 +26,24 @@ AutoDriveStateMachine::AutoDriveStateMachine(
   m_auxController = &auxXbox;
 
   paths.assign(path.begin(), path.end());
-
-  frc::SmartDashboard::PutStringArray("m_command", paths.front().Command);
-
-  std::cout << "paths Size " << paths.size() << std::endl;
-  std::cout << "paths Point Size 0 " << path[0].Waypoints.size() << std::endl;
-  std::cout << "paths Point Size 1 " << path[1].Waypoints.size() << std::endl;
-  std::cout << "paths Point Size 2 " << path[2].Waypoints.size() << std::endl;
-  // apriltagBool = paths.front().limelightFollow[0];
 }
 
 // Called when the command is initially scheduled.
 void AutoDriveStateMachine::Initialize()
 {
-  // nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
-
-  m_messager->SetDriveMessage("Shoot"); //change message(?)
-
-  // deltaX = 0;
-  // deltaY = 0;
-  // lastPointSpeed = 0_mps;
-  // desiredPose = m_waypoints.front();
-  // pointSpeed = m_driveSpeed.front();
-  // cruiseSpeed = m_cruiseSpeed.front();
-  // lastPose = m_drive->GetPose();
-
-  // accumulatedError = 0;
+  m_messager->SetDriveMessage("Shoot"); 
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutoDriveStateMachine::Execute()
 {
-    // frc::SmartDashboard::PutString("Message", m_messager->GetMessage());
-
-    // std::cout << "Aux Message " << m_messager->GetAuxMessage() << std::endl;
-
     switch (drive_state) 
     {
     case NONE:
-      // not sure what should happen
-      if(m_messager->GetAuxMessage().compare("NextPath") != 0){
-        // std::cout << m_messager->GetAuxMessage() << " AutoDrive65" << std::endl;
-      }
       if(m_messager->GetAuxMessage().compare("NextPath") == 0)
       {
         pathFollowState = true;
       }
-
-      // std::cout << pathFollowState << " pathFollowState" << std::endl;
-      // std::cout << "PathsIsEmpty? " << paths.empty() << std::endl;
 
       if(noteFollowState == true){
         drive_state = NOTE_FOLLOW;
@@ -322,23 +291,23 @@ void AutoDriveStateMachine::Execute()
 
         if(apriltagBool == true)
         {
-        txApril = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
-        units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+          txApril = m_limelight->FilteredPhotonYaw();
+          units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
 
-        if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
-        {
-            rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
-        }
-        else
-        {
-            rot = units::angular_velocity::radians_per_second_t(0);
-        }
-        
-        m_drive->Drive(rot, false, false);
-        }
-        else
-        {
-        m_drive->Drive(thetaVal, false, false);
+          if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
+          {
+              rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+          }
+          else
+          {
+              rot = units::angular_velocity::radians_per_second_t(0);
+          }
+          
+          m_drive->Drive(rot, false, false);
+          }
+          else
+          {
+          m_drive->Drive(thetaVal, false, false);
 
         }
       }

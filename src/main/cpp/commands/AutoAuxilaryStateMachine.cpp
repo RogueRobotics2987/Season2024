@@ -38,11 +38,13 @@ void AutoAuxilaryStateMachine::Initialize()
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
-  if(m_shooter->GetMagazineSensor())
-  {
-    state = BACKUP;
-    magEncoderPos = m_shooter->GetCurrMagEncoderVal();
-  }
+  state = BACKUP;
+
+  // if(m_shooter->GetMagazineSensor())
+  // {
+  //   state = BACKUP;
+  //   magEncoderPos = m_shooter->GetCurrMagEncoderVal();
+  // }
 
 }
 
@@ -385,7 +387,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
-    if(fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0)
+    if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 ) && fabs(filteredTarget.GetYaw()) <= 5)
     {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
@@ -413,8 +415,14 @@ void AutoAuxilaryStateMachine::Execute()
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
 
+    if(filteredTargetID == 7 || filteredTargetID == 4)
+    {
+      //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
+    }
+
     //start shooter motors
-    m_shooter->SetShooter(0.8, 0.8);
+    m_shooter->SetShooter(0.75, 0.75);
 
     if(time > 100)
     {
