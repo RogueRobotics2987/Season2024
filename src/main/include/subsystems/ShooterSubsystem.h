@@ -57,11 +57,12 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void zeroIntergralVal();
   void accumulateError();
   void SetShooterAngle();
+  double GetDesired();
 
 
  private:
-  rev::CANSparkMax LeftShooter{15, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax RightShooter{16, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax BottomShooter{16, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
   //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
@@ -78,7 +79,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double m_DesiredAngle = 40; 
   double testAngle = 40;
 
-  double angleTrim = 15;
+  double angleTrim = 0;
   double accumulatedError = 0;
 
   double magMotorSpeed = 0.0;

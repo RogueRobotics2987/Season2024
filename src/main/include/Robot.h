@@ -27,6 +27,8 @@ class Robot : public frc::TimedRobot
     std::optional<frc2::CommandPtr> m_autonomousCommand;
     std::optional<frc2::CommandPtr> m_stateMachine;
     std::optional<frc2::CommandPtr> m_driveStateMachine;
+    std::optional<frc2::CommandPtr> m_autoDriveStateMachine;
+    std::optional<frc2::CommandPtr> m_autoAuxilaryStateMachine;
     RobotContainer m_container;
 };
 
