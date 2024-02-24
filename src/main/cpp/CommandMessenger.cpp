@@ -4,15 +4,24 @@
 class CommandMessenger {
     public:  
 
-        void setMessage(std::string message){
-            myString = message;
+        void SetAuxMessage(std::string message){
+            AuxMessage = message;
         }
 
-        std::string GetMessage(){
-            return myString;
+        std::string GetAuxMessage(){
+            return AuxMessage;
+        }
+
+        void SetDriveMessage(std::string message){
+            DriveMessage = message;
+        }
+
+        std::string GetDriveMessage(){
+            return DriveMessage;
         }
 
     private:
-        std::string myString;  
+        std::string DriveMessage;  
+        std::string AuxMessage;  
 
 };
