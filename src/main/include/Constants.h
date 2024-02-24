@@ -118,17 +118,17 @@ namespace DebugConstants {
     constexpr bool debugIntake = false; 
     constexpr bool debugLimelight = true; 
     constexpr bool debugSwerveModules = false; 
-    constexpr bool debugStateMachine = false; 
+    constexpr bool debugStateMachine = true; 
     constexpr bool debugDriveStateMachine = false; 
-    constexpr bool debugAuto = false; 
+    constexpr bool debugAuto = true; 
 }  
 
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
-    constexpr double RaisedShooterAngle = 80;
+    constexpr double RaisedShooterAngle = 94;
     constexpr double EncoderOffSet = 0.13; //0.03787;
-    constexpr double ki = 0.0004;   //0.001
+    constexpr double ki = 0.0002;   //0.001
     constexpr double kp = 0.02;
     constexpr double magMotorSpeed = 0.0;
     constexpr double magKp = 0.1;

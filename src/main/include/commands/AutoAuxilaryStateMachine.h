@@ -58,7 +58,7 @@ class AutoAuxilaryStateMachine
  private:
   //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
   enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, LOWER_ARM_EXTEND_INITIAL, 
-    UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
+    UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING, NEXT_PATH};
   intakeState state = EMPTY;
 
   std::vector<double> RedDistVector;
@@ -111,6 +111,8 @@ class AutoAuxilaryStateMachine
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;
   units::meter_t filteredRange = 0_m;
+
+  std::string lastMessage;
 
   int timeDrop = 0;   //keep track of dropper iterations
 
