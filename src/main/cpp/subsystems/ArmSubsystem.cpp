@@ -61,8 +61,8 @@ void ArmSubsystem::Periodic() {
 
 
 
-    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, LowerArmAngle) * kpLowerArm) * 1);   // questionably tested
-    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, UpperArmAngle) * kpUpperArm) * -1); 
+    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, LowerArmAngle) * ArmConstants::kpLowerArm) * -1);   // questionably tested
+    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, UpperArmAngle) * ArmConstants::kpUpperArm) * -1); 
 }
 
 
@@ -151,7 +151,7 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
         // Pose += 1;
     // }
 
-    Pose = fabs(Pose - 1);  //This is the invert
+    // Pose = fabs(Pose - 1);  //This is the invert
     Pose *= 360;
 
     return Pose;
@@ -172,7 +172,7 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
     return Pose;
 }
 
-double ArmSubsystem:: DistanceBetweenAngles(double targetAngle, double sourceAngle)
+double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
 {
   double a = targetAngle - sourceAngle;
   if(a > 180)
@@ -193,3 +193,9 @@ double ArmSubsystem:: DistanceBetweenAngles(double targetAngle, double sourceAng
 void ArmSubsystem::FollowShooter(double error){
     ArmWheels.Set(error * 0.035);
 }
+
+void ArmSubsystem::MoveLowerArm(){
+    LowerArm.Set(0.5);
+}
+
+

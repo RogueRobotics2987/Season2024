@@ -195,6 +195,9 @@ void StateMachine::Execute()
       placeInTrap = false;
     }
   }
+  // if(m_auxController->GetRawButton(4)){
+  //   m_arm->MoveLowerArm();
+  // }
 
   if(m_auxController->GetRawButtonPressed(8))
   {
@@ -461,7 +464,7 @@ void StateMachine::Execute()
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
-    //switch states when timer has exceded 1.0 seconds
+    //switch states when timer has exceded 5.0 seconds
     //run 60 times a second
     time++;
 
@@ -562,7 +565,7 @@ void StateMachine::Execute()
     m_arm->setLowerArmAngle(ArmConstants::LowerTrapExtentionAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
 
-    //switch states when timer has exceded 1.0 seconds
+    //switch states when timer has exceded 5 .0 seconds
     //run 60 times a second
     time++;
 

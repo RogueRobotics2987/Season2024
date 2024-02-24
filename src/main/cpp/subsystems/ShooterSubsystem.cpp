@@ -7,7 +7,7 @@
 ShooterSubsystem::ShooterSubsystem() {
     // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
     //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
-    magPIDController.SetP(magKp);
+    magPIDController.SetP(ShooterConstants::magKp);
     TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);

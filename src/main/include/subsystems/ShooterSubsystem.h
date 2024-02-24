@@ -82,8 +82,5 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double angleTrim = 0;
   double accumulatedError = 0;
 
-  double magMotorSpeed = 0.0;
-  double magKp = 0.1;
-
   //double tempKp = 0.01;
 };

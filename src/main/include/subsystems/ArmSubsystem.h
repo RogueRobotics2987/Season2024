@@ -36,6 +36,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void stopArmWheels();
   void FollowShooter(double error);
 
+  void MoveLowerArm();
+
   double getLowerEncoderPos();
   double getUpperEncoderPos();
   
@@ -59,16 +61,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
   frc::DutyCycleEncoder m_UpperArmEncoder{6};  //placeholder, TODO: test
   frc::DutyCycleEncoder m_LowerArmEncoder{7};
-
-
-  double kpLowerArm = 0.0111/2;  //TODO: test
-  double kpUpperArm = 0.00555/2;
-
-  double kiLowerArm = 0.000111;  //TODO: test
-  double kiUpperArm = 0.0000555;
-
-  double kiSumLowerArm = 0.0;
-  double kiSumUpperArm = 0.0;
 
   double m_LowerDesired = 0;
   double m_UpperDesired = 0;
