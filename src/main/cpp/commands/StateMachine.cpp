@@ -36,6 +36,8 @@ void StateMachine::Initialize()
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
+  frc::SmartDashboard::PutNumber("Driver Angle", 20);
+
   if(m_shooter->GetMagazineSensor())
   {
     state = LOADED;
@@ -47,7 +49,13 @@ void StateMachine::Initialize()
 
 // Called repeatedly when this Command is scheduled to run
 void StateMachine::Execute()
-{  
+{ 
+  //double Driver_Angle = frc::SmartDashboard::GetNumber("Driver Angle", 30 );
+  // if (frc::SmartDashboard::GetNumber("Driver Angle", 20 )< 20){
+
+  // }else if (frc::SmartDashboard::GetNumber("Driver Angle", 20 )>21 && frc::SmartDashboard::GetNumber("Driver Angle", 20 )<90){
+  //    m_shooter->SetActuator(frc::SmartDashboard::GetNumber("Driver Angle", 20 ));
+  // }
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
   targetIDs.clear();
 
@@ -78,7 +86,7 @@ void StateMachine::Execute()
         frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
         frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
 
-        units::meter_t filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
+        filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
           CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
         units::degree_t{filteredTarget.GetPitch()});
         frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
@@ -359,7 +367,8 @@ void StateMachine::Execute()
 
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
-      // m_shooter->ApriltagShooterTheta(filteredRange.value());
+      //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
     if(warmUpShooter == true)
@@ -391,9 +400,15 @@ void StateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
     m_messager->setMessage("ShooterWarmup");
 
+    if(filteredTargetID == 7 || filteredTargetID == 4)
+    {
+      //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value());
+    }
+
 
     //start shooter motors
-    m_shooter->SetShooter(0.8, 0.8);
+    m_shooter->SetShooter(0.75, 0.75);
 
     if(warmUpShooter == false)
     {

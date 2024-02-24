@@ -118,7 +118,7 @@ namespace DebugConstants {
     constexpr bool debugIntake = false; 
     constexpr bool debugLimelight = true; 
     constexpr bool debugSwerveModules = false; 
-    constexpr bool debugStateMachine = false; 
+    constexpr bool debugStateMachine = true; 
     constexpr bool debugDriveStateMachine = false; 
     constexpr bool debugAuto = false; 
 }  
