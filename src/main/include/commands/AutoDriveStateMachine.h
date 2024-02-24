@@ -63,8 +63,8 @@ class AutoDriveStateMachine
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-  // double kpApril = 0.02206;
-  double kpApril = 0.005;
+  double kpApril = 0.02206;
+  // double kpApril = 0.05;
   double speedX = 0;
   double speedY = 0;
   bool NoJoystickInput = false;

@@ -97,10 +97,12 @@ class RobotContainer
 
 
 
-    std::vector<frc::Pose2d>  B_1Waypoints{
+    std::vector<frc::Pose2d>  B_1Waypoints{ //TODO change back later
+      frc::Pose2d(1.45_m, 8_m, frc::Rotation2d(180_deg)), //added second line for test
       frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)), //added second line for test
-      frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(1.45_m, 6_m, frc::Rotation2d(180_deg)), //added second line for test
+      // frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
+      // frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1PointSpeed{
@@ -118,7 +120,7 @@ class RobotContainer
     std::vector<std::string> B_1Command{
       "Null",
       "Null",
-      "Intake"
+      "Null"
     };
 
     std::vector<bool> B_1LimelightPath{

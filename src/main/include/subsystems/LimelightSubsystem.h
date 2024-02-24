@@ -40,7 +40,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
  private:
   photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
-  photon::PhotonPipelineResult result = camera.GetLatestResult();
+  photon::PhotonPipelineResult result;
 
   double AprilTagstx = 0;
   double AprilTagsty = 0;
@@ -49,6 +49,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
   std::vector<double> targetIDs;
   std::vector<photon::PhotonTrackedTarget> myTargets;
+  std::span<const photon::PhotonTrackedTarget> tempTargets;
   double targetData = 0;
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;

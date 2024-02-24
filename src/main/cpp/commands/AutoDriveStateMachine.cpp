@@ -292,22 +292,20 @@ void AutoDriveStateMachine::Execute()
         if(apriltagBool == true)
         {
           txApril = m_limelight->FilteredPhotonYaw();
+
+          std::cout << "TX april " << txApril << std::endl;
+
           units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
 
-          if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
-          {
-              rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
-          }
-          else
-          {
-              rot = units::angular_velocity::radians_per_second_t(0);
-          }
+          rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+          
+          std::cout << "RotationValue " << rot.value() << std:: endl;
           
           m_drive->Drive(rot, false, false);
-          }
-          else
-          {
-          m_drive->Drive(thetaVal, false, false);
+        }
+        else
+        {
+        m_drive->Drive(thetaVal, false, false);
 
         }
       }

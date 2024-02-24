@@ -29,30 +29,35 @@ void LimelightSubsystem::Periodic()
     frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
     frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
 
-    std::span<const photon::PhotonTrackedTarget> tempTargets = result.GetTargets();
-    myTargets.assign(tempTargets.begin(), tempTargets.end());
+    result = camera.GetLatestResult();
 
-    for(unsigned int i = 0; i < myTargets.size(); i++)
-    {
-      targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
+    if(result.HasTargets() == true){
+        
+        tempTargets = result.GetTargets();
+        myTargets.assign(tempTargets.begin(), tempTargets.end());
 
-      if(myTargets.at(i).GetFiducialId() == 4 || myTargets.at(i).GetFiducialId() == 7)
-      {
-        filteredTarget = myTargets.at(i);
-        filteredTargetID = filteredTarget.GetFiducialId();
-        //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
+        for(unsigned int i = 0; i < myTargets.size(); i++)
+        {
+            targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
 
-        filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
-          CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
-        units::degree_t{filteredTarget.GetPitch()});
+            if(myTargets.at(i).GetFiducialId() == 4 || myTargets.at(i).GetFiducialId() == 7)
+            {
+                filteredTarget = myTargets.at(i);
+                filteredTargetID = filteredTarget.GetFiducialId();
+                //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
 
-        if(DebugConstants::debugLimelight == true){
-            frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
-            frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
-            frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
-        }
-      }
-    }   
+                filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
+                CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
+                units::degree_t{filteredTarget.GetPitch()});
+
+                if(DebugConstants::debugLimelight == true){
+                    frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
+                    frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
+                    frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
+                }
+            }
+        }   
+    }
 }
 
 bool LimelightSubsystem::PhotonHasTarget(){
@@ -85,6 +90,8 @@ double LimelightSubsystem::GetNotety()
 }
 
 double LimelightSubsystem::FilteredPhotonYaw(){
-    return filteredTarget.GetYaw();
+    if(filteredTarget.GetYaw() != 18.6696151741019976){
+        return filteredTarget.GetYaw();
+    }
 }
 
