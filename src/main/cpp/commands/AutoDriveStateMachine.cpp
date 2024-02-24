@@ -12,10 +12,8 @@ AutoDriveStateMachine::AutoDriveStateMachine(
     frc::XboxController &driveXbox,
     frc::XboxController &auxXbox,
     CommandMessenger &message,
-  std::vector<frc::Pose2d> waypoints,
-  std::vector<units::meters_per_second_t> driveSpeed,
-  std::vector<units::meters_per_second_t> cruiseSpeed,
-  bool limeLight)
+    std::vector<AutoPaths::AutoPath> &path
+)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drive = &drive;
@@ -27,53 +25,42 @@ AutoDriveStateMachine::AutoDriveStateMachine(
   m_driverController = &driveXbox;
   m_auxController = &auxXbox;
 
-  m_waypoints.assign(waypoints.begin(), waypoints.end());
-  m_driveSpeed.assign(driveSpeed.begin(), driveSpeed.end());
-  m_cruiseSpeed.assign(cruiseSpeed.begin(), cruiseSpeed.end());
-  // maxSpeed = driveSpeed;
+  paths.assign(path.begin(), path.end());
 
-  for(int i = 0; i < (int)waypoints.size()-1; ++i)
-  {
-    deltaY = fabs((double)waypoints[i].Y() - (double)waypoints[i+1].Y());
-    deltaX = fabs((double)waypoints[i].X() - (double)waypoints[i+1].X());
-    m_waypointDistance.push_back(hypot(deltaX, deltaY));
-  }
-
-  apriltagBool = limeLight;
+  // apriltagBool = paths.front().limelightFollow[0];
 }
 
 // Called when the command is initially scheduled.
 void AutoDriveStateMachine::Initialize()
 {
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+  // nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 
-  m_messager->setMessage("Empty");
+  m_messager->SetDriveMessage("Loaded"); //change message(?)
 
-  deltaX = 0;
-  deltaY = 0;
-  lastPointSpeed = 0_mps;
-  m_waypoints.pop_front();
-  desiredPose = m_waypoints.front();
-  m_waypoints.pop_front(); 
-  m_driveSpeed.pop_front();
-  pointSpeed = m_driveSpeed.front();
-  m_driveSpeed.pop_front();
-  m_cruiseSpeed.pop_front();
-  cruiseSpeed = m_cruiseSpeed.front();
-  m_cruiseSpeed.pop_front();
-  lastPose = m_drive->GetPose();
+  // deltaX = 0;
+  // deltaY = 0;
+  // lastPointSpeed = 0_mps;
+  // desiredPose = m_waypoints.front();
+  // pointSpeed = m_driveSpeed.front();
+  // cruiseSpeed = m_cruiseSpeed.front();
+  // lastPose = m_drive->GetPose();
 
-  accumulatedError = 0;
+  // accumulatedError = 0;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutoDriveStateMachine::Execute()
  {
-    frc::SmartDashboard::PutString("Message", m_messager->GetMessage());
+    // frc::SmartDashboard::PutString("Message", m_messager->GetMessage());
   switch (drive_state) 
   {
     case NONE:
       // not sure what should happen
+
+      if(m_messager->GetAuxMessage().compare("NextPath") == 0)
+      {
+        pathFollowState = true;
+      }
 
       if(noteFollowState == true){
         drive_state = NOTE_FOLLOW;
@@ -84,8 +71,8 @@ void AutoDriveStateMachine::Execute()
         drive_state = APRIL_FOLLOW;
         standard = false;
       }
-      else if(pathFollowState == true){
-        drive_state = PATH_FOLLOW;
+      else if(pathFollowState == true && paths.empty() != true){
+        drive_state = PRE_PATH_FOLLOW;
         standard = false;
       }
 
@@ -94,7 +81,7 @@ void AutoDriveStateMachine::Execute()
     case NOTE_FOLLOW:
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
 
-      if(m_messager->GetMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
+      if(m_messager->GetAuxMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
       {
         drive_state = NONE;
       }
@@ -122,7 +109,7 @@ void AutoDriveStateMachine::Execute()
     case APRIL_FOLLOW:
       txApril = m_limelight->GetAprilTagtx() - 5;   // what is this number?
 
-      if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
+      if(m_messager->GetAuxMessage().compare("Loaded") != 0 || m_messager->GetAuxMessage().compare("ShooterWarmup") !=  0)  // TODO: oduble check!!!
       {
         drive_state = NONE;
       }
@@ -152,14 +139,54 @@ void AutoDriveStateMachine::Execute()
 
     break;
 
+    case PRE_PATH_FOLLOW:
+
+      m_waypoints.assign(paths.front().Waypoints.begin(), paths.front().Waypoints.end());
+      m_driveSpeed.assign(paths.front().PointSpeed.begin(), paths.front().PointSpeed.end());
+      m_cruiseSpeed.assign(paths.front().CruiseSpeed.begin(), paths.front().CruiseSpeed.end());
+      m_command.assign(paths.front().Command.begin(), paths.front().Command.end());
+      m_limefollowAuto.assign(paths.front().limelightFollow.begin(), paths.front().limelightFollow.end());
+      // maxSpeed = driveSpeed;
+
+      for(int i = 0; i < (int)paths.front().Waypoints.size()-1; ++i)
+      {
+        deltaY = fabs((double)paths.front().Waypoints[i].Y() - (double)paths.front().Waypoints[i+1].Y());
+        deltaX = fabs((double)paths.front().Waypoints[i].X() - (double)paths.front().Waypoints[i+1].X());
+        m_waypointDistance.push_back(hypot(deltaX, deltaY));
+      }
+
+      deltaX = 0;
+      deltaY = 0;
+      accumulatedError = 0;
+      lastPointSpeed = 0_mps;
+      desiredPose = m_waypoints.front();
+      m_waypoints.pop_front();
+      pointSpeed = m_driveSpeed.front();
+      m_driveSpeed.pop_front();
+      cruiseSpeed = m_cruiseSpeed.front();
+      m_cruiseSpeed.pop_front();
+      command = m_command.front();
+      m_command.pop_front();
+      apriltagBool = m_limefollowAuto.front();
+      m_limefollowAuto.pop_front();
+
+      lastPose = m_drive->GetPose();
+
+      drive_state = PATH_FOLLOW;
+
+    break;
+
     case PATH_FOLLOW:  
+    
       currentPose = m_drive->GetPose();
 
       if((fabs((double)currentPose.X() - (double)desiredPose.X()) < threshold) 
           && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
           /*&& ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5)*/)
       {
-        m_messager->setMessage("TurnOnIntake");\
+        if(command.compare("Intake") == 0){ //TODO COME BACK TO THIS
+          m_messager->SetDriveMessage("TurnOnIntake");
+        }
 
         if(m_waypoints.size() > 0) 
         {
@@ -295,7 +322,8 @@ void AutoDriveStateMachine::Execute()
       if(finished == true){
         drive_state = NONE;
         pathFollowState = false;
-        m_messager->setMessage("Shoot");
+        m_messager->SetDriveMessage("Shoot");
+        paths.pop_front();
       }
 
       break;

@@ -76,7 +76,7 @@ void DriveStateMachine::Execute() {
     case NOTE_FOLLOW:
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
 
-      if(m_messager->GetMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
+      if(m_messager->GetDriveMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
       {
         drive_state = NONE;
       }
@@ -103,7 +103,7 @@ void DriveStateMachine::Execute() {
     case APRIL_FOLLOW:
       txApril = m_limelight->GetAprilTagtx() - 5;   // what is this number?
 
-    if(m_messager->GetMessage().compare("Loaded") != 0 || m_messager->GetMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
+    if(m_messager->GetDriveMessage().compare("Loaded") != 0 || m_messager->GetDriveMessage().compare("ShooterWarmup"))  // TODO: oduble check!!!
       {
         drive_state = NONE;
       }

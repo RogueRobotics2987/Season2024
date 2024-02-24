@@ -152,7 +152,7 @@ void AutoAuxilaryStateMachine::Execute()
 //     pickupNote = !pickupNote;
 //   }
 
-  if(m_messager->GetMessage().compare("TurnOnIntake") != 0)
+  if(m_messager->GetDriveMessage().compare("TurnOnIntake") == 0)
   {
     pickupNote = true;
   }
@@ -370,7 +370,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
-    if(fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetMessage().compare("Shoot") != 0)
+    if(fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") != 0)
     {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
@@ -430,7 +430,7 @@ void AutoAuxilaryStateMachine::Execute()
 
     if(time >= 60)
     {
-      state = EMPTY;
+      state = NEXT_PATH;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
 
       time = 0;
@@ -440,6 +440,17 @@ void AutoAuxilaryStateMachine::Execute()
     break;
 
   //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
+
+  case NEXT_PATH:
+    frc::SmartDashboard::PutString("state: ", "NEXT PATH");
+
+
+    m_messager->SetAuxMessage("NextPath");
+
+    // pickupNote = false; //check if this value breaks auto?
+    state = EMPTY;
+
+  break;
 
   case RAISE_SHOOTER:
     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);

@@ -194,10 +194,7 @@ frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
     m_driverController,
     m_auxController,
     driveShooterMessager,
-    B_1Waypoints,
-    B_1PointSpeed,
-    B_1CruiseSpeed,
-    true
+    path
   ).ToPtr();
 }
 
@@ -323,9 +320,20 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   if(chosenAuto == "B_1")
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
+
+    AutoPaths::AutoPath B_1;
+    B_1.PointSpeed = B_1PointSpeed;
+    B_1.CruiseSpeed = B_1CruiseSpeed;
+    B_1.Waypoints = B_1Waypoints;
+    B_1.Command = B_1Command;
+    B_1.limelightFollow = B_1LimelightPath;
+
+    path.push_back(B_1);
+    path.push_back(B_1);
+
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_2")

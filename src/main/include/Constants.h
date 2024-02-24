@@ -120,7 +120,7 @@ namespace DebugConstants {
     constexpr bool debugSwerveModules = false; 
     constexpr bool debugStateMachine = false; 
     constexpr bool debugDriveStateMachine = false; 
-    constexpr bool debugAuto = false; 
+    constexpr bool debugAuto = true; 
 }  
 
 namespace ShooterConstants {
