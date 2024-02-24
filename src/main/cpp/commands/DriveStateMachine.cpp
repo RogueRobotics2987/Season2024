@@ -51,7 +51,6 @@ void DriveStateMachine::Execute()
   //   standard = true;
   // }
 
-
   if(m_driverController->GetRawButtonPressed(1))
   {
     noteFollowState = !noteFollowState;
@@ -86,13 +85,12 @@ void DriveStateMachine::Execute()
       if(noteFollowState == true)
       {
         drive_state = NOTE_FOLLOW;
-        standard = false;
       } 
-      //else if(aprilFollowState == true)
-      //{
-      //  drive_state = APRIL_FOLLOW;
-      //  standard = false;
-      //}
+      
+      if(aprilFollowState == true && m_messager->GetAuxMessage().compare("AprilFollow") == 0)
+      {
+       drive_state = APRIL_FOLLOW;
+      }
 
       break;
 
@@ -144,16 +142,7 @@ void DriveStateMachine::Execute()
         m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
       }
     
-  /*
-  if(m_messager->GetMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
-      {
-        drive_state = NONE;
-        noteFollowState = false;
-      }
-
-      */
       
-
       if(noteFollowState == false)
       {
         drive_state = NONE;
@@ -176,8 +165,9 @@ void DriveStateMachine::Execute()
         txApril = m_limelight->PhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
 
         //rotApril = units::angular_velocity::radians_per_second_t(0);
-        // if(tx > 7 || tx < -7){
-        rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+        //if(txApril > 7 || txApril < -7){
+          rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+        //}
 
         speedY = Deadzone(m_driverController->GetLeftY());
         speedX = Deadzone(m_driverController->GetLeftX());
@@ -212,7 +202,8 @@ void DriveStateMachine::Execute()
         m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
       }
 
-      if(m_messager->GetAuxMessage().compare("ShooterWarmup") != 0)
+
+      if(m_messager->GetAuxMessage().compare("AprilFollow") != 0)
       {
         drive_state = NONE;
         aprilFollowState = false;
@@ -222,11 +213,6 @@ void DriveStateMachine::Execute()
       {
         drive_state = NONE;
       }
-
-      // if(standard == true){
-      //   drive_state = NONE;
-      //   aprilFollowState = false;
-      // }
 
       break;
 

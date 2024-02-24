@@ -66,7 +66,7 @@ class DriveStateMachine
 
 
   bool noteFollowState = false;
-  bool aprilFollowState = false;
+  bool aprilFollowState = true; //false;
   bool standard = false;
 
   bool runIntake = false;

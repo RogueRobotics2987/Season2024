@@ -314,6 +314,7 @@ void StateMachine::Execute()
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
+      m_messager->SetAuxMessage("None");
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
 
@@ -357,7 +358,7 @@ void StateMachine::Execute()
     
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
-    m_messager->SetAuxMessage("None");
+    m_messager->SetAuxMessage("Loaded");
 
     //pickupNote = false;
 
@@ -400,7 +401,7 @@ void StateMachine::Execute()
 
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
-    m_messager->SetAuxMessage("ShooterWarmup");
+    m_messager->SetAuxMessage("AprilFollow");
 
 
     //start shooter motors
@@ -413,7 +414,8 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
     } 
-    else if(moveNote2Shoot == true)
+    
+    if(moveNote2Shoot == true)
     {
       state = SHOOT;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOT");

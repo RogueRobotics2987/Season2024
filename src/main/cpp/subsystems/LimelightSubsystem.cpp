@@ -14,7 +14,6 @@ void LimelightSubsystem::Periodic()
 
     //TODO Coment this back in eventually once limelights are put onto the robot
 
-
     //AprilTagstx = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
     //AprilTagsty = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("ty",0.0);
     Notetx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
@@ -22,34 +21,49 @@ void LimelightSubsystem::Periodic()
     auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
     auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
 
-    //std::cout << threeDPose.alue << std::endl;
 
     double distanceToTagInMeters = threeDPose[0];
     frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
     frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
     
 
+    result = camera.GetLatestResult();
+    hasTarget = result.HasTargets();
+
+    if(hasTarget == true)
+    {
+        tempTargets = result.GetTargets();
+        myTargets.assign(tempTargets.begin(), tempTargets.end());
+
+        for(unsigned int i = 0; i < myTargets.size(); i++)
+        {
+            if(myTargets.at(i).GetFiducialId() == 4 || myTargets.at(i).GetFiducialId() == 7)
+            {
+                filteredTarget = myTargets.at(i);
+                filteredTargetID = filteredTarget.GetFiducialId();
+            }
+        }
+    }
 }
 
+
 bool LimelightSubsystem::PhotonHasTarget(){
-    bool hasTarget = result.HasTargets();
-    return hasTarget;
+    bool hasTargetFiltered = false;
+
+    if(hasTarget == true)
+    {
+        if(filteredTargetID == 4 || filteredTargetID == 7)
+        {
+            hasTargetFiltered = true;
+        }
+    }
+
+    return hasTargetFiltered;
 }
 
 double LimelightSubsystem::PhotonYaw(){
-    double yaw = result.GetBestTarget().GetYaw();
+    double yaw = filteredTarget.GetYaw();
     return yaw;
-}
-
-double LimelightSubsystem::GetAprilTagtx()
-{
-    return AprilTagstx;
-}
-
-
-double LimelightSubsystem::GetAprilTagty()
-{
-    return AprilTagsty;
 }
 
 double LimelightSubsystem::GetNotetx()
@@ -62,3 +76,13 @@ double LimelightSubsystem::GetNotety()
     return Notety;
 }
 
+
+double LimelightSubsystem::GetAprilTagtx()
+{
+    return AprilTagstx;
+}
+
+double LimelightSubsystem::GetAprilTagty()
+{
+    return AprilTagsty;
+}

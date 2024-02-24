@@ -43,6 +43,12 @@ class LimelightSubsystem : public frc2::SubsystemBase
   double AprilTagsty = 0;
   double Notetx = 0;
   double Notety = 0;
+
+  bool hasTarget = false;
+  std::span<const photon::PhotonTrackedTarget> tempTargets;
+  std::vector<photon::PhotonTrackedTarget> myTargets;
+  photon::PhotonTrackedTarget filteredTarget;
+  int filteredTargetID = -1;
   
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
