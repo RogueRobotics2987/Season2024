@@ -11,6 +11,7 @@
 //#include <frc/apriltag/AprilTagPoseEstimator.h>
 #include "networktables/NetworkTableInstance.inc"
 
+#include "Constants.h"
 #include "photon/PhotonUtils.h"
 #include "photon/PhotonCamera.h"
 #include "photon/PhotonPoseEstimator.h"
@@ -32,12 +33,14 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
     bool PhotonHasTarget();
     double PhotonYaw();
+    double FilteredPhotonYaw();
+
 
     std::vector<double> botPose;
 
  private:
   photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
-  photon::PhotonPipelineResult result = camera.GetLatestResult();
+  photon::PhotonPipelineResult result;
 
   double AprilTagstx = 0;
   double AprilTagsty = 0;
@@ -45,10 +48,18 @@ class LimelightSubsystem : public frc2::SubsystemBase
   double Notety = 0;
 
   bool hasTarget = false;
+
+  std::vector<double> targetIDs;
   std::span<const photon::PhotonTrackedTarget> tempTargets;
   std::vector<photon::PhotonTrackedTarget> myTargets;
+  double targetData = 0;
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;
+  units::meter_t filteredRange = 0_m;
+
+  units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
+  units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
+  units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
   
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.

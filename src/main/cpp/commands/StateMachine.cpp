@@ -235,7 +235,7 @@ void StateMachine::Execute()
     m_shooter->StopShooter();
     m_arm->stopArmWheels();
 
-    m_shooter->SetIntakePose(); //temporarily adjusted to test
+    m_shooter->SetIntakePose(); 
 
     if(pickupNote == true)
     {

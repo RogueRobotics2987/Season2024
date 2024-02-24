@@ -25,6 +25,7 @@
 
 #include "subsystems/LimelightSubsystem.h"
 #include "../cpp/CommandMessenger.cpp"
+#include "../cpp/AutoPaths.cpp"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
@@ -87,6 +88,7 @@ class RobotContainer
 
     CommandMessenger driveShooterMessager;
 
+    std::vector<AutoPaths::AutoPath> path;
 
 
     //Blue auto Paths
@@ -107,6 +109,18 @@ class RobotContainer
       1_mps,
       1_mps,
       1.5_mps
+    };
+
+    std::vector<std::string> B_1Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> B_1LimelightPath{
+      true,
+      true,
+      true
     };
 
     std::vector<frc::Pose2d>  B_2Waypoints{

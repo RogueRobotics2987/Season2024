@@ -90,7 +90,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose;
+    return Pose + 6;
 }
 
 void ShooterSubsystem::runMagazine(double speed){

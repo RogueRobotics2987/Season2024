@@ -110,7 +110,7 @@ class StateMachine
   double targetData = 0;
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;
-  units::meter_t filteredRange;
+  units::meter_t filteredRange = 0_m;
 
   int timeDrop = 0;   //keep track of dropper iterations
 

@@ -11,6 +11,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "networktables/NetworkTableInstance.inc"
+#include "../cpp/AutoPaths.cpp"
 
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -27,11 +28,9 @@ class AutoDriveStateMachine
     : public frc2::CommandHelper<frc2::Command, AutoDriveStateMachine> {
  public:
   AutoDriveStateMachine();
-  AutoDriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager,
-    std::vector<frc::Pose2d> waypoints,
-  std::vector<units::meters_per_second_t> driveSpeed,
-  std::vector<units::meters_per_second_t> cruiseSpeed,
-  bool apriltag);
+  AutoDriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager, 
+    std::vector<AutoPaths::AutoPath> &path
+  );
 
   void Initialize() override;
 
@@ -47,7 +46,7 @@ class AutoDriveStateMachine
 
 
  private:
-  enum driveState{NONE, NOTE_FOLLOW, APRIL_FOLLOW, PATH_FOLLOW};
+  enum driveState{NONE, NOTE_FOLLOW, APRIL_FOLLOW, PRE_PATH_FOLLOW, PATH_FOLLOW};
   driveState drive_state = NONE;
 
   DriveSubsystem* m_drive;
@@ -64,7 +63,8 @@ class AutoDriveStateMachine
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-  double kpApril = 0.02206;
+  // double kpApril = 0.02206;
+  double kpApril = 0.005;
   double speedX = 0;
   double speedY = 0;
   bool NoJoystickInput = false;
@@ -74,7 +74,7 @@ class AutoDriveStateMachine
   bool noteFollowState = false;
   bool aprilFollowState = false;
   bool standard = false;
-  bool pathFollowState = true;
+  bool pathFollowState = false;
 
   bool runIntake = false;
   bool runShooterWarmup = false;
@@ -83,7 +83,11 @@ class AutoDriveStateMachine
     std::list<frc::Pose2d> m_waypoints;
     std::list<units::meters_per_second_t> m_driveSpeed;
     std::list<units::meters_per_second_t> m_cruiseSpeed;
+    std::list<std::string> m_command;
+    std::list<bool> m_limefollowAuto;
     std::list<double> m_waypointDistance;
+    std::list<AutoPaths::AutoPath> paths;
+
 
     bool finished = false;
     frc::Pose2d currentPose;
@@ -105,6 +109,7 @@ class AutoDriveStateMachine
     units::meters_per_second_t cruiseSpeed;
     double currentDistance = 0;
     bool apriltagBool = false;
+    std::string command;
     double accumulatedError = 0;
     units::meters_per_second_t lastPointSpeed = 0_mps;
 
