@@ -38,15 +38,31 @@ void ArmSubsystem::Periodic() {
     if(m_LowerDesired > ArmConstants::LowerArmSoftLimitHigh){
         m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
     }
-    else if(m_LowerDesired < ArmConstants::LowerArmSoftLimitLow){
+    else if(m_LowerDesired < ArmConstants::LowerArmSoftLimitLow){ 
         m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
     }
 
     frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
+    if(GetOffSetEncoderValueLower() < 1.0 && GetOffSetEncoderValueLower() > -1.0){
+        LowerArmAngle = 0;
+    }
+    else{
+        LowerArmAngle = GetOffSetEncoderValueLower();
+    }
+    if(GetOffSetEncoderValueUpper() < 1.0 && GetOffSetEncoderValueUpper() > -1.0){
+        UpperArmAngle = 0;
+    }
+    else{
+        UpperArmAngle = GetOffSetEncoderValueUpper();
+    }
 
-    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower()) * kpLowerArm) * 1);   // questionably tested
-    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper()) * kpUpperArm) * -1); 
+
+
+
+
+    LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, LowerArmAngle) * kpLowerArm) * 1);   // questionably tested
+    UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, UpperArmAngle) * kpUpperArm) * -1); 
 }
 
 
@@ -131,9 +147,9 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
     double Pose = 0;
     Pose = m_LowerArmEncoder.GetAbsolutePosition() - ArmConstants::LowerArmOffset;
 
-    if(Pose < 0){
-        Pose += 1;
-    }
+    // if(Pose < 0){
+        // Pose += 1;
+    // }
 
     Pose = fabs(Pose - 1);  //This is the invert
     Pose *= 360;
@@ -146,9 +162,9 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
     double Pose = 0;
     Pose = m_UpperArmEncoder.GetAbsolutePosition() - ArmConstants::UpperArmOffset;
 
-    if(Pose < 0){
-        Pose += 1;
-    }
+    // if(Pose < 0){
+        // Pose += 1;
+    // }
 
     // Pose = fabs(Pose - 1); //This is the invert
     Pose *= 272.72;
@@ -156,7 +172,7 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
     return Pose;
 }
 
-double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+double ArmSubsystem:: DistanceBetweenAngles(double targetAngle, double sourceAngle)
 {
   double a = targetAngle - sourceAngle;
   if(a > 180)
@@ -173,6 +189,7 @@ double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngl
   }
 
   return a;
+}
 void ArmSubsystem::FollowShooter(double error){
     ArmWheels.Set(error * 0.035);
 }

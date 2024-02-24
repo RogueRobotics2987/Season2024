@@ -61,8 +61,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::DutyCycleEncoder m_LowerArmEncoder{7};
 
 
-  double kpLowerArm = 0.0111;  //TODO: test
-  double kpUpperArm = 0.00555;
+  double kpLowerArm = 0.0111/2;  //TODO: test
+  double kpUpperArm = 0.00555/2;
 
   double kiLowerArm = 0.000111;  //TODO: test
   double kiUpperArm = 0.0000555;
@@ -72,6 +72,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double m_LowerDesired = 0;
   double m_UpperDesired = 0;
+
+  double LowerArmAngle = 0;
+  double UpperArmAngle = 0;
 
   // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
   // armState state = INITIAL;

@@ -185,8 +185,7 @@ void StateMachine::Execute()
     } else {
       placeInForwardAmp = false;
     }
-  }
-  */
+  } 
   if(m_auxController->GetRawButtonPressed(4))
   { 
     if(placeInTrap == false){
@@ -225,6 +224,7 @@ void StateMachine::Execute()
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
     m_arm->stopArmWheels();
+    
 
     m_shooter->SetIntakePose(); //temporarily adjusted to test
 
@@ -460,12 +460,12 @@ void StateMachine::Execute()
 
 
     m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-     if(time >= 60){
+     if(time >= 300){
       if(placeInTrap){
         state = ARM_TRAP;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_TRAP");
@@ -520,13 +520,13 @@ void StateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "ARM_AMP");
 
     m_arm->setLowerArmAngle(ArmConstants::LowerForwardAmpExtentionAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperForwardAmpExtentionAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperForwardAmpExtentionAngle);
 
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 300){
       state = DROP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP");
       time = 0;
@@ -539,13 +539,13 @@ void StateMachine::Execute()
     frc::SmartDashboard::PutString("state: ", "ARM_AMP");
 
     m_arm->setLowerArmAngle(ArmConstants::LowerBackwardAmpExtentionAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperBackwardAmpExtentionAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperBackwardAmpExtentionAngle);
 
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 300){
       state = DROP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP");
       time = 0;
@@ -560,13 +560,13 @@ void StateMachine::Execute()
 
 
     m_arm->setLowerArmAngle(ArmConstants::LowerTrapExtentionAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
+    // m_arm->setUpperArmAngle(ArmConstants::UpperTrapExtentionAngle);
 
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 300){
       state = DROP;
       frc::SmartDashboard::PutString("state: ", "changing to DROP");
       time = 0;
@@ -582,12 +582,12 @@ void StateMachine::Execute()
 
 
     //m_arm->dropNote();
-    m_arm->runArmWheels(0.5); //temp speed value
+    // m_arm->runArmWheels(0.5); //temp speed value
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 120){
+    if(time >= 0){
       state = ARM_RETRACT_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_INITIAL");
       time = 0;
@@ -607,7 +607,7 @@ void StateMachine::Execute()
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 300){
       state = ARM_RETRACT_FINAL;
       frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_FINAL");
       time = 0;
@@ -621,12 +621,12 @@ void StateMachine::Execute()
     m_messager->setMessage("ArmRetractFinal");
 
     m_arm->setLowerArmAngle(ArmConstants::LowerInitialAngle);
-    m_arm->setUpperArmAngle(ArmConstants::UpperInitialAngle); 
+    // m_arm->setUpperArmAngle(ArmConstants::UpperInitialAngle); 
     //switch states when timer has exceded 1.0 seconds
     //run 60 times a second
     time++;
 
-    if(time >= 60){
+    if(time >= 300){
       state = DROP_SHOOTER;
       frc::SmartDashboard::PutString("state: ", "changing to DROP_SHOOTER");
       time = 0;
@@ -647,6 +647,9 @@ void StateMachine::Execute()
     time++;
 
     if(time >= 90){
+    placeInForwardAmp = false;
+    placeInTrap = false;
+    placeInBackwardsAmp = false; 
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
       time = 0;
