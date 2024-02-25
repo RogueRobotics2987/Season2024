@@ -24,10 +24,11 @@
 #include <string>
 
 #include "subsystems/LimelightSubsystem.h"
+#include "../cpp/CommandMessenger.cpp"
+#include "../cpp/AutoPaths.cpp"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
-// #include "subsystems/TestMotor.h"
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
@@ -36,6 +37,9 @@
 #include "subsystems/ArmSubsystem.h"
 #include "commands/FollowWaypoints.h"
 #include "commands/StateMachine.h"
+#include "commands/DriveStateMachine.h"
+#include "commands/AutoDriveStateMachine.h"
+#include "commands/AutoAuxilaryStateMachine.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
 
@@ -53,13 +57,16 @@ class RobotContainer
     frc2::CommandPtr GetAutonomousCommand();
     frc2::CommandPtr GetPath(std::vector<frc::Pose2d> waypoints);
 
+    void SetRanAuto(bool ranAuto); 
     float Deadzone(float x); 
     frc2::CommandPtr onFlyGeneration();
 
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
-    frc2::CommandPtr GetStateMachine();
-
+    frc2::CommandPtr GetAuxilaryStateMachine();
+    frc2::CommandPtr GetDriveStateMachine();
+    frc2::CommandPtr GetAutoAuxilaryStateMachine();
+    frc2::CommandPtr GetAutoDriveStateMachine();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -68,7 +75,6 @@ class RobotContainer
 
     // The robot's subsystems are defined here...
     DriveSubsystem m_drive;
-    // TestMotor m_testMotor;
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
@@ -79,6 +85,10 @@ class RobotContainer
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
 
+    CommandMessenger driveShooterMessager;
+
+    std::vector<AutoPaths::AutoPath> path;
+
     //Blue auto Paths
 
 
@@ -88,18 +98,33 @@ class RobotContainer
 
 
     std::vector<frc::Pose2d>  B_1Waypoints{
-      frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)), //added second line for test
+      frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> B_1CruiseSpeed{
       1_mps,
+      1_mps,
       1.5_mps
+    };
+
+    std::vector<std::string> B_1Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> B_1LimelightPath{
+      true,
+      true,
+      true
     };
 
     std::vector<frc::Pose2d>  B_2Waypoints{

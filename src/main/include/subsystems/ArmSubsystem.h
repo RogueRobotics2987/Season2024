@@ -10,6 +10,7 @@
 #include <Constants.h> 
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
+#include <frc/DutyCycleEncoder.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -18,16 +19,32 @@ class ArmSubsystem : public frc2::SubsystemBase {
  public:
   ArmSubsystem();
 
+  double GetOffSetEncoderValueLower();
+  double GetOffSetEncoderValueUpper();
+  
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
+
+  void setVoltage(double speed);
+
+  void StopWheels();
 
   void dropNote();
   void stopDrop();
 
+  void runArmWheels(double speed);
+  void stopArmWheels();
+  void FollowShooter(double error);
+
+  void MoveLowerArm();
+
   double getLowerEncoderPos();
   double getUpperEncoderPos();
+  
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
   bool compareHasNote(bool other);
+
 
   // void defaultArmPos();
 
@@ -39,20 +56,17 @@ class ArmSubsystem : public frc2::SubsystemBase {
  private:
   rev::CANSparkMax LowerArm{17, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
-  // rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
 
-  rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
-  rev::SparkMaxAlternateEncoder m_UpperArmEncoder{UpperArm.GetAlternateEncoder(34.375)};  //placeholder, TODO: test
+  // rev::SparkMaxAlternateEncoder m_LowerArmEncoder{LowerArm.GetAlternateEncoder(125)}; //8192?
+  frc::DutyCycleEncoder m_UpperArmEncoder{6};  //placeholder, TODO: test
+  frc::DutyCycleEncoder m_LowerArmEncoder{7};
 
+  double m_LowerDesired = 0;
+  double m_UpperDesired = 0;
 
-  double kpLowerArm = 0.0111;  //TODO: test
-  double kpUpperArm = 0.00555;
-
-  double kiLowerArm = 0.000111;  //TODO: test
-  double kiUpperArm = 0.0000555;
-
-  double kiSumLowerArm = 0.0;
-  double kiSumUpperArm = 0.0;
+  double LowerArmAngle = 0;
+  double UpperArmAngle = 0;
 
   // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
   // armState state = INITIAL;

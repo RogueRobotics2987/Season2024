@@ -53,6 +53,7 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(); //resets the heading on the gyro
 
+  //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
       bool noJoystickInput = false; //checks if there is any joystick input (if true the wheels will go to the the 45 degree (X) position)
@@ -91,46 +92,19 @@ void RobotContainer::ConfigureButtonBindings(){
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
-  // start/stop Intake
-  // frc2::JoystickButton(&m_driverController, 5).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 5).OnFalse(m_testMotor.Stop());
-
-  // shoot
-  //frc2::JoystickButton(&m_driverController, 6).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 1).OnTrue(m_testMotor.Move());
-
-  // frc2::JoystickButton(&m_driverController, 2).OnTrue(m_testMotor.Move());
-  
-  // frc2::JoystickButton(&m_driverController, 3);
-
-  // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
-
-  // arm pose presets
-  //frc2::JoystickButton(&m_auxController, 4).WhileTrue(m_testMotor.Move());
-  //frc2::JoystickButton(&m_auxController, 2).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 1).WhileTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_auxController, 3).WhileTrue(m_testMotor.Move());
-
-  // shoot
-  //frc2::JoystickButton(&m_auxController, 8).OnTrue(m_testMotor.Move());
-
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
   // // Robot slides left (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
 
   // //Limelight Note Detection
-  // frc2::JoystickButton(&m_driverController, 3).WhileTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  // frc2::JoystickButton(&m_driverController, 4).WhileTrue(AprilTagFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
 
-  // // Run/stop test motor
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_testMotor.Move());
-  // frc2::JoystickButton(&m_driverController, 8).OnTrue(m_testMotor.Stop());
+  //TODO adjust deadzone so the robot will not be at an angle when aiming, also implement this fucntion into the state machine
+  // frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(AutoAprilTag(m_limelight, m_drive).ToPtr());
 
   // //start PICKUP state
   // //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
@@ -142,14 +116,14 @@ void RobotContainer::ConfigureButtonBindings(){
 float RobotContainer::DeadzoneCubed(float x){
   x = x * x * x;  // exponetial curve, slow acceleration at begining
 
-  if ((x < 0.1) &&  (x > -0.1)){
+  if ((x < 0.001) &&  (x > -0.001)){
     x=0;
   }
-  else if (x >= 0.1){
-    x = x - 0.1;
+  else if (x >= 0.001){
+    x = x ;//- 0.1;
   }
-  else if (x <= -0.1){
-    x = x + 0.1;
+  else if (x <= -0.001){
+    x = x ;//+ 0.1;
   }
 
   return(x);
@@ -170,16 +144,62 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-frc2::CommandPtr RobotContainer::GetStateMachine(){
+frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine(){
   return StateMachine(
       m_arm, 
       m_climb,
-      m_color, 
+      m_color, //can remove?
       m_intake,
       m_shooter, 
       m_driverController,
-      m_auxController
+      m_auxController,
+      driveShooterMessager
+      // m_limelight,
+      // m_drive
     ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
+  return DriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager
+  ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
+  return AutoAuxilaryStateMachine(
+      m_arm, 
+      m_climb, //can remove?
+      m_color, //can remove.
+      m_intake,
+      m_shooter, 
+      m_driverController,
+      m_auxController,
+      driveShooterMessager
+      // m_limelight,
+      // m_drive
+    ).ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
+
+  m_drive.ResetOdometry(B_1Waypoints[0]);
+
+  return AutoDriveStateMachine(
+    m_drive,
+    m_limelight,
+    m_driverController,
+    m_auxController,
+    driveShooterMessager,
+    path
+  ).ToPtr();
+}
+
+void RobotContainer::SetRanAuto(bool ranAuto){
+  m_drive.SetRanAuto(ranAuto);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
@@ -300,9 +320,35 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   if(chosenAuto == "B_1")
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
+
+    AutoPaths::AutoPath B_1;
+    B_1.PointSpeed = B_1PointSpeed;
+    B_1.CruiseSpeed = B_1CruiseSpeed;
+    B_1.Waypoints = B_1Waypoints;
+    B_1.Command = B_1Command;
+    B_1.limelightFollow = B_1LimelightPath;
+
+    // AutoPaths::AutoPath B_12;
+    // B_12.PointSpeed = B_1PointSpeed;
+    // B_12.CruiseSpeed = B_1CruiseSpeed;
+    // B_12.Waypoints = B_1Waypoints;
+    // B_12.Command = B_1Command;
+    // B_12.limelightFollow = B_1LimelightPath; 
+    
+    // AutoPaths::AutoPath B_13;
+    // B_13.PointSpeed = B_1PointSpeed;
+    // B_13.CruiseSpeed = B_1CruiseSpeed;
+    // B_13.Waypoints = B_1Waypoints;
+    // B_13.Command = B_1Command;
+    // B_13.limelightFollow = B_1LimelightPath;
+
+    path.push_back(B_1);
+    // path.push_back(B_12);
+    // path.push_back(B_13);
+
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_2")
@@ -339,7 +385,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "B_3_7")
   { 
-    m_drive.ResetOdometry(B_2_7Waypoints[0]);
+    m_drive.ResetOdometry(B_3_7Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, B_3_7Waypoints, B_3_7PointSpeed, B_3_7CruiseSpeed, false).ToPtr()
@@ -387,7 +433,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
     else if(chosenAuto == "R_1")
   { 
-    m_drive.ResetOdometry(B_2Waypoints[0]);
+    m_drive.ResetOdometry(R_1Waypoints[0]);
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       FollowWaypoints(m_drive, m_limelight, R_1Waypoints, R_1PointSpeed, R_1CruiseSpeed, false).ToPtr()

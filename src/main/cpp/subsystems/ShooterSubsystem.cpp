@@ -5,36 +5,64 @@
 #include "subsystems/ShooterSubsystem.h"
 
 ShooterSubsystem::ShooterSubsystem() {
-    LeftShooter.Follow(RightShooter, true);
+    // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
+    //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
+    magPIDController.SetP(ShooterConstants::magKp);
+    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
 }
 
 // This method will be called once per scheduler run
 void ShooterSubsystem::Periodic() {
-    //  ShooterActuator.Set((GetEncoderOffSet() - m_DesiredAngle) * kp); 
+    //tempKp = frc::SmartDashboard::GetNumber("shooter actuator kp", tempKp);
 
-    if(DebugConstants::debug == true){
+
+    if(DebugConstants::debugShooter == true)
+    {
         frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
-        frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetEncoderOffSet());
-        frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetDistance());
+        frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
+        frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
+        frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
+        frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
+        // m_DesiredAngle = frc::SmartDashboard::GetNumber("SetAngle", m_DesiredAngle);
     }
+
+    SetShooterAngle();
+
 }
 
 void ShooterSubsystem::JoystickActuator(double pos){
     if(fabs(pos) > .15){
-        m_DesiredAngle += pos*.1;
+        m_DesiredAngle += pos*.3;
     }
 }
 
 void ShooterSubsystem::StopShooter(){
-    RightShooter.Set(0.0);
+    TopShooter.Set(0.0);
+    BottomShooter.Set(0.0);
 }
 
-void ShooterSubsystem::SetShooter(double speed) {
-    RightShooter.Set(speed);
+void ShooterSubsystem::SetShooter(double speedBottom, double speedTop) {
+    BottomShooter.Set(speedBottom);
+    TopShooter.Set(speedTop);
 }
 
 void ShooterSubsystem::ReverseShooter(){   
-    RightShooter.Set(-0.2);
+    BottomShooter.Set(-0.2);
+    TopShooter.Set(0.2);
 }
 
 
@@ -47,19 +75,41 @@ bool ShooterSubsystem::GetMagazineSensor(){
 }
 
 bool ShooterSubsystem::IsTargeted(){
-    return fabs(GetEncoderOffSet() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
+    return fabs(GetOffSetEncoderValue() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
 }
 
-double ShooterSubsystem::GetEncoderOffSet(){
-    return ShooterEncoder.GetDistance() - ShooterConstants::EncoderOffSet;
+//Calculates encoder position and changes it to degrees
+double ShooterSubsystem::GetOffSetEncoderValue(){
+    double Pose = 0;
+    Pose = ShooterEncoder.GetAbsolutePosition() + ShooterConstants::EncoderOffSet;
+
+    if(Pose < 0){
+        Pose += 1;
+    }
+
+    Pose = fabs(Pose - 1);
+    Pose *= 132;
+
+    return Pose + 6;
 }
 
-void ShooterSubsystem::runMagazine(){
-    MagazineMotor.Set(0.5);
+void ShooterSubsystem::runMagazine(double speed){
+    MagazineMotor.Set(speed);
 }
 
 void ShooterSubsystem::stopMagazine(){
     MagazineMotor.Set(0.0);
+}
+
+void ShooterSubsystem::holdMagazine(double pos){
+    magPIDController.SetReference(pos, rev::ControlType::kPosition);
+
+}
+
+double ShooterSubsystem::GetCurrMagEncoderVal(){
+    double currEncoderVal = MagazineEncoder.GetPosition();
+
+    return currEncoderVal;
 }
 
 void ShooterSubsystem::driveActuator(double speed){
@@ -75,6 +125,81 @@ void ShooterSubsystem::driveActuator(double speed){
 }
 
 void ShooterSubsystem::setRestingActuatorPosition(){
-    //ShooterActuator.Set(GetEncoderOffSet() * kp);
-    m_DesiredAngle = ShooterConstants::EncoderOffSet; 
+    m_DesiredAngle = ShooterConstants::RestingAngle; 
+}
+
+void ShooterSubsystem::SetIntakePose(){
+    m_DesiredAngle = ShooterConstants::RestingAngle;
+}
+
+void ShooterSubsystem::ApriltagShooterTheta(double dist){
+    // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
+    frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+    //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
+   // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
+   m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+}
+
+void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
+    if(buttonUp){
+        angleTrim = angleTrim + 0.25;
+    }
+    else if(buttonDown){
+        angleTrim= angleTrim - 0.25;
+    }
+}
+
+void ShooterSubsystem::zeroIntergralVal(){
+    accumulatedError = 0;
+}
+
+void ShooterSubsystem::accumulateError(){
+    double angleError =  DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+
+    if(accumulatedError < 0.15){
+        accumulatedError += ShooterConstants::ki * angleError;
+    }
+}
+
+
+double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
+}
+
+void ShooterSubsystem::SetShooterAngle()
+{
+    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle)
+    {
+        m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
+    }
+    else if(m_DesiredAngle <= ShooterConstants::RestingAngle)
+    {
+        m_DesiredAngle = ShooterConstants::RestingAngle;
+    }
+
+    double angleError = DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
+
+    double angleOutput = ((angleError * ShooterConstants::kp)) + accumulatedError;
+
+    ShooterActuator.Set(-angleOutput); 
+    //MagazineMotor.Set(magMotorSpeed);
+}
+
+double ShooterSubsystem::GetDesired(){
+    return m_DesiredAngle;
 }

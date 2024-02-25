@@ -4,41 +4,75 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem(){
-
+IntakeSubsystem::IntakeSubsystem()
+{
+    CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
 }
 
 // This method will be called once per scheduler run
-void IntakeSubsystem::Periodic(){
-    detectNoteIntake1 = intakeColorSensor1.Get();
-    detectNoteIntake2 = intakeColorSensor2.Get();
-
-    frc::SmartDashboard::PutBoolean("Intake colorSensor 1 val: ", detectNoteIntake1);
-    frc::SmartDashboard::PutBoolean("Intake colorSensor 2 val: ", detectNoteIntake2);
-}
-
-
-void IntakeSubsystem::Direction(){  // get current val to tell which direction motors moving in
-    frontVal= FrontIntake.GetOutputCurrent();
-    backVal = BackIntake.GetOutputCurrent();
-
-    if (frontVal > 1.0 ){//&& detectNoteIntake1 == true){ // need to find actual value and put in constants 
-        CenterIntake. Set(0.5); // need to find actual speed
-
-    }else if (backVal > 1.0){// && detectNoteIntake2 == true){
-        CenterIntake.Set(-0.5);
+void IntakeSubsystem::Periodic()
+{
+    if(DebugConstants::debugIntake == true){
+        frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
+        frc::SmartDashboard::PutBoolean("ColorBack", intakeColorSensorRear.Get());
     }
 }
 
-void IntakeSubsystem::runIntake(){
+
+void IntakeSubsystem::Direction(double speed){  // get current val to tell which direction motors moving in
+    // frontVal= FrontIntake.GetOutputCurrent();
+    // backVal = BackIntake.GetOutputCurrent();
+
+    if (intakeColorSensorFront.Get()){ // need to find actual value and put in constants 
+        CenterIntake.Set(-speed); // need to find actual speed
+
+    }else if (intakeColorSensorRear.Get()){
+        CenterIntake.Set(speed);
+    }
+}
+
+void IntakeSubsystem::runIntake(double speed){
     // need to make it so that these turn on with a button
+<<<<<<< HEAD
     FrontIntake.Set(0.25);
     BackIntake.Set(-0.25);
 
+=======
+    FrontIntake.Set(speed);
+    BackIntake.Set(-speed);
+>>>>>>> f39f3d02ca9e8873aa50d8198dbecc064c4b2bb4
 }
 
 void IntakeSubsystem::stopIntake(){
     FrontIntake.Set(0.0);
     BackIntake.Set(0.0);
     CenterIntake.Set(0.0);
+}
+
+bool IntakeSubsystem::GetIntakeFront(){
+    return intakeColorSensorFront.Get();
+}
+
+bool IntakeSubsystem::GetIntakeRear(){
+    return intakeColorSensorRear.Get();
+}
+
+void IntakeSubsystem::spitOutIntake(){
+    FrontIntake.Set(-0.2);
+    BackIntake.Set(0.2);
+    CenterIntake.Set(0.2);
 }

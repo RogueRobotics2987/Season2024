@@ -12,6 +12,7 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 
 /**
  * An example command.
@@ -25,7 +26,7 @@ class AprilTagFollower
 {
   public:
     AprilTagFollower(); 
-    AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
+    AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, ShooterSubsystem &shooter);
 
     void Initialize() override;
 
@@ -35,7 +36,7 @@ class AprilTagFollower
 
     bool IsFinished() override;
 
-    double kp = -0.09927;
+    double kp = 0.02206;
     double speedX = 0;
     double speedY = 0;
     bool NoJoystickInput = false;
@@ -43,7 +44,9 @@ class AprilTagFollower
   private:
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
+    ShooterSubsystem* m_shooter = nullptr;
     frc::XboxController* m_Xbox = nullptr;
+    
     float Deadzone(float x);
 
 };

@@ -33,11 +33,11 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class StateMachine
-    : public frc2::CommandHelper<frc2::Command, StateMachine> {
+class AutoAuxilaryStateMachine
+    : public frc2::CommandHelper<frc2::Command, AutoAuxilaryStateMachine> {
  public:
-  StateMachine();
-  StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
+  AutoAuxilaryStateMachine();
+  AutoAuxilaryStateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
                IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);// LimelightSubsystem &limelight, 
               // DriveSubsystem &drivetrain);
 
@@ -57,8 +57,8 @@ class StateMachine
 
  private:
   //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
-  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, 
-    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
+  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, LOWER_ARM_EXTEND_INITIAL, 
+    UPPER_ARM_EXTEND_INITIAL, ARM_TRAP, ARM_AMP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING, NEXT_PATH};
   intakeState state = EMPTY;
 
   std::vector<double> RedDistVector;
@@ -90,9 +90,8 @@ class StateMachine
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
 
-  bool placeInForwardAmp = false;
-  bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
+  bool placeInAmp = true;
 
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
@@ -113,7 +112,9 @@ class StateMachine
   int filteredTargetID = -1;
   units::meter_t filteredRange = 0_m;
 
+  std::string lastMessage;
+
   int timeDrop = 0;   //keep track of dropper iterations
 
   double magEncoderPos = 0.0;
-};
+  };
