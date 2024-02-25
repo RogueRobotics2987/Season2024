@@ -150,7 +150,7 @@ namespace ArmConstants {
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
 
-    constexpr double LowerClimbingExtentionAngle = 90;
+    constexpr double LowerClimbingExtentionAngle = -90;
     constexpr double UpperClimbingExtentionAngle = 0;
 
     constexpr double LowerFirstRetractionAngle = 90;

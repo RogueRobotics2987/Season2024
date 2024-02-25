@@ -7,18 +7,21 @@
 ClimberSubsystem::ClimberSubsystem()=default;
 
 // This method will be called once per scheduler run
-void ClimberSubsystem::Periodic() {
+void ClimberSubsystem::Periodic() 
+{
 
 }
 
 
-void ClimberSubsystem::startClimber() {
+void ClimberSubsystem::startClimber() 
+{
     ClimberMoter.Set(0.5);  
 }
 
-void ClimberSubsystem::stopClimber() {
+void ClimberSubsystem::stopClimber()
+ {
     ClimberMoter.Set(0.0);
-}
+ }
 
 
 

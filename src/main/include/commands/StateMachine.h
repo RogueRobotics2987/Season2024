@@ -58,7 +58,7 @@ class StateMachine
  private:
   //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
   enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, 
-    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
+    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING, CHAIN_CLIMB};
   intakeState state = EMPTY;
 
   std::vector<double> RedDistVector;
@@ -84,7 +84,9 @@ class StateMachine
   // bool huntingNote = false;
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
-
+  bool chainClimb = false;        // accsessor for chain climb
+  bool raiseHook = false;         // raises climbing hook for chain
+  bool raiseRobot = false;        // brings the climbing hooks all the way so robot is raised off ground
   bool emptyIntake = false;       // self explainitory
 
   bool warmUpShooter = false;     // warmup shooter (warmMilk)

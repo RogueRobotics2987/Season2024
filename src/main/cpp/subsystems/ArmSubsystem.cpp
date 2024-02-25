@@ -151,7 +151,7 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
         // Pose += 1;
     // }
 
-    // Pose = fabs(Pose - 1);  //This is the invert
+    Pose = fabs(Pose - 1);  //This is the invert
     Pose *= 360;
 
     return Pose;

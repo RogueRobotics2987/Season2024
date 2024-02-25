@@ -152,6 +152,22 @@ void StateMachine::Execute()
   //   m_arm->setVoltage(0);
   // }
 
+  if(m_auxController->GetRawButtonPressed(1))
+   {
+    raiseHook = true;
+   }
+
+   if(m_auxController->GetRawButtonPressed(3))
+   {
+     raiseRobot = true;
+   }
+
+  if(m_driverController->GetRawButtonPressed(3))
+  {
+    chainClimb = !chainClimb;
+    //setstate = CHAIN_CLIMB;
+  }
+
   if(m_driverController->GetRawButtonPressed(5))
   { 
     //TODO: trace code
@@ -208,10 +224,10 @@ void StateMachine::Execute()
   //   m_arm->MoveLowerArm();
   // }
 
-  if(m_auxController->GetRawButtonPressed(8))
+  /*if(m_auxController->GetRawButtonPressed(8))
   {
 
-  }
+  } */
 
   if(fabs(m_auxController->GetRightY()) > 0.15)
   {
@@ -250,7 +266,14 @@ void StateMachine::Execute()
     {
       state = PICKUP;
       pickupNote = true;
+    } 
+
+    if(chainClimb == true)
+    {
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
     }
+  
     // if(pov0 == true)
     // {
     //   state = SPIT_OUT;
@@ -392,6 +415,12 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
 
     } 
+
+    if(chainClimb == true)
+    {
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
+    }
 
     // if(pov0 == true)
     // {
@@ -689,6 +718,68 @@ void StateMachine::Execute()
     }
 
     break;
+
+    case CHAIN_CLIMB:
+      frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
+
+      //move shooter out of way
+      m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+
+      if(time >= 60 && time <= 300)
+      {
+        //move arms out of way 
+        m_arm->setLowerArmAngle(ArmConstants::LowerClimbingExtentionAngle);
+        
+      }
+
+      time++;
+
+      
+      //button 1 things
+      /*if(raiseHook == true)
+      {
+        m_climb->startClimber();
+
+        time++;
+
+        if(time >= 90) //figure out time
+        {
+          m_climb->stopClimber();
+        }
+        time = 0;
+      }
+
+      if(raiseRobot == true)
+      {
+        m_climb->startClimber();
+
+        time++;
+
+        if(time >= 90) //figure out time
+        {
+          m_climb->stopClimber();
+        }
+        time = 0;
+      }
+       //reset timer, figure out
+       //run motwer (12) for 0.0 revolutions
+      
+      
+      //start motor to move hook to top
+      
+      //stop motor after x revolutions
+    
+      //button 3 things
+      
+      //start motor to move hook 
+      
+      //stop motor after y revolutions
+      */
+      
+      
+
+    break;
+      
 
   //  case NOTE_HUNTING:
 
