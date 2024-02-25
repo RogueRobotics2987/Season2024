@@ -42,6 +42,7 @@
 #include "commands/AutoAuxilaryStateMachine.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
+#include "commands/DriveStateMachine.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -89,13 +90,8 @@ class RobotContainer
 
     std::vector<AutoPaths::AutoPath> path;
 
+
     //Blue auto Paths
-
-
-
-
-
-
 
     std::vector<frc::Pose2d>  B_1Waypoints{
       frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)), //added second line for test

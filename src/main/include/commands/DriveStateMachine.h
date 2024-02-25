@@ -50,21 +50,23 @@ class DriveStateMachine
   frc::XboxController* m_auxController = nullptr;
 
 
+  double speedX = 0;
+  double speedY = 0;
+  double rot = 0.0;
+  bool NoJoystickInput = false;
+
   units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
   units::velocity::meters_per_second_t speedNote = units::velocity::meters_per_second_t(0);
-  double kpNote = 0.09927;
+  double kpNote = 0.009927; //0.09927;
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
   double kpApril = 0.02206;
-  double speedX = 0;
-  double speedY = 0;
-  bool NoJoystickInput = false;
   double txApril = 0.0;
 
 
   bool noteFollowState = false;
-  bool aprilFollowState = false;
+  bool aprilFollowState = true; //false;
   bool standard = false;
 
   bool runIntake = false;

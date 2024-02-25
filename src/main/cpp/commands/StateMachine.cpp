@@ -59,6 +59,7 @@ void StateMachine::Execute()
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
   targetIDs.clear();
 
+  //TODO: is this going to interfear with the limelight subsystem?
 // Define Camera
 // Find out what we need to do to get strgest tag id
 // calculate camra tangent get camera dx and dy and get tan of that
@@ -245,6 +246,11 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
     
+    if(m_messager->GetDriveMessage().compare("runIntake") == 0)
+    {
+      state = PICKUP;
+      pickupNote = true;
+    }
     // if(pov0 == true)
     // {
     //   state = SPIT_OUT;
@@ -266,7 +272,7 @@ void StateMachine::Execute()
 
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
-      m_messager->SetAuxMessage("SpitOut");
+    m_messager->SetAuxMessage("SpitOut");
 
 
     m_shooter->runMagazine(-0.2);
@@ -307,7 +313,7 @@ void StateMachine::Execute()
     //   state = SPIT_OUT;
     //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     // }
-    else if(m_shooter->GetMagazineSensor())
+    if(m_shooter->GetMagazineSensor())
     {
       state = BACKUP;
       pickupNote = false;
@@ -319,7 +325,14 @@ void StateMachine::Execute()
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
+      m_messager->SetAuxMessage("None");
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
+    }
+
+    if(m_messager->GetDriveMessage().compare("Empty") == 0)
+    {
+      state = EMPTY;
+      pickupNote = false;
     }
 
     // if(pov0 == true)
@@ -400,7 +413,7 @@ void StateMachine::Execute()
 
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
-    m_messager->SetAuxMessage("ShooterWarmup");
+    m_messager->SetAuxMessage("AprilFollow");
 
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
@@ -419,7 +432,8 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
 
     } 
-    else if(moveNote2Shoot == true)
+    
+    if(moveNote2Shoot == true)
     {
       state = SHOOT;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOT");
