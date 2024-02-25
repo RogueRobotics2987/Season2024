@@ -11,7 +11,7 @@ AutoDriveStateMachine::AutoDriveStateMachine(
     LimelightSubsystem &limelight,
     frc::XboxController &driveXbox,
     frc::XboxController &auxXbox,
-    CommandMessenger &message,
+    MessengerCommand &message, /*CommandMessenger &message,*/
     std::vector<AutoPaths::AutoPath> &path
 )
 {

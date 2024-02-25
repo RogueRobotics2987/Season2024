@@ -23,26 +23,28 @@
 #include <iostream>
 #include <string>
 
-#include "subsystems/LimelightSubsystem.h"
-#include "../cpp/CommandMessenger.cpp"
 #include "../cpp/AutoPaths.cpp"
 #include "Constants.h"
-#include "subsystems/DriveSubsystem.h"
-#include "subsystems/SwerveModuleSubsystem.h"
+#include "MessengerCommand.h"
+
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagFollower.h"
 #include "commands/AutoAprilTag.h"
-#include "subsystems/ShooterSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/ArmSubsystem.h"
 #include "commands/FollowWaypoints.h"
 #include "commands/StateMachine.h"
 #include "commands/DriveStateMachine.h"
 #include "commands/AutoDriveStateMachine.h"
 #include "commands/AutoAuxilaryStateMachine.h"
+#include "commands/DriveStateMachine.h"
+
+#include "subsystems/LimelightSubsystem.h"
+#include "subsystems/DriveSubsystem.h"
+#include "subsystems/SwerveModuleSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
-#include "commands/DriveStateMachine.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -86,7 +88,8 @@ class RobotContainer
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
 
-    CommandMessenger driveShooterMessager;
+    //CommandMessenger driveShooterMessager;
+    MessengerCommand driveShooterMessager;
 
     std::vector<AutoPaths::AutoPath> path;
 

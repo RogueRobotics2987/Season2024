@@ -6,7 +6,9 @@
 
 DriveStateMachine::DriveStateMachine() {}
   
-DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &message) {
+DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, 
+                                     frc::XboxController &driveXbox, frc::XboxController &auxXbox, MessengerCommand &message) //CommandMessenger &message) 
+{
   // Use addRequirements() here to declare subsystem dependencies.
   m_drive = &drive;
   AddRequirements(m_drive);
@@ -21,53 +23,38 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
 // Called when the command is initially scheduled.
 void DriveStateMachine::Initialize() {
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
+  frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
+  frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
 
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveStateMachine::Execute() 
 {
-  frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
-  frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
-  frc::SmartDashboard::PutString("drive messenger", m_messager->GetDriveMessage());
-  frc::SmartDashboard::PutString("aux messenger", m_messager->GetAuxMessage());
+  // frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
+  // frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
+  // frc::SmartDashboard::PutString("drive messenger", m_messager->GetDriveMessage());
+  // frc::SmartDashboard::PutString("aux messenger", m_messager->GetAuxMessage());
   
   //Buttons
-  // if(m_driverController->GetRawButtonPressed(5))
-  // {
-  //   //noteFollowState = true;
-  //   runIntake = !runIntake;
-  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
-  //   runShooterWarmup = false;
-  // } 
-
-  // if(m_driverController->GetRawButtonPressed(6))
-  // {
-  //   runShooterWarmup = !runShooterWarmup;
-  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 1);
-  //   runIntake = false;
-  // }
-
-  // if(m_driverController->GetRawAxis(3) > 0.05){
-  //   standard = true;
-  // }
-
   if(m_driverController->GetRawButtonPressed(1))
   {
     noteFollowState = !noteFollowState;
+    frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
   }
   
-
   if(m_driverController->GetRawButtonPressed(2))
   {
     aprilFollowState = !aprilFollowState;
+    frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
   }
+
 
   switch (drive_state) 
   {
     case NONE:
       frc::SmartDashboard::PutString("drive state", "NONE");
-      m_messager->SetDriveMessage("any");
+      m_messager->SetDriveMessage("None");
 
       speedY = Deadzone(m_driverController->GetLeftY());
       speedX = Deadzone(m_driverController->GetLeftX());
@@ -143,7 +130,6 @@ void DriveStateMachine::Execute()
 
         m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
       }
-    
       
       if(noteFollowState == false)
       {

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../cpp/CommandMessenger.cpp"
+#include "MessengerCommand.h"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
@@ -38,7 +39,8 @@ class AutoAuxilaryStateMachine
  public:
   AutoAuxilaryStateMachine();
   AutoAuxilaryStateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);// LimelightSubsystem &limelight, 
+               IntakeSubsystem &intake, ShooterSubsystem &shooter, 
+               frc::XboxController &driveXbox, frc::XboxController &auxXbox, MessengerCommand &message); //CommandMessenger &messager);// LimelightSubsystem &limelight, 
               // DriveSubsystem &drivetrain);
 
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
@@ -74,7 +76,8 @@ class AutoAuxilaryStateMachine
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
-  CommandMessenger* m_messager;
+  //CommandMessenger* m_messager;
+  MessengerCommand* m_messager;
  // LimelightSubsystem* m_limelight = nullptr;
   // DriveSubsystem* m_drivetrain = nullptr;
 

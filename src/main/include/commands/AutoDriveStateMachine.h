@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "../cpp/CommandMessenger.cpp"
+#include "MessengerCommand.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "networktables/NetworkTableInstance.inc"
@@ -28,7 +29,8 @@ class AutoDriveStateMachine
     : public frc2::CommandHelper<frc2::Command, AutoDriveStateMachine> {
  public:
   AutoDriveStateMachine();
-  AutoDriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager, 
+  AutoDriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &limelight, 
+    frc::XboxController &driveXbox, frc::XboxController &auxXbox, MessengerCommand &message, /*CommandMessenger &messager,*/ 
     std::vector<AutoPaths::AutoPath> &path
   );
 
@@ -51,7 +53,8 @@ class AutoDriveStateMachine
 
   DriveSubsystem* m_drive;
   LimelightSubsystem* m_limelight;
-  CommandMessenger* m_messager;
+  //CommandMessenger* m_messager;
+  MessengerCommand* m_messager;
 
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;

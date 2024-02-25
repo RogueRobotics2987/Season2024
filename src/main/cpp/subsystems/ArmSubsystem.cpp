@@ -58,9 +58,6 @@ void ArmSubsystem::Periodic() {
     }
 
 
-
-
-
     LowerArm.Set((DistanceBetweenAngles(m_LowerDesired, LowerArmAngle) * ArmConstants::kpLowerArm) * -1);   // questionably tested
     UpperArm.Set((DistanceBetweenAngles(m_UpperDesired, UpperArmAngle) * ArmConstants::kpUpperArm) * -1); 
 }
@@ -100,19 +97,6 @@ void ArmSubsystem::setVoltage(double speed){
     LowerArm.Set(speed);
 }
 
-void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
-    //frc::SmartDashboard::PutString("state function: ", "dropNote");
-
-    //double lowArmAngle = m_LowerArmEncoder.GetPosition();
-
-    //ArmWheels.Set(0.5);
-}
-
-void ArmSubsystem::stopDrop(){      //stop armWheels
-    //frc::SmartDashboard::PutString("state function: ", "stopDrop");
-    //ArmWheels.Set(0.0);
-}
-
 double ArmSubsystem::getLowerEncoderPos(){
     return m_LowerArmEncoder.GetAbsolutePosition();
 }
@@ -121,26 +105,16 @@ double ArmSubsystem::getUpperEncoderPos(){
     return m_UpperArmEncoder.GetAbsolutePosition();
 }
 
+
 void ArmSubsystem::runArmWheels(double speed){
    ArmWheels.Set(-speed);
 }
+
 void ArmSubsystem::stopArmWheels()
 {
     ArmWheels.Set(0.0);
 }
-// bool ArmSubsystem::compareHasNote(bool Other){
-//     if(Other && HasNote) {
-//         return true;
-//     }
-//     else{
-//         return false;
-//     }
-// }
 
-void ArmSubsystem::StopWheels()
-{
-    ArmWheels.Set(0.0);
-}
 
 double ArmSubsystem::GetOffSetEncoderValueLower()
 {
@@ -190,6 +164,7 @@ double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngl
 
   return a;
 }
+
 void ArmSubsystem::FollowShooter(double error){
     ArmWheels.Set(error * 0.035);
 }
@@ -198,4 +173,20 @@ void ArmSubsystem::MoveLowerArm(){
     LowerArm.Set(0.5);
 }
 
+// void ArmSubsystem::StopWheels()
+// {
+//     ArmWheels.Set(0.0);
+// }
 
+// void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
+//     //frc::SmartDashboard::PutString("state function: ", "dropNote");
+
+//     //double lowArmAngle = m_LowerArmEncoder.GetPosition();
+
+//     //ArmWheels.Set(0.5);
+// }
+
+// void ArmSubsystem::stopDrop(){      //stop armWheels
+//     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
+//     //ArmWheels.Set(0.0);
+// }

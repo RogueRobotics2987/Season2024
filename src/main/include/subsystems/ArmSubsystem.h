@@ -27,10 +27,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void setVoltage(double speed);
 
-  void StopWheels();
-
-  void dropNote();
-  void stopDrop();
+  // void StopWheels();
+  // void dropNote();
+  // void stopDrop();
 
   void runArmWheels(double speed);
   void stopArmWheels();
@@ -67,12 +66,4 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double LowerArmAngle = 0;
   double UpperArmAngle = 0;
-
-  // enum armState {INITIAL, LOWER_ARM_EXTEND_INITIAL, UPPER_ARM_EXTEND_INITIAL, ARM_FINAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL};
-  // armState state = INITIAL;
-  // frc::XboxController* m_Xbox = nullptr;
-  // bool HasNote = false;
-
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
 };

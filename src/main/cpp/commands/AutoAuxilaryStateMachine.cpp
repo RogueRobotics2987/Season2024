@@ -14,7 +14,7 @@ AutoAuxilaryStateMachine::AutoAuxilaryStateMachine(
   ShooterSubsystem &shooter, 
   frc::XboxController &driveXbox,
   frc::XboxController &auxXbox,
-  CommandMessenger &message)
+  MessengerCommand &message) //CommandMessenger &message)
 {
   m_arm = &arm;
   AddRequirements({m_arm});
@@ -242,13 +242,13 @@ void AutoAuxilaryStateMachine::Execute()
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
-    m_arm->stopDrop();
+    //m_arm->stopDrop();
     //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     //m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
     m_shooter->stopMagazine();
     m_shooter->StopShooter();
-    m_arm->StopWheels();
+    m_arm->stopArmWheels();
 
     m_shooter->SetIntakePose();
 
@@ -324,7 +324,7 @@ void AutoAuxilaryStateMachine::Execute()
       magEncoderPos = m_shooter->GetCurrMagEncoderVal();
 
       m_intake->stopIntake();
-      m_arm->StopWheels();
+      m_arm->stopArmWheels();
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
@@ -376,7 +376,7 @@ void AutoAuxilaryStateMachine::Execute()
 
     // turn running motors off
     m_intake->stopIntake();
-    m_arm->StopWheels();
+    m_arm->stopArmWheels();
     m_shooter->holdMagazine(magEncoderPos);
     m_shooter->StopShooter();
 

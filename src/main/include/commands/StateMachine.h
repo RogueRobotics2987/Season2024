@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../cpp/CommandMessenger.cpp"
+#include "MessengerCommand.h"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
@@ -38,7 +39,8 @@ class StateMachine
  public:
   StateMachine();
   StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);// LimelightSubsystem &limelight, 
+               IntakeSubsystem &intake, ShooterSubsystem &shooter, 
+               frc::XboxController &driveXbox, frc::XboxController &auxXbox, MessengerCommand &message); //CommandMessenger &messager);// LimelightSubsystem &limelight, 
               // DriveSubsystem &drivetrain);
 
   units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
@@ -56,9 +58,8 @@ class StateMachine
   bool IsFinished() override;
 
  private:
-  //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
-  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, 
-    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING};
+  enum intakeState {EMPTY, SPIT_OUT, PICKUP, BACKUP, LOADED, SHOOTER_WARMUP, SHOOT, FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, ARM_CHAIN_CLIMB, 
+                    /*DROP_WARMUP, DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, NOTE_HUNTING*/};
   intakeState state = EMPTY;
 
   std::vector<double> RedDistVector;
@@ -74,7 +75,8 @@ class StateMachine
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
-  CommandMessenger* m_messager;
+  //CommandMessenger* m_messager;
+  MessengerCommand* m_messager;
  // LimelightSubsystem* m_limelight = nullptr;
   // DriveSubsystem* m_drivetrain = nullptr;
 
@@ -82,38 +84,40 @@ class StateMachine
   frc::XboxController* m_auxController = nullptr;
 
   // bool huntingNote = false;
+  bool resetLoaded = false;
 
-  bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
-
+  bool pickupNote = false;        // if auto/teleop want to pickup a note
   bool emptyIntake = false;       // self explainitory
 
-  bool warmUpShooter = false;     // warmup shooter (warmMilk)
+  bool warmUpShooter = false;     // warmup shooter
   bool moveNote2Shoot = false;    // move note into shooter
 
   bool placeInForwardAmp = false;
   bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
 
-  units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
-  units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
-  units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
-
-  bool pov0 = false; // spit out note when button pov0 is pressed
+  bool pov0 = false;              // spit out note when button pov0 is pressed
 
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
   //bool waitForArm = false;        // waits for the armSubsystem/dropper state machine
   float Deadzone(float x);
   double tx = 0.0;
+
   int time = 0;       //keep track of shooter iterations
+  int timeDrop = 0;   //keep track of dropper iterations
+
+  double magEncoderPos = 0.0;
+
+
+  units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
+  units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
+  units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
+
   std::vector<double> targetIDs;
   std::vector<photon::PhotonTrackedTarget> myTargets;
   double targetData = 0;
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;
   units::meter_t filteredRange = 0_m;
-
-  int timeDrop = 0;   //keep track of dropper iterations
-
-  double magEncoderPos = 0.0;
 };
