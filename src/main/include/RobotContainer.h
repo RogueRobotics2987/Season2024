@@ -97,12 +97,10 @@ class RobotContainer
 
 
 
-    std::vector<frc::Pose2d>  B_1Waypoints{ //TODO change back later
-      frc::Pose2d(1.45_m, 8_m, frc::Rotation2d(180_deg)), //added second line for test
+    std::vector<frc::Pose2d>  B_1Waypoints{ 
       frc::Pose2d(1.45_m, 7_m, frc::Rotation2d(180_deg)), //added second line for test
-      frc::Pose2d(1.45_m, 6_m, frc::Rotation2d(180_deg)), //added second line for test
-      // frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
-      // frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
+      frc::Pose2d(2_m, 7_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.90_m, 7_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_1PointSpeed{
@@ -128,6 +126,9 @@ class RobotContainer
       true,
       true
     };
+
+    std::string B_1EndCommand = "Shoot";
+    std::string B_12EndCommand = "NoteFollow"; //temp string to force a state when testing
 
     std::vector<frc::Pose2d>  B_2Waypoints{
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),

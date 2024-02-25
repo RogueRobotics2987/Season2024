@@ -327,13 +327,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     B_1.Waypoints = B_1Waypoints;
     B_1.Command = B_1Command;
     B_1.limelightFollow = B_1LimelightPath;
+    B_1.EndCommand = B_1EndCommand;
 
-    // AutoPaths::AutoPath B_12;
-    // B_12.PointSpeed = B_1PointSpeed;
-    // B_12.CruiseSpeed = B_1CruiseSpeed;
-    // B_12.Waypoints = B_1Waypoints;
-    // B_12.Command = B_1Command;
-    // B_12.limelightFollow = B_1LimelightPath; 
+    AutoPaths::AutoPath B_12;
+    B_12.PointSpeed = B_1PointSpeed;
+    B_12.CruiseSpeed = B_1CruiseSpeed;
+    B_12.Waypoints = B_1Waypoints;
+    B_12.Command = B_1Command;
+    B_12.limelightFollow = B_1LimelightPath; 
+    B_12.EndCommand = B_12EndCommand;
     
     // AutoPaths::AutoPath B_13;
     // B_13.PointSpeed = B_1PointSpeed;
@@ -343,7 +345,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     // B_13.limelightFollow = B_1LimelightPath;
 
     path.push_back(B_1);
-    // path.push_back(B_12);
+    path.push_back(B_12);
     // path.push_back(B_13);
 
     return frc2::cmd::Sequence(
