@@ -135,6 +135,7 @@ namespace ShooterConstants {
 }
 
 namespace ArmConstants {
+    
     constexpr double LowerInitialAngle = 0;
     constexpr double UpperInitialAngle = 0;
 
