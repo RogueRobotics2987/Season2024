@@ -89,6 +89,9 @@ void StateMachine::Execute()
   // std::cout << "Debug:" << noteFollowState << std::endl;
   // std::cout << "Debug: button A " << buttonA << std::endl;
 
+  frc::SmartDashboard::PutBoolean("ButtonA", buttonA);
+  frc::SmartDashboard::PutBoolean("ButtonB", buttonB);
+
   if(buttonA && state == EMPTY)
   {
     // std::cout << "debug" << 93 << std::endl;
@@ -117,6 +120,12 @@ void StateMachine::Execute()
     //TODO: trace code
     pickupNote = !pickupNote;
   }
+
+  if(m_driverController->GetRawButtonPressed(7))
+  {
+    m_drive->ZeroHeading();
+  }
+
 
   //this will get lost sometimes where you cannot turn it off while april tag tracker is being used
   if(m_driverController->GetRawButtonPressed(6))
@@ -186,6 +195,8 @@ void StateMachine::Execute()
 
   if(noteFollowState != true && aprilFollowState != true)
   {
+    frc::SmartDashboard::PutString("DriveConfiguration ", "DefaultDrive");
+
     speedY = Deadzone(m_driverController->GetLeftY());
     speedX = Deadzone(m_driverController->GetLeftX());
     rot = Deadzone(m_driverController->GetRightX());
@@ -199,10 +210,12 @@ void StateMachine::Execute()
       NoJoystickInput = false;
     }
 
-    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
   }
   else if(noteFollowState == true)
   {
+    frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
+
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
     {
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
@@ -219,7 +232,6 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      
       m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
     } 
     else 
@@ -237,11 +249,13 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
 
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
     }
   }
   else if(aprilFollowState == true)
   {
+    frc::SmartDashboard::PutString("DriveConfiguration ", "AprilFollow");
+
     if(m_limelight->PhotonHasTarget() == true)
     {
       txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
@@ -282,7 +296,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
 
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
     }
   }
 
