@@ -143,11 +143,15 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
 {
     if(desiredAngle >= ArmConstants::LowerArmSoftLimitHigh)
     {
-        desiredAngle = ArmConstants::LowerArmSoftLimitHigh;
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
     }
     else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
     {
-        desiredAngle = ArmConstants::LowerArmSoftLimitLow;
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
+    }
+    else
+    {
+        m_LowerDesired = desiredAngle;
     }
 
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
@@ -169,11 +173,14 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
 {
     if(desiredAngle >= ArmConstants::UpperArmSoftLimitHigh)
     {
-        desiredAngle = ArmConstants::UpperArmSoftLimitHigh;
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitHigh;
     }
     else if(desiredAngle <= ArmConstants::UpperArmSoftLimitLow)
     {
-        desiredAngle = ArmConstants::UpperArmSoftLimitLow;
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitLow;
+    }
+    else{
+        m_UpperDesired = desiredAngle;
     }
 
     double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());

@@ -58,6 +58,8 @@ void StateMachine::Execute()
   frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
   frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
 
+  filteredTargetID = m_limelight->GetFilteredTarget().GetFiducialId();
+ 
   //double Driver_Angle = frc::SmartDashboard::GetNumber("Driver Angle", 30 );
   // if (frc::SmartDashboard::GetNumber("Driver Angle", 20 )< 20){
 
@@ -65,7 +67,6 @@ void StateMachine::Execute()
   //    m_shooter->SetActuator(frc::SmartDashboard::GetNumber("Driver Angle", 20 ));
   // }
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
-  targetIDs.clear();
 
   // apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
@@ -440,7 +441,7 @@ void StateMachine::Execute()
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
       //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
-      m_shooter->ApriltagShooterTheta(filteredRange.value());
+      m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance());
     }
 
     if(warmUpShooter == true)
@@ -473,7 +474,7 @@ void StateMachine::Execute()
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
       //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
-      m_shooter->ApriltagShooterTheta(filteredRange.value());
+      m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance());
     }
 
     //start shooter motors
