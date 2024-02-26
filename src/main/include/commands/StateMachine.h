@@ -127,7 +127,7 @@ class StateMachine
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
   //bool waitForArm = false;        // waits for the armSubsystem/dropper state machine
-  float Deadzone(float x);
+
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
   std::vector<double> targetIDs;
