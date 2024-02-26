@@ -26,11 +26,11 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
 
-    frc::SmartDashboard::GetNumber("lower arm desired", m_LowerDesired);
-    frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
+    frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
+    //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
-    frc::SmartDashboard::GetNumber("upper arm desired", m_UpperDesired);
-    frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
+    frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
+   // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
 
     setLowerArmAngle(m_LowerDesired);
     setUpperArmAngle(m_UpperDesired);
@@ -143,12 +143,17 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
 {
     if(desiredAngle >= ArmConstants::LowerArmSoftLimitHigh)
     {
-        desiredAngle = ArmConstants::LowerArmSoftLimitHigh;
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
     }
     else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
     {
-        desiredAngle = ArmConstants::LowerArmSoftLimitLow;
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
     }
+    else
+    {
+        m_LowerDesired = desiredAngle;
+    }
+
 
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
     if(LowerangleError < 10)
@@ -169,12 +174,17 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
 {
     if(desiredAngle >= ArmConstants::UpperArmSoftLimitHigh)
     {
-        desiredAngle = ArmConstants::UpperArmSoftLimitHigh;
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitHigh;
     }
     else if(desiredAngle <= ArmConstants::UpperArmSoftLimitLow)
     {
-        desiredAngle = ArmConstants::UpperArmSoftLimitLow;
+        m_UpperDesired = ArmConstants::UpperArmSoftLimitLow;
     }
+   else
+    {
+        m_UpperDesired = desiredAngle;
+    }
+
 
     double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
     if(UpperangleError < 5)
