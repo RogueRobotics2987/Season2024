@@ -13,15 +13,14 @@ void ClimberSubsystem::Periodic()
 }
 
 
-void ClimberSubsystem::startClimber() 
-{
-    ClimberMoter.Set(0.5);  
+void ClimberSubsystem::startClimber() {
+    ClimberMoter.Set(0.05);  
+    //ClimberMoter.GetEncoder();
 }
 
-void ClimberSubsystem::stopClimber()
- {
+void ClimberSubsystem::stopClimber() {
     ClimberMoter.Set(0.0);
- }
+}
 
 
 

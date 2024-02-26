@@ -35,7 +35,8 @@ void StateMachine::Initialize()
 {
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
-
+  m_arm->setLowerArmAngle(0);
+  m_arm->setUpperArmAngle(0);
   frc::SmartDashboard::PutNumber("Driver Angle", 20);
 
   if(m_shooter->GetMagazineSensor())
@@ -723,33 +724,41 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
 
       //move shooter out of way
-      m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
 
-      if(time >= 60 && time <= 300)
+      if(time >= 180 && time < 360)
       {
         //move arms out of way 
         m_arm->setLowerArmAngle(ArmConstants::LowerClimbingExtentionAngle);
-        
       }
-
-      time++;
 
       
-      //button 1 things
-      /*if(raiseHook == true)
+
+      if(time >= 360)
       {
-        m_climb->startClimber();
-
-        time++;
-
-        if(time >= 90) //figure out time
-        {
-          m_climb->stopClimber();
-        }
-        time = 0;
+        //move arms out of way 
+        m_arm->setUpperArmAngle(ArmConstants::UpperClimbingExtentionAngle);
       }
 
-      if(raiseRobot == true)
+      
+        time++;
+      
+      
+      //button 1 things
+      if(raiseHook == true)
+      {
+        m_climb->startClimber(); 
+
+        //time++;
+
+        //if(time >= 90) //figure out time
+        //{
+          m_climb->stopClimber();
+        //}
+        //time = 0;
+      }
+
+     /*if(raiseRobot == true)
       {
         m_climb->startClimber();
 
@@ -764,7 +773,7 @@ void StateMachine::Execute()
        //reset timer, figure out
        //run motwer (12) for 0.0 revolutions
       
-      
+      */
       //start motor to move hook to top
       
       //stop motor after x revolutions
@@ -774,7 +783,6 @@ void StateMachine::Execute()
       //start motor to move hook 
       
       //stop motor after y revolutions
-      */
       
       
 
