@@ -36,8 +36,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
 
-  frc::DigitalInput intakeColorSensorFront {1};   // 0 is a place holder for the DIO port
-  frc::DigitalInput intakeColorSensorRear {2};   // 0 is a place holder for the DIO port
+  frc::DigitalInput intakeColorSensorFront {3};   // 0 is a place holder for the DIO port
+  frc::DigitalInput intakeColorSensorRear {4};   // 0 is a place holder for the DIO port
 
 
   // Components (e.g. motor controllers and sensors) should generally be

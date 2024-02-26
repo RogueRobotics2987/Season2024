@@ -82,12 +82,32 @@ void StateMachine::Execute()
   //   m_arm->setVoltage(0);
   // }
 
-  if(m_driverController->GetRawButtonPressed(1) && state == EMPTY)
+  buttonA = m_driverController->GetRawButtonPressed(1);
+  buttonB = m_driverController->GetRawButtonPressed(2);
+
+  // std::cout << "Debug:" << state << std::endl;
+  // std::cout << "Debug:" << noteFollowState << std::endl;
+  // std::cout << "Debug: button A " << buttonA << std::endl;
+
+  if(buttonA && state == EMPTY)
   {
-    noteFollowState = !noteFollowState;
+    // std::cout << "debug" << 93 << std::endl;
+    noteFollowState = true;
+    pickupNote = true;
+  }
+  else if(buttonA && state == PICKUP && noteFollowState == true)
+  {
+  // std::cout << "debug" << 99 << std::endl;
+
+    noteFollowState = false;
+    pickupNote = false;
+  }
+  else if(state == LOADED){
+    // std::cout << "debug" << 105 << std::endl;
+    noteFollowState = false;
   }
 
-  if(m_driverController->GetRawButtonPressed(2) && state == SHOOTER_WARMUP)
+  if(buttonB && state == SHOOTER_WARMUP)
   {
     aprilFollowState = !aprilFollowState;
   }
@@ -98,6 +118,7 @@ void StateMachine::Execute()
     pickupNote = !pickupNote;
   }
 
+  //this will get lost sometimes where you cannot turn it off while april tag tracker is being used
   if(m_driverController->GetRawButtonPressed(6))
   { 
     warmUpShooter = !warmUpShooter;
@@ -160,7 +181,10 @@ void StateMachine::Execute()
 
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
-  if(noteFollowState != true || aprilFollowState != true)
+  frc::SmartDashboard::PutBoolean("noteFollowState", noteFollowState);
+  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState);
+
+  if(noteFollowState != true && aprilFollowState != true)
   {
     speedY = Deadzone(m_driverController->GetLeftY());
     speedX = Deadzone(m_driverController->GetLeftX());
@@ -177,7 +201,7 @@ void StateMachine::Execute()
 
     m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
   }
-  else if(noteFollowState == true && aprilFollowState != true)
+  else if(noteFollowState == true)
   {
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
     {
@@ -216,31 +240,31 @@ void StateMachine::Execute()
       m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
     }
   }
-  else if(noteFollowState != true && aprilFollowState == true)
+  else if(aprilFollowState == true)
   {
     if(m_limelight->PhotonHasTarget() == true)
     {
-    txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
-    frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
+      txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+      frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-    //rotApril = units::angular_velocity::radians_per_second_t(0);
-    //if(txApril > 7 || txApril < -7){
-    rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
-    //}
+      //rotApril = units::angular_velocity::radians_per_second_t(0);
+      //if(txApril > 7 || txApril < -7){
+      rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      //}
 
-    speedY = Deadzone(m_driverController->GetLeftY());
-    speedX = Deadzone(m_driverController->GetLeftX());
+      speedY = Deadzone(m_driverController->GetLeftY());
+      speedX = Deadzone(m_driverController->GetLeftX());
 
-    if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
-    {
-      NoJoystickInput = true;
-    }
-    else
-    {
-      NoJoystickInput = false;
-    }
-      
-    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+      if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
+      {
+        NoJoystickInput = true;
+      }
+      else
+      {
+        NoJoystickInput = false;
+      }
+        
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
 
     } 
     else 
@@ -284,17 +308,6 @@ void StateMachine::Execute()
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
-    
-
-    //TODO: THERE IS NO MESSENGER
-    /*
-    if(m_messager->GetDriveMessage().compare("runIntake") == 0)
-    {
-      state = PICKUP;
-      pickupNote = true;
-    }
-    */
-
 
     // if(pov0 == true)
     // {
@@ -311,7 +324,6 @@ void StateMachine::Execute()
     if(placeInTrap || placeInForwardAmp){
       state = RAISE_SHOOTER;
     }
-
 
     break;
 
@@ -368,15 +380,6 @@ void StateMachine::Execute()
 
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
-
-    //TODO: THERE IS NO MESSENGER
-    /*
-    if(m_messager->GetDriveMessage().compare("Empty") == 0)
-    {
-      state = EMPTY;
-      pickupNote = false;
-    }
-    */
 
     // if(pov0 == true)
     // {

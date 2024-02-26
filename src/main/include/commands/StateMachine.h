@@ -21,6 +21,8 @@
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h> 
 
+#include "networktables/NetworkTableInstance.inc"
+
 #include "photon/PhotonUtils.h"
 #include "photon/PhotonCamera.h"
 #include "photon/PhotonPoseEstimator.h"
@@ -144,11 +146,11 @@ class StateMachine
 //TODO: MOVED OVER FROM DriveStateMachine
   units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
   units::velocity::meters_per_second_t speedNote = units::velocity::meters_per_second_t(0);
-  double kpNote = 0.009927; //0.09927;
+  double kpNote = 0.05;
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-  double kpApril = 0.02206;
+  double kpApril = 0.09;
   double txApril = 0.0;
 
   bool noteFollowState = false;
@@ -156,4 +158,6 @@ class StateMachine
   bool standard = false;
   bool runIntake = false;
   bool runShooterWarmup = false;
+  bool buttonA = false;
+  bool buttonB = false;
 };

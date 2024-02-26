@@ -70,7 +70,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
   //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
-  frc::DigitalInput MagazineSensor{3};
+  frc::DigitalInput MagazineSensor{5};
   rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder();
   
   frc::PIDController shooterPIDController{ShooterConstants::kp, ShooterConstants::ki, 0};
