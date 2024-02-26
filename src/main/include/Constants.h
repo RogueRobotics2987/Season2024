@@ -170,7 +170,7 @@ namespace ArmConstants {
     constexpr double UpperArmSoftLimitHigh = 67;
     constexpr double LowerArmSoftLimitHigh = 41;
 
-    constexpr double LowerArmOffset = 0.865;
+    constexpr double LowerArmOffset = -49;
     constexpr double UpperArmOffset = 0.14;
     
     constexpr double kpLowerArm = 0.0111/3;  //TODO: test

@@ -86,16 +86,16 @@ void ArmSubsystem::StopWheels()
 double ArmSubsystem::GetOffSetEncoderValueLower()
 {
     double Pose = 0;
-    Pose = m_LowerArmEncoder.GetAbsolutePosition() - ArmConstants::LowerArmOffset; //Offset used to reference a desired zero position with raw encoder value
+    Pose = m_LowerArmEncoder.GetAbsolutePosition() ; //Offset used to reference a desired zero position with raw encoder value
 
     // if(Pose < 0){
         // Pose += 1;
     // }
 
-    // Pose = fabs(Pose - 1);  //This is the invert
+    Pose = fabs(Pose - 1);  //This is the invert
     Pose *= 360;
 
-    return Pose;
+    return Pose + ArmConstants::LowerArmOffset;
 }
 
 double ArmSubsystem::GetOffSetEncoderValueUpper()
@@ -151,7 +151,8 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
     }
 
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
-    if(LowerangleError < 10){
+    if(LowerangleError < 10)
+    {
         LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
     }    
     else {
@@ -176,7 +177,8 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
     }
 
     double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
-    if(UpperangleError < 0.15){
+    if(UpperangleError < 5)
+    {
         UpperaccumulatedError += ArmConstants::kiUpperArm * UpperangleError;
     }
     else {
