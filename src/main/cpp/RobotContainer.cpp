@@ -146,17 +146,20 @@ float RobotContainer::Deadzone(float x){
 
 frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine(){
   return StateMachine(
+      m_drive,
+      m_limelight,
+      m_driverController,
       m_arm, 
       m_climb,
       m_color, //can remove?
       m_intake,
-      m_shooter, 
-      m_driverController,
+      m_shooter,
       m_auxController,
       driveShooterMessager
     ).ToPtr();
 }
 
+/*
 frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
   return DriveStateMachine(
     m_drive,
@@ -166,6 +169,7 @@ frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
     driveShooterMessager
   ).ToPtr();
 }
+*/
 
 frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
   return AutoAuxilaryStateMachine(

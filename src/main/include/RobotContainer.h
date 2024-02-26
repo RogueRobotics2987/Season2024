@@ -65,7 +65,7 @@ class RobotContainer
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
     frc2::CommandPtr GetAuxilaryStateMachine();
-    frc2::CommandPtr GetDriveStateMachine();
+    //frc2::CommandPtr GetDriveStateMachine();
     frc2::CommandPtr GetAutoAuxilaryStateMachine();
     frc2::CommandPtr GetAutoDriveStateMachine();
 

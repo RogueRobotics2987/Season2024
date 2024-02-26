@@ -19,9 +19,9 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
 }
 
 // Called when the command is initially scheduled.
-void DriveStateMachine::Initialize() {
+void DriveStateMachine::Initialize()
+{
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
-
 }
 
 // Called repeatedly when this Command is scheduled to run
