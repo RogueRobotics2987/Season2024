@@ -49,7 +49,6 @@ class DriveStateMachine
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;
 
-
   double speedX = 0;
   double speedY = 0;
   double rot = 0.0;
@@ -68,8 +67,6 @@ class DriveStateMachine
   bool noteFollowState = false;
   bool aprilFollowState = true; //false;
   bool standard = false;
-
   bool runIntake = false;
   bool runShooterWarmup = false;
-
 };
