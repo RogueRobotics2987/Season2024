@@ -104,14 +104,7 @@ void DriveStateMachine::Execute()
       {
         txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
 
-        //if(txNote > 7 || txNote < -7)
-        //{
           rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
-        // }
-        // else
-        // {
-        //   rotNote = units::angular_velocity::radians_per_second_t(0);
-        // }
 
         speedY = Deadzone(m_driverController->GetLeftY());
 

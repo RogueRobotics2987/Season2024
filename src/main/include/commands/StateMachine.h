@@ -58,10 +58,6 @@ class StateMachine
   float Deadzone(float x);
 
   //TODO: WHY ARE THESE PUBLIC? REVIEW THESE AND THEY PROBABLY NEED TO GO TO PRIVATE
-  units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
-  units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
-  double kp = 0.02206;//0.0248175;//0.009927;
-  double speedY = 0;
 
  private:
   enum intakeState 
@@ -140,6 +136,10 @@ class StateMachine
   int timeDrop = 0;   //keep track of dropper iterations
 
   double magEncoderPos = 0.0;
+
+  double rot = 0;
+  double kp = 0.02206;//0.0248175;//0.009927;
+  double speedY = 0;
 
 //TODO: MOVED OVER FROM DriveStateMachine
   units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);

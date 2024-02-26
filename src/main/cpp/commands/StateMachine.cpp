@@ -47,7 +47,7 @@ void StateMachine::Initialize()
 
   if(m_shooter->GetMagazineSensor())
   {
-    state = LOADED;
+    state = BACKUP;
     magEncoderPos = m_shooter->GetCurrMagEncoderVal();
   }
 }
@@ -67,84 +67,6 @@ void StateMachine::Execute()
   frc::SmartDashboard::PutBoolean("Pick up note?: ", pickupNote);
   targetIDs.clear();
 
-  //TODO: is this going to interfear with the limelight subsystem?
-// Define Camera
-// Find out what we need to do to get strgest tag id
-// calculate camra tangent get camera dx and dy and get tan of that
-  photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
-  photon::PhotonPipelineResult result = camera.GetLatestResult();
-  bool hasTarget = result.HasTargets();
-
-  frc::SmartDashboard::PutBoolean("hasTarget", hasTarget);
-
-  if(hasTarget)
-  {
-    //TODO clean up variable names to make them more understandable in this if statement
-    std::span<const photon::PhotonTrackedTarget> tempTargets = result.GetTargets();
-    myTargets.assign(tempTargets.begin(), tempTargets.end());
-
-    for(unsigned int i = 0; i < myTargets.size(); i++)
-    {
-      targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
-
-      if(myTargets.at(i).GetFiducialId() == 4)
-      {
-        filteredTarget = myTargets.at(i);
-        filteredTargetID = filteredTarget.GetFiducialId();
-        //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
-        frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
-        frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
-
-        filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
-          CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
-        units::degree_t{filteredTarget.GetPitch()});
-        frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
-      }
-    }
-
-    photon::PhotonTrackedTarget target = result.GetBestTarget();
-    
-    units::meter_t range = photon::PhotonUtils::CalculateDistanceToTarget(
-      CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
-    units::degree_t{target.GetPitch()});
-  
-    frc::SmartDashboard::PutNumber("DistanceToTarget", range.value());
-
-    double yaw = target.GetYaw();
-    int targetID = target.GetFiducialId();
-
-    frc::SmartDashboard::PutNumberArray("Targets", targetIDs);
-
-    frc::SmartDashboard::PutNumber("TargetID", targetID);
-    frc::SmartDashboard::PutNumber("TargetYaw", yaw);
-
-  }
-
-  if (result.MultiTagResult().result.isPresent) {
-    wpi::SmallVector<int16_t, 32U> fieldToCamera = result.MultiTagResult().fiducialIdsUsed;
-    std::vector<double> temp;
-    temp.assign(fieldToCamera.begin(), fieldToCamera.end());
-    frc::SmartDashboard::PutNumberArray("MegaPoseID", temp);
-
-    frc::Transform3d multi = result.MultiTagResult().result.best;
-
-    frc::SmartDashboard::PutNumber("MegaPoseRoll", (multi.Rotation().X().value() * (180/3.14159)));
-    frc::SmartDashboard::PutNumber("MegaPosePitch", (multi.Rotation().Y().value() * (180/3.14159)));
-    frc::SmartDashboard::PutNumber("MegaPoseYaw", (multi.Rotation().Z().value()  * (180/3.14159)));
-    frc::SmartDashboard::PutNumber("MegaPoseX", multi.X().value());
-    frc::SmartDashboard::PutNumber("MegaPoseY", multi.Y().value());
-    frc::SmartDashboard::PutNumber("MegaPoseZ", multi.Z().value());
-    // frc::SmartDashboard::PutNumber("MegaPoseTranslation", multi.Translation());
-  }
-  
-  
-
-  // RedDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpired", std::span<const double>({0, 0, 0, 0, 0, 0}));
-  // BlueDistVector = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose_wpiblue", std::span<const double>({0, 0, 0, 0, 0, 0}));
-
-  // blueDist = BlueDistVector[0];
-  // redDist = RedDistVector[0];
-
   // apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
   m_shooter->accumulateError();
@@ -160,12 +82,12 @@ void StateMachine::Execute()
   //   m_arm->setVoltage(0);
   // }
 
-  if(m_driverController->GetRawButtonPressed(1))
+  if(m_driverController->GetRawButtonPressed(1) && state == EMPTY)
   {
     noteFollowState = !noteFollowState;
   }
 
-  if(m_driverController->GetRawButtonPressed(2))
+  if(m_driverController->GetRawButtonPressed(2) && state == SHOOTER_WARMUP)
   {
     aprilFollowState = !aprilFollowState;
   }
@@ -238,7 +160,107 @@ void StateMachine::Execute()
 
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
+  if(noteFollowState != true || aprilFollowState != true)
+  {
+    speedY = Deadzone(m_driverController->GetLeftY());
+    speedX = Deadzone(m_driverController->GetLeftX());
+    rot = Deadzone(m_driverController->GetRightX());
 
+    if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+    {
+      NoJoystickInput = true;
+    }
+    else
+    {
+      NoJoystickInput = false;
+    }
+
+    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+  }
+  else if(noteFollowState == true && aprilFollowState != true)
+  {
+    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
+    {
+      txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
+
+      rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
+
+      speedY = Deadzone(m_driverController->GetLeftY());
+
+      if((fabs(speedY) + fabs(rotNote.value())) < .05)
+      {
+        NoJoystickInput = true;
+      }
+      else
+      {
+        NoJoystickInput = false;
+      }
+      
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+    } 
+    else 
+    {
+      speedY = Deadzone(m_driverController->GetLeftY());
+      speedX = Deadzone(m_driverController->GetLeftX());
+      rot = Deadzone(m_driverController->GetRightX());
+
+      if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+      {
+        NoJoystickInput = true;
+      }
+      else
+      {
+        NoJoystickInput = false;
+      }
+
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+    }
+  }
+  else if(noteFollowState != true && aprilFollowState == true)
+  {
+    if(m_limelight->PhotonHasTarget() == true)
+    {
+    txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+    frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
+
+    //rotApril = units::angular_velocity::radians_per_second_t(0);
+    //if(txApril > 7 || txApril < -7){
+    rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+    //}
+
+    speedY = Deadzone(m_driverController->GetLeftY());
+    speedX = Deadzone(m_driverController->GetLeftX());
+
+    if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
+    {
+      NoJoystickInput = true;
+    }
+    else
+    {
+      NoJoystickInput = false;
+    }
+      
+    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+
+    } 
+    else 
+    {
+      speedY = Deadzone(m_driverController->GetLeftY());
+      speedX = Deadzone(m_driverController->GetLeftX());
+      rot = Deadzone(m_driverController->GetRightX());
+
+      if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+      {
+        NoJoystickInput = true;
+      }
+      else
+      {
+        NoJoystickInput = false;
+      }
+
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+    }
+  }
 
   // state machine
   switch (state)
@@ -320,7 +342,7 @@ void StateMachine::Execute()
     if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
     {
       m_arm->runArmWheels(0.25);
-      m_shooter->runMagazine(0.25);  //TODO test this function, might not have behaved correctly first test
+      m_shooter->runMagazine(0.25);
     }
 
     if(pickupNote == false)
@@ -380,6 +402,7 @@ void StateMachine::Execute()
       m_intake->stopIntake();
       time = 0;
       state = LOADED;
+      noteFollowState = false;
     }
 
     time++;
@@ -476,6 +499,7 @@ void StateMachine::Execute()
 
       time = 0;
       moveNote2Shoot = false;
+      aprilFollowState = false;
     }
 
     break;
@@ -788,8 +812,6 @@ bool StateMachine::IsFinished() {
   return false;
 }
 
-//TODO: THIS WAS NOT COMMENTED OUT IN DRIVE STATE MACHINE
-/*
 float StateMachine::Deadzone(float x)
 {
   if ((x < 0.1) &&  (x > -0.1))
@@ -806,4 +828,3 @@ float StateMachine::Deadzone(float x)
   }
   return(x);
 }
-*/
