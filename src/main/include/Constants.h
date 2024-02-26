@@ -151,8 +151,8 @@ namespace ArmConstants {
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
 
-    constexpr double LowerClimbingExtentionAngle = 90;
-    constexpr double UpperClimbingExtentionAngle = 0;
+    constexpr double LowerClimbingExtentionAngle = 70;
+    constexpr double UpperClimbingExtentionAngle = 140;
 
     constexpr double LowerFirstRetractionAngle = 90;
     constexpr double UpperFirstRetractionAngle = 0;
@@ -164,20 +164,20 @@ namespace ArmConstants {
         check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
         if you need help talk to kaden before he leaves on wednesday 2/21 
     */
-    constexpr double UpperArmSoftLimitLow = 2;
-    constexpr double LowerArmSoftLimitLow = 1;
+    constexpr double UpperArmSoftLimitLow = 0;
+    constexpr double LowerArmSoftLimitLow = 0;
     
-    constexpr double UpperArmSoftLimitHigh = 67;
-    constexpr double LowerArmSoftLimitHigh = 41;
+    constexpr double UpperArmSoftLimitHigh = 160; //change??
+    constexpr double LowerArmSoftLimitHigh = 95;
 
     constexpr double LowerArmOffset = -49;
     constexpr double UpperArmOffset = 0.14;
     
-    constexpr double kpLowerArm = 0.0111/3;  //TODO: test
-    constexpr double kpUpperArm = 0.00555/3;
+    constexpr double kpLowerArm = 0.01;  //TODO: test
+    constexpr double kpUpperArm = 0.01;
 
-    constexpr double kiLowerArm = 0.000111;  //TODO: test
-    constexpr double kiUpperArm = 0.0000555;
+    constexpr double kiLowerArm = 0.0005;  //TODO: test
+    constexpr double kiUpperArm = 0.0005;
 
     constexpr double kiSumLowerArm = 0.0;
     constexpr double kiSumUpperArm = 0.0;

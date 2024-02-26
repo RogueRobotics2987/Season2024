@@ -93,4 +93,14 @@ double LimelightSubsystem::GetNotety()
     return Notety;
 }
 
+double LimelightSubsystem::FilteredDistance()
+{
+    return filteredRange.value();
+}
+
+photon::PhotonTrackedTarget LimelightSubsystem::GetFilteredTarget()
+{
+    return filteredTarget;
+}
+
 
