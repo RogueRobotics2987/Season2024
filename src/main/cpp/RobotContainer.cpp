@@ -88,9 +88,10 @@ RobotContainer::RobotContainer()
   ));
 }
 
-void RobotContainer::ConfigureButtonBindings(){
+void RobotContainer::ConfigureButtonBindings()
+{
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
-  frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
+  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -111,7 +112,6 @@ void RobotContainer::ConfigureButtonBindings(){
   // //frc2::JoystickButton(&m_driverController, 5).ToggleOnFalse(m_intakeShoot.PickupStop());
 
 }
-
 
 float RobotContainer::DeadzoneCubed(float x){
   x = x * x * x;  // exponetial curve, slow acceleration at begining
@@ -144,30 +144,32 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine(){
+frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine()
+{
   return StateMachine(
+      m_drive,
+      m_limelight,
       m_arm, 
       m_climb,
       m_color, //can remove?
       m_intake,
-      m_shooter, 
+      m_shooter,
       m_driverController,
-      m_auxController,
-      driveShooterMessager
-      // m_limelight,
-      // m_drive
+      m_auxController
     ).ToPtr();
 }
 
+/*
 frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
   return DriveStateMachine(
     m_drive,
-    m_limelight,
-    m_driverController,
-    m_auxController,
+    m_limelight, 
+    m_driverController, 
+    m_auxController, 
     driveShooterMessager
   ).ToPtr();
 }
+*/
 
 frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
   return AutoAuxilaryStateMachine(
@@ -179,8 +181,6 @@ frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
       m_driverController,
       m_auxController,
       driveShooterMessager
-      // m_limelight,
-      // m_drive
     ).ToPtr();
 }
 

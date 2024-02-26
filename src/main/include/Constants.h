@@ -126,7 +126,7 @@ namespace DebugConstants {
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
-    constexpr double RaisedShooterAngle = 85;
+    constexpr double RaisedShooterAngle = 80;//94;
     constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0002;   //0.001
     constexpr double kp = 0.02;
@@ -135,6 +135,7 @@ namespace ShooterConstants {
 }
 
 namespace ArmConstants {
+    
     constexpr double LowerInitialAngle = 0;
     constexpr double UpperInitialAngle = 0;
 
@@ -169,7 +170,7 @@ namespace ArmConstants {
     constexpr double UpperArmSoftLimitHigh = 67;
     constexpr double LowerArmSoftLimitHigh = 41;
 
-    constexpr double LowerArmOffset = 0.865;
+    constexpr double LowerArmOffset = -49;
     constexpr double UpperArmOffset = 0.14;
     
     constexpr double kpLowerArm = 0.0111/3;  //TODO: test

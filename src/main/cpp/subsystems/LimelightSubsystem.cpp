@@ -23,16 +23,15 @@ void LimelightSubsystem::Periodic()
     auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
     auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
 
-    //std::cout << threeDPose.alue << std::endl;
 
     double distanceToTagInMeters = threeDPose[0];
     frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
     frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
 
     result = camera.GetLatestResult();
+    hasTarget = result.HasTargets();
 
-    if(result.HasTargets() == true){
-        
+    if(hasTarget == true){
         tempTargets = result.GetTargets();
         myTargets.assign(tempTargets.begin(), tempTargets.end());
 
@@ -60,23 +59,28 @@ void LimelightSubsystem::Periodic()
     }
 }
 
+
 bool LimelightSubsystem::PhotonHasTarget(){
-    return result.HasTargets();
+    bool hasTargetFiltered = false;
+
+    if(hasTarget == true)
+    {
+        if(filteredTargetID == 4 || filteredTargetID == 7)
+        {
+            hasTargetFiltered = true;
+        }
+    }
+
+    return hasTargetFiltered;
 }
 
 double LimelightSubsystem::PhotonYaw(){
-    return result.GetBestTarget().GetYaw();
+    double yaw = filteredTarget.GetYaw();
+    return yaw;
 }
 
-double LimelightSubsystem::GetAprilTagtx()
-{
-    return AprilTagstx;
-}
-
-
-double LimelightSubsystem::GetAprilTagty()
-{
-    return AprilTagsty;
+double LimelightSubsystem::FilteredPhotonYaw(){
+    return filteredTarget.GetYaw();
 }
 
 double LimelightSubsystem::GetNotetx()
@@ -89,9 +93,4 @@ double LimelightSubsystem::GetNotety()
     return Notety;
 }
 
-double LimelightSubsystem::FilteredPhotonYaw(){
-    if(filteredTarget.GetYaw() != 18.6696151741019976){
-        return filteredTarget.GetYaw();
-    }
-}
 

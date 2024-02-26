@@ -47,6 +47,8 @@ class LimelightSubsystem : public frc2::SubsystemBase
   double Notetx = 0;
   double Notety = 0;
 
+  bool hasTarget = false;
+
   std::vector<double> targetIDs;
   std::vector<photon::PhotonTrackedTarget> myTargets;
   std::span<const photon::PhotonTrackedTarget> tempTargets;

@@ -95,7 +95,7 @@ void AutoDriveStateMachine::Execute()
     break;
 
     case APRIL_FOLLOW:
-      txApril = m_limelight->FilteredPhotonYaw();
+      txApril = m_limelight->FilteredPhotonYaw();   // what is this number?
 
       // if(m_messager->GetAuxMessage().compare("Loaded") != 0 || m_messager->GetAuxMessage().compare("ShooterWarmup") !=  0)  // TODO: oduble check!!!
       // {

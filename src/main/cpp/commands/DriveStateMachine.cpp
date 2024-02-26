@@ -19,115 +19,156 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
 }
 
 // Called when the command is initially scheduled.
-void DriveStateMachine::Initialize() {
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
-
+void DriveStateMachine::Initialize()
+{
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void DriveStateMachine::Execute() {
+void DriveStateMachine::Execute() 
+{
+  frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
+  frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
+  frc::SmartDashboard::PutString("drive messenger", m_messager->GetDriveMessage());
+  frc::SmartDashboard::PutString("aux messenger", m_messager->GetAuxMessage());
+  
   //Buttons
-  if(m_driverController->GetRawButtonPressed(5)){
-    //noteFollowState = true;
-    runIntake = true;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
-    runShooterWarmup = false;
-  } 
+  // if(m_driverController->GetRawButtonPressed(5))
+  // {
+  //   //noteFollowState = true;
+  //   runIntake = !runIntake;
+  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
+  //   runShooterWarmup = false;
+  // } 
 
-  if(m_driverController->GetRawButtonPressed(6)){
-    runShooterWarmup = true;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 1);
-    runIntake = false;
-  }
+  // if(m_driverController->GetRawButtonPressed(6))
+  // {
+  //   runShooterWarmup = !runShooterWarmup;
+  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 1);
+  //   runIntake = false;
+  // }
 
   // if(m_driverController->GetRawAxis(3) > 0.05){
   //   standard = true;
   // }
 
-
-  if(m_driverController->GetRawButtonPressed(1) && runIntake == true){
-    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) ==1){
-      noteFollowState = !noteFollowState;
-    }
+  if(m_driverController->GetRawButtonPressed(1))
+  {
+    noteFollowState = !noteFollowState;
   }
+  
 
-  if(m_driverController->GetRawButtonPressed(2) && runShooterWarmup == true){
-    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) ==1){
-      aprilFollowState = true;
-    }
+  if(m_driverController->GetRawButtonPressed(2))
+  {
+    aprilFollowState = !aprilFollowState;
   }
 
   switch (drive_state) 
   {
     case NONE:
       frc::SmartDashboard::PutString("drive state", "NONE");
+      m_messager->SetDriveMessage("any");
 
-      m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
+      speedY = Deadzone(m_driverController->GetLeftY());
+      speedX = Deadzone(m_driverController->GetLeftX());
+      rot = Deadzone(m_driverController->GetRightX());
 
-      if(noteFollowState == true){
+      if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+      {
+        NoJoystickInput = true;
+      }
+      else
+      {
+        NoJoystickInput = false;
+      }
+
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+
+      if(noteFollowState == true)
+      {
         drive_state = NOTE_FOLLOW;
-        standard = false;
-
-      } else if(aprilFollowState == true){
-        drive_state = APRIL_FOLLOW;
-        standard = false;
+      } 
+      
+      if(aprilFollowState == true && m_messager->GetAuxMessage().compare("AprilFollow") == 0)
+      {
+       drive_state = APRIL_FOLLOW;
       }
 
       break;
 
     case NOTE_FOLLOW:
       frc::SmartDashboard::PutString("drive state", "NOTE_FOLLOW");
+      m_messager->SetDriveMessage("runIntake");
 
-      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv",0) == 1){
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
+      {
+        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
 
-        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
+          rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
 
-        if(txNote > 7 || txNote < -7)
+        speedY = Deadzone(m_driverController->GetLeftY());
+
+        if((fabs(speedY) + fabs(rotNote.value())) < .05)
         {
-          rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
+          NoJoystickInput = true;
         }
         else
         {
-          rotNote = units::angular_velocity::radians_per_second_t(0);
+          NoJoystickInput = false;
         }
         
-        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(0), rotNote, false, false);
+        m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      } 
+      else 
+      {
+        speedY = Deadzone(m_driverController->GetLeftY());
+        speedX = Deadzone(m_driverController->GetLeftX());
+        rot = Deadzone(m_driverController->GetRightX());
 
-      } else {
-        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
+        if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+        {
+          NoJoystickInput = true;
+        }
+        else
+        {
+          NoJoystickInput = false;
+        }
+
+        m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
       }
     
+      
+      if(noteFollowState == false)
+      {
+        drive_state = NONE;
+        m_messager->SetDriveMessage("Empty");
+      }
 
-      // if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0){
-      //   drive_state = NONE;
-      //   noteFollowState = false;
-      // }
-
-      if(m_messager->GetDriveMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
+      if(m_messager->GetAuxMessage().compare("None") == 0)
       {
         drive_state = NONE;
         noteFollowState = false;
       }
-
-      if(noteFollowState == false){
-         drive_state = NONE;
-      }
-      
+  
       break;
 
     case APRIL_FOLLOW:
       frc::SmartDashboard::PutString("drive state", "APRIL_FOLLOW");
+      //frc::SmartDashboard::Put
+      m_messager->SetDriveMessage("ShooterWarmup");
       
-      if(m_limelight->PhotonHasTarget() == true){
-
-        txApril = m_limelight->PhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+      if(m_limelight->PhotonHasTarget() == true)
+      {
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+        frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
         //rotApril = units::angular_velocity::radians_per_second_t(0);
-        // if(tx > 7 || tx < -7){
-        rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+        //if(txApril > 7 || txApril < -7){
+          rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+        //}
 
         speedY = Deadzone(m_driverController->GetLeftY());
-        speedX = Deadzone(m_driverController->GetLeftY());
+        speedX = Deadzone(m_driverController->GetLeftX());
 
         if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
         {
@@ -140,20 +181,35 @@ void DriveStateMachine::Execute() {
         
         m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
 
-      } else {
-        m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(m_driverController->GetLeftX()), units::radians_per_second_t(m_driverController->GetRightX()), false, false);
-      }
-    
+      } 
+      else 
+      {
+        speedY = Deadzone(m_driverController->GetLeftY());
+        speedX = Deadzone(m_driverController->GetLeftX());
+        rot = Deadzone(m_driverController->GetRightX());
 
-      if(m_messager->GetAuxMessage().compare("ShooterWarmup") != 0)
+        if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+        {
+          NoJoystickInput = true;
+        }
+        else
+        {
+          NoJoystickInput = false;
+        }
+
+        m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), false, NoJoystickInput);
+      }
+
+
+      if(m_messager->GetAuxMessage().compare("AprilFollow") != 0)
       {
         drive_state = NONE;
         aprilFollowState = false;
       }
 
-      if(standard == true){
+      if(aprilFollowState == false)
+      {
         drive_state = NONE;
-        aprilFollowState = false;
       }
 
       break;
@@ -162,27 +218,29 @@ void DriveStateMachine::Execute() {
       drive_state = NONE;
       break;
   }
-
 }
 
 // Called once the command ends or is interrupted.
 void DriveStateMachine::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool DriveStateMachine::IsFinished() {
+bool DriveStateMachine::IsFinished() 
+{
   return false;
 }
 
-
 float DriveStateMachine::Deadzone(float x)
 {
-  if ((x < 0.1) &&  (x > -0.1)){
+  if ((x < 0.1) &&  (x > -0.1))
+  {
     x=0;
   }
-  else if (x >= 0.1){
+  else if (x >= 0.1)
+  {
     x = x - 0.1;
   }
-  else if (x <= -0.1){
+  else if (x <= -0.1)
+  {
     x = x + 0.1;
   }
   return(x);
