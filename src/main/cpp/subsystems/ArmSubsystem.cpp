@@ -30,7 +30,7 @@ void ArmSubsystem::Periodic() {
     //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
     frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
-    //frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
+   // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
 
     setLowerArmAngle(m_LowerDesired);
     setUpperArmAngle(m_UpperDesired);
@@ -154,6 +154,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
         m_LowerDesired = desiredAngle;
     }
 
+
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
     if(LowerangleError < 10)
     {
@@ -179,10 +180,11 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
     {
         m_UpperDesired = ArmConstants::UpperArmSoftLimitLow;
     }
-    else
+   else
     {
         m_UpperDesired = desiredAngle;
     }
+
 
     double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
     if(UpperangleError < 5)

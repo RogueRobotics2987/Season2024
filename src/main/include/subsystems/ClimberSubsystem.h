@@ -10,18 +10,30 @@
 //#include "networktables/NetworkTableInstance.inc"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-class ClimberSubsystem : public frc2::SubsystemBase {
- public:
+class ClimberSubsystem : public frc2::SubsystemBase 
+{
+public:
   ClimberSubsystem();
+  ClimberSubsystem(
+    int m_MotorController,
+    rev::SparkRelativeEncoder::Type m_EncoderType,
+    int m_counts_per_rev
+  );
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
-  void Periodic() override;
+  void Periodic();
   void startClimber();
   void stopClimber();
 
  private:
-  rev::CANSparkMax ClimberMoter{12, rev::CANSparkMax::MotorType::kBrushless};
+
+  rev::CANSparkMax m_climberMoter{12, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkRelativeEncoder* m_driveEncoder;
+  rev::SparkRelativeEncoder::Type m_EncoderType;
+
+  int m_counts_per_rev;
+  bool m_reverseClimberEncoder;
   
 };
