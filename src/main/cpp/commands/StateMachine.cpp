@@ -786,7 +786,7 @@ void StateMachine::Execute()
       if(time >= 180 && time < 360)
       {
         //move arms out of way 
-        m_arm->setLowerArmAngle(ArmConstants::LowerClimbingExtentionAngle);
+        m_arm->setLowerArmAngle(80); //TODO: Magic Int - needs to be made into a constant
       }
 
       
@@ -794,7 +794,7 @@ void StateMachine::Execute()
       if(time >= 360)
       {
         //move arms out of way 
-        m_arm->setUpperArmAngle(ArmConstants::UpperClimbingExtentionAngle);
+        m_arm->setUpperArmAngle(0);
       }
 
       
