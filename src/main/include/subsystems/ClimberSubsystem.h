@@ -14,16 +14,18 @@ class ClimberSubsystem : public frc2::SubsystemBase
 {
 public:
   ClimberSubsystem();
+  /*
   ClimberSubsystem(
     int m_MotorController,
     rev::SparkRelativeEncoder::Type m_EncoderType,
     int m_counts_per_rev
   );
+  */
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
-  void Periodic();
+  void Periodic() override;
   void startClimber();
   void stopClimber();
 

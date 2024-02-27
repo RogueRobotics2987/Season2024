@@ -41,8 +41,6 @@ void StateMachine::Initialize()
 {
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
-  m_arm->setLowerArmAngle(0);
-  m_arm->setUpperArmAngle(0);
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 0);
   frc::SmartDashboard::PutNumber("Driver Angle", 20);
 
@@ -799,7 +797,7 @@ void StateMachine::Execute()
 
       
         time++;
-      
+      /*
       
       //button 1 things
       if(raiseHook == true)
@@ -814,6 +812,7 @@ void StateMachine::Execute()
         //}
         //time = 0;
       }
+      /*
 
      /*if(raiseRobot == true)
       {
