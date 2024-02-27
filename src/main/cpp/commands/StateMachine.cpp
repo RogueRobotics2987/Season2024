@@ -121,6 +121,22 @@ void StateMachine::Execute()
     aprilFollowState = !aprilFollowState;
   }
 
+  if(m_auxController->GetRawButtonPressed(1))
+   {
+    raiseHook = true;
+   }
+
+   if(m_auxController->GetRawButtonPressed(3))
+   {
+     raiseRobot = true;
+   }
+
+  if(m_driverController->GetRawButtonPressed(3))
+  {
+    chainClimb = !chainClimb;
+    //setstate = CHAIN_CLIMB;
+  }
+
   if(m_driverController->GetRawButtonPressed(5))
   { 
     //TODO: trace code
@@ -151,10 +167,14 @@ void StateMachine::Execute()
   //   huntingNote = !huntingNote;
   // }
 
-  // if(m_auxController->GetPOV() != -1 && m_auxController->GetPOV() == 0)
-  // {
-  //   pov0 = !pov0;
-  // }  
+  if(m_auxController->GetPOV() != -1 && m_auxController->GetPOV() == 0)
+  {
+    pov0 = true;
+  }  
+  else
+  {
+    pov0 = false;
+  }
 
   //  if(m_auxController->GetRawButtonPressed(2))
   //   {
@@ -334,17 +354,17 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
 
+    if(chainClimb == true)
+    {
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
+    }
+  
     if(pov0 == true)
     {
       state = SPIT_OUT;
       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     }
-
-    // if(huntingNote == true){
-    //   state = NOTE_HUNTING;
-    //   frc::SmartDashboard::PutString("state: ", "changing to Hunting Note");
-
-    // }
 
     if(placeInTrap || placeInForwardAmp){
       state = RAISE_SHOOTER;
@@ -461,11 +481,17 @@ void StateMachine::Execute()
 
     } 
 
-    if(pov0 == true)
+    if(chainClimb == true)
     {
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
     }
+
+     if(pov0 == true)
+     {
+       state = SPIT_OUT;
+       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+     }
 
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
@@ -741,7 +767,77 @@ void StateMachine::Execute()
 
     break;
 
-    //  case NOTE_HUNTING:
+    case CHAIN_CLIMB:
+      frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
+
+      //move shooter out of way
+     m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
+
+      if(time >= 180 && time < 360)
+      {
+        //move arms out of way 
+        m_arm->setLowerArmAngle(80); //TODO: Magic Int - needs to be made into a constant
+      }
+
+      
+
+      if(time >= 360)
+      {
+        //move arms out of way 
+        m_arm->setUpperArmAngle(0);
+      }
+
+      
+        time++;
+      /*
+      
+      //button 1 things
+      if(raiseHook == true)
+      {
+        m_climb->startClimber(); 
+
+        //time++;
+
+        //if(time >= 90) //figure out time
+        //{
+          m_climb->stopClimber();
+        //}
+        //time = 0;
+      }
+      /*
+
+     /*if(raiseRobot == true)
+      {
+        m_climb->startClimber();
+
+        time++;
+
+        if(time >= 90) //figure out time
+        {
+          m_climb->stopClimber();
+        }
+        time = 0;
+      }
+       //reset timer, figure out
+       //run motwer (12) for 0.0 revolutions
+      
+      */
+      //start motor to move hook to top
+      
+      //stop motor after x revolutions
+    
+      //button 3 things
+      
+      //start motor to move hook 
+      
+      //stop motor after y revolutions
+      
+      
+
+    break;
+      
+
+  //  case NOTE_HUNTING:
 
     //   m_intake->runIntake();
     //   m_intake->Direction();

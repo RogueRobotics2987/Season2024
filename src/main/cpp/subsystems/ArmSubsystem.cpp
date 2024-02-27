@@ -157,7 +157,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
     }
     else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
     {
-        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
+        desiredAngle = ArmConstants::LowerArmSoftLimitLow;
     }
     else
     {
@@ -176,8 +176,7 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
     {
         m_UpperDesired = ArmConstants::UpperArmSoftLimitLow;
     }
-   else
-    {
+    else{
         m_UpperDesired = desiredAngle;
     }
 }
