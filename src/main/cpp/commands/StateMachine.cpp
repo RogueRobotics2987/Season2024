@@ -42,6 +42,8 @@ void StateMachine::Initialize()
   m_shooter->zeroIntergralVal();
   m_shooter->setRestingActuatorPosition();
 
+  m_arm->ZeroIntergral();
+
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 0);
   frc::SmartDashboard::PutNumber("Driver Angle", 20);
 
@@ -71,7 +73,10 @@ void StateMachine::Execute()
   // apriltagID = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tid", 0);
 
   m_shooter->accumulateError();
-  m_shooter->SetShooterAngle();
+  m_shooter->SetShooterAngle(); //TODO this should probably get removed...
+
+  m_arm->accumulateErrorLower();
+  m_arm->accumulateErrorUpper();
 
   // frc::SmartDashboard::PutNumber("angle test value", angleTest);
 
@@ -146,16 +151,15 @@ void StateMachine::Execute()
   //   huntingNote = !huntingNote;
   // }
 
-  if(m_auxController->GetPOV(90) == 0)
-  {
-    pov0 = !pov0;
-  }
-  
+  // if(m_auxController->GetPOV() != -1 && m_auxController->GetPOV() == 0)
+  // {
+  //   pov0 = !pov0;
+  // }  
 
-//  if(m_auxController->GetRawButtonPressed(2))
-//   {
-//     pov0 = !pov0;
-//   }
+  //  if(m_auxController->GetRawButtonPressed(2))
+  //   {
+  //     pov0 = !pov0;
+  //   }
 
   if(m_auxController->GetRawButtonPressed(2)){
     if(placeInForwardAmp == false){
@@ -330,11 +334,11 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
 
-    // if(pov0 == true)
-    // {
-    //   state = SPIT_OUT;
-    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    // }
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
 
     // if(huntingNote == true){
     //   state = NOTE_HUNTING;
@@ -383,10 +387,10 @@ void StateMachine::Execute()
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
-    // else if(emptyIntake == true){
-    //   state = SPIT_OUT;
-    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    // }
+    else if(emptyIntake == true){
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
     if(m_shooter->GetMagazineSensor())
     {
       state = BACKUP;
@@ -402,11 +406,11 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to LOADED");
     }
 
-    // if(pov0 == true)
-    // {
-    //   state = SPIT_OUT;
-    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    // }
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
     
     break;
 
@@ -457,11 +461,11 @@ void StateMachine::Execute()
 
     } 
 
-    // if(pov0 == true)
-    // {
-    //   state = SPIT_OUT;
-    //   frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    // }
+    if(pov0 == true)
+    {
+      state = SPIT_OUT;
+      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+    }
 
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
