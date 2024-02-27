@@ -90,7 +90,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose -8; //setting negative make it go lower positive goes higher
+    return Pose -8;
 }
 
 double ShooterSubsystem::ShooterError(){
