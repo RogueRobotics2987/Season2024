@@ -46,7 +46,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void holdMagazine(double pos);
 
   double GetCurrMagEncoderVal();
-
+  double ShooterError();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
   double DistanceBetweenAngles(double targetAngle, double sourceAngle);

@@ -90,7 +90,10 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose + 12;
+    return Pose -5;
+}
+double ShooterSubsystem::ShooterError(){
+    return m_DesiredAngle -GetOffSetEncoderValue();
 }
 
 void ShooterSubsystem::runMagazine(double speed){
@@ -183,13 +186,13 @@ double ShooterSubsystem::DistanceBetweenAngles(double targetAngle, double source
 
 void ShooterSubsystem::SetShooterAngle()
 {
-    if(m_DesiredAngle >= ShooterConstants::RaisedShooterAngle)
+    if(m_DesiredAngle >= ShooterConstants::ShooterMaxSoftLimit)
     {
-        m_DesiredAngle = ShooterConstants::RaisedShooterAngle;
+        m_DesiredAngle = ShooterConstants::ShooterMaxSoftLimit;
     }
-    else if(m_DesiredAngle <= ShooterConstants::RestingAngle)
+    else if(m_DesiredAngle <= ShooterConstants::ShooterMinSoftLimit)
     {
-        m_DesiredAngle = ShooterConstants::RestingAngle;
+        m_DesiredAngle = ShooterConstants::ShooterMinSoftLimit;
     }
 
     double angleError = DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());

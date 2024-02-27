@@ -123,10 +123,19 @@ namespace DebugConstants {
     constexpr bool debugAuto = true; 
 }  
 
+namespace StateMachineConstants{
+//constexpr double loweredArmExtended = 70;
+// constexpr double upperArmExtended = 140;
+    constexpr double RaisedShooterAngle = 80;//94;
+    constexpr double LowerClimbingExtentionAngle = 70;
+    constexpr double UpperClimbingExtentionAngle = 140;
+}
+
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
-    constexpr double RaisedShooterAngle = 80;//94;
+    constexpr double ShooterMaxSoftLimit = 80;
+    constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0002;   //0.001
     constexpr double kp = 0.02;
@@ -152,8 +161,7 @@ namespace ArmConstants {
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
 
-    constexpr double LowerClimbingExtentionAngle = 70;
-    constexpr double UpperClimbingExtentionAngle = 140;
+   
 
     constexpr double LowerFirstRetractionAngle = 90;
     constexpr double UpperFirstRetractionAngle = 0;
