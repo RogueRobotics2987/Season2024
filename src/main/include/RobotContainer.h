@@ -114,7 +114,7 @@ class RobotContainer
     std::vector<std::string> B_1Command{
       "Null",
       "Null",
-      "Null"
+      "Intake"
     };
 
     std::vector<bool> B_1LimelightPath{
