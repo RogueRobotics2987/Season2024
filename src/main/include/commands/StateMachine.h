@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "../cpp/CommandMessenger.cpp"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
@@ -22,6 +21,8 @@
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h> 
 
+#include "networktables/NetworkTableInstance.inc"
+
 #include "photon/PhotonUtils.h"
 #include "photon/PhotonCamera.h"
 #include "photon/PhotonPoseEstimator.h"
@@ -37,15 +38,16 @@ class StateMachine
     : public frc2::CommandHelper<frc2::Command, StateMachine> {
  public:
   StateMachine();
-  StateMachine(ArmSubsystem &arm, ClimberSubsystem &climb, ColorSensorSubsystem &color, 
-               IntakeSubsystem &intake, ShooterSubsystem &shooter, frc::XboxController &driveXbox, frc::XboxController &auxXbox, CommandMessenger &messager);// LimelightSubsystem &limelight, 
-              // DriveSubsystem &drivetrain);
-
-  units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
-  units::velocity::meters_per_second_t speed = units::velocity::meters_per_second_t(0);
-  double kp = 0.02206;//0.0248175;//0.009927;
-  double speedY = 0;
-  bool NoJoystickInput = false;
+  StateMachine(
+    DriveSubsystem &drive,
+    LimelightSubsystem &limelight,
+    ArmSubsystem &arm,
+    ClimberSubsystem &climb,
+    ColorSensorSubsystem &color,
+    IntakeSubsystem &intake,
+    ShooterSubsystem &shooter,
+    frc::XboxController &driverController,
+    frc::XboxController &auxController);
 
   void Initialize() override;
 
@@ -55,43 +57,68 @@ class StateMachine
 
   bool IsFinished() override;
 
- private:
-  //enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ WAIT};
-  enum intakeState {EMPTY, SPIT_OUT, PICKUP, LOADED, SHOOTER_WARMUP, SHOOT, /*DROP_WARMUP, DROP*/ DROP_ARMS, DROP_SHOOTER, RAISE_SHOOTER, ARMS_EXTEND_INITIAL, 
-    FORWARD_ARM_AMP, BACKWARD_ARM_AMP, ARM_TRAP, DROP, ARM_RETRACT_INITIAL, ARM_RETRACT_FINAL, BACKUP, NOTE_HUNTING, CHAIN_CLIMB};
-  intakeState state = EMPTY;
+  float Deadzone(float x);
 
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+
+
+  //TODO: WHY ARE THESE PUBLIC? REVIEW THESE AND THEY PROBABLY NEED TO GO TO PRIVATE
+
+ private:
+  enum intakeState 
+  {
+    EMPTY,
+    SPIT_OUT,
+    PICKUP,
+    LOADED,
+    SHOOTER_WARMUP,
+    SHOOT,
+    DROP_ARMS,
+    DROP_SHOOTER,
+    RAISE_SHOOTER,
+    ARMS_EXTEND_INITIAL,
+    FORWARD_ARM_AMP,
+    BACKWARD_ARM_AMP,
+    ARM_TRAP,
+    DROP,
+    ARM_RETRACT_INITIAL,
+    ARM_RETRACT_FINAL,
+    BACKUP,
+    NOTE_HUNTING,
+    NOTE_FOLLOW,
+    APRIL_FOLLOW,
+    CHAIN_CLIMB
+  };
+
+  intakeState state = EMPTY;
   std::vector<double> RedDistVector;
   std::vector<double> BlueDistVector;
-
-  double blueDist = 0;
-  double redDist = 0;
-
-  int apriltagID = 0;
 
   ArmSubsystem* m_arm = nullptr;
   ClimberSubsystem* m_climb = nullptr;
   ColorSensorSubsystem* m_colorSensor = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   ShooterSubsystem* m_shooter = nullptr;
-  CommandMessenger* m_messager;
- // LimelightSubsystem* m_limelight = nullptr;
-  // DriveSubsystem* m_drivetrain = nullptr;
+  LimelightSubsystem* m_limelight = nullptr;
+  DriveSubsystem* m_drive = nullptr;
 
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;
 
-  // bool huntingNote = false;
+  double speedX = 0;
+  bool NoJoystickInput = false;
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
   bool chainClimb = false;        // accsessor for chain climb
   bool raiseHook = false;         // raises climbing hook for chain
   bool raiseRobot = false;        // brings the climbing hooks all the way so robot is raised off ground
-  bool emptyIntake = false;       // self explainitory
+  double blueDist = 0;
+  double redDist = 0;
+  int apriltagID = 0;
 
+  bool emptyIntake = false;       // self explainitory
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
-
   bool placeInForwardAmp = false;
   bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
@@ -105,7 +132,7 @@ class StateMachine
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
   //bool waitForArm = false;        // waits for the armSubsystem/dropper state machine
-  float Deadzone(float x);
+
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
   std::vector<double> targetIDs;
@@ -118,4 +145,26 @@ class StateMachine
   int timeDrop = 0;   //keep track of dropper iterations
 
   double magEncoderPos = 0.0;
+
+  double rot = 0;
+  double kp = 0.02206;//0.0248175;//0.009927;
+  double speedY = 0;
+
+//TODO: MOVED OVER FROM DriveStateMachine
+  units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
+  units::velocity::meters_per_second_t speedNote = units::velocity::meters_per_second_t(0);
+  double kpNote = 0.05;
+  double txNote = 0.0;
+
+  units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
+  double kpApril = 0.09;
+  double txApril = 0.0;
+
+  bool noteFollowState = false;
+  bool aprilFollowState = false;
+  bool standard = false;
+  bool runIntake = false;
+  bool runShooterWarmup = false;
+  bool buttonA = false;
+  bool buttonB = false;
 };
