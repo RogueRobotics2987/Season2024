@@ -32,8 +32,8 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
    // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
 
-    setLowerArmAngle(m_LowerDesired);
-    setUpperArmAngle(m_UpperDesired);
+    RunLowerArm();
+    RunUpperArm();
 }
 /* 
 void ArmSubsystem::setVoltage(double speed){ 
@@ -93,7 +93,7 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
     // }
 
     Pose = fabs(Pose - 1);  //This is the invert
-    Pose *= 360;
+    Pose *= 360; //360 for per revolution
 
     return Pose + ArmConstants::LowerArmOffset;
 }
@@ -108,7 +108,7 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
     // }
 
     // Pose = fabs(Pose - 1); //This is the invert
-    Pose *= 272.72;
+    Pose *= 272.72; //per revolution but with gear ratio
 
     return Pose;
 }
@@ -164,21 +164,6 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
         m_LowerDesired = desiredAngle;
     }
 
-
-
-    double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
-    if(LowerangleError < 10)
-    {
-        LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
-    }    
-    else {
-        LoweraccumulatedError = 0;
-    }
-
-    double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;
-
-    LowerArm.Set(lowerAngleOutput); //TODO verify polarity
-
 }
 
 void ArmSubsystem::setUpperArmAngle(double desiredAngle)
@@ -195,9 +180,24 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
     {
         m_UpperDesired = desiredAngle;
     }
+}
 
+void ArmSubsystem::accumulateErrorLower()
+{
+ double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
+    if(LowerangleError < 10)
+    {
+        LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
+    }    
+    else
+    {
+        LoweraccumulatedError = 0;
+    }
+}
 
-    double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
+void ArmSubsystem::accumulateErrorUpper()
+{
+   double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
     if(UpperangleError < 5)
     {
         UpperaccumulatedError += ArmConstants::kiUpperArm * UpperangleError;
@@ -205,9 +205,27 @@ void ArmSubsystem::setUpperArmAngle(double desiredAngle)
     else {
         UpperaccumulatedError = 0;
     }
+}
+
+void ArmSubsystem::RunLowerArm()
+{
+    double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
+
+    double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;
+    LowerArm.Set(lowerAngleOutput); //TODO verify polarity
+}
+
+void ArmSubsystem::RunUpperArm()
+{
+    double UpperangleError = DistanceBetweenAngles(m_UpperDesired, GetOffSetEncoderValueUpper());
 
     double UpperAngleOutput = ((UpperangleError * ArmConstants::kpUpperArm)) + UpperaccumulatedError;
 
     UpperArm.Set(UpperAngleOutput); //TODO verify polarity
+}
 
+void ArmSubsystem::ZeroIntergral()
+{
+    LoweraccumulatedError = 0;
+    UpperaccumulatedError = 0;
 }

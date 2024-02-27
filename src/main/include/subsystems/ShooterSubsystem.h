@@ -16,6 +16,7 @@
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <math.h>
+#include <iostream>
 
 class ShooterSubsystem : public frc2::SubsystemBase {
  public:

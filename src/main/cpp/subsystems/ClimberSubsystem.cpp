@@ -15,11 +15,7 @@
 // }
 
 // This method will be called once per scheduler run
-void ClimberSubsystem::Periodic() 
-{
-
-}
-
+void ClimberSubsystem::Periodic() {}
 
 void ClimberSubsystem::startClimber() 
 {

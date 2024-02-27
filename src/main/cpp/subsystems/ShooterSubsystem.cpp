@@ -93,7 +93,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     return Pose -5;
 }
 double ShooterSubsystem::ShooterError(){
-    return m_DesiredAngle -GetOffSetEncoderValue();
+    return m_DesiredAngle - GetOffSetEncoderValue();
 }
 
 void ShooterSubsystem::runMagazine(double speed){
