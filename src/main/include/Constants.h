@@ -147,6 +147,7 @@ namespace ArmConstants {
 
     constexpr double LowerBackwardAmpExtentionAngle = 50;
     constexpr double UpperBackwardAmpExtentionAngle = 206;
+
     
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
@@ -171,7 +172,7 @@ namespace ArmConstants {
     constexpr double LowerArmSoftLimitHigh = 95;
 
     constexpr double LowerArmOffset = -49;
-    constexpr double UpperArmOffset = 0.14;
+    constexpr double UpperArmOffset = 0.14; //TODO: test
     
     constexpr double kpLowerArm = 0.01;  //TODO: test
     constexpr double kpUpperArm = 0.01;
