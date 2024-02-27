@@ -165,6 +165,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
     }
 
 
+
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
     if(LowerangleError < 10)
     {
