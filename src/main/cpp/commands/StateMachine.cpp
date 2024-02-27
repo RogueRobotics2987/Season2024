@@ -127,7 +127,6 @@ void StateMachine::Execute()
     m_drive->ZeroHeading();
   }
 
-
   //this will get lost sometimes where you cannot turn it off while april tag tracker is being used
   if(m_driverController->GetRawButtonPressed(6))
   { 
@@ -211,7 +210,7 @@ void StateMachine::Execute()
       NoJoystickInput = false;
     }
 
-    m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
+    m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed), true, NoJoystickInput);
   }
   else if(noteFollowState == true)
   {
@@ -233,7 +232,7 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
     } 
     else 
     {
@@ -250,7 +249,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
 
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed), true, NoJoystickInput);
     }
   }
   else if(aprilFollowState == true)
@@ -261,6 +260,13 @@ void StateMachine::Execute()
     {
       txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
+
+      // currentPose = m_drive->GetPose().Rotation().Degrees().value();
+
+      // if (filteredTargetID == 4 || filteredTargetID == 7)
+      // {
+
+      // }
 
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
@@ -279,7 +285,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
         
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY  * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), rotApril, false, NoJoystickInput);
 
     } 
     else 
@@ -297,7 +303,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
 
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), units::radians_per_second_t(rot), true, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed), true, NoJoystickInput);
     }
   }
 
@@ -845,4 +851,23 @@ float StateMachine::Deadzone(float x)
     x = x + 0.1;
   }
   return(x);
+}
+
+double StateMachine::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
 }

@@ -59,6 +59,9 @@ class StateMachine
 
   float Deadzone(float x);
 
+  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+
+
   //TODO: WHY ARE THESE PUBLIC? REVIEW THESE AND THEY PROBABLY NEED TO GO TO PRIVATE
 
  private:
