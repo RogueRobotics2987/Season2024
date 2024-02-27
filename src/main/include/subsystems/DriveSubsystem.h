@@ -68,7 +68,7 @@ class DriveSubsystem : public frc2::SubsystemBase
     float GetPitch();
     float GetRoll();
     float GetRawGyroX();
-    frc2::CommandPtr ZeroHeading();
+    void ZeroHeading();
     frc2::CommandPtr FieldOrientatedTrue(); //field orientated driving
     frc2::CommandPtr FieldOrientatedFalse(); //robot centric driving
     frc2::CommandPtr SetAngleAdjustment(double angle);

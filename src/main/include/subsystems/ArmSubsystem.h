@@ -11,6 +11,7 @@
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
 #include <frc/DutyCycleEncoder.h>
+#include <iostream>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -25,18 +26,28 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
 
-  void setVoltage(double speed);
+  // void setVoltage(double speed);
+  
+  void accumulateErrorLower();
+  void accumulateErrorUpper();
 
-  // void StopWheels();
-  // void dropNote();
-  // void stopDrop();
+  void RunLowerArm();
+  void RunUpperArm();
+
+  void ZeroIntergral();
+
+  void StopWheels();
+
+  void dropNote();
+  void stopDrop();
 
   void runArmWheels(double speed);
   void stopArmWheels();
   void FollowShooter(double error);
 
   void MoveLowerArm();
-
+  double getLowerArmError();
+  double getUpperArmError();
   double getLowerEncoderPos();
   double getUpperEncoderPos();
   
@@ -66,4 +77,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   double LowerArmAngle = 0;
   double UpperArmAngle = 0;
+
+  double LoweraccumulatedError = 0;
+  double UpperaccumulatedError = 0;
+
+
+
 };

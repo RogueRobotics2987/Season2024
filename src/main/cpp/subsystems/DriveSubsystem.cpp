@@ -59,13 +59,7 @@ DriveSubsystem::DriveSubsystem()
 void DriveSubsystem::Periodic(){
   // Implementation of subsystem periodic method goes here.
 
-  if(ranAuto == true){ //TODO test this. have not had a chance to test yet
-    orientationOffset = frc::Rotation2d(3.14159265359_rad);
-    //used to set field oriented in autonomous when we arent facing the correct way
-  }
-  else{
-    orientationOffset = frc::Rotation2d(0_rad);
-  }
+
 
   m_odometry.Update(
     frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())),
@@ -210,13 +204,8 @@ units::degree_t DriveSubsystem::GetHeading(){
   return m_gyro.GetRotation2d().Degrees() + orientationOffset.Degrees();
 }
 
-frc2::CommandPtr DriveSubsystem::ZeroHeading(){
-  return this->RunOnce(
-    [this] {
-      SetRanAuto(false);
+void DriveSubsystem::ZeroHeading(){
       m_gyro.Reset();
-    }
-  );
 }
 
 //small left right movement. Optional to have

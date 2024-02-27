@@ -21,11 +21,9 @@ DriveStateMachine::DriveStateMachine(DriveSubsystem &drive, LimelightSubsystem &
 }
 
 // Called when the command is initially scheduled.
-void DriveStateMachine::Initialize() {
+void DriveStateMachine::Initialize()
+{
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
-  frc::SmartDashboard::PutBoolean("Note Follow", noteFollowState);
-  frc::SmartDashboard::PutBoolean("April Follow", aprilFollowState);
-
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -91,14 +89,7 @@ void DriveStateMachine::Execute()
       {
         txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
 
-        //if(txNote > 7 || txNote < -7)
-        //{
           rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
-        // }
-        // else
-        // {
-        //   rotNote = units::angular_velocity::radians_per_second_t(0);
-        // }
 
         speedY = Deadzone(m_driverController->GetLeftY());
 

@@ -123,10 +123,19 @@ namespace DebugConstants {
     constexpr bool debugAuto = true; 
 }  
 
+namespace StateMachineConstants{
+//constexpr double loweredArmExtended = 70;
+// constexpr double upperArmExtended = 140;
+    constexpr double RaisedShooterAngle = 80;//94;
+    constexpr double LowerClimbingExtentionAngle = 70;
+    constexpr double UpperClimbingExtentionAngle = 140;
+}
+
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
-    constexpr double RaisedShooterAngle = 80;//94;
+    constexpr double ShooterMaxSoftLimit = 80;
+    constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0002;   //0.001
     constexpr double kp = 0.02;
@@ -135,6 +144,7 @@ namespace ShooterConstants {
 }
 
 namespace ArmConstants {
+    
     constexpr double LowerInitialAngle = 0;
     constexpr double UpperInitialAngle = 0;
 
@@ -146,12 +156,12 @@ namespace ArmConstants {
 
     constexpr double LowerBackwardAmpExtentionAngle = 50;
     constexpr double UpperBackwardAmpExtentionAngle = 206;
+
     
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
 
-    constexpr double LowerClimbingExtentionAngle = 90;
-    constexpr double UpperClimbingExtentionAngle = 0;
+   
 
     constexpr double LowerFirstRetractionAngle = 90;
     constexpr double UpperFirstRetractionAngle = 0;
@@ -163,20 +173,20 @@ namespace ArmConstants {
         check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
         if you need help talk to kaden before he leaves on wednesday 2/21 
     */
-    constexpr double UpperArmSoftLimitLow = 2;
-    constexpr double LowerArmSoftLimitLow = 1;
+    constexpr double UpperArmSoftLimitLow = 0;
+    constexpr double LowerArmSoftLimitLow = 0;
     
-    constexpr double UpperArmSoftLimitHigh = 67;
-    constexpr double LowerArmSoftLimitHigh = 41;
+    constexpr double UpperArmSoftLimitHigh = 160; //change??
+    constexpr double LowerArmSoftLimitHigh = 95;
 
-    constexpr double LowerArmOffset = 0.865;
-    constexpr double UpperArmOffset = 0.14;
+    constexpr double LowerArmOffset = -49;
+    constexpr double UpperArmOffset = 0.14; //TODO: test
     
-    constexpr double kpLowerArm = 0.0111/3;  //TODO: test
-    constexpr double kpUpperArm = 0.00555/3;
+    constexpr double kpLowerArm = 0.01;  //TODO: test
+    constexpr double kpUpperArm = 0.0025;
 
-    constexpr double kiLowerArm = 0.000111;  //TODO: test
-    constexpr double kiUpperArm = 0.0000555;
+    constexpr double kiLowerArm = 0.0005;  //TODO: test
+    constexpr double kiUpperArm = 0.000125;
 
     constexpr double kiSumLowerArm = 0.0;
     constexpr double kiSumUpperArm = 0.0;
