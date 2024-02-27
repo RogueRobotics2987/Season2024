@@ -145,10 +145,10 @@ void ShooterSubsystem::ApriltagShooterTheta(double dist){
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
     if(buttonUp){
-        angleTrim = angleTrim + 0.25;
+        angleTrim = angleTrim - 0.25;
     }
     else if(buttonDown){
-        angleTrim= angleTrim - 0.25;
+        angleTrim= angleTrim + 0.25;
     }
 }
 
