@@ -151,10 +151,14 @@ void StateMachine::Execute()
   //   huntingNote = !huntingNote;
   // }
 
-  // if(m_auxController->GetPOV() != -1 && m_auxController->GetPOV() == 0)
-  // {
-  //   pov0 = !pov0;
-  // }  
+  if(m_auxController->GetPOV() != -1 && m_auxController->GetPOV() == 0)
+  {
+    pov0 = true;
+  }  
+  else
+  {
+    pov0 = false;
+  }
 
   //  if(m_auxController->GetRawButtonPressed(2))
   //   {
