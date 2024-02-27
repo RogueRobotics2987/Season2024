@@ -256,7 +256,7 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
     } 
     else 
     {
