@@ -214,11 +214,13 @@ void StateMachine::Execute()
 
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
+
   frc::SmartDashboard::PutBoolean("noteFollowState", noteFollowState);
   frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState);
 
   if(noteFollowState != true && aprilFollowState != true)
   {
+    //regular drive
     frc::SmartDashboard::PutString("DriveConfiguration ", "DefaultDrive");
 
     speedY = Deadzone(m_driverController->GetLeftY());
@@ -240,6 +242,7 @@ void StateMachine::Execute()
   {
     frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
 
+    //limited drive, else regular
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
     {
       txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
@@ -280,17 +283,12 @@ void StateMachine::Execute()
   {
     frc::SmartDashboard::PutString("DriveConfiguration ", "AprilFollow");
 
-    if(m_limelight->PhotonHasTarget() == true)
+    if(m_limelight->PhotonHasTarget() == true)  //limited drive, else regular
     {
       txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
       // currentPose = m_drive->GetPose().Rotation().Degrees().value();
-
-      // if (filteredTargetID == 4 || filteredTargetID == 7)
-      // {
-
-      // }
 
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
@@ -394,13 +392,21 @@ void StateMachine::Execute()
     
     // start intake motors, REMEMBER: middle motor changes direction
     m_intake->runIntake(0.25);
-    m_intake->Direction(0.25);
+    if(noteFollowState == true && aprilFollowState != true)
+    {
+      m_intake->DirectionNote(0.25);
+    } 
+    else 
+    {
+      m_intake->Direction(0.25);
+    }
 
     if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
     {
       m_arm->runArmWheels(0.25);
       m_shooter->runMagazine(0.25);
     }
+
 
     if(pickupNote == false)
     {
@@ -804,9 +810,9 @@ void StateMachine::Execute()
         //}
         //time = 0;
       }
-      /*
+      
 
-     /*if(raiseRobot == true)
+      if(raiseRobot == true)
       {
         m_climb->startClimber();
 
