@@ -4,15 +4,15 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem(
-  int m_MotorController,
-  rev::SparkRelativeEncoder::Type m_EncoderType,
-  int m_counts_per_rev
-)
+// ClimberSubsystem::ClimberSubsystem(
+//   int m_MotorController,
+//   rev::SparkRelativeEncoder::Type m_EncoderType,
+//   int m_counts_per_rev
+// )
 
-{
+// {
 
-}
+// }
 
 // This method will be called once per scheduler run
 void ClimberSubsystem::Periodic() 

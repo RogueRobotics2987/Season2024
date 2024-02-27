@@ -175,10 +175,10 @@ namespace ArmConstants {
     constexpr double UpperArmOffset = 0.14; //TODO: test
     
     constexpr double kpLowerArm = 0.01;  //TODO: test
-    constexpr double kpUpperArm = 0.01;
+    constexpr double kpUpperArm = 0.0025;
 
     constexpr double kiLowerArm = 0.0005;  //TODO: test
-    constexpr double kiUpperArm = 0.0005;
+    constexpr double kiUpperArm = 0.000125;
 
     constexpr double kiSumLowerArm = 0.0;
     constexpr double kiSumUpperArm = 0.0;

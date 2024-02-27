@@ -528,7 +528,7 @@ void StateMachine::Execute()
     //run 60 times a second
     time++;
 
-     if(time >= 300){
+     if(m_arm->getLowerArmError() > ){
       if(placeInTrap){
         state = ARM_TRAP;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_TRAP");
