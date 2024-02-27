@@ -114,7 +114,7 @@ class RobotContainer
     std::vector<std::string> B_1Command{
       "Null",
       "Null",
-      "Intake"
+      "Null"
     };
 
     std::vector<bool> B_1LimelightPath{
@@ -122,6 +122,9 @@ class RobotContainer
       true,
       true
     };
+
+    std::string B_1EndCommand = "Shoot";
+    std::string B_12EndCommand = "NoteFollow"; //temp string to force a state when testing
 
     std::vector<frc::Pose2d>  B_2Waypoints{
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),

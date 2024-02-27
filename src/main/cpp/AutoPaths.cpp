@@ -14,19 +14,8 @@ class AutoPaths {
         std::vector<units::meters_per_second_t> CruiseSpeed; 
         std::vector<std::string> Command;
         std::vector<bool> limelightFollow;
+        std::string EndCommand;
     };   
-
-    // void setWaypoints(std::vector<frc::Pose2d> WP){
-    //     AutoPath.Waypoints.assign(WP.begin(), WP.end());
-    // }
-    
-    // void setCruiseSpeed(std::vector<units::meters_per_second_t> CP){
-    //     AutoPath.CruiseSpeed.assign(CP.begin(), CP.end());
-    // }
-
-    // void setPointSpeed(std::vector<units::meters_per_second_t> PS){
-    //     AutoPath.PointSpeed.assign(PS.begin(), PS.end());
-    // }
         
     private:
 
