@@ -138,6 +138,16 @@ void ArmSubsystem::FollowShooter(double error){
 void ArmSubsystem::MoveLowerArm(){
     LowerArm.Set(0.5);
 }
+double ArmSubsystem::getLowerArmError()
+{
+   return m_LowerDesired-GetOffSetEncoderValueLower();
+}
+
+double ArmSubsystem::getUpperArmError()
+{
+   return m_LowerDesired-GetOffSetEncoderValueUpper();
+}
+
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle)
 {
