@@ -205,7 +205,7 @@ units::degree_t DriveSubsystem::GetHeading(){
 }
 
 void DriveSubsystem::ZeroHeading(){
-      m_gyro.Reset();
+  m_gyro.Reset();
 }
 
 //small left right movement. Optional to have

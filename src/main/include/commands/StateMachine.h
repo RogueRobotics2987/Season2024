@@ -146,11 +146,11 @@ class StateMachine
 //TODO: MOVED OVER FROM DriveStateMachine
   units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
   units::velocity::meters_per_second_t speedNote = units::velocity::meters_per_second_t(0);
-  double kpNote = 0.05;
+  double kpNote = 0.045;
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-  double kpApril = 0.09;
+  double kpApril = 0.08;
   double txApril = 0.0;
 
   bool noteFollowState = false;

@@ -233,7 +233,7 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(0), -rotNote, false, NoJoystickInput);
     } 
     else 
     {
@@ -264,7 +264,7 @@ void StateMachine::Execute()
 
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
-      rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      rotApril = units::angular_velocity::radians_per_second_t(txApril * kpApril);
       //}
 
       speedY = Deadzone(m_driverController->GetLeftY());

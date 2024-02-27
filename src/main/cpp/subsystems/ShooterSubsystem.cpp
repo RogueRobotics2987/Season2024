@@ -81,7 +81,7 @@ bool ShooterSubsystem::IsTargeted(){
 //Calculates encoder position and changes it to degrees
 double ShooterSubsystem::GetOffSetEncoderValue(){
     double Pose = 0;
-    Pose = ShooterEncoder.GetAbsolutePosition() + ShooterConstants::EncoderOffSet;
+    Pose = ShooterEncoder.GetAbsolutePosition() + ShooterConstants::EncoderOffSet; //TODO make encoder offset from absolute to degrees
 
     if(Pose < 0){
         Pose += 1;
@@ -90,7 +90,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose + 6;
+    return Pose + 12;
 }
 
 void ShooterSubsystem::runMagazine(double speed){
