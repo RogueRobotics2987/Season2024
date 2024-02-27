@@ -146,7 +146,7 @@ void StateMachine::Execute()
   //   huntingNote = !huntingNote;
   // }
 
-  if(m_auxController->GetPOV(0) == 0)
+  if(m_auxController->GetPOV(90) == 0)
   {
     pov0 = !pov0;
   }
