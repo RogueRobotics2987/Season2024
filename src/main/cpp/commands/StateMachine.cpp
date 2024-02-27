@@ -268,18 +268,8 @@ void StateMachine::Execute()
     {
       txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
-
-      // currentPose = m_drive->GetPose().Rotation().Degrees().value();
-
-      // if (filteredTargetID == 4 || filteredTargetID == 7)
-      // {
-
-      // }
-
-      //rotApril = units::angular_velocity::radians_per_second_t(0);
-      //if(txApril > 7 || txApril < -7){
+   
       rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
-      //}
 
       speedY = Deadzone(m_driverController->GetLeftY());
       speedX = Deadzone(m_driverController->GetLeftX());

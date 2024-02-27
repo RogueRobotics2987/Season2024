@@ -57,6 +57,11 @@ void AutoAuxilaryStateMachine::Execute()
   //For the Shooter Apriltag test
   targetIDs.clear();
 
+  m_shooter->accumulateError();
+
+  m_arm->accumulateErrorLower();
+  m_arm->accumulateErrorUpper();
+
   // Define Camera
   // Find out what we need to do to get strgest tag id
   // calculate camra tangent get camera dx and dy and get tan of that
