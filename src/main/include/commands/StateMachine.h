@@ -86,7 +86,8 @@ class StateMachine
     BACKUP,
     NOTE_HUNTING,
     NOTE_FOLLOW,
-    APRIL_FOLLOW
+    APRIL_FOLLOW,
+    CHAIN_CLIMB
   };
 
   intakeState state = EMPTY;
