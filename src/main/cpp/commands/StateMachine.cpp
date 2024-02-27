@@ -248,6 +248,11 @@ void StateMachine::Execute()
     {
       state = SPIT_OUT;
       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+
+      m_intake->stopIntake();
+      m_shooter->stopMagazine();
+      m_shooter->StopShooter();
+      m_arm->stopArmWheels();
     }
 
     // if(huntingNote == true){
@@ -262,15 +267,12 @@ void StateMachine::Execute()
     break;
 
   case SPIT_OUT:
+    if(resetLoaded == true){
+      state = LOADED;
+      break;
+    }
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
     m_messager->SetAuxMessage("SpitOut");
-    
-    //It's a good idea to make sure all roller motors are stopped before running the 'spit-out' motors.
-    m_intake->stopIntake();
-    m_shooter->stopMagazine();
-    m_shooter->StopShooter();
-    m_shooter->SetIntakePose();
-    m_arm->stopArmWheels();
 
     m_intake->spitOutIntake();
     m_shooter->runMagazine(-0.2);
