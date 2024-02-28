@@ -15,6 +15,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
   void Direction(double speed);
+  void DirectionNote(double speed);
   void runIntake(double speed);
   void stopIntake();
   bool GetIntakeFront();
