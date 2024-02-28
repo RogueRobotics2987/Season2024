@@ -176,6 +176,15 @@ void StateMachine::Execute()
     pov0 = false;
   }
 
+  if(m_driverController->GetPOV() != -1 && m_driverController->GetPOV() == 90)
+  {
+    raiseClimber = true;
+  }  
+  else
+  {
+    raiseClimber = false;
+  }
+
   //  if(m_auxController->GetRawButtonPressed(2))
   //   {
   //     pov0 = !pov0;
@@ -788,40 +797,31 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
 
       //move shooter out of way
-     m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+      m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
 
-      if(time >= 180 && time < 360)
+      if(time >= 90 && time < 180)
       {
         //move arms out of way 
         m_arm->setLowerArmAngle(80); //TODO: Magic Int - needs to be made into a constant
       }
 
-      
-
-      if(time >= 360)
+      if(time >= 180)
       {
         //move arms out of way 
         m_arm->setUpperArmAngle(0);
       }
 
-      
-        time++;
-      /*
+      time++;
       
       //button 1 things
-      if(raiseHook == true)
+      if(raiseClimber == true)
       {
-        m_climb->startClimber(); 
-
-        //time++;
-
-        //if(time >= 90) //figure out time
-        //{
-          m_climb->stopClimber();
-        //}
-        //time = 0;
+        m_climb->startClimber();
       }
-      /*
+      else 
+      {
+        m_climb->stopClimber();
+      }
 
      /*if(raiseRobot == true)
       {

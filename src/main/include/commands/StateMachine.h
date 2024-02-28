@@ -128,6 +128,7 @@ class StateMachine
   units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
 
   bool pov0 = false; // spit out note when button pov0 is pressed
+  bool raiseClimber = false;
 
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
