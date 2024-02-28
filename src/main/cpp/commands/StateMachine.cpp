@@ -191,19 +191,25 @@ void StateMachine::Execute()
   //   }
 
   if(m_auxController->GetRawButtonPressed(2)){
-    if(placeInForwardAmp == false){
+    if(placeInForwardAmp == false)
+    {
       placeInForwardAmp = true;
       placeInTrap = false;
-    } else {
+    }
+    else
+    {
       placeInForwardAmp = false;
     }
   } 
   if(m_auxController->GetRawButtonPressed(4))
   { 
-    if(placeInTrap == false){
+    if(placeInTrap == false)
+    {
       placeInTrap = true;
       placeInForwardAmp = false;
-    } else {
+    } 
+    else
+    {
       placeInTrap = false;
     }
   }
@@ -224,7 +230,7 @@ void StateMachine::Execute()
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   frc::SmartDashboard::PutBoolean("noteFollowState", noteFollowState);
-  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState);
+  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState); //remove(?)
 
   if(noteFollowState != true && aprilFollowState != true)
   {
@@ -265,7 +271,7 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
     } 
     else 
     {
@@ -346,7 +352,7 @@ void StateMachine::Execute()
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
-    m_arm->stopDrop();
+    m_arm->stopDrop(); //TODO remove(?)
     //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     //m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
@@ -416,10 +422,7 @@ void StateMachine::Execute()
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
-    else if(emptyIntake == true){
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    }
+
     if(m_shooter->GetMagazineSensor())
     {
       state = BACKUP;
@@ -567,15 +570,12 @@ void StateMachine::Execute()
 
     break;
 
-  //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
-
   case RAISE_SHOOTER:
     m_shooter->SetActuator(StateMachineConstants::RaisedShooterAngle);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
     
-
     if(m_shooter->ShooterError() > StateMachineConstants::RaisedShooterAngle){
       state = ARMS_EXTEND_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
@@ -592,7 +592,8 @@ void StateMachine::Execute()
     //run 60 times a second
   
 
-     if(m_arm->getLowerArmError() > StateMachineConstants::LowerClimbingExtentionAngle){
+    if(m_arm->getLowerArmError() < 1) //TODO magic number
+    {
 
       if(placeInTrap){
         state = ARM_TRAP;
@@ -792,6 +793,7 @@ void StateMachine::Execute()
       {
         //move arms out of way 
         m_arm->setUpperArmAngle(0);
+        time = 360;
       }
 
       time++;
