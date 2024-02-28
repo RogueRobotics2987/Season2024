@@ -167,4 +167,7 @@ class StateMachine
   bool runShooterWarmup = false;
   bool buttonA = false;
   bool buttonB = false;
+
+  double currentHeading = 0;
+  double desiredHeading = 0;
 };

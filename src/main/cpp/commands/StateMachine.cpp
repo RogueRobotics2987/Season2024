@@ -120,6 +120,10 @@ void StateMachine::Execute()
   {
     aprilFollowState = !aprilFollowState;
   }
+  else if(state != SHOOTER_WARMUP)
+  {
+    aprilFollowState = false;
+  }
 
   if(m_auxController->GetRawButtonPressed(1))
    {
@@ -288,19 +292,26 @@ void StateMachine::Execute()
 
     if(m_limelight->PhotonHasTarget() == true)
     {
-      txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+      if (filteredTargetID == 4 || filteredTargetID == 7)
+      {
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+        desiredHeading = currentHeading + txApril;
+      }
+
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      // currentPose = m_drive->GetPose().Rotation().Degrees().value();
+      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
-      // if (filteredTargetID == 4 || filteredTargetID == 7)
-      // {
+      std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
 
-      // }
+      double error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
+      rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
+
+ 
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
-      rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      // rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
       //}
 
       speedY = Deadzone(m_driverController->GetLeftY());
