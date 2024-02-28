@@ -37,7 +37,7 @@ void LimelightSubsystem::Periodic()
 
         for(unsigned int i = 0; i < myTargets.size(); i++)
         {
-            targetIDs.emplace_back(myTargets.at(i).GetFiducialId());
+            targetIDs.emplace_back(myTargets.at(i).GetFiducialId()); //TODO remove(?)
 
             if(myTargets.at(i).GetFiducialId() == 4 || myTargets.at(i).GetFiducialId() == 7)
             {

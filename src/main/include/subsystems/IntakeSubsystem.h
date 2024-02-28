@@ -30,8 +30,6 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   double frontVal = 0.0;
   double backVal = 0.0;
 
-  DriveSubsystem* m_drivetrain;
-
   rev::CANSparkMax BackIntake{9, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
