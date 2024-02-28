@@ -153,4 +153,15 @@ class StateMachine
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
   double kpApril = 0.09;
   double txApril = 0.0;
+
+  bool noteFollowState = false;
+  bool aprilFollowState = false;
+  bool standard = false;
+  bool runIntake = false;
+  bool runShooterWarmup = false;
+  bool buttonA = false;
+  bool buttonB = false;
+
+  double currentHeading = 0;
+  double desiredHeading = 0;
 };

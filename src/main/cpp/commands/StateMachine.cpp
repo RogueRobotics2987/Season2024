@@ -106,6 +106,10 @@ void StateMachine::Execute()
   {
     aprilFollowState = !aprilFollowState;
   }
+  else if(state != SHOOTER_WARMUP)
+  {
+    aprilFollowState = false;
+  }
 
   /*
 
@@ -173,19 +177,25 @@ void StateMachine::Execute()
 
 /*
   if(m_auxController->GetRawButtonPressed(2)){
-    if(placeInForwardAmp == false){
+    if(placeInForwardAmp == false)
+    {
       placeInForwardAmp = true;
       placeInTrap = false;
-    } else {
+    }
+    else
+    {
       placeInForwardAmp = false;
     }
   } 
   if(m_auxController->GetRawButtonPressed(4))
   { 
-    if(placeInTrap == false){
+    if(placeInTrap == false)
+    {
       placeInTrap = true;
       placeInForwardAmp = false;
-    } else {
+    } 
+    else
+    {
       placeInTrap = false;
     }
   }
@@ -204,7 +214,7 @@ void StateMachine::Execute()
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   frc::SmartDashboard::PutBoolean("noteFollowState", noteFollowState);
-  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState);
+  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState); //remove(?)
 
   if(noteFollowState != true && aprilFollowState != true)
   {
@@ -273,10 +283,27 @@ void StateMachine::Execute()
 
     if(m_limelight->PhotonHasTarget() == true)  //limited drive, else regular
     {
-      txApril = m_limelight->FilteredPhotonYaw(); // TODO: check!
+      if (filteredTargetID == 4 || filteredTargetID == 7)
+      {
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+        desiredHeading = currentHeading + txApril;
+      }
+
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+
+      std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
+
+      double error = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+      rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
+
+ 
+      //rotApril = units::angular_velocity::radians_per_second_t(0);
+      //if(txApril > 7 || txApril < -7){
+      // rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      //}
 
       speedY = Deadzone(m_driverController->GetLeftY());
       speedX = Deadzone(m_driverController->GetLeftX());
@@ -635,6 +662,7 @@ void StateMachine::Execute()
       {
         //move arms out of way 
         m_arm->setUpperArmAngle(0);
+        time = 360;
       }
       
       time++;
