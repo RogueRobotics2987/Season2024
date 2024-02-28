@@ -4,17 +4,29 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem()=default;
+ClimberSubsystem::ClimberSubsystem() {}
+//TODO: Not sure what this does - commented out for now.
+  /*int m_MotorController,
+  rev::SparkRelativeEncoder::Type m_EncoderType,
+  int m_counts_per_rev
+)
+
+// {
+
+}
+*/
 
 // This method will be called once per scheduler run
 void ClimberSubsystem::Periodic() {}
 
-void ClimberSubsystem::startClimber() {
-    ClimberMoter.Set(0.5);  
+void ClimberSubsystem::startClimber() 
+{
+    m_climberMoter.Set(0.5);  
 }
 
-void ClimberSubsystem::stopClimber() {
-    ClimberMoter.Set(0.0);
+void ClimberSubsystem::stopClimber() 
+{
+    m_climberMoter.Set(0.0);
 }
 
 

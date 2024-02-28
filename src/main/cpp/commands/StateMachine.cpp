@@ -120,6 +120,26 @@ void StateMachine::Execute()
   {
     aprilFollowState = !aprilFollowState;
   }
+  else if(state != SHOOTER_WARMUP)
+  {
+    aprilFollowState = false;
+  }
+
+  if(m_auxController->GetRawButtonPressed(1))
+   {
+    raiseHook = true;
+   }
+
+   if(m_auxController->GetRawButtonPressed(3))
+   {
+     raiseRobot = true;
+   }
+
+  if(m_driverController->GetRawButtonPressed(3))
+  {
+    chainClimb = !chainClimb;
+    //setstate = CHAIN_CLIMB;
+  }
 
   if(m_driverController->GetRawButtonPressed(5))
   { 
@@ -166,19 +186,25 @@ void StateMachine::Execute()
   //   }
 
   if(m_auxController->GetRawButtonPressed(2)){
-    if(placeInForwardAmp == false){
+    if(placeInForwardAmp == false)
+    {
       placeInForwardAmp = true;
       placeInTrap = false;
-    } else {
+    }
+    else
+    {
       placeInForwardAmp = false;
     }
   } 
   if(m_auxController->GetRawButtonPressed(4))
   { 
-    if(placeInTrap == false){
+    if(placeInTrap == false)
+    {
       placeInTrap = true;
       placeInForwardAmp = false;
-    } else {
+    } 
+    else
+    {
       placeInTrap = false;
     }
   }
@@ -186,10 +212,10 @@ void StateMachine::Execute()
   //   m_arm->MoveLowerArm();
   // }
 
-  if(m_auxController->GetRawButtonPressed(8))
+  /*if(m_auxController->GetRawButtonPressed(8))
   {
 
-  }
+  } */
 
   if(fabs(m_auxController->GetRightY()) > 0.15)
   {
@@ -199,7 +225,7 @@ void StateMachine::Execute()
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
   frc::SmartDashboard::PutBoolean("noteFollowState", noteFollowState);
-  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState);
+  frc::SmartDashboard::PutBoolean("aprilFollowState", aprilFollowState); //remove(?)
 
   if(noteFollowState != true && aprilFollowState != true)
   {
@@ -240,7 +266,7 @@ void StateMachine::Execute()
       {
         NoJoystickInput = false;
       }
-      m_drive->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
     } 
     else 
     {
@@ -266,10 +292,27 @@ void StateMachine::Execute()
 
     if(m_limelight->PhotonHasTarget() == true)
     {
-      txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check!
+      if (filteredTargetID == 4 || filteredTargetID == 7)
+      {
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+        desiredHeading = currentHeading + txApril;
+      }
+
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
-   
-      rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+
+      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+
+      std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
+
+      double error = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+      rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
+
+ 
+      //rotApril = units::angular_velocity::radians_per_second_t(0);
+      //if(txApril > 7 || txApril < -7){
+      // rotApril = units::angular_velocity::radians_per_second_t((0 - txApril) * kpApril);
+      //}
 
       speedY = Deadzone(m_driverController->GetLeftY());
       speedX = Deadzone(m_driverController->GetLeftX());
@@ -311,7 +354,7 @@ void StateMachine::Execute()
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
     // stop all motors
-    m_arm->stopDrop();
+    m_arm->stopDrop(); //TODO remove(?)
     //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
     //m_arm->setUpperArmAngle(ArmConstants::UpperFullRetractedAngle);
     m_intake->stopIntake();
@@ -328,17 +371,17 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
 
+    if(chainClimb == true)
+    {
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
+    }
+  
     if(pov0 == true)
     {
       state = SPIT_OUT;
       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     }
-
-    // if(huntingNote == true){
-    //   state = NOTE_HUNTING;
-    //   frc::SmartDashboard::PutString("state: ", "changing to Hunting Note");
-
-    // }
 
     if(placeInTrap || placeInForwardAmp){
       state = RAISE_SHOOTER;
@@ -381,10 +424,7 @@ void StateMachine::Execute()
       state = EMPTY;
       frc::SmartDashboard::PutString("state: ", "changing to EMPTY");
     }
-    else if(emptyIntake == true){
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
-    }
+
     if(m_shooter->GetMagazineSensor())
     {
       state = BACKUP;
@@ -455,11 +495,17 @@ void StateMachine::Execute()
 
     } 
 
-    if(pov0 == true)
+    if(chainClimb == true)
     {
-      state = SPIT_OUT;
-      frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+      state = CHAIN_CLIMB;
+      frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
     }
+
+     if(pov0 == true)
+     {
+       state = SPIT_OUT;
+       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
+     }
 
     // if(placeInTrap || placeInAmp){
     //   state = RAISE_SHOOTER;
@@ -526,19 +572,15 @@ void StateMachine::Execute()
 
     break;
 
-  //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
-
   case RAISE_SHOOTER:
-    m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+    m_shooter->SetActuator(StateMachineConstants::RaisedShooterAngle);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
-    time++;
-
-    if(time >= 90){
+    
+    if(m_shooter->ShooterError() > StateMachineConstants::RaisedShooterAngle){
       state = ARMS_EXTEND_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
-      time = 0;
     }
 
     break;
@@ -546,16 +588,16 @@ void StateMachine::Execute()
   case ARMS_EXTEND_INITIAL:
     frc::SmartDashboard::PutString("state: ", "LOWER_ARM_EXTEND_INITAL");
 
-    m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
+    m_arm->setLowerArmAngle(StateMachineConstants::LowerClimbingExtentionAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
     //switch states when timer has exceded 5.0 seconds
     //run 60 times a second
-    time++;
+  
 
-    if(time >= 300)
+    if(m_arm->getLowerArmError() < 1) //TODO magic number
     {
-      if(placeInTrap)
-      {
+
+      if(placeInTrap){
         state = ARM_TRAP;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_TRAP");
       }
@@ -574,7 +616,6 @@ void StateMachine::Execute()
         state = ARM_RETRACT_INITIAL;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_INITIAL");
       }
-      time = 0;
     }
 
     break;
@@ -738,7 +779,76 @@ void StateMachine::Execute()
 
     break;
 
-    //  case NOTE_HUNTING:
+    case CHAIN_CLIMB:
+      frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
+
+      //move shooter out of way
+     m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
+
+      if(time >= 180 && time < 360)
+      {
+        //move arms out of way 
+        m_arm->setLowerArmAngle(80); //TODO: Magic Int - needs to be made into a constant
+      }
+
+      if(time >= 360)
+      {
+        //move arms out of way 
+        m_arm->setUpperArmAngle(0);
+        time = 360;
+      }
+
+      
+        time++;
+      /*
+      
+      //button 1 things
+      if(raiseHook == true)
+      {
+        m_climb->startClimber(); 
+
+        //time++;
+
+        //if(time >= 90) //figure out time
+        //{
+          m_climb->stopClimber();
+        //}
+        //time = 0;
+      }
+      /*
+
+     /*if(raiseRobot == true)
+      {
+        m_climb->startClimber();
+
+        time++;
+
+        if(time >= 90) //figure out time
+        {
+          m_climb->stopClimber();
+        }
+        time = 0;
+      }
+       //reset timer, figure out
+       //run motwer (12) for 0.0 revolutions
+      
+      */
+      //start motor to move hook to top
+      
+      //stop motor after x revolutions
+    
+      //button 3 things
+      
+      //start motor to move hook 
+      
+      //stop motor after y revolutions
+      
+      
+
+    break;
+      
+
+  //  case NOTE_HUNTING:
 
     //   m_intake->runIntake();
     //   m_intake->Direction();

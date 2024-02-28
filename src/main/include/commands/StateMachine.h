@@ -86,7 +86,8 @@ class StateMachine
     BACKUP,
     NOTE_HUNTING,
     NOTE_FOLLOW,
-    APRIL_FOLLOW
+    APRIL_FOLLOW,
+    CHAIN_CLIMB
   };
 
   intakeState state = EMPTY;
@@ -112,6 +113,9 @@ class StateMachine
   int apriltagID = 0;
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
+  bool chainClimb = false;
+  bool raiseHook = false;
+  bool raiseRobot = false;
   bool emptyIntake = false;       // self explainitory
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
@@ -163,4 +167,7 @@ class StateMachine
   bool runShooterWarmup = false;
   bool buttonA = false;
   bool buttonB = false;
+
+  double currentHeading = 0;
+  double desiredHeading = 0;
 };

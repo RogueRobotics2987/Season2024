@@ -26,11 +26,11 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
 
-    frc::SmartDashboard::GetNumber("lower arm desired", m_LowerDesired);
-    frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
+    frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
+    //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
-    frc::SmartDashboard::GetNumber("upper arm desired", m_UpperDesired);
-    frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
+    frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
+   // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
 
     RunLowerArm();
     RunUpperArm();
@@ -138,6 +138,16 @@ void ArmSubsystem::FollowShooter(double error){
 void ArmSubsystem::MoveLowerArm(){
     LowerArm.Set(0.5);
 }
+double ArmSubsystem::getLowerArmError()
+{
+   return m_LowerDesired-GetOffSetEncoderValueLower();
+}
+
+double ArmSubsystem::getUpperArmError()
+{
+   return m_LowerDesired-GetOffSetEncoderValueUpper();
+}
+
 
 void ArmSubsystem::setLowerArmAngle(double desiredAngle)
 {
@@ -147,7 +157,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
     }
     else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
     {
-        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
+        desiredAngle = ArmConstants::LowerArmSoftLimitLow;
     }
     else
     {
