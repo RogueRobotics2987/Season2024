@@ -45,7 +45,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void FollowShooter(double error);
 
   void MoveLowerArm();
-
+  double getLowerArmError();
+  double getUpperArmError();
   double getLowerEncoderPos();
   double getUpperEncoderPos();
   

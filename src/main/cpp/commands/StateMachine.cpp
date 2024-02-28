@@ -362,14 +362,6 @@ void StateMachine::Execute()
       state = PICKUP;   
       frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
     }
-    
-    /*
-    if(m_messager->GetDriveMessage().compare("runIntake") == 0)
-    {
-      state = PICKUP;
-      pickupNote = true;
-    } 
-    */
 
     if(chainClimb == true)
     {
@@ -382,12 +374,6 @@ void StateMachine::Execute()
       state = SPIT_OUT;
       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     }
-
-    // if(huntingNote == true){
-    //   state = NOTE_HUNTING;
-    //   frc::SmartDashboard::PutString("state: ", "changing to Hunting Note");
-
-    // }
 
     if(placeInTrap || placeInForwardAmp){
       state = RAISE_SHOOTER;
@@ -584,16 +570,15 @@ void StateMachine::Execute()
   //TODO THIS CODE BELOW HAS NOT BEEN TESTED, PLEASE TEST BEFORE CONTINUING
 
   case RAISE_SHOOTER:
-    m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+    m_shooter->SetActuator(StateMachineConstants::RaisedShooterAngle);
 
     //switch states when timer has exceded 1.5 seconds
     //run 60 times a second
-    time++;
+    
 
-    if(time >= 90){
+    if(m_shooter->ShooterError() > StateMachineConstants::RaisedShooterAngle){
       state = ARMS_EXTEND_INITIAL;
       frc::SmartDashboard::PutString("state: ", "changing to LOWER_ARM_EXTEND_INITIAL");
-      time = 0;
     }
 
     break;
@@ -601,16 +586,15 @@ void StateMachine::Execute()
   case ARMS_EXTEND_INITIAL:
     frc::SmartDashboard::PutString("state: ", "LOWER_ARM_EXTEND_INITAL");
 
-    m_arm->setLowerArmAngle(ArmConstants::LowerFirstExtentionAngle);
+    m_arm->setLowerArmAngle(StateMachineConstants::LowerClimbingExtentionAngle);
     // m_arm->setUpperArmAngle(ArmConstants::UpperFirstExtentionAngle);
     //switch states when timer has exceded 5.0 seconds
     //run 60 times a second
-    time++;
+  
 
-    if(time >= 300)
-    {
-      if(placeInTrap)
-      {
+     if(m_arm->getLowerArmError() > StateMachineConstants::LowerClimbingExtentionAngle){
+
+      if(placeInTrap){
         state = ARM_TRAP;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_TRAP");
       }
@@ -629,7 +613,6 @@ void StateMachine::Execute()
         state = ARM_RETRACT_INITIAL;
         frc::SmartDashboard::PutString("state: ", "changing to ARM_RETRACT_INITIAL");
       }
-      time = 0;
     }
 
     break;
@@ -797,7 +780,7 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
 
       //move shooter out of way
-      m_shooter->SetActuator(ShooterConstants::RaisedShooterAngle);
+     m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
 
       if(time >= 90 && time < 180)
       {
