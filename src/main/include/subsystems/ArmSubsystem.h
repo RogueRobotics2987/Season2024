@@ -23,6 +23,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   double GetOffSetEncoderValueLower();
   double GetOffSetEncoderValueUpper();
   
+  //DO NOT SET TO ZERO doesnt acutally update....
   void setLowerArmAngle(double desiredAngle);
   void setUpperArmAngle(double desiredAngle);
 

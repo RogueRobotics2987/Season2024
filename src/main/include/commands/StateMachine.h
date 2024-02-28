@@ -77,7 +77,8 @@ class StateMachine
     FORWARD_ARM_AMP,
     BACKWARD_ARM_AMP,
     ARM_TRAP,
-    CHAIN_CLIMB
+    CHAIN_CLIMB,
+    ARMS_RETRACT
   };
 
   intakeState state = EMPTY;

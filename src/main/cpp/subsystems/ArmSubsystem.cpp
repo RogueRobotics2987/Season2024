@@ -25,7 +25,6 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
-
     frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
     //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
@@ -192,6 +191,7 @@ void ArmSubsystem::accumulateErrorUpper()
 
 void ArmSubsystem::RunLowerArm()
 {
+    // std::cout << m_LowerDesired << " Debug lower arm desired" << std::endl;
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
 
     double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;

@@ -47,8 +47,12 @@ void StateMachine::Initialize()
 
   m_arm->ZeroIntergral();
 
+  m_arm->setLowerArmAngle(1);
+
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 0);
   frc::SmartDashboard::PutNumber("Driver Angle", 20);
+
+  state = EMPTY;
 
   if(m_shooter->GetMagazineSensor())
   {
@@ -71,6 +75,8 @@ void StateMachine::Execute()
 
   m_arm->accumulateErrorLower();
   m_arm->accumulateErrorUpper();
+  
+
 
   // BUTTONS!!!
   driveButtonA = m_driverController->GetRawButtonPressed(1);
@@ -170,11 +176,13 @@ void StateMachine::Execute()
 
   if(m_driverController->GetPOV() != -1 && m_driverController->GetPOV() == 90)
   {
-    raiseClimber = true;
+    // raiseClimber = true;
+    m_climb->startClimber();
   }
   else 
   {
-    raiseClimber = false;
+    // raiseClimber = false;
+    m_climb->stopClimber();
   }
 
 /*
@@ -355,6 +363,8 @@ void StateMachine::Execute()
       }
 
       // stop all motors
+      m_arm->setLowerArmAngle(0.5);
+      m_arm->setUpperArmAngle(0.5);
       m_arm->stopDrop();
       m_intake->stopIntake();
       m_shooter->stopMagazine();
@@ -366,6 +376,7 @@ void StateMachine::Execute()
       {
         state = PICKUP;   
         frc::SmartDashboard::PutString("state: ", "changing to PICKUP");
+        m_intake->DirectionNote(0.25);
       }
 
       if(chainClimb == true)
@@ -421,7 +432,7 @@ void StateMachine::Execute()
       
       // start intake motors, REMEMBER: middle motor changes direction
       m_intake->runIntake(0.25);
-      m_intake->DirectionNote(0.25);
+      m_intake->Direction(0.25);
 
       if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
       {
@@ -650,12 +661,12 @@ void StateMachine::Execute()
 
     case CHAIN_CLIMB:
     {
-      frc::SmartDashboard::PutString("state:", "CHAIN_CLIMB");
+      frc::SmartDashboard::PutString("state: ", "CHAIN_CLIMB");
 
       //move shooter out of way
       m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
 
-      if(time >= 50 && time < 140)
+      if(time >= 65 && time < 140)
       {
         //move arms out of way 
         m_arm->setLowerArmAngle(80);
@@ -671,14 +682,14 @@ void StateMachine::Execute()
       time++;
       
       //button 1 things
-      if(raiseClimber == true)
-      {
-        m_climb->startClimber();
-      }
-      else
-      {
-        m_climb->stopClimber();
-      }
+      // if(raiseClimber == true)
+      // {
+      //   m_climb->startClimber();
+      // }
+      // else
+      // {
+      //   m_climb->stopClimber();
+      // }
 
       //Driver
       if(m_auxController->GetRawButtonPressed(1))
@@ -695,7 +706,30 @@ void StateMachine::Execute()
       {
         m_arm->setLowerArmAngle(85);
       }
+    
+      //COMMENTED OUT BECAUSE IS UNSTABLE RIGHT NOW DO NOT GO INTO YOUR CLIMBER BECAUSE YOU CANT GET OUT
+      // if(chainClimb == false)
+      // {
+      //   state = ARMS_RETRACT;
+      //   time = 0;
+      //   m_arm->setLowerArmAngle(35);
+      //   m_arm->setUpperArmAngle(0.5);
+      // }
+
+      break;
+    }
+    case ARMS_RETRACT:
+    {
+      if(fabs(35 - m_arm->GetOffSetEncoderValueLower()) < 1)
+      {
+        m_shooter->SetActuator(40);
+        m_arm->setLowerArmAngle(1);
       
+        if(fabs(m_shooter->GetDesired() - m_shooter->GetOffSetEncoderValue()) < 2)
+        {
+          state = EMPTY;
+        }
+      }
       break;
     }
 
