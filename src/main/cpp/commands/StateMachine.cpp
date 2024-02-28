@@ -75,6 +75,7 @@ void StateMachine::Execute()
   // BUTTONS!!!
   driveButtonA = m_driverController->GetRawButtonPressed(1);
   driveButtonB = m_driverController->GetRawButtonPressed(2);
+  driveLeftBumperPushed = m_driverController->GetRawButtonPressed(5);
 
   // std::cout << "Debug:" << state << std::endl;
   // std::cout << "Debug:" << noteFollowState << std::endl;
@@ -129,11 +130,12 @@ void StateMachine::Execute()
     chainClimb = !chainClimb;
   }
 
-  if(m_driverController->GetRawButtonPressed(5) && state == EMPTY)
+  if(driveLeftBumperPushed && state == EMPTY)
   { 
     pickupNote = true;
   }
-  else if(m_driverController->GetRawButtonPressed(5) && state == PICKUP && noteFollowState == false)
+  
+  else if(driveLeftBumperPushed && state == PICKUP && noteFollowState == false)
   {
     pickupNote = false;
   }
@@ -348,6 +350,7 @@ void StateMachine::Execute()
       if(resetLoaded)
       {
         state = LOADED;
+        SetBoolsFalse();
         break;
       }
 
@@ -764,6 +767,7 @@ void StateMachine::SetBoolsFalse()
   aprilFollowState = false;
   driveButtonA = false;
   driveButtonB = false;
+  driveLeftBumperPushed = false;
 
   resetLoaded = false;
 }

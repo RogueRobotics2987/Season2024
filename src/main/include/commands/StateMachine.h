@@ -122,6 +122,7 @@ class StateMachine
   bool aprilFollowState = false;
   bool driveButtonA = false;
   bool driveButtonB = false;
+  bool driveLeftBumperPushed = false;
 
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
@@ -154,9 +155,6 @@ class StateMachine
   double kpApril = 0.09;
   double txApril = 0.0;
 
-  bool noteFollowState = false;
-  bool aprilFollowState = false;
-  bool standard = false;
   bool runIntake = false;
   bool runShooterWarmup = false;
   bool buttonA = false;
