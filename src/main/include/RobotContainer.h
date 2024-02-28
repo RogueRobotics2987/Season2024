@@ -118,9 +118,9 @@ class RobotContainer
     };
 
     std::vector<bool> B_1LimelightPath{
-      true,
-      true,
-      true
+      false,
+      false,
+      false
     };
 
     std::string B_1EndCommand = "Shoot";
