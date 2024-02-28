@@ -356,33 +356,108 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   else if(chosenAuto == "B_2")
   { 
     m_drive.ResetOdometry(B_2Waypoints[0]);
+
+    AutoPaths::AutoPath B_2;
+    B_2.PointSpeed = B_2PointSpeed;
+    B_2.CruiseSpeed = B_2CruiseSpeed;
+    B_2.Waypoints = B_2Waypoints;
+    B_2.Command = B_2Command;
+    B_2.limelightFollow = B_2LimelightPath;
+    B_2.EndCommand = B_2EndCommand;
+
+    path.push_back(B_2);
+
+
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_2Waypoints, B_2PointSpeed, B_2CruiseSpeed, false).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr() //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_2Waypoints, B_2PointSpeed, B_2CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3")
   { 
     m_drive.ResetOdometry(B_3Waypoints[0]);
+
+    AutoPaths::AutoPath B_3;
+    B_3.PointSpeed = B_3PointSpeed;
+    B_3.CruiseSpeed = B_3CruiseSpeed;
+    B_3.Waypoints = B_3Waypoints;
+    B_3.Command = B_3Command;
+    B_3.limelightFollow = B_3LimelightPath;
+    B_3.EndCommand = B_3EndCommand;
+
+    path.push_back(B_3);
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_3Waypoints, B_3PointSpeed, B_3CruiseSpeed, false).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_3Waypoints, B_3PointSpeed, B_3CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_1_2_3")
   { 
-    m_drive.ResetOdometry(B_1_2_3Waypoints[0]);
+    m_drive.ResetOdometry(B_1_2_3Waypoints1[0]);
+
+    AutoPaths::AutoPath B_1_2_3pt1;
+    B_1_2_3pt1.PointSpeed = B_1_2_3PointSpeed1;
+    B_1_2_3pt1.CruiseSpeed = B_1_2_3CruiseSpeed1;
+    B_1_2_3pt1.Waypoints = B_1_2_3Waypoints1;
+    B_1_2_3pt1.Command = B_1_2_3Command1;
+    B_1_2_3pt1.limelightFollow = B_1_2_3LimelightPath1;
+    B_1_2_3pt1.EndCommand = B_1_2_3EndCommand1;
+
+    AutoPaths::AutoPath B_1_2_3pt2;
+    B_1_2_3pt2.PointSpeed = B_1_2_3PointSpeed2;
+    B_1_2_3pt2.CruiseSpeed = B_1_2_3CruiseSpeed2;
+    B_1_2_3pt2.Waypoints = B_1_2_3Waypoints2;
+    B_1_2_3pt2.Command = B_1_2_3Command2;
+    B_1_2_3pt2.limelightFollow = B_1_2_3LimelightPath2;
+    B_1_2_3pt2.EndCommand = B_1_2_3EndCommand2;
+
+    AutoPaths::AutoPath B_1_2_3pt3;
+    B_1_2_3pt3.PointSpeed = B_1_2_3PointSpeed3;
+    B_1_2_3pt3.CruiseSpeed = B_1_2_3CruiseSpeed3;
+    B_1_2_3pt3.Waypoints = B_1_2_3Waypoints3;
+    B_1_2_3pt3.Command = B_1_2_3Command3;
+    B_1_2_3pt3.limelightFollow = B_1_2_3LimelightPath3;
+    B_1_2_3pt3.EndCommand = B_1_2_3EndCommand3;
+
+    path.push_back(B_1_2_3pt1);
+    path.push_back(B_1_2_3pt2);
+    path.push_back(B_1_2_3pt3);
+
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_1_2_3Waypoints, B_1_2_3PointSpeed, B_1_2_3CruiseSpeed, false).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_1_2_3Waypoints, B_1_2_3PointSpeed, B_1_2_3CruiseSpeed, false).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3_6")
   { 
-    m_drive.ResetOdometry(B_3_6Waypoints[0]);
+    m_drive.ResetOdometry(B_3_6Waypoints1[0]);
+
+    AutoPaths::AutoPath B_3_6pt1;
+    B_3_6pt1.PointSpeed = B_3_6PointSpeed1;
+    B_3_6pt1.CruiseSpeed = B_3_6CruiseSpeed1;
+    B_3_6pt1.Waypoints = B_3_6Waypoints1;
+    B_3_6pt1.Command = B_3_6Command1;
+    B_3_6pt1.limelightFollow = B_3_6LimelightPath1;
+    B_3_6pt1.EndCommand = B_3_6EndCommand1;
+
+    AutoPaths::AutoPath B_3_6pt2;
+    B_3_6pt2.PointSpeed = B_3_6PointSpeed2;
+    B_3_6pt2.CruiseSpeed = B_3_6CruiseSpeed2;
+    B_3_6pt2.Waypoints = B_3_6Waypoints2;
+    B_3_6pt2.Command = B_3_6Command2;
+    B_3_6pt2.limelightFollow = B_3_6LimelightPath2;
+    B_3_6pt2.EndCommand = B_3_6EndCommand2;
+
+    AutoPaths::AutoPath B_3_6pt3;
+    B_3_6pt3.PointSpeed = B_3_6PointSpeed3;
+    B_3_6pt3.CruiseSpeed = B_3_6CruiseSpeed3;
+    B_3_6pt3.Waypoints = B_3_6Waypoints3;
+    B_3_6pt3.Command = B_3_6Command3;
+    B_3_6pt3.limelightFollow = B_3_6LimelightPath3;
+    B_3_6pt3.EndCommand = B_3_6EndCommand3;
     return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      FollowWaypoints(m_drive, m_limelight, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, true).ToPtr()
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_3_6Waypoints, B_3_6PointSpeed, B_3_6CruiseSpeed, true).ToPtr()
     );  
   }
   else if(chosenAuto == "B_3_7")

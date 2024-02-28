@@ -54,6 +54,14 @@ void Robot::TeleopInit()
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
+    if(m_autoAuxilaryStateMachine){
+      m_autoAuxilaryStateMachine->Cancel();
+      m_autoAuxilaryStateMachine.reset();
+    }
+    if(m_autoDriveStateMachine){
+      m_autoDriveStateMachine->Cancel();
+      m_autoDriveStateMachine.reset();
+    }
   }
   m_stateMachine = m_container.GetAuxilaryStateMachine();
   m_stateMachine->Schedule();

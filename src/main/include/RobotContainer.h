@@ -124,74 +124,183 @@ class RobotContainer
     };
 
     std::string B_1EndCommand = "Shoot";
-    std::string B_12EndCommand = "NoteFollow"; //temp string to force a state when testing
+    // std::string B_12EndCommand = "NoteFollow"; //temp string to force a state when testing
 
     std::vector<frc::Pose2d>  B_2Waypoints{
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 5.55_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_2PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> B_2CruiseSpeed{
       1_mps,
+      1_mps,
       1.5_mps
     };
 
+    std::vector<std::string> B_2Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> B_2LimelightPath{
+      false,
+      false,
+      false
+    };
+
+    std::string B_2EndCommand = "Shoot";
+
+
     std::vector<frc::Pose2d>  B_3Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(180_deg))
     };
 
     std::vector<units::meters_per_second_t> B_3PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> B_3CruiseSpeed{
       1_mps,
+      1_mps,
       1.5_mps
     };
 
-    std::vector<frc::Pose2d>  B_1_2_3Waypoints{
+    std::vector<std::string> B_3Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> B_3LimelightPath{
+      false,
+      false,
+      false
+    };
+
+    std::string B_3EndCommand = "Shoot";
+
+    std::vector<frc::Pose2d>  B_1_2_3Waypoints1{
       frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 7.0_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 7.0_m, frc::Rotation2d(180_deg)),
+    };
+
+    std::vector<frc::Pose2d>  B_1_2_3Waypoints2{
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 5.55_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 5.55_m, frc::Rotation2d(180_deg)),
+    };
+
+    std::vector<frc::Pose2d>  B_1_2_3Waypoints3{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.9_m, 4.1_m, frc::Rotation2d(180_deg))
     };
 
-    std::vector<units::meters_per_second_t> B_1_2_3PointSpeed{
-      0_mps,
-      0_mps,
-      1_mps,
+    std::vector<units::meters_per_second_t> B_1_2_3PointSpeed1{
       0_mps,
       1_mps,
       0_mps
     };
 
-    std::vector<units::meters_per_second_t> B_1_2_3CruiseSpeed{
+    std::vector<units::meters_per_second_t> B_1_2_3PointSpeed2{
+      0_mps,
       1_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      2_mps,
-      2_mps
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_1_2_3PointSpeed3{
+      0_mps,
+      1_mps,
+      0_mps
     };
 
 
-    std::vector<frc::Pose2d> B_3_6Waypoints{
+    std::vector<units::meters_per_second_t> B_1_2_3CruiseSpeed1{
+      1_mps,
+      1_mps,
+      1.5_mps,
+    };
+
+    std::vector<units::meters_per_second_t> B_1_2_3CruiseSpeed2{
+      1_mps,
+      1_mps,
+      1.5_mps,
+    };
+
+    std::vector<units::meters_per_second_t> B_1_2_3CruiseSpeed3{
+      1_mps,
+      1_mps,
+      1.5_mps,
+    };
+
+    std::vector<std::string> B_1_2_3Command1{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<std::string> B_1_2_3Command2{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<std::string> B_1_2_3Command3{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> B_1_2_3LimelightPath1{
+      false,
+      false,
+      false
+    };
+    
+    std::vector<bool> B_1_2_3LimelightPath2{
+      false,
+      false,
+      false
+    };
+    
+    std::vector<bool> B_1_2_3LimelightPath3{
+      false,
+      false,
+      false
+    };
+
+    std::string B_1_2_3EndCommand1 = "Shoot";
+    std::string B_1_2_3EndCommand2 = "Shoot";
+    std::string B_1_2_3EndCommand3 = "Shoot";
+
+    std::vector<frc::Pose2d> B_3_6Waypoints1{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(2.7_m, 4.1_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<frc::Pose2d> B_3_6Waypoints2{
       frc::Pose2d(2.45_m, 4.1_m, frc::Rotation2d(180_deg)), // auto rotate TODO change later
       frc::Pose2d(2.45_m, 3_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.6_m, 3.45_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(6.6_m, 4.1_m, frc::Rotation2d(180_deg)),
-      frc::Pose2d(8.15_m, 4.1_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(8.15_m, 4.1_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<frc::Pose2d> B_3_6Waypoints3{
       frc::Pose2d(5.6_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(4.6_m, 3.5_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(3_m, 3_m, frc::Rotation2d(145_deg)),
@@ -200,14 +309,21 @@ class RobotContainer
     };
 
     //point speed is the speed you want to be going at the specific waypoint
-    std::vector<units::meters_per_second_t> B_3_6PointSpeed{
+    std::vector<units::meters_per_second_t> B_3_6PointSpeed1{
       0_mps,
-      0_mps,
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6PointSpeed2{
       0_mps,
       2_mps,
       2_mps,
       1.75_mps,
-      0.5_mps,
+      0.5_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6PointSpeed3{
       2_mps,
       2_mps,
       2_mps,
@@ -215,21 +331,76 @@ class RobotContainer
       0_mps
     };
 
-    //The cruise speed is the speed to get to that waypoint, so for the last item it would be the speed to get to that item.
-    std::vector<units::meters_per_second_t> B_3_6CruiseSpeed{
+    std::vector<units::meters_per_second_t> B_3_6CruiseSpeed1{
       1_mps,
       1_mps,
+      1_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6CruiseSpeed2{
       1_mps,
       2_mps,
       2_mps,
       3_mps,
-      2_mps,
+      2_mps
+    };
+
+    std::vector<units::meters_per_second_t> B_3_6CruiseSpeed3{
       2_mps,
       2_mps,
       2_mps,
       2_mps,
       1.5_mps
     };
+
+    std::vector<std::string> B_3_6Command1{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<std::string> B_3_6Command2{
+      "Null",
+      "Null",
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<std::string> B_3_6Command3{
+      "Null",
+      "Null",
+      "Null",
+      "Null",
+      "Null"
+    };
+
+    std::vector<bool> B_3_6LimelightPath1{
+      false,
+      false,
+      false
+    };
+
+    std::vector<bool> B_3_6LimelightPath2{
+      false,
+      false,
+      false,
+      false,
+      false
+    };
+
+    std::vector<bool> B_3_6LimelightPath3{
+      false,
+      false,
+      false,
+      false,
+      false
+    };
+
+    std::string B_3_6EndCommand1 = "Shoot";
+    std::string B_3_6EndCommand2 = "NoteTrack"; //could be changed to none
+    std::string B_3_6EndCommand3 = "Shoot";
+
 
     std::vector<frc::Pose2d> B_3_7Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
@@ -784,33 +955,67 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
 
     std::vector<frc::Pose2d>  R_1Waypoints{
       frc::Pose2d(15.1_m, 7_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14_m, 7_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(13.65_m, 7_m, frc::Rotation2d(0_deg))
     };
 
     std::vector<units::meters_per_second_t> R_1PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> R_1CruiseSpeed{
-      2_mps,
-      2_mps
+      1_mps,
+      1_mps,
+      1.5_mps
     };
+
+    std::vector<std::string> R_1Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> R_1LimelightPath{
+      false,
+      false,
+      false
+    };
+
+    std::string R_1EndCommand = "Shoot";
 
     std::vector<frc::Pose2d>  R_2Waypoints{
       frc::Pose2d(15.1_m, 5.55_m, frc::Rotation2d(0_deg)),
+      frc::Pose2d(14_m, 5.55_m, frc::Rotation2d(0_deg)),
       frc::Pose2d(13.65_m, 5.55_m, frc::Rotation2d(0_deg))
     };
 
     std::vector<units::meters_per_second_t> R_2PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> R_2CruiseSpeed{
-      2_mps,
-      2_mps
+      1_mps,
+      1_mps,
+      1.5_mps
     };
+
+    std::vector<std::string> R_2Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> R_2LimelightPath{
+      false,
+      false,
+      false
+    };
+
+    std::string R_2EndCommand = "Shoot";
 
     std::vector<frc::Pose2d>  R_3Waypoints{
       frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
@@ -819,13 +1024,29 @@ std::vector<frc::Pose2d> B_3_2_1_4_5Waypoints{
 
     std::vector<units::meters_per_second_t> R_3PointSpeed{
       0_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> R_3CruiseSpeed{
-      2_mps,
-      2_mps
+      1_mps,
+      1_mps,
+      1.5_mps
     };
+
+    std::vector<std::string> R_3Command{
+      "Null",
+      "Null",
+      "Intake"
+    };
+
+    std::vector<bool> R_3LimelightPath{
+      false,
+      false,
+      false
+    };
+
+    std::string R_3EndCommand = "Shoot";
 
     std::vector<frc::Pose2d> R_3_6Waypoints{
       frc::Pose2d(15.1_m, 4.1_m, frc::Rotation2d(0_deg)),
