@@ -105,6 +105,8 @@ class StateMachine
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;
 
+  void SetBoolsFalse();
+
   double speedX = 0;
   bool NoJoystickInput = false;
 
@@ -122,12 +124,20 @@ class StateMachine
   bool placeInForwardAmp = false;
   bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
+  bool pov0 = false; // spit out note when button pov0 is pressed
+  bool resetLoaded = false;
+
+  bool noteFollowState = false;
+  bool aprilFollowState = false;
+  bool standard = false;
+  bool runIntake = false;
+  bool runShooterWarmup = false;
+  bool driveButtonA = false;
+  bool driveButtonB = false;
 
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
   units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
-
-  bool pov0 = false; // spit out note when button pov0 is pressed
 
   //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
   //bool dropNote = false;          // activate dropper
@@ -159,12 +169,5 @@ class StateMachine
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
   double kpApril = 0.09;
   double txApril = 0.0;
-
-  bool noteFollowState = false;
-  bool aprilFollowState = false;
-  bool standard = false;
-  bool runIntake = false;
-  bool runShooterWarmup = false;
-  bool buttonA = false;
-  bool buttonB = false;
+\
 };

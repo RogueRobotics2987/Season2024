@@ -88,23 +88,23 @@ void StateMachine::Execute()
   //   m_arm->setVoltage(0);
   // }
 
-  buttonA = m_driverController->GetRawButtonPressed(1);
-  buttonB = m_driverController->GetRawButtonPressed(2);
+  driveButtonA = m_driverController->GetRawButtonPressed(1);
+  driveButtonB = m_driverController->GetRawButtonPressed(2);
 
   // std::cout << "Debug:" << state << std::endl;
   // std::cout << "Debug:" << noteFollowState << std::endl;
   // std::cout << "Debug: button A " << buttonA << std::endl;
 
-  frc::SmartDashboard::PutBoolean("ButtonA", buttonA);
-  frc::SmartDashboard::PutBoolean("ButtonB", buttonB);
+  frc::SmartDashboard::PutBoolean("ButtonA", driveButtonA);
+  frc::SmartDashboard::PutBoolean("ButtonB", driveButtonB);
 
-  if(buttonA && state == EMPTY)
+  if(driveButtonA && state == EMPTY)
   {
     // std::cout << "debug" << 93 << std::endl;
     noteFollowState = true;
     pickupNote = true;
   }
-  else if(buttonA && state == PICKUP && noteFollowState == true)
+  else if(driveButtonA && state == PICKUP && noteFollowState == true)
   {
   // std::cout << "debug" << 99 << std::endl;
 
@@ -114,9 +114,10 @@ void StateMachine::Execute()
   else if(state == LOADED){
     // std::cout << "debug" << 105 << std::endl;
     noteFollowState = false;
+    pickupNote = false;
   }
 
-  if(buttonB && state == SHOOTER_WARMUP)
+  if(driveButtonB && state == SHOOTER_WARMUP)
   {
     aprilFollowState = !aprilFollowState;
   }
@@ -137,10 +138,13 @@ void StateMachine::Execute()
     //setstate = CHAIN_CLIMB;
   }
 
-  if(m_driverController->GetRawButtonPressed(5))
+  if(m_driverController->GetRawButtonPressed(5) && state == EMPTY)
   { 
-    //TODO: trace code
-    pickupNote = !pickupNote;
+    pickupNote = true;
+  }
+  else if(m_driverController->GetRawButtonPressed(5) && state == PICKUP && noteFollowState == false)
+  {
+    pickupNote = false;
   }
 
   if(m_driverController->GetRawButtonPressed(7))
@@ -176,11 +180,6 @@ void StateMachine::Execute()
     pov0 = false;
   }
 
-  //  if(m_auxController->GetRawButtonPressed(2))
-  //   {
-  //     pov0 = !pov0;
-  //   }
-
   if(m_auxController->GetRawButtonPressed(2)){
     if(placeInForwardAmp == false){
       placeInForwardAmp = true;
@@ -202,10 +201,11 @@ void StateMachine::Execute()
   //   m_arm->MoveLowerArm();
   // }
 
-  /*if(m_auxController->GetRawButtonPressed(8))
+  if(m_driverController->GetRawButtonPressed(8))
   {
+    resetLoaded = true;
+  }
 
-  } */
 
   if(fabs(m_auxController->GetRightY()) > 0.15)
   {
@@ -334,6 +334,13 @@ void StateMachine::Execute()
   {
   case EMPTY:     // turn everything off
     frc::SmartDashboard::PutString("state: ", "EMPTY");
+    if(resetLoaded)
+    {
+      state = LOADED;
+      SetBoolsFalse();
+      break;
+    }
+
     // stop all motors
     m_arm->stopDrop();
     //m_arm->setLowerArmAngle(ArmConstants::LowerFullRetractedAngle);
@@ -364,14 +371,21 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "changing to SPIT_OUT");
     }
 
-    if(placeInTrap || placeInForwardAmp){
-      state = RAISE_SHOOTER;
-    }
+    // if(placeInTrap || placeInForwardAmp){
+    //   state = RAISE_SHOOTER;
+    // }
 
     break;
 
   case SPIT_OUT:
     frc::SmartDashboard::PutString("state: ", "SPIT_OUT");
+    if(resetLoaded)
+    {
+      state = LOADED;
+      SetBoolsFalse();
+      break;
+    }
+
     m_shooter->runMagazine(-0.2);
     m_arm->runArmWheels(-0.2);
     m_intake->spitOutIntake();
@@ -387,19 +401,25 @@ void StateMachine::Execute()
   case PICKUP:    // start intake and magazine
     // m_shooter->driveActuator(m_auxController->GetRightY());
     frc::SmartDashboard::PutString("state: ", "PICKUP");
+    if(resetLoaded)
+    {
+      state = LOADED;
+      SetBoolsFalse();
+      break;
+    }
 
     m_shooter->SetIntakePose();
     
     // start intake motors, REMEMBER: middle motor changes direction
     m_intake->runIntake(0.25);
-    if(noteFollowState == true && aprilFollowState != true)
-    {
+    // if(noteFollowState == true && aprilFollowState != true)
+    // {
       m_intake->DirectionNote(0.25);
-    } 
-    else 
-    {
-      m_intake->Direction(0.25);
-    }
+    // } 
+    // else 
+    // {
+    //   m_intake->Direction(0.25);
+    // }
 
     if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
     {
@@ -465,7 +485,8 @@ void StateMachine::Execute()
     
   case LOADED:    // self explanitory
     frc::SmartDashboard::PutString("state: ", "LOADED");
-    //pickupNote = false;
+    resetLoaded = false;
+    pickupNote = false;
 
     // turn running motors off
     m_intake->stopIntake();
@@ -512,6 +533,12 @@ void StateMachine::Execute()
 
   case SHOOTER_WARMUP:
     frc::SmartDashboard::PutString("state: ", "SHOOTER_WARMUP");
+    if(resetLoaded)
+    {
+      state = LOADED;
+      SetBoolsFalse();
+      break;
+    }
 
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
@@ -973,4 +1000,27 @@ double StateMachine::DistanceBetweenAngles(double targetAngle, double sourceAngl
   }
 
   return a;
+}
+
+void StateMachine::SetBoolsFalse()
+{
+  pickupNote = false;
+  chainClimb = false;
+  raiseHook = false;
+  raiseRobot = false;
+  emptyIntake = false;       
+  warmUpShooter = false;     
+  moveNote2Shoot = false;    
+  placeInForwardAmp = false;
+  placeInBackwardsAmp = false;
+  placeInTrap = false;
+  pov0 = false;
+  resetLoaded = false;
+  noteFollowState = false;
+  aprilFollowState = false;
+  standard = false;
+  runIntake = false;
+  runShooterWarmup = false;
+  driveButtonA = false;
+  driveButtonB = false;
 }
