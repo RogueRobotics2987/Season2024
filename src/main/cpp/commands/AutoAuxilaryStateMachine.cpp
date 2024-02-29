@@ -325,7 +325,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
-    if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 ) && fabs(filteredTarget.GetYaw()) <= 5)
+    if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 )/* && fabs(filteredTarget.GetYaw()) <= 5*/)
     {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");

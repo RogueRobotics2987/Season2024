@@ -295,8 +295,7 @@ void StateMachine::Execute()
     {
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
-        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
-        desiredHeading = currentHeading + txApril;
+        desiredHeading = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
       }
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
@@ -664,22 +663,22 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "CHAIN_CLIMB");
 
       //move shooter out of way
-      m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
+      // m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
 
-      if(time >= 65 && time < 140)
-      {
-        //move arms out of way 
-        m_arm->setLowerArmAngle(80);
-      }
+      // if(time >= 65 && time < 140)
+      // {
+      //   //move arms out of way 
+      //   m_arm->setLowerArmAngle(80);
+      // }
 
-      if(time >= 140 && time < 200)
-      {
-        //move arms out of way 
-        m_arm->setUpperArmAngle(0);
-        time = 360;
-      }
+      // if(time >= 140 && time < 200)
+      // {
+      //   //move arms out of way 
+      //   m_arm->setUpperArmAngle(0);
+      //   time = 360;
+      // }
       
-      time++;
+      // time++;
       
       //button 1 things
       // if(raiseClimber == true)
@@ -691,21 +690,21 @@ void StateMachine::Execute()
       //   m_climb->stopClimber();
       // }
 
-      //Driver
-      if(m_auxController->GetRawButtonPressed(1))
-      {
-        m_arm->setLowerArmAngle(50);
-      }
+      // //Driver
+      // if(m_auxController->GetRawButtonPressed(1))
+      // {
+      //   m_arm->setLowerArmAngle(50);
+      // }
 
-      if(m_auxController->GetRawButtonPressed(2))
-      {
-        m_arm->setUpperArmAngle(160);
-      }
+      // if(m_auxController->GetRawButtonPressed(2))
+      // {
+      //   m_arm->setUpperArmAngle(160);
+      // }
 
-      if(m_auxController->GetRawButtonPressed(3))
-      {
-        m_arm->setLowerArmAngle(85);
-      }
+      // if(m_auxController->GetRawButtonPressed(3))
+      // {
+      //   m_arm->setLowerArmAngle(85);
+      // }
     
       //COMMENTED OUT BECAUSE IS UNSTABLE RIGHT NOW DO NOT GO INTO YOUR CLIMBER BECAUSE YOU CANT GET OUT
       // if(chainClimb == false)
@@ -715,6 +714,11 @@ void StateMachine::Execute()
       //   m_arm->setLowerArmAngle(35);
       //   m_arm->setUpperArmAngle(0.5);
       // }
+
+      if(chainClimb == false)
+      {
+        state = LOADED;
+      }
 
       break;
     }

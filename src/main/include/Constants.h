@@ -138,7 +138,7 @@ namespace ShooterConstants {
     constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0002;   //0.001
-    constexpr double kp = 0.02;
+    constexpr double kp = 0.03;
     constexpr double magMotorSpeed = 0.0;
     constexpr double magKp = 0.1;
 }
