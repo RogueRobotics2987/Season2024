@@ -33,37 +33,15 @@ void DriveStateMachine::Execute()
   frc::SmartDashboard::PutString("aux messenger", m_messager->GetAuxMessage());
   
   //Buttons
-  // if(m_driverController->GetRawButtonPressed(5))
-  // {
-  //   //noteFollowState = true;
-  //   runIntake = !runIntake;
-  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
-  //   runShooterWarmup = false;
-  // } 
-
-  // if(m_driverController->GetRawButtonPressed(6))
-  // {
-  //   runShooterWarmup = !runShooterWarmup;
-  //   //nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline", 1);
-  //   runIntake = false;
-  // }
-
-  // if(m_driverController->GetRawAxis(3) > 0.05){
-  //   standard = true;
-  // }
-
   if(m_driverController->GetRawButtonPressed(1))
   {
     noteFollowState = !noteFollowState;
   }
-  
 
   if(m_driverController->GetRawButtonPressed(2))
   {
     aprilFollowState = !aprilFollowState;
   }
-
-  
 
   switch (drive_state) 
   {

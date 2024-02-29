@@ -25,7 +25,6 @@ void ArmSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
-
     frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
     //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
@@ -69,14 +68,6 @@ void ArmSubsystem::stopArmWheels()
 {
     ArmWheels.Set(0.0);
 }
-// bool ArmSubsystem::compareHasNote(bool Other){
-//     if(Other && HasNote) {
-//         return true;
-//     }
-//     else{
-//         return false;
-//     }
-// }
 
 void ArmSubsystem::StopWheels()
 {
@@ -88,10 +79,6 @@ double ArmSubsystem::GetOffSetEncoderValueLower()
     double Pose = 0;
     Pose = m_LowerArmEncoder.GetAbsolutePosition() ; //Offset used to reference a desired zero position with raw encoder value
 
-    // if(Pose < 0){
-        // Pose += 1;
-    // }
-
     Pose = fabs(Pose - 1);  //This is the invert
     Pose *= 360; //360 for per revolution
 
@@ -102,10 +89,6 @@ double ArmSubsystem::GetOffSetEncoderValueUpper()
 {
     double Pose = 0;
     Pose = m_UpperArmEncoder.GetAbsolutePosition() - ArmConstants::UpperArmOffset; //Offset used to reference a desired zero position with raw encoder value
-
-    // if(Pose < 0){
-        // Pose += 1;
-    // }
 
     // Pose = fabs(Pose - 1); //This is the invert
     Pose *= 272.72; //per revolution but with gear ratio
@@ -208,6 +191,7 @@ void ArmSubsystem::accumulateErrorUpper()
 
 void ArmSubsystem::RunLowerArm()
 {
+    // std::cout << m_LowerDesired << " Debug lower arm desired" << std::endl;
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
 
     double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;

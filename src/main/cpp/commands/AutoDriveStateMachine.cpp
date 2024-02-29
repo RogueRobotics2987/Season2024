@@ -37,9 +37,13 @@ void AutoDriveStateMachine::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AutoDriveStateMachine::Execute()
 {
+
+  filteredTargetID = m_limelight->GetFilteredTarget().GetFiducialId();
+
     switch (drive_state) 
     {
     case NONE:
+    frc::SmartDashboard::PutString("autoDriveState", "None");
       if(m_messager->GetAuxMessage().compare("NextPath") == 0)
       {
         pathFollowState = true;
@@ -61,67 +65,75 @@ void AutoDriveStateMachine::Execute()
     break;
 
     case NOTE_FOLLOW:
-      txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+      frc::SmartDashboard::PutString("autoDriveState", "NOTE_FOllow");
+      m_messager->SetDriveMessage("TurnOnIntake");
 
-      if(m_messager->GetAuxMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
       {
-        drive_state = NONE;
+        txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
+
+        // if(m_messager->GetAuxMessage().compare("Pickup") != 0)   // TODO: DOUBLE CHECK!!!
+        // {
+        //   drive_state = NONE;
+        // }
+
+        if(txNote > 7 || txNote < -7)
+        {
+          rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
+        }
+        else
+        {
+          rotNote = units::angular_velocity::radians_per_second_t(0);
+        }
+        
+        m_drive->Drive(0.3_mps, 0_mps, rotNote, false, false);
       }
 
-      if(txNote > 7 || txNote < -7)
-      {
-        rotNote = units::angular_velocity::radians_per_second_t((0 + txNote) * kpNote);
-      }
-      else
-      {
-        rotNote = units::angular_velocity::radians_per_second_t(0);
-      }
-      
-      m_drive->Drive(units::velocity::meters_per_second_t(m_driverController->GetLeftY()), units::velocity::meters_per_second_t(0), rotNote, false, false);
-
-
-      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0)
+      //TODO test that this statement will change a note into the bumpers and not stop pre emptivly due to the nt statement
+      if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0) == 0 || m_messager->GetAuxMessage().compare("HasNote") == 0)
       {
         drive_state = NONE;
         noteFollowState = false;
+        m_messager->SetAuxMessage("NextPath"); //once finished with note tracking and sucessfully picked it up run next path
       }
       
     break;
 
     case APRIL_FOLLOW:
-      txApril = m_limelight->FilteredPhotonYaw();   // what is this number?
+    {
+      frc::SmartDashboard::PutString("autoDriveState", "April_Follow");
+    
+        if (filteredTargetID == 4 || filteredTargetID == 7)
+        {
+          txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+          desiredHeading = currentHeading + txApril;
+          std::cout << "Auto desireedHeading: " << desiredHeading << std::endl;
+        }
 
-      if(m_messager->GetAuxMessage().compare("Loaded") != 0 || m_messager->GetAuxMessage().compare("ShooterWarmup") !=  0)  // TODO: oduble check!!!
-      {
-        drive_state = NONE;
-      }
+        frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      //rotApril = units::angular_velocity::radians_per_second_t(0);
-      // if(tx > 7 || tx < -7){
-      rotApril = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+        currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
-      speedY = Deadzone(m_driverController->GetLeftY());
-      speedX = Deadzone(m_driverController->GetLeftY());
+        std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
 
-      if((fabs(speedY) + fabs(speedX) + fabs(rotApril.value())) < .05)
-      {
-        NoJoystickInput = true;
-      }
-      else
-      {
-        NoJoystickInput = false;
-      }
-      
-      m_drive->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+        double error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
-      if(standard == true){
-        drive_state = NONE;
-        aprilFollowState = false;
-      }
+        rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
+        
+        m_drive->Drive(0_mps, 0_mps, rotApril, false, false);
 
-    break;
+        if(m_messager->GetAuxMessage().compare("NextPath") == 0){
+          drive_state = NONE;
+          aprilFollowState = false;
+        }
+
+      break;
+    }
+
+    //TODO add curly braces around each case for switch statements
 
     case PRE_PATH_FOLLOW:
+      frc::SmartDashboard::PutString("autoDriveState", "PRE_PATH_FOLLOW");
 
       m_waypoints.clear();
       m_driveSpeed.clear();
@@ -189,6 +201,8 @@ void AutoDriveStateMachine::Execute()
     break;
 
     case PATH_FOLLOW:  
+      frc::SmartDashboard::PutString("autoDriveState", "PATH_FOLLOW");
+
     
       currentPose = m_drive->GetPose();
 
@@ -291,24 +305,29 @@ void AutoDriveStateMachine::Execute()
 
         if(apriltagBool == true)
         {
-          txApril = m_limelight->FilteredPhotonYaw();
-          units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+          std::cout << "AprilTags Move" << std::endl;
+          if(m_limelight->PhotonHasTarget() == true)
+          {
+            if (filteredTargetID == 4 || filteredTargetID == 7)
+            {
+              txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+              desiredHeading = currentHeading + txApril;
+            }
 
-          if( txApril != -9999 && (txApril > 2.5 || txApril < -2.5))
-          {
-              rot = units::angular_velocity::radians_per_second_t((0-txApril) * kpApril);
+            frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
+
+            currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+
+            std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
+
+            double error = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+            rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
           }
-          else
-          {
-              rot = units::angular_velocity::radians_per_second_t(0);
-          }
-          
-          m_drive->Drive(rot, false, false);
-          }
-          else
-          {
+        }
+        else
+        {
           m_drive->Drive(thetaVal, false, false);
-
         }
       }
 
@@ -340,14 +359,21 @@ void AutoDriveStateMachine::Execute()
       if(finished == true){
         drive_state = NONE;
         pathFollowState = false;
-        m_messager->SetDriveMessage("Shoot");
+
+        std::cout << paths.front().EndCommand << " EndCommand" << std::endl;
+
+        if(paths.front().EndCommand.compare("Shoot") == 0)
+        {
+          m_messager->SetDriveMessage("Shoot");
+          aprilFollowState = true;
+        }
+        else if(paths.front().EndCommand.compare("NoteFollow") == 0)
+        {
+          noteFollowState = true;
+        }
+
         finished = false;
-
-        std::cout << "paths Size " << paths.size() << std::endl;
-
-          paths.pop_front();
-          std::cout << "paths Size " << paths.size() << std::endl;
-
+        paths.pop_front();
       }
 
       break;

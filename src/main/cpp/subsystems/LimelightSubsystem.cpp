@@ -33,6 +33,7 @@ void LimelightSubsystem::Periodic()
 
     if(hasTarget == true){
         tempTargets = result.GetTargets();
+
         myTargets.assign(tempTargets.begin(), tempTargets.end());
 
         for(unsigned int i = 0; i < myTargets.size(); i++)
@@ -53,6 +54,7 @@ void LimelightSubsystem::Periodic()
                     frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
                     frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
                     frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
+                    frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
                 }
             }
         }   
@@ -80,7 +82,23 @@ double LimelightSubsystem::PhotonYaw(){
 }
 
 double LimelightSubsystem::FilteredPhotonYaw(){
-    return filteredTarget.GetYaw();
+
+    double cameraLateralOffset = 0.19; //7.5" in meters
+    double dist = FilteredDistance();
+
+    double x1 = cos(filteredTarget.GetYaw()) * dist;
+    double y1 = sin(filteredTarget.GetYaw()) * dist;
+
+    double x2 = x1;
+
+    double y2 = y1 - cameraLateralOffset;
+
+    double OffsetAngle = atan(y2/x2) * (180/3.14159269);
+
+    // double alpha = atan(cameraLateralOffset/dist) * (180/3.14159269); // finds the angle 
+
+    // return filteredTarget.GetYaw();
+    return OffsetAngle;
 }
 
 double LimelightSubsystem::GetNotetx()

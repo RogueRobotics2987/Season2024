@@ -57,6 +57,11 @@ void AutoAuxilaryStateMachine::Execute()
   //For the Shooter Apriltag test
   targetIDs.clear();
 
+  m_shooter->accumulateError();
+
+  m_arm->accumulateErrorLower();
+  m_arm->accumulateErrorUpper();
+
   // Define Camera
   // Find out what we need to do to get strgest tag id
   // calculate camra tangent get camera dx and dy and get tan of that
@@ -165,74 +170,6 @@ void AutoAuxilaryStateMachine::Execute()
   {
     pickupNote = true;
   }
-
-//   if(m_messager->GetMessage().compare("Shoot") != 0)
-//   {
-//     warmUpShooter = true;
-//   }
-
-
-
-//   if(m_driverController->GetRawButtonPressed(6))
-//   { 
-//     warmUpShooter = !warmUpShooter;
-//   }
-
-//   if(m_driverController->GetRawAxis(3) > 0.05/*|| m_auxController->GetRawButtonPressed(8)*/)
-//   {
-//     moveNote2Shoot = true;
-
-//   } else{
-//     moveNote2Shoot = false;
-//   }
-
-  
-  // if(m_driverController->GetRawButtonPressed(4)){
-  //   huntingNote = !huntingNote;
-  // }
-/*
-  if(m_auxController->GetPOV(0) == 0)
-  {
-    pov0 = !pov0;
-  }
-  */
-
-//  if(m_auxController->GetRawButtonPressed(2))
-//   {
-//     pov0 = !pov0;
-//   }
-
-/*
-  if(m_auxController->GetRawButtonPressed(2)){
-    if(placeInAmp == false){
-      placeInAmp = true;
-      placeInTrap = false;
-    } else {
-      placeInAmp = false;
-    }
-  }
-  */
-//   if(m_auxController->GetRawButtonPressed(4))
-//   { 
-//     if(placeInTrap == false){
-//       placeInTrap = true;
-//       placeInAmp = false;
-//     } else {
-//       placeInTrap = false;
-//     }
-//   }
-
-//   if(m_auxController->GetRawButtonPressed(8))
-//   {
-
-//   }
-
-//   if(fabs(m_auxController->GetRightY()) > 0.15)
-//   {
-//     m_shooter->JoystickActuator(m_auxController->GetRightY());
-//   }
-
-//   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
 
 // std::cout << "Drive Message " << m_messager->GetDriveMessage() << std::endl;
 
@@ -359,6 +296,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_intake->stopIntake();
       time = 0;
       state = LOADED;
+      m_messager->SetAuxMessage("HasNote"); //tells the driveState machine when the robot has a note
     }
 
     time++;
@@ -387,7 +325,7 @@ void AutoAuxilaryStateMachine::Execute()
       m_shooter->ApriltagShooterTheta(filteredRange.value());
     }
 
-    if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 ) && fabs(filteredTarget.GetYaw()) <= 5)
+    if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 )/* && fabs(filteredTarget.GetYaw()) <= 5*/)
     {
       state = SHOOTER_WARMUP;
       frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");

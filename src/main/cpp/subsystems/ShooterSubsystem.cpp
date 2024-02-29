@@ -90,7 +90,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose -8;
+    return Pose -7;
 }
 double ShooterSubsystem::ShooterError(){
     return m_DesiredAngle - GetOffSetEncoderValue();
@@ -145,10 +145,10 @@ void ShooterSubsystem::ApriltagShooterTheta(double dist){
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
     if(buttonUp){
-        angleTrim = angleTrim + 0.25;
+        angleTrim = angleTrim - 0.25;
     }
     else if(buttonDown){
-        angleTrim= angleTrim - 0.25;
+        angleTrim= angleTrim + 0.25;
     }
 }
 

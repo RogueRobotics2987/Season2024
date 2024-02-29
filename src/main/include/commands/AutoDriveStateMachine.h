@@ -47,7 +47,7 @@ class AutoDriveStateMachine
 
  private:
   enum driveState{NONE, NOTE_FOLLOW, APRIL_FOLLOW, PRE_PATH_FOLLOW, PATH_FOLLOW};
-  driveState drive_state = NONE;
+  driveState drive_state = APRIL_FOLLOW;
 
   DriveSubsystem* m_drive;
   LimelightSubsystem* m_limelight;
@@ -63,8 +63,8 @@ class AutoDriveStateMachine
   double txNote = 0.0;
 
   units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-  // double kpApril = 0.02206;
-  double kpApril = 0.005;
+  double kpApril = 0.02206;
+  // double kpApril = 0.05;
   double speedX = 0;
   double speedY = 0;
   bool NoJoystickInput = false;
@@ -112,5 +112,8 @@ class AutoDriveStateMachine
     std::string command;
     double accumulatedError = 0;
     units::meters_per_second_t lastPointSpeed = 0_mps;
-
+    double currentHeading = 0;
+    double desiredHeading = 0;
+    photon::PhotonTrackedTarget filteredTarget;
+    int filteredTargetID = -1;
 };

@@ -70,24 +70,15 @@ class StateMachine
     EMPTY,
     SPIT_OUT,
     PICKUP,
+    BACKUP,
     LOADED,
     SHOOTER_WARMUP,
     SHOOT,
-    DROP_ARMS,
-    DROP_SHOOTER,
-    RAISE_SHOOTER,
-    ARMS_EXTEND_INITIAL,
     FORWARD_ARM_AMP,
     BACKWARD_ARM_AMP,
     ARM_TRAP,
-    DROP,
-    ARM_RETRACT_INITIAL,
-    ARM_RETRACT_FINAL,
-    BACKUP,
-    NOTE_HUNTING,
-    NOTE_FOLLOW,
-    APRIL_FOLLOW,
-    CHAIN_CLIMB
+    CHAIN_CLIMB,
+    ARMS_RETRACT
   };
 
   intakeState state = EMPTY;
@@ -105,6 +96,8 @@ class StateMachine
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;
 
+  void SetBoolsFalse();
+
   double speedX = 0;
   bool NoJoystickInput = false;
 
@@ -114,24 +107,27 @@ class StateMachine
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
   bool chainClimb = false;
-  bool raiseHook = false;
-  bool raiseRobot = false;
-  bool emptyIntake = false;       // self explainitory
+  bool raiseClimber = false;
+  bool lowerArmTrap = false;
+  bool upperArmTrap = false;
+  bool emptyIntake = false;       // self explainitory  // spit out note when button pov0 is pressed
   bool warmUpShooter = false;     // warmup shooter (warmMilk)
   bool moveNote2Shoot = false;    // move note into shooter
   bool placeInForwardAmp = false;
   bool placeInBackwardsAmp = false;
   bool placeInTrap = false;
 
+  bool resetLoaded = false;
+
+  bool noteFollowState = false;
+  bool aprilFollowState = false;
+  bool driveButtonA = false;
+  bool driveButtonB = false;
+  bool driveLeftBumperPushed = false;
+
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
   units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.44);
-
-  bool pov0 = false; // spit out note when button pov0 is pressed
-
-  //bool moveArm2Drop = false;      // warmup dropper (move arm into position)
-  //bool dropNote = false;          // activate dropper
-  //bool waitForArm = false;        // waits for the armSubsystem/dropper state machine
 
   double tx = 0.0;
   int time = 0;       //keep track of shooter iterations
@@ -160,9 +156,6 @@ class StateMachine
   double kpApril = 0.09;
   double txApril = 0.0;
 
-  bool noteFollowState = false;
-  bool aprilFollowState = false;
-  bool standard = false;
   bool runIntake = false;
   bool runShooterWarmup = false;
   bool buttonA = false;

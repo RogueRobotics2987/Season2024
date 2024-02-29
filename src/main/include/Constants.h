@@ -138,7 +138,7 @@ namespace ShooterConstants {
     constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;
     constexpr double ki = 0.0002;   //0.001
-    constexpr double kp = 0.02;
+    constexpr double kp = 0.03;
     constexpr double magMotorSpeed = 0.0;
     constexpr double magKp = 0.1;
 }
@@ -177,7 +177,7 @@ namespace ArmConstants {
     constexpr double LowerArmSoftLimitLow = 0;
     
     constexpr double UpperArmSoftLimitHigh = 160; //change??
-    constexpr double LowerArmSoftLimitHigh = 95;
+    constexpr double LowerArmSoftLimitHigh = 110;
 
     constexpr double LowerArmOffset = -49;
     constexpr double UpperArmOffset = 0.14; //TODO: test

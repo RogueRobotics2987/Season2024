@@ -45,6 +45,14 @@ void IntakeSubsystem::Direction(double speed){  // get current val to tell which
     }
 }
 
+void IntakeSubsystem::DirectionNote(double speed){
+    if(intakeColorSensorFront.Get()){
+        CenterIntake.Set(-speed);
+    } else {
+        CenterIntake.Set(speed);
+    }
+}
+
 void IntakeSubsystem::runIntake(double speed){
     // need to make it so that these turn on with a button
     FrontIntake.Set(speed);

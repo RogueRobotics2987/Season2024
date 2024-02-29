@@ -7,7 +7,8 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
 
-  m_chooser.SetDefaultOption("B_1", "B_1");
+  m_chooser.SetDefaultOption("basic_auto", "basic_auto");
+  m_chooser.AddOption("B_1", "B_1");
   m_chooser.AddOption("B_2", "B_2");
   m_chooser.AddOption("B_3", "B_3");
   m_chooser.AddOption("B_1_2_3", "B_1_2_3");
@@ -186,7 +187,7 @@ frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
 
 frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
 
-  m_drive.ResetOdometry(B_1Waypoints[0]);
+  // m_drive.ResetOdometry(B_1Waypoints[0]);
 
   return AutoDriveStateMachine(
     m_drive,
@@ -316,8 +317,31 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   //   frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
   //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
   // };
+  if(chosenAuto == "basic_auto")
+  {
+    // return frc2::cmd::Sequence(
+    //   frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+    //   frc2::ParallelRaceGroup p1 
+    //   (
+    //     frc2::cmd::Run(
+    //     [this] {
+    //       m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
+    //     },
+    //     {&m_drive});
+    //   )  
+    //   FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr();
+    // );
+    
+    // to deploy to run no auto. --------------------------------------------------------------
 
-  if(chosenAuto == "B_1")
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      // FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+    );  
+
+    //-----------------------------------------------------------------
+  }
+  else if(chosenAuto == "B_1")
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
 
@@ -327,6 +351,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     B_1.Waypoints = B_1Waypoints;
     B_1.Command = B_1Command;
     B_1.limelightFollow = B_1LimelightPath;
+    B_1.EndCommand = B_1EndCommand;
 
     // AutoPaths::AutoPath B_12;
     // B_12.PointSpeed = B_1PointSpeed;
@@ -334,6 +359,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     // B_12.Waypoints = B_1Waypoints;
     // B_12.Command = B_1Command;
     // B_12.limelightFollow = B_1LimelightPath; 
+    // B_12.EndCommand = B_12EndCommand;
     
     // AutoPaths::AutoPath B_13;
     // B_13.PointSpeed = B_1PointSpeed;

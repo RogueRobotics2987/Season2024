@@ -53,8 +53,8 @@ class LimelightSubsystem : public frc2::SubsystemBase
   bool hasTarget = false;
 
   std::vector<double> targetIDs;
-  std::span<const photon::PhotonTrackedTarget> tempTargets;
   std::vector<photon::PhotonTrackedTarget> myTargets;
+  std::span<const photon::PhotonTrackedTarget> tempTargets;
   double targetData = 0;
   photon::PhotonTrackedTarget filteredTarget;
   int filteredTargetID = -1;
