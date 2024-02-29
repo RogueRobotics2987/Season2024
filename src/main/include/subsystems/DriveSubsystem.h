@@ -120,6 +120,7 @@ class DriveSubsystem : public frc2::SubsystemBase
 
     // The gyro sensor
     AHRS m_gyro{frc::I2C::kMXP}; //Do not use Serial Port 
+    // AHRS m_gyro{frc::SerialPort::kMXP}; //Do not use Serial Port 
 
     // Odometry class for tracking robot pose
     // 4 defines the number of modules

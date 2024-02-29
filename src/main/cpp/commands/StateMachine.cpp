@@ -295,8 +295,7 @@ void StateMachine::Execute()
     {
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
-        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
-        desiredHeading = currentHeading + txApril;
+        desiredHeading = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
       }
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
@@ -666,18 +665,18 @@ void StateMachine::Execute()
       //move shooter out of way
       /*m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
 
-      if(time >= 65 && time < 140)
-      {
-        //move arms out of way 
-        m_arm->setLowerArmAngle(80);
-      }
+      // if(time >= 65 && time < 140)
+      // {
+      //   //move arms out of way 
+      //   m_arm->setLowerArmAngle(80);
+      // }
 
-      if(time >= 140 && time < 200)
-      {
-        //move arms out of way 
-        m_arm->setUpperArmAngle(0);
-        time = 360;
-      }
+      // if(time >= 140 && time < 200)
+      // {
+      //   //move arms out of way 
+      //   m_arm->setUpperArmAngle(0);
+      //   time = 360;
+      // }
       
       time++;*/
       
@@ -698,10 +697,10 @@ void StateMachine::Execute()
         m_arm->setLowerArmAngle(50);
       }
 
-      if(m_auxController->GetRawButtonPressed(2))
-      {
-        m_arm->setUpperArmAngle(160);
-      }
+      // if(m_auxController->GetRawButtonPressed(2))
+      // {
+      //   m_arm->setUpperArmAngle(160);
+      // }
 
       if(m_auxController->GetRawButtonPressed(3))
       {
@@ -716,6 +715,11 @@ void StateMachine::Execute()
       //   m_arm->setLowerArmAngle(35);
       //   m_arm->setUpperArmAngle(0.5);
        }
+
+      if(chainClimb == false)
+      {
+        state = LOADED;
+      }
 
       break;
     }
