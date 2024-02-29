@@ -176,13 +176,13 @@ void StateMachine::Execute()
 
   if(m_driverController->GetPOV() != -1 && m_driverController->GetPOV() == 90)
   {
-    // raiseClimber = true;
-    m_climb->startClimber();
+     raiseClimber = true;
+    //m_climb->startClimber();
   }
   else 
   {
-    // raiseClimber = false;
-    m_climb->stopClimber();
+     raiseClimber = false;
+    //m_climb->stopClimber();
   }
 
 /*
@@ -664,7 +664,7 @@ void StateMachine::Execute()
       frc::SmartDashboard::PutString("state: ", "CHAIN_CLIMB");
 
       //move shooter out of way
-      m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
+      /*m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
 
       if(time >= 65 && time < 140)
       {
@@ -679,19 +679,20 @@ void StateMachine::Execute()
         time = 360;
       }
       
-      time++;
+      time++;*/
       
       //button 1 things
-      // if(raiseClimber == true)
-      // {
-      //   m_climb->startClimber();
-      // }
-      // else
-      // {
-      //   m_climb->stopClimber();
-      // }
+       if(raiseClimber == true)
+       {
+         m_climb->startClimber();
+       }
+       else
+       {
+         m_climb->stopClimber();
+       }
 
       //Driver
+     /*
       if(m_auxController->GetRawButtonPressed(1))
       {
         m_arm->setLowerArmAngle(50);
@@ -706,15 +707,15 @@ void StateMachine::Execute()
       {
         m_arm->setLowerArmAngle(85);
       }
-    
+    */
       //COMMENTED OUT BECAUSE IS UNSTABLE RIGHT NOW DO NOT GO INTO YOUR CLIMBER BECAUSE YOU CANT GET OUT
-      // if(chainClimb == false)
-      // {
-      //   state = ARMS_RETRACT;
-      //   time = 0;
+      if(chainClimb == false)
+       {
+         state = LOADED;
+         //time = 0;
       //   m_arm->setLowerArmAngle(35);
       //   m_arm->setUpperArmAngle(0.5);
-      // }
+       }
 
       break;
     }
