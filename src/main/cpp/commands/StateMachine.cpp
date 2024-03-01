@@ -291,8 +291,11 @@ void StateMachine::Execute()
   {
     frc::SmartDashboard::PutString("DriveConfiguration ", "AprilFollow");
 
+
     if(m_limelight->PhotonHasTarget() == true)  //limited drive, else regular
     {
+      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
         txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
@@ -301,13 +304,9 @@ void StateMachine::Execute()
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
-
-      std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
-
       double error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
-      rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
+      rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
 
  
       //rotApril = units::angular_velocity::radians_per_second_t(0);
@@ -327,7 +326,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
         
-      m_drive->Drive(units::velocity::meters_per_second_t(-speedY  * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), rotApril, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY  * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), -rotApril, false, NoJoystickInput);
 
     } 
     else 
