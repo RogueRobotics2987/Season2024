@@ -91,14 +91,37 @@ double LimelightSubsystem::FilteredPhotonYaw(){
 
     double x2 = x1;
 
-    double y2 = y1 - cameraLateralOffset;
+    double y2 = y1 - cameraLateralOffset;//cameraLateralOffset - y1;
 
-    double OffsetAngle = atan(y2/x2) * (180/3.14159269);
+    double OffsetAngle = atan(y2/x2) * (180/3.14159269);//atan2(y2, x2) * (180/3.14159269);
 
     // double alpha = atan(cameraLateralOffset/dist) * (180/3.14159269); // finds the angle 
 
-    return filteredTarget.GetYaw();
+    double staticOffset = 4;
+
+    return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
     // return OffsetAngle;
+}
+
+double LimelightSubsystem::PhotonYawMap(double originalVal)
+{
+    double convertedVal = 0.0;
+    double expoOffsetVal = 0.0;
+    double halfFOV = 31.66;
+    double A = 5 / (halfFOV * halfFOV);     // 5 is max error at edge of FOV
+
+    expoOffsetVal = A * (originalVal * originalVal);
+
+    if(originalVal >= 0)
+    {
+        convertedVal = originalVal - expoOffsetVal;
+    }
+    else if(originalVal < 0)
+    {
+        convertedVal = originalVal + expoOffsetVal;
+    }
+
+    return convertedVal;
 }
 
 double LimelightSubsystem::GetNotetx()

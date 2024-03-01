@@ -214,6 +214,7 @@ void StateMachine::Execute()
   if(m_driverController->GetRawButtonPressed(8))
   {
     resetLoaded = true;
+    magEncoderPos = m_shooter->GetCurrMagEncoderVal();
   }
 
   if(fabs(m_auxController->GetRightY()) > 0.15)
@@ -291,24 +292,24 @@ void StateMachine::Execute()
   {
     frc::SmartDashboard::PutString("DriveConfiguration ", "AprilFollow");
 
+
     if(m_limelight->PhotonHasTarget() == true)  //limited drive, else regular
     {
+      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
-        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
-        desiredHeading = currentHeading + txApril;
+        txApril = m_limelight->FilteredPhotonYaw();
+        desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
       }
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
-
-      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
-
-      std::cout << desiredHeading << " Debug: DesiredHeading" << std::endl;
+      frc::SmartDashboard::PutNumber("april - desieredHeading", desiredHeading);
+      frc::SmartDashboard::PutNumber("april - currentHeading", currentHeading);
 
       double error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
-      rotApril = units::angular_velocity::radians_per_second_t(error * -kpApril);
-
+      rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
  
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
@@ -327,7 +328,7 @@ void StateMachine::Execute()
         NoJoystickInput = false;
       }
         
-      m_drive->Drive(units::velocity::meters_per_second_t(-speedY  * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), rotApril, false, NoJoystickInput);
+      m_drive->Drive(units::velocity::meters_per_second_t(-speedY  * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), -rotApril, false, NoJoystickInput);
 
     } 
     else 

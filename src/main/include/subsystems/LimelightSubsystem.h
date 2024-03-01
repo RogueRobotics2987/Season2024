@@ -34,6 +34,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
     bool PhotonHasTarget();
     double PhotonYaw();
     double FilteredPhotonYaw();
+    double PhotonYawMap(double originalVal);
     double FilteredDistance();
     photon::PhotonTrackedTarget GetFilteredTarget();
 

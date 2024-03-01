@@ -10,6 +10,7 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 /*
  * An example command.
  *
@@ -22,7 +23,7 @@ class AutoAprilTag
 {
   public:
     AutoAprilTag(); 
-    AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain);
+    AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, ShooterSubsystem &m_shooter);
 
     void Initialize() override;
 
@@ -32,11 +33,20 @@ class AutoAprilTag
 
     bool IsFinished() override;
 
-    double kp = 0.09927/2;
+    double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
   private:
     LimelightSubsystem* m_limePose = nullptr;
-    DriveSubsystem* m_drivetrain = nullptr;
-    double tx = 0;
-    double tv = 0;
+    DriveSubsystem* m_drive = nullptr;
+    ShooterSubsystem* m_shooter = nullptr;
+
+    units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
+    double kpApril = 0.09;
+    double txApril = 0.0;
+
+    double currentHeading = 0;
+    double desiredHeading = 0;
+    int filteredTargetID = -1;
+    double error = 0;
+
 };
