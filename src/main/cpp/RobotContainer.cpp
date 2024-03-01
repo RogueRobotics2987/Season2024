@@ -326,7 +326,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::Run(
           [this]
             {
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
+              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
             }
         ),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
@@ -407,7 +408,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::Run(
           [this]
             {
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
+              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
             }
         ),
         frc2::WaitCommand(1.5_s).ToPtr()
