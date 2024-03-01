@@ -97,7 +97,9 @@ double LimelightSubsystem::FilteredPhotonYaw(){
 
     // double alpha = atan(cameraLateralOffset/dist) * (180/3.14159269); // finds the angle 
 
-    return filteredTarget.GetYaw();
+    double staticOffset = 4;
+
+    return filteredTarget.GetYaw() + staticOffset;
     // return OffsetAngle;
 }
 
