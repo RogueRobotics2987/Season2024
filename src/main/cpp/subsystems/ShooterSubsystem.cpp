@@ -8,6 +8,7 @@ ShooterSubsystem::ShooterSubsystem() {
     // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
     //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
     magPIDController.SetP(ShooterConstants::magKp);
+
     TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
@@ -115,6 +116,7 @@ double ShooterSubsystem::GetCurrMagEncoderVal(){
     return currEncoderVal;
 }
 
+
 void ShooterSubsystem::driveActuator(double speed){
     if(speed > 0.1){
         ShooterActuator.Set(0.05);
@@ -135,12 +137,14 @@ void ShooterSubsystem::SetIntakePose(){
     m_DesiredAngle = ShooterConstants::RestingAngle;
 }
 
-void ShooterSubsystem::ApriltagShooterTheta(double dist){
+void ShooterSubsystem::ApriltagShooterTheta(double dist, double pos){
     // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
     frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
     //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
    // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
    m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+
+   holdMagazine(pos);
 }
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
