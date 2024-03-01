@@ -299,16 +299,17 @@ void StateMachine::Execute()
 
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
-        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
-        desiredHeading = currentHeading + txApril;
+        txApril = m_limelight->FilteredPhotonYaw();
+        desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
       }
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
+      frc::SmartDashboard::PutNumber("april - desieredHeading", desiredHeading);
+      frc::SmartDashboard::PutNumber("april - currentHeading", currentHeading);
 
       double error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
       rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
-
  
       //rotApril = units::angular_velocity::radians_per_second_t(0);
       //if(txApril > 7 || txApril < -7){
