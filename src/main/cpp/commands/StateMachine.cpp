@@ -295,7 +295,8 @@ void StateMachine::Execute()
     {
       if (filteredTargetID == 4 || filteredTargetID == 7)
       {
-        desiredHeading = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+        txApril = m_limelight->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
+        desiredHeading = currentHeading + txApril;
       }
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
