@@ -320,22 +320,135 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   
   if(chosenAuto == "basic_auto")
   {
-    return frc2::cmd::Sequence(
+    return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      frc2::cmd::Race(
-        frc2::cmd::Run([this] { m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance()); }),
-        frc2::WaitCommand(1_s).ToPtr()
+      frc2::cmd::Race( //aim shooter for 0.75s
+        frc2::cmd::Run(
+          [this]
+            {
+              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
-      frc2::cmd::Sequence([this] {m_shooter.SetShooter(0.75, 0.75),  }),
-      FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0.75, 0.75);
+            }
+        ),
+        frc2::WaitCommand(0.75_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.runMagazine(1);
+              m_arm.runArmWheels(1);
+              m_intake.runIntake(1);
+              m_intake.Direction(1);
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0, 0);
+              m_shooter.runMagazine(0);
+              m_arm.runArmWheels(0);
+              m_intake.runIntake(0);
+              m_intake.Direction(0);  
+            }
+        )
+      ),
+      frc2::cmd::Parallel( // follow path and turn on intake until a note has been seen by the mag
+        FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr(),
+        frc2::FunctionalCommand(
+          [this] 
+            { //init
+              m_intake.runIntake(0.25);
+              m_intake.DirectionNote(0.25); //will always run direction backwards unless note detected in front, useful here as pickup will only be from back atm
+              m_arm.runArmWheels(0.25);
+              m_shooter.runMagazine(0.25);
+            },
+          [this] 
+            { //execute
+              //do nothin.
+            },
+          [this] (bool interrupted) //This is neccesary or it breaks
+            { //on end
+              m_intake.runIntake(0);
+              m_intake.DirectionNote(0);
+              m_arm.runArmWheels(0);
+              m_shooter.runMagazine(0);
+            },
+          [this]
+            { //isfinished
+              return m_shooter.GetMagazineSensor();
+            },
+          {&m_intake, &m_shooter, &m_arm}
+        ).ToPtr()
+      ),
+      frc2::cmd::Sequence( //does a backup with the mag to prime the notes position
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.runMagazine(-0.2);
+            }
+        ),
+        frc2::WaitCommand(0.11_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.runMagazine(0);
+            }
+        )
+      ),
+      frc2::cmd::Race( //primes the shooter again as before
+        frc2::cmd::Run(
+          [this]
+            {
+              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr()
+      ),
+      frc2::cmd::Sequence( //shoots note
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0.75, 0.75);
+            }
+        ),
+        frc2::WaitCommand(0.75_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.runMagazine(1);
+              m_arm.runArmWheels(1);
+              m_intake.runIntake(1);
+              m_intake.Direction(1);
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0, 0);
+              m_shooter.runMagazine(0);
+              m_arm.runArmWheels(0);
+              m_intake.runIntake(0);
+              m_intake.Direction(0);  
+            }
+        )
+      )
     );
     
     // to deploy to run no auto. --------------------------------------------------------------
 
-    return frc2::cmd::Sequence(
-      frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      // FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
-    );  
+    // return frc2::cmd::Sequence(
+    //   frc2::WaitCommand(0.1_s).ToPtr()  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+    //   // FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+    // );  
 
     //-----------------------------------------------------------------
   }

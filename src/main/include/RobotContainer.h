@@ -18,6 +18,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/WaitCommand.h>
