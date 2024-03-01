@@ -292,6 +292,7 @@ void AutoAuxilaryStateMachine::Execute()
     else
     {
       m_shooter->stopMagazine();
+      magEncoderPos = m_shooter->GetCurrMagEncoderVal();
       m_arm->stopArmWheels();
       m_intake->stopIntake();
       time = 0;
@@ -322,7 +323,7 @@ void AutoAuxilaryStateMachine::Execute()
 
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
-      m_shooter->ApriltagShooterTheta(filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value(), magEncoderPos);
     }
 
     if((fabs(m_shooter->GetOffSetEncoderValue() - m_shooter->GetDesired()) < 5 && m_messager->GetDriveMessage().compare("Shoot") == 0 )/* && fabs(filteredTarget.GetYaw()) <= 5*/)
@@ -356,7 +357,7 @@ void AutoAuxilaryStateMachine::Execute()
     if(filteredTargetID == 7 || filteredTargetID == 4)
     {
       //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
-      m_shooter->ApriltagShooterTheta(filteredRange.value());
+      m_shooter->ApriltagShooterTheta(filteredRange.value(), magEncoderPos);
     }
 
     //start shooter motors

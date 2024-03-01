@@ -53,7 +53,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double DistanceBetweenAngles(double targetAngle, double sourceAngle);
   void SetIntakePose();
 
-  void ApriltagShooterTheta(double dist);
+  void ApriltagShooterTheta(double dist, double pos);
   void AngleTrimAdjust(bool buttonUp, bool buttonDown);
   void zeroIntergralVal();
   void accumulateError();

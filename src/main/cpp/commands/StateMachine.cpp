@@ -483,6 +483,7 @@ void StateMachine::Execute()
       else
       {
         m_shooter->stopMagazine();
+        magEncoderPos = m_shooter->GetCurrMagEncoderVal();
         m_arm->stopArmWheels();
         m_intake->stopIntake();
         time = 0;
@@ -507,10 +508,12 @@ void StateMachine::Execute()
       m_shooter->stopMagazine();
       m_shooter->StopShooter();
 
+      //m_shooter->holdMagazine(magEncoderPos);
+
       if(filteredTargetID == 7 || filteredTargetID == 4)
       {
         //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
-        m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance());
+        m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance(), magEncoderPos);
       }
 
       if(warmUpShooter == true)
@@ -544,10 +547,12 @@ void StateMachine::Execute()
         break;
       }
 
+      //m_shooter->holdMagazine(magEncoderPos);
+
       if(filteredTargetID == 7 || filteredTargetID == 4)
       {
         //frc::SmartDashboard::PutNumber("Shooter Angle Theta",filteredRange.value());
-        m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance());
+        m_shooter->ApriltagShooterTheta(m_limelight->FilteredDistance(), magEncoderPos);
       }
 
       //start shooter motors
@@ -556,7 +561,6 @@ void StateMachine::Execute()
       if(warmUpShooter == false)
       {
         state = LOADED;
-        magEncoderPos = m_shooter->GetCurrMagEncoderVal();
         frc::SmartDashboard::PutString("state: ", "changing to LOADED");
       } 
       
