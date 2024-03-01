@@ -8,7 +8,7 @@ RobotContainer::RobotContainer()
   std::cout << "cout in robot container" << std::endl;
 
   m_chooser.SetDefaultOption("basic_auto", "basic_auto");
-  m_chooser.AddOption("JustShoot", "justShoot");
+  m_chooser.AddOption("JustShoot", "JustShoot");
   m_chooser.AddOption("B_1", "B_1");
   m_chooser.AddOption("B_2", "B_2");
   m_chooser.AddOption("B_3", "B_3");

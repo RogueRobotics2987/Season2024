@@ -214,6 +214,7 @@ void StateMachine::Execute()
   if(m_driverController->GetRawButtonPressed(8))
   {
     resetLoaded = true;
+    magEncoderPos = m_shooter->GetCurrMagEncoderVal();
   }
 
   if(fabs(m_auxController->GetRightY()) > 0.15)
