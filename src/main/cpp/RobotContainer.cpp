@@ -317,20 +317,18 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   //   frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
   //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
   // };
+  
   if(chosenAuto == "basic_auto")
   {
-    // return frc2::cmd::Sequence(
-    //   frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-    //   frc2::ParallelRaceGroup p1 
-    //   (
-    //     frc2::cmd::Run(
-    //     [this] {
-    //       m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance());
-    //     },
-    //     {&m_drive});
-    //   )  
-    //   FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr();
-    // );
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      frc2::cmd::Race(
+        frc2::cmd::Run([this] { m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance()); }),
+        frc2::WaitCommand(1_s).ToPtr()
+      ),
+      frc2::cmd::Sequence([this] {m_shooter.SetShooter(0.75, 0.75),  }),
+      FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr()
+    );
     
     // to deploy to run no auto. --------------------------------------------------------------
 

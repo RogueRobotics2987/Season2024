@@ -10,10 +10,13 @@
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc/XboxController.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/Command.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
