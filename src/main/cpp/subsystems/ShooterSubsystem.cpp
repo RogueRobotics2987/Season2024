@@ -91,7 +91,7 @@ double ShooterSubsystem::GetOffSetEncoderValue(){
     Pose = fabs(Pose - 1);
     Pose *= 132;
 
-    return Pose -7;
+    return Pose -11;
 }
 double ShooterSubsystem::ShooterError(){
     return m_DesiredAngle - GetOffSetEncoderValue();

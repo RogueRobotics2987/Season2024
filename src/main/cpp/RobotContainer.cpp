@@ -12,7 +12,7 @@ RobotContainer::RobotContainer()
 
   //paths commented out for now since they are unused
   
-  // m_chooser.AddOption("B_1", "B_1");
+  m_chooser.AddOption("B_1", "B_1");
   // m_chooser.AddOption("B_2", "B_2");
   // m_chooser.AddOption("B_3", "B_3");
   // m_chooser.AddOption("B_1_2_3", "B_1_2_3");
@@ -417,7 +417,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
               m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
             }
         ),
-        frc2::WaitCommand(1.5_s).ToPtr()
+        frc2::WaitCommand(2_s).ToPtr()
       ),
       frc2::cmd::Sequence( //shoots note
         frc2::cmd::RunOnce(
@@ -508,17 +508,19 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
       return frc2::cmd::Sequence( //the whole auto path!
-      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      frc2::cmd::Race( //aim shooter for 0.75s
-        frc2::cmd::Run(
-          [this]
-            {
-              AutoAprilTag(m_limelight, m_drive, m_shooter);
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
-            }
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time.
+      frc2::cmd::Parallel( 
+        frc2::cmd::Race( //aim shooter for 0.75s
+          frc2::cmd::Run(
+            [this]
+              {
+                double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
+          ),
+          frc2::WaitCommand(1.5_s).ToPtr() //can change if need
         ),
-        frc2::WaitCommand(1.5_s).ToPtr() //can change if need
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr()
       ),
       frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
         frc2::cmd::RunOnce(
@@ -592,15 +594,18 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             }
         )
       ),
-      frc2::cmd::Race( //primes the shooter again as before
-        frc2::cmd::Run(
-          [this]
-            {
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
-            }
+      frc2::cmd::Parallel( 
+        frc2::cmd::Race( //aim shooter for 0.75s
+          frc2::cmd::Run(
+            [this]
+              {
+                double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
+          ),
+          frc2::WaitCommand(1.5_s).ToPtr() //can change if need
         ),
-        frc2::WaitCommand(1.5_s).ToPtr()
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr()
       ),
       frc2::cmd::Sequence( //shoots note
         frc2::cmd::RunOnce(
