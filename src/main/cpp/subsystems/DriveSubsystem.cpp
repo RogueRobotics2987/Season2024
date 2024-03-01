@@ -59,7 +59,15 @@ DriveSubsystem::DriveSubsystem()
 void DriveSubsystem::Periodic(){
   // Implementation of subsystem periodic method goes here.
 
-frc::SmartDashboard::PutNumber("NavX temp", m_gyro.GetTempC());
+  frc::SmartDashboard::PutNumber("NavX temp", m_gyro.GetTempC());
+
+  if(ranAuto == true){
+    orientationOffset = frc::Rotation2d(3.14159265359_rad);
+    //used to set field oriented in autonomous when we arent facing the correct way
+  }
+  else{
+    orientationOffset = frc::Rotation2d(0_rad);
+  }
 
   m_odometry.Update(
     frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())),
