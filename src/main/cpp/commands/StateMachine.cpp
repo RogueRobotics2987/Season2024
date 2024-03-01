@@ -131,10 +131,12 @@ void StateMachine::Execute()
   }
   */
 
+/*
   if(m_driverController->GetRawButtonPressed(3))
   {
     chainClimb = !chainClimb;
   }
+  */
 
   if(driveLeftBumperPushed && state == EMPTY)
   { 
@@ -380,11 +382,14 @@ void StateMachine::Execute()
         m_intake->DirectionNote(0.25);
       }
 
+      /*
       if(chainClimb == true)
       {
         state = CHAIN_CLIMB;
         frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
       }
+
+    */
     
       if(emptyIntake == true)
       {
@@ -523,11 +528,13 @@ void StateMachine::Execute()
         frc::SmartDashboard::PutString("state: ", "changing to SHOOTER_WARMUP");
       } 
 
+      /*
       if(chainClimb == true)
       {
         state = CHAIN_CLIMB;
         frc::SmartDashboard::PutString("state:", "changing to CHAIN_CLIMB");
       }
+      */
 
       if(emptyIntake == true)
       {
@@ -664,62 +671,10 @@ void StateMachine::Execute()
       break;
     }
 
+    /*
     case CHAIN_CLIMB:
     {
       frc::SmartDashboard::PutString("state: ", "CHAIN_CLIMB");
-
-      //move shooter out of way
-      // m_shooter->SetActuator(ShooterConstants::ShooterMaxSoftLimit);
-
-      // if(time >= 65 && time < 140)
-      // {
-      //   //move arms out of way 
-      //   m_arm->setLowerArmAngle(80);
-      // }
-
-      // if(time >= 140 && time < 200)
-      // {
-      //   //move arms out of way 
-      //   m_arm->setUpperArmAngle(0);
-      //   time = 360;
-      // }
-      
-      // time++;
-      
-      //button 1 things
-      // if(raiseClimber == true)
-      // {
-      //   m_climb->startClimber();
-      // }
-      // else
-      // {
-      //   m_climb->stopClimber();
-      // }
-
-      // //Driver
-      // if(m_auxController->GetRawButtonPressed(1))
-      // {
-      //   m_arm->setLowerArmAngle(50);
-      // }
-
-      // if(m_auxController->GetRawButtonPressed(2))
-      // {
-      //   m_arm->setUpperArmAngle(160);
-      // }
-
-      // if(m_auxController->GetRawButtonPressed(3))
-      // {
-      //   m_arm->setLowerArmAngle(85);
-      // }
-    
-      //COMMENTED OUT BECAUSE IS UNSTABLE RIGHT NOW DO NOT GO INTO YOUR CLIMBER BECAUSE YOU CANT GET OUT
-      // if(chainClimb == false)
-      // {
-      //   state = ARMS_RETRACT;
-      //   time = 0;
-      //   m_arm->setLowerArmAngle(35);
-      //   m_arm->setUpperArmAngle(0.5);
-      // }
 
       if(chainClimb == false)
       {
@@ -728,6 +683,8 @@ void StateMachine::Execute()
 
       break;
     }
+    */
+
     case ARMS_RETRACT:
     {
       if(fabs(35 - m_arm->GetOffSetEncoderValueLower()) < 1)
@@ -805,7 +762,7 @@ void StateMachine::SetBoolsFalse()
   placeInForwardAmp = false;
   placeInBackwardsAmp = false;
   placeInTrap = false;
-  chainClimb = false;
+  //chainClimb = false;
 
   noteFollowState = false;
   aprilFollowState = false;

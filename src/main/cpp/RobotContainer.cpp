@@ -380,7 +380,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { //execute
               //do nothin.
             },
-          [this] (bool interrupted) //This is neccesary or it breaks
+          [this] (bool interrupted)
             { //on end
               m_intake.runIntake(0);
               m_intake.DirectionNote(0);
@@ -415,6 +415,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             {
               double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
               m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              std::cout << "BasicAuto 418: " << m_limelight.FilteredDistance() << std::endl;
             }
         ),
         frc2::WaitCommand(2_s).ToPtr()

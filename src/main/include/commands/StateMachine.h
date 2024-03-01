@@ -77,7 +77,7 @@ class StateMachine
     FORWARD_ARM_AMP,
     BACKWARD_ARM_AMP,
     ARM_TRAP,
-    CHAIN_CLIMB,
+    // CHAIN_CLIMB,
     ARMS_RETRACT
   };
 
@@ -106,7 +106,7 @@ class StateMachine
   int apriltagID = 0;
 
   bool pickupNote = false;        // if auto/teleop want to pickup a note (OrangeCheerio)
-  bool chainClimb = false;
+  // bool chainClimb = false;
   bool raiseClimber = false;
   bool lowerArmTrap = false;
   bool upperArmTrap = false;

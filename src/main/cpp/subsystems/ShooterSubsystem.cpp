@@ -142,6 +142,7 @@ void ShooterSubsystem::ApriltagShooterTheta(double dist, double pos){
     frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
     //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
    // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
+   std::cout << "is aiming" << std::endl;
    m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
 
    holdMagazine(pos);
