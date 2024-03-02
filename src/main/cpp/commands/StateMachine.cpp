@@ -439,13 +439,9 @@ void StateMachine::Execute()
       // start intake motors, REMEMBER: middle motor changes direction
       m_intake->runIntake(0.25);
       m_intake->Direction(0.25);
-
-      if(m_intake->GetIntakeFront() || m_intake->GetIntakeRear())
-      {
-        m_arm->runArmWheels(0.25);
-        m_shooter->runMagazine(0.25);
-      }
-
+      m_arm->runArmWheels(0.25);
+      m_shooter->runMagazine(0.25);
+      
       if(pickupNote == false)
       {
         state = EMPTY;

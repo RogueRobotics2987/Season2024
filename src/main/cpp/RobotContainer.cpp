@@ -9,6 +9,7 @@ RobotContainer::RobotContainer()
 
   m_chooser.SetDefaultOption("basic_auto", "basic_auto");
   m_chooser.AddOption("JustShoot", "JustShoot");
+  m_chooser.AddOption("sideShootToback", "sideShootToback");
 
   //paths commented out for now since they are unused
   
@@ -203,12 +204,13 @@ frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
   ).ToPtr();
 }
 
-void RobotContainer::SetRanAuto(bool ranAuto){
-  m_drive.SetRanAuto(ranAuto);
-}
+// void RobotContainer::SetRanAuto(bool ranAuto){
+//   m_drive.SetRanAuto(ranAuto);
+// }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
+
   m_drive.ZeroHeading();
 
   chosenAuto = m_chooser.GetSelected();
@@ -325,14 +327,26 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   if(chosenAuto == "basic_auto")
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
+    // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      frc2::cmd::RunOnce(
+        [this]
+          {
+            m_shooter.zeroIntergralVal();
+          }
+      ),
       frc2::cmd::Race( //aim shooter for 0.75s
         frc2::cmd::Run(
           [this]
             {
+              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
               double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              m_shooter.accumulateError();
+              if(filteredTargetID == 7 || filteredTargetID == 4)
+              {
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
             }
         ),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
@@ -356,13 +370,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         ),
         frc2::WaitCommand(1.5_s).ToPtr(),
         frc2::cmd::RunOnce(
-          [this]
+          [this]  
             {
               m_shooter.SetShooter(0, 0);
               m_shooter.runMagazine(0);
               m_arm.runArmWheels(0);
               m_intake.runIntake(0);
-              m_intake.Direction(0);  
+              m_intake.Direction(0); 
+              m_shooter.SetIntakePose();
             }
         )
       ),
@@ -413,9 +428,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::Run(
           [this]
             {
+              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
               double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
-              std::cout << "BasicAuto 418: " << m_limelight.FilteredDistance() << std::endl;
+              m_shooter.accumulateError();
+              if(filteredTargetID == 7 || filteredTargetID == 4)
+              {
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
             }
         ),
         frc2::WaitCommand(2_s).ToPtr()
@@ -461,15 +480,27 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     //-----------------------------------------------------------------
   }
   else if(chosenAuto == "JustShoot")
-  {
+  { 
+    // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      frc2::cmd::RunOnce(
+        [this]
+          {
+            m_shooter.zeroIntergralVal();
+          }
+      ),
       frc2::cmd::Race( //aim shooter for 0.75s
         frc2::cmd::Run(
           [this]
             {
+              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
               double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-              m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              m_shooter.accumulateError();
+              if(filteredTargetID == 7 || filteredTargetID == 4)
+              {
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
             }
         ),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
@@ -503,6 +534,63 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             }
         )
       )
+    );
+  }
+  else if(chosenAuto == "sideShootToback")
+  {
+    return frc2::cmd::Sequence( //the whole auto path!
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      frc2::cmd::RunOnce(
+        [this]
+          {
+            m_shooter.zeroIntergralVal();
+          }
+      ),
+      frc2::cmd::Race( //aim shooter for 0.75s
+        frc2::cmd::Run(
+          [this]
+            {
+              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
+              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              m_shooter.accumulateError();
+              if(filteredTargetID == 7 || filteredTargetID == 4)
+              {
+                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+              }
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr() //can change if need
+      ),
+      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0.75, 0.75);
+            }
+        ),
+        frc2::WaitCommand(0.75_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.runMagazine(1);
+              m_arm.runArmWheels(1);
+              m_intake.runIntake(1);
+              m_intake.Direction(1);
+            }
+        ),
+        frc2::WaitCommand(1.5_s).ToPtr(),
+        frc2::cmd::RunOnce(
+          [this]
+            {
+              m_shooter.SetShooter(0, 0);
+              m_shooter.runMagazine(0);
+              m_arm.runArmWheels(0);
+              m_intake.runIntake(0);
+              m_intake.Direction(0);  
+            }
+        )
+      ),
+      FollowWaypoints(m_drive, m_limelight, B_2Waypoints, B_2PointSpeed, B_2CruiseSpeed, false).ToPtr()
     );
   }
   else if(chosenAuto == "B_1")

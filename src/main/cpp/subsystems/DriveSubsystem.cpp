@@ -46,7 +46,7 @@ DriveSubsystem::DriveSubsystem()
 
     m_odometry {
       kDriveKinematics,
-      frc::Rotation2d(m_gyro.GetRotation2d()),
+      frc::Rotation2d(m_gyro.GetRotation2d().Radians()),
       {
         m_frontLeft.GetPosition(),
         m_frontRight.GetPosition(),
@@ -61,13 +61,13 @@ void DriveSubsystem::Periodic(){
 
   frc::SmartDashboard::PutNumber("NavX temp", m_gyro.GetTempC());
 
-  if(ranAuto == true){
-    orientationOffset = frc::Rotation2d(3.14159265359_rad);
-    //used to set field oriented in autonomous when we arent facing the correct way
-  }
-  else{
-    orientationOffset = frc::Rotation2d(0_rad);
-  }
+  // if(ranAuto == true){
+  //   orientationOffset = frc::Rotation2d(3.14159265359_rad);
+  //   //used to set field oriented in autonomous when we arent facing the correct way
+  // }
+  // else{
+  //   orientationOffset = frc::Rotation2d(0_rad);
+  // }
 
   m_odometry.Update(
     frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())),
@@ -213,6 +213,7 @@ units::degree_t DriveSubsystem::GetHeading(){
 }
 
 void DriveSubsystem::ZeroHeading(){
+      SetRanAuto(false);
       m_gyro.Reset();
 }
 
@@ -282,8 +283,17 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
   return {forward, sideways, angular};
 }
 
-void DriveSubsystem::SetRanAuto(bool ranAuto){
-  this-> ranAuto = ranAuto;
+// void DriveSubsystem::SetRanAuto(bool ranAuto)
+//{
+//   this-> ranAuto = ranAuto;
+// }
+
+frc2::CommandPtr DriveSubsystem::SetAngleAdjustment(double angle){
+  return this->RunOnce(
+    [this, angle] {
+      m_gyro.SetAngleAdjustment(angle);
+      // m_gyro.Reset();
+    });
 }
 
 DriveSubsystem::~DriveSubsystem()

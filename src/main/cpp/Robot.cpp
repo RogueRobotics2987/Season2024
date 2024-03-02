@@ -34,8 +34,7 @@ void Robot::AutonomousInit()
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
-    ranAuto = true; 
-    m_container.SetRanAuto(ranAuto);
+    // ranAuto = true; 
   }
   // m_autoDriveStateMachine = m_container.GetAutoDriveStateMachine();
   // m_autoDriveStateMachine->Schedule();
@@ -51,6 +50,8 @@ void Robot::TeleopInit()
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
+
+  // m_container.SetRanAuto(ranAuto);
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
