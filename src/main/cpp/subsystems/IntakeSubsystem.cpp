@@ -39,16 +39,16 @@ void IntakeSubsystem::Direction(double speed){  // get current val to tell which
 
     if (intakeColorSensorFront.Get()){ // need to find actual value and put in constants 
         CenterIntake.Set(-speed); // need to find actual speed
-
-    }else if (intakeColorSensorRear.Get()){
-        CenterIntake.Set(speed);
     }
 }
 
 void IntakeSubsystem::DirectionNote(double speed){
-    if(intakeColorSensorFront.Get()){
+    if(intakeColorSensorFront.Get())
+    {
         CenterIntake.Set(-speed);
-    } else {
+    }
+    else
+    {
         CenterIntake.Set(speed);
     }
 }

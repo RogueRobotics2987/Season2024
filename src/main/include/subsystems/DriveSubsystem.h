@@ -98,7 +98,6 @@ class DriveSubsystem : public frc2::SubsystemBase
     frc2::CommandPtr Twitch(bool direction);
     void SetRanAuto(bool ranAuto);
 
-
     frc::SwerveDriveKinematics<4> kDriveKinematics
     {
       frc::Translation2d{ModuleConstants::kWheelBase / 2, ModuleConstants::kTrackWidth / 2},
