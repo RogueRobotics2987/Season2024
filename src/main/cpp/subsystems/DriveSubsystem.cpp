@@ -213,7 +213,7 @@ units::degree_t DriveSubsystem::GetHeading(){
 }
 
 void DriveSubsystem::ZeroHeading(){
-      SetRanAuto(false);
+      // SetRanAuto(false);
       m_gyro.Reset();
 }
 
