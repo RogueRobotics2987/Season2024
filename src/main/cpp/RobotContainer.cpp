@@ -481,6 +481,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "JustShoot")
   { 
+    m_drive.ResetOdometry(B_1Waypoints[0]);
     // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
@@ -538,6 +539,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "sideShootToback")
   {
+    m_drive.ResetOdometry(sideBackupWaypoints[0]);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       frc2::cmd::RunOnce(
@@ -590,7 +592,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             }
         )
       ),
-      FollowWaypoints(m_drive, m_limelight, B_2Waypoints, B_2PointSpeed, B_2CruiseSpeed, false).ToPtr()
+      FollowWaypoints(m_drive, m_limelight, sideBackupWaypoints, sideBackupPointSpeed, sideBackupCruiseSpeed, false).ToPtr()
     );
   }
   else if(chosenAuto == "B_1")

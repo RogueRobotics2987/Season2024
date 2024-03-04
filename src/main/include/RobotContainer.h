@@ -145,6 +145,21 @@ class RobotContainer
       1.5_mps
     };
 
+  std::vector<frc::Pose2d>  sideBackupWaypoints{
+      frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
+      frc::Pose2d(3.5_m, 5.55_m, frc::Rotation2d(180_deg))
+    };
+
+    std::vector<units::meters_per_second_t> sideBackupPointSpeed{
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::meters_per_second_t> sideBackupCruiseSpeed{
+      1_mps,
+      1.5_mps
+    };
+
     std::vector<frc::Pose2d>  B_3Waypoints{
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
       frc::Pose2d(2.90_m, 4.1_m, frc::Rotation2d(180_deg))
