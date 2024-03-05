@@ -144,4 +144,44 @@ photon::PhotonTrackedTarget LimelightSubsystem::GetFilteredTarget()
     return filteredTarget;
 }
 
+//still need to do the hold mag seperate from the subsystem, I think in the command.
+//pass in the angle trim from the shooter subsystems function get angletrim
+double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim)
+{
+    frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+    return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+}
 
+double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
+{
+    txApril = FilteredPhotonYaw();
+    desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
+
+    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+    return (driveError * kpApril);
+}
+
+double LimelightSubsystem::GetApriltagDriveError()
+{
+    return driveError;
+}
+
+double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
+}

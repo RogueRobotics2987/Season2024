@@ -7,7 +7,6 @@
 ShooterSubsystem::ShooterSubsystem() {
     // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
     //frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
-    magPIDController.SetP(ShooterConstants::magKp);
 
     TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
@@ -33,7 +32,7 @@ void ShooterSubsystem::Periodic() {
 
     if(DebugConstants::debugShooter == true)
     {
-        frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
+        // frc::SmartDashboard::PutBoolean("ColorMag", MagazineSensor.Get());
         frc::SmartDashboard::PutNumber("ShooterEncoder: ",GetOffSetEncoderValue());
         frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
         frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
@@ -71,9 +70,9 @@ void ShooterSubsystem::SetActuator(double DesiredAngle) {
     m_DesiredAngle = DesiredAngle;
 }   
 
-bool ShooterSubsystem::GetMagazineSensor(){
-    return MagazineSensor.Get();
-}
+// bool ShooterSubsystem::GetMagazineSensor(){
+//     return MagazineSensor.Get();
+// }
 
 bool ShooterSubsystem::IsTargeted(){
     return fabs(GetOffSetEncoderValue() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
@@ -97,24 +96,23 @@ double ShooterSubsystem::ShooterError(){
     return m_DesiredAngle - GetOffSetEncoderValue();
 }
 
-void ShooterSubsystem::runMagazine(double speed){
-    MagazineMotor.Set(speed);
-}
+// void ShooterSubsystem::runMagazine(double speed){
+//     MagazineMotor.Set(speed);
+// }
 
-void ShooterSubsystem::stopMagazine(){
-    MagazineMotor.Set(0.0);
-}
+// void ShooterSubsystem::stopMagazine(){
+//     MagazineMotor.Set(0.0);
+// }
 
-void ShooterSubsystem::holdMagazine(double pos){
-    magPIDController.SetReference(pos, rev::ControlType::kPosition);
+// void ShooterSubsystem::holdMagazine(double pos){
+//     magPIDController.SetReference(pos, rev::ControlType::kPosition);
+// }
 
-}
+// double ShooterSubsystem::GetCurrMagEncoderVal(){
+//     double currEncoderVal = MagazineEncoder.GetPosition();
 
-double ShooterSubsystem::GetCurrMagEncoderVal(){
-    double currEncoderVal = MagazineEncoder.GetPosition();
-
-    return currEncoderVal;
-}
+//     return currEncoderVal;
+// }
 
 
 void ShooterSubsystem::driveActuator(double speed){
@@ -137,16 +135,16 @@ void ShooterSubsystem::SetIntakePose(){
     m_DesiredAngle = ShooterConstants::RestingAngle;
 }
 
-void ShooterSubsystem::ApriltagShooterTheta(double dist, double pos){
-    // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
-    frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
-    //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
-   // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
-   std::cout << "is aiming" << std::endl;
-   m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+// void ShooterSubsystem::ApriltagShooterTheta(double dist, double pos){
+//     // m_DesiredAngle = (-3.45 * (dist * 3.28084)) + 66.3 + angleTrim; //the equation is in feet but our distance is in meters so we convert it to feet for the equation
+//     frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+//     //m_DesiredAngle = 86.51 * exp(-0.316 * dist) + angleTrim;
+//    // m_DesiredAngle = 91.02 * exp(-0.257 * dist) + angleTrim;
+//    std::cout << "is aiming" << std::endl;
+//    m_DesiredAngle = -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
 
-   holdMagazine(pos);
-}
+// //    holdMagazine(pos);
+// }
 
 void ShooterSubsystem::AngleTrimAdjust(bool buttonUp, bool buttonDown){
     if(buttonUp){
@@ -208,6 +206,12 @@ void ShooterSubsystem::SetShooterAngle()
     //MagazineMotor.Set(magMotorSpeed);
 }
 
-double ShooterSubsystem::GetDesired(){
+double ShooterSubsystem::GetDesired()
+{
     return m_DesiredAngle;
+}
+
+double ShooterSubsystem::GetAngleTrim()
+{
+    return angleTrim;
 }

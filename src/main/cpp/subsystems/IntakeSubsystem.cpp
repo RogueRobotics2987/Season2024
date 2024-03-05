@@ -6,6 +6,8 @@
 
 IntakeSubsystem::IntakeSubsystem()
 {
+    magPIDController.SetP(ShooterConstants::magKp);
+
     CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     BackIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
@@ -28,7 +30,6 @@ void IntakeSubsystem::Periodic()
 {
     if(DebugConstants::debugIntake == true){
         frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
-        frc::SmartDashboard::PutBoolean("ColorBack", intakeColorSensorRear.Get());
     }
 }
 
@@ -69,12 +70,30 @@ bool IntakeSubsystem::GetIntakeFront(){
     return intakeColorSensorFront.Get();
 }
 
-bool IntakeSubsystem::GetIntakeRear(){
-    return intakeColorSensorRear.Get();
-}
-
 void IntakeSubsystem::spitOutIntake(){
     FrontIntake.Set(-0.2);
     BackIntake.Set(0.2);
     CenterIntake.Set(0.2);
+}
+
+bool IntakeSubsystem::GetMagazineSensor(){
+    return MagazineSensor.Get();
+}
+
+void IntakeSubsystem::runMagazine(double speed){
+    MagazineMotor.Set(speed);
+}
+
+void IntakeSubsystem::stopMagazine(){
+    MagazineMotor.Set(0.0);
+}
+
+void IntakeSubsystem::holdMagazine(double pos){
+    magPIDController.SetReference(pos, rev::ControlType::kPosition);
+}
+
+double IntakeSubsystem::GetCurrMagEncoderVal(){
+    double currEncoderVal = MagazineEncoder.GetPosition();
+
+    return currEncoderVal;
 }

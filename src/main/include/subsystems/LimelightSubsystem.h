@@ -37,8 +37,11 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double PhotonYawMap(double originalVal);
     double FilteredDistance();
     photon::PhotonTrackedTarget GetFilteredTarget();
+    double GetApriltagShooterTheta(double dist, double angleTrim);
+    double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
-
+    double GetApriltagDriveMotorVal(double currentHeading);
+    double GetApriltagDriveError();
 
     std::vector<double> botPose;
 
@@ -64,7 +67,12 @@ class LimelightSubsystem : public frc2::SubsystemBase
   units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
   units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
   units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.45);
-  
+
+  double driveError = 0;
+  double txApril = 0;
+  double desiredHeading = 0;
+  double kpApril = 0.09;
+
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 };

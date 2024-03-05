@@ -64,8 +64,8 @@ void Robot::TeleopInit()
   //   m_autoDriveStateMachine->Cancel();
   //   m_autoDriveStateMachine.reset();
   // }
-  m_stateMachine = m_container.GetAuxilaryStateMachine();
-  m_stateMachine->Schedule();
+  // m_stateMachine = m_container.GetAuxilaryStateMachine();
+  // m_stateMachine->Schedule();
   //m_driveStateMachine = m_container.GetDriveStateMachine();
   //m_driveStateMachine->Schedule();
 }

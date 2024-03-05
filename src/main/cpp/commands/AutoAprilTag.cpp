@@ -38,7 +38,7 @@ void AutoAprilTag::Execute()
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      double error = DistanceBetweenAngles(desiredHeading, currentHeading);
+      error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
       rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
         

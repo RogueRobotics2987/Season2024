@@ -67,7 +67,6 @@ RobotContainer::RobotContainer()
       double safeY =  DeadzoneCubed(m_driverController.GetLeftY());
       double safeRot = DeadzoneCubed(m_driverController.GetRightX());
 
-
       bool fieldOrientated;
 
       if (m_driverController.GetRawAxis(3)> 0.15){ //if the right trigger is pulled
@@ -92,12 +91,42 @@ RobotContainer::RobotContainer()
     },
     {&m_drive}
   ));
+
+  m_shooter.SetDefaultCommand(
+  frc2::RunCommand(
+    [this]
+      {
+        m_shooter.setRestingActuatorPosition();
+      },
+      {&m_shooter}
+  ));
+
+  m_climb.SetDefaultCommand(
+  frc2::RunCommand(
+    [this]
+      {
+        m_climb.stopClimber();
+      },
+      {&m_climb}
+  ));
+
+  m_intake.SetDefaultCommand(
+  frc2::RunCommand(
+    [this]
+      {
+        m_intake.stopIntake();
+        m_intake.holdMagazine(m_intake.GetCurrMagEncoderVal());
+      },
+      {&m_intake}
+  ));
 }
+
+
 
 void RobotContainer::ConfigureButtonBindings()
 {
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
-  // frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeading());
+  frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeadingCmd());
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -150,20 +179,20 @@ float RobotContainer::Deadzone(float x){
   return(x);
 }
 
-frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine()
-{
-  return StateMachine(
-      m_drive,
-      m_limelight,
-      m_arm, 
-      m_climb,
-      m_color, //can remove?
-      m_intake,
-      m_shooter,
-      m_driverController,
-      m_auxController
-    ).ToPtr();
-}
+// frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine()
+// {
+//   return StateMachine(
+//       m_drive,
+//       m_limelight,
+//       m_arm, 
+//       m_climb,
+//       m_color, //can remove?
+//       m_intake,
+//       m_shooter,
+//       m_driverController,
+//       m_auxController
+//     ).ToPtr();
+// }
 
 /*
 frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
@@ -177,32 +206,32 @@ frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
 }
 */
 
-frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
-  return AutoAuxilaryStateMachine(
-      m_arm, 
-      m_climb, //can remove?
-      m_color, //can remove.
-      m_intake,
-      m_shooter, 
-      m_driverController,
-      m_auxController,
-      driveShooterMessager
-    ).ToPtr();
-}
+// frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
+//   return AutoAuxilaryStateMachine(
+//       m_arm, 
+//       m_climb, //can remove?
+//       m_color, //can remove.
+//       m_intake,
+//       m_shooter, 
+//       m_driverController,
+//       m_auxController,
+//       driveShooterMessager
+//     ).ToPtr();
+// }
 
-frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
+// frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
 
-  // m_drive.ResetOdometry(B_1Waypoints[0]);
+//   // m_drive.ResetOdometry(B_1Waypoints[0]);
 
-  return AutoDriveStateMachine(
-    m_drive,
-    m_limelight,
-    m_driverController,
-    m_auxController,
-    driveShooterMessager,
-    path
-  ).ToPtr();
-}
+//   return AutoDriveStateMachine(
+//     m_drive,
+//     m_limelight,
+//     m_driverController,
+//     m_auxController,
+//     driveShooterMessager,
+//     path
+//   ).ToPtr();
+// }
 
 // void RobotContainer::SetRanAuto(bool ranAuto){
 //   m_drive.SetRanAuto(ranAuto);
@@ -341,11 +370,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
               m_shooter.accumulateError();
               if(filteredTargetID == 7 || filteredTargetID == 4)
               {
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
             }
         ),
@@ -362,8 +391,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -373,8 +402,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]  
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0); 
               m_shooter.SetIntakePose();
@@ -388,8 +417,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { //init
               m_intake.runIntake(0.25);
               m_intake.DirectionNote(0.25); //will always run direction backwards unless note detected in front, useful here as pickup will only be from back atm
-              m_arm.runArmWheels(0.25);
-              m_shooter.runMagazine(0.25);
+              // m_arm.runArmWheels(0.25); //todo change to new wheels when put on
+              m_intake.runMagazine(0.25);
             },
           [this] 
             { //execute
@@ -399,28 +428,28 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { //on end
               m_intake.runIntake(0);
               m_intake.DirectionNote(0);
-              m_arm.runArmWheels(0);
-              m_shooter.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
+              m_intake.runMagazine(0);
             },
           [this]
             { //isfinished
-              return m_shooter.GetMagazineSensor();
+              return m_intake.GetMagazineSensor();
             },
-          {&m_intake, &m_shooter, &m_arm}
+          {&m_intake, &m_shooter, &m_arm} //re check this list to see if the "arm" is needed
         ).ToPtr()
       ),
       frc2::cmd::Sequence( //does a backup with the mag to prime the notes position
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(-0.2);
+              m_intake.runMagazine(-0.2);
             }
         ),
         frc2::WaitCommand(0.11_s).ToPtr(),
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(0);
+              m_intake.runMagazine(0);
             }
         )
       ),
@@ -429,11 +458,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
               m_shooter.accumulateError();
               if(filteredTargetID == 7 || filteredTargetID == 4)
               {
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
             }
         ),
@@ -450,8 +479,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -461,8 +490,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0);  
             }
@@ -496,11 +525,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
               m_shooter.accumulateError();
               if(filteredTargetID == 7 || filteredTargetID == 4)
               {
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
             }
         ),
@@ -517,8 +546,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -528,8 +557,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0);  
             }
@@ -553,11 +582,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
+              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
               m_shooter.accumulateError();
               if(filteredTargetID == 7 || filteredTargetID == 4)
               {
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
             }
         ),
@@ -574,8 +603,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -585,8 +614,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0);  
             }
@@ -605,8 +634,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           frc2::cmd::Run(
             [this]
               {
-                double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                double magEncoderPos = m_intake.GetCurrMagEncoderVal();
+                m_intake.holdMagazine(magEncoderPos);
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
           ),
           frc2::WaitCommand(1.5_s).ToPtr() //can change if need
@@ -624,8 +654,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -635,8 +665,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0);  
             }
@@ -649,8 +679,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { //init
               m_intake.runIntake(0.25);
               m_intake.DirectionNote(0.25); //will always run direction backwards unless note detected in front, useful here as pickup will only be from back atm
-              m_arm.runArmWheels(0.25);
-              m_shooter.runMagazine(0.25);
+              // m_arm.runArmWheels(0.25); //todo change to new wheels when put on
+              m_intake.runMagazine(0.25);
             },
           [this] 
             { //execute
@@ -660,12 +690,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { //on end
               m_intake.runIntake(0);
               m_intake.DirectionNote(0);
-              m_arm.runArmWheels(0);
-              m_shooter.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
+              m_intake.runMagazine(0);
             },
           [this]
             { //isfinished
-              return m_shooter.GetMagazineSensor();
+              return m_intake.GetMagazineSensor();
             },
           {&m_intake, &m_shooter, &m_arm}
         ).ToPtr()
@@ -674,14 +704,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(-0.2);
+              m_intake.runMagazine(-0.2);
             }
         ),
         frc2::WaitCommand(0.11_s).ToPtr(),
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(0);
+              m_intake.runMagazine(0);
             }
         )
       ),
@@ -690,8 +720,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           frc2::cmd::Run(
             [this]
               {
-                double magEncoderPos = m_shooter.GetCurrMagEncoderVal();
-                m_shooter.ApriltagShooterTheta(m_limelight.FilteredDistance(), magEncoderPos);
+                // double magEncoderPos = m_intake.GetCurrMagEncoderVal();
+                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
               }
           ),
           frc2::WaitCommand(1.5_s).ToPtr() //can change if need
@@ -709,8 +739,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
           [this]
             {
-              m_shooter.runMagazine(1);
-              m_arm.runArmWheels(1);
+              m_intake.runMagazine(1);
+              // m_arm.runArmWheels(1); //todo change to new wheels when put on
               m_intake.runIntake(1);
               m_intake.Direction(1);
             }
@@ -720,8 +750,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           [this]
             {
               m_shooter.SetShooter(0, 0);
-              m_shooter.runMagazine(0);
-              m_arm.runArmWheels(0);
+              m_intake.runMagazine(0);
+              // m_arm.runArmWheels(0); //todo change to new wheels when put on
               m_intake.runIntake(0);
               m_intake.Direction(0);  
             }
