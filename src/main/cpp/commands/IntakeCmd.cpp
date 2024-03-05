@@ -4,20 +4,38 @@
 
 #include "commands/IntakeCmd.h"
 
-IntakeCmd::IntakeCmd() {
-  // Use addRequirements() here to declare subsystem dependencies.
+IntakeCmd::IntakeCmd(IntakeSubsystem &intake)
+{
+  m_intake = &intake;
+  AddRequirements(m_intake);
 }
 
 // Called when the command is initially scheduled.
-void IntakeCmd::Initialize() {}
+void IntakeCmd::Initialize()
+{
+  m_intake->runIntake(0.25);
+  m_intake->Direction(0.25);
+  // m_intake->run(0.25); arm wheels need to move too but what build is doing with it is unknown
+  m_intake->runMagazine(0.25);
+}
 
 // Called repeatedly when this Command is scheduled to run
-void IntakeCmd::Execute() {}
+void IntakeCmd::Execute()
+{
+  //doesnt need to do anything repeatedly
+}
 
 // Called once the command ends or is interrupted.
-void IntakeCmd::End(bool interrupted) {}
+void IntakeCmd::End(bool interrupted)
+{
+  m_intake->runIntake(0);
+  m_intake->Direction(0);
+  // m_intake->run(0); arm wheels need to move too but what build is doing with it is unknown
+  m_intake->runMagazine(0);
+}
 
 // Returns true when the command should end.
-bool IntakeCmd::IsFinished() {
-  return false;
+bool IntakeCmd::IsFinished()
+{
+  m_intake->GetMagazineSensor();
 }

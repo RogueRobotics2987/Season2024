@@ -7,6 +7,8 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include "subsystems/IntakeSubsystem.h"
+
 /**
  * An example command.
  *
@@ -15,15 +17,22 @@
  * Command will *not* work!
  */
 class IntakeCmd
-    : public frc2::CommandHelper<frc2::Command, IntakeCmd> {
- public:
-  IntakeCmd();
+    : public frc2::CommandHelper<frc2::Command, IntakeCmd>
+{
+  public:
+    IntakeCmd();
+    IntakeCmd(
+      IntakeSubsystem &intake
+    );
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
+    bool IsFinished() override;
+
+  private:
+    IntakeSubsystem* m_intake = nullptr;
 };

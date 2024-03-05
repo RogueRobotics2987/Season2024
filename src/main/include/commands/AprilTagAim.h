@@ -21,12 +21,12 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AprilTagFollower
-    : public frc2::CommandHelper<frc2::Command, AprilTagFollower> 
+class AprilTagAim
+    : public frc2::CommandHelper<frc2::Command, AprilTagAim> 
 {
   public:
-    AprilTagFollower(); 
-    AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, ShooterSubsystem &shooter);
+    AprilTagAim(); 
+    AprilTagAim(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driveXbox, ShooterSubsystem &shooter);
 
     void Initialize() override;
 
@@ -35,6 +35,8 @@ class AprilTagFollower
     void End(bool interrupted) override;
 
     bool IsFinished() override;
+    
+    float Deadzone(float x);
 
     double kp = 0.02206;
     double speedX = 0;
@@ -45,8 +47,12 @@ class AprilTagFollower
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
-    frc::XboxController* m_Xbox = nullptr;
+    frc::XboxController* m_driverController = nullptr;
     
-    float Deadzone(float x);
-
+    units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
+    
+    double currentHeading = 0;
+    double desiredHeading = 0;
+    int filteredTargetID = -1;
+    double error = 0;
 };

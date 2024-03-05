@@ -34,7 +34,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
 #include "commands/NoteFollower.h"
-#include "commands/AprilTagFollower.h"
+#include "commands/AprilTagAim.h"
 #include "commands/AutoAprilTag.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
@@ -47,6 +47,7 @@
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
 #include "commands/DriveStateMachine.h"
+#include "commands/IntakeCmd.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

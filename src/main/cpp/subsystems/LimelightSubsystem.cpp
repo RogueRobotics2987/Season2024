@@ -81,22 +81,8 @@ double LimelightSubsystem::PhotonYaw(){
     return yaw;
 }
 
-double LimelightSubsystem::FilteredPhotonYaw(){
-
-    double cameraLateralOffset = 0.19; //7.5" in meters
-    double dist = FilteredDistance();
-
-    double x1 = cos(filteredTarget.GetYaw()) * dist;
-    double y1 = sin(filteredTarget.GetYaw()) * dist;
-
-    double x2 = x1;
-
-    double y2 = y1 - cameraLateralOffset;//cameraLateralOffset - y1;
-
-    double OffsetAngle = atan(y2/x2) * (180/3.14159269);//atan2(y2, x2) * (180/3.14159269);
-
-    // double alpha = atan(cameraLateralOffset/dist) * (180/3.14159269); // finds the angle 
-
+double LimelightSubsystem::FilteredPhotonYaw()
+{
     double staticOffset = 4;
 
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
@@ -154,8 +140,11 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
 
 double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
 {
-    txApril = FilteredPhotonYaw();
-    desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
+    if(filteredTargetID == 4 || filteredTargetID == 7)
+    {
+        txApril = FilteredPhotonYaw();
+        desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
+    }
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
 

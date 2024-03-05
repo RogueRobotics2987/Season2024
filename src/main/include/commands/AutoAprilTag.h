@@ -41,9 +41,7 @@ class AutoAprilTag
     ShooterSubsystem* m_shooter = nullptr;
 
     units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
-    double kpApril = 0.09;
-    double txApril = 0.0;
-
+    
     double currentHeading = 0;
     double desiredHeading = 0;
     int filteredTargetID = -1;

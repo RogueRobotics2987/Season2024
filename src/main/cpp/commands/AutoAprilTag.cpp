@@ -16,38 +16,25 @@ AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetr
 }
 
 // Called when the command is initially scheduled.
-void AutoAprilTag::Initialize() 
-{
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
-}
+void AutoAprilTag::Initialize(){}
 
 // Called repeatedly when this Command is scheduled to run
 void AutoAprilTag::Execute()
 {
-    if(m_limePose->PhotonHasTarget() == true)  //limited drive, else regular
-    {
-      filteredTargetID = m_limePose->GetFilteredTarget().GetFiducialId();
+  currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
-      currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+  rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading));
+  
+  m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), -rotApril, false, false);
 
-      if (filteredTargetID == 4 || filteredTargetID == 7)
-      {
-        txApril = m_limePose->FilteredPhotonYaw(); //m_limelight->GetAprilTagtx() - 5; // TODO: check
-        desiredHeading = currentHeading + txApril;
-      }
-
-      frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
-
-      error = DistanceBetweenAngles(desiredHeading, currentHeading);
-
-      rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
-        
-      m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), -rotApril, false, false);
-    }
+  m_shooter->SetActuator(m_limePose->GetApriltagShooterTheta(m_limePose->FilteredDistance(), m_shooter->GetAngleTrim()));
 }
 
 // Called once the command ends or is interrupted.
-void AutoAprilTag::End(bool interrupted) {}
+void AutoAprilTag::End(bool interrupted)
+{
+  m_drive->Drive(0_rad_per_s, false, false);
+}
 
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()

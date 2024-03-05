@@ -121,12 +121,15 @@ RobotContainer::RobotContainer()
   ));
 }
 
-
-
 void RobotContainer::ConfigureButtonBindings()
 {
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeadingCmd());
+
+  frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake).ToPtr());
+
+  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -137,7 +140,7 @@ void RobotContainer::ConfigureButtonBindings()
   //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
 
   // //Limelight April Tag Detection, y
-  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagFollower(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
 
   //TODO adjust deadzone so the robot will not be at an angle when aiming, also implement this fucntion into the state machine
   // frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(AutoAprilTag(m_limelight, m_drive).ToPtr());
