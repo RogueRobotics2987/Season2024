@@ -16,10 +16,7 @@ AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetr
 }
 
 // Called when the command is initially scheduled.
-void AutoAprilTag::Initialize() 
-{
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
-}
+void AutoAprilTag::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void AutoAprilTag::Execute()
@@ -38,7 +35,7 @@ void AutoAprilTag::Execute()
 
       frc::SmartDashboard::PutNumber("filtered yaw val", txApril);
 
-      double error = DistanceBetweenAngles(desiredHeading, currentHeading);
+      error = DistanceBetweenAngles(desiredHeading, currentHeading);
 
       rotApril = units::angular_velocity::radians_per_second_t(error * kpApril);
         
@@ -47,14 +44,17 @@ void AutoAprilTag::Execute()
 }
 
 // Called once the command ends or is interrupted.
-void AutoAprilTag::End(bool interrupted) {}
+void AutoAprilTag::End(bool interrupted)
+{
+  m_drive->Drive(0_mps, 0_mps, 0_rad_per_s, false, false);
+}
 
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
   if(error < 3)
   {
-    return true;
+    // return true; //commented out to test that the function actually works
   }
   else
   {

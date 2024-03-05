@@ -598,7 +598,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   else if(chosenAuto == "B_1")
   {
     m_drive.ResetOdometry(B_1Waypoints[0]);
-      return frc2::cmd::Sequence( //the whole auto path!
+    return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time.
       frc2::cmd::Parallel( 
         frc2::cmd::Race( //aim shooter for 0.75s
