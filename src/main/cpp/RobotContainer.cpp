@@ -128,6 +128,46 @@ void RobotContainer::ConfigureButtonBindings()
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeadingCmd());
 
+  frc2::JoystickButton(&m_auxController, 4).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+      {
+        m_shooter.SetActuator(ShooterConstants::SubwooferAngle); 
+      },
+      {&m_shooter}
+    )
+  );
+
+  frc2::JoystickButton(&m_auxController, 5).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+      {
+        m_shooter.SetActuator(ShooterConstants::StageAngle); 
+      },
+      {&m_shooter}
+    )
+  );
+
+  frc2::JoystickButton(&m_auxController, 6).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+      {
+        m_climb.startClimber(); 
+      },
+      {&m_climb}
+    )
+  );
+
+  // frc2::JoystickButton(&m_auxController, 6).WhileTrue(
+  //   frc2::cmd::RunOnce(
+  //     [this]
+  //     {
+  //       m_climb.startClimber(); 
+  //     },
+  //     {&m_climb}
+  //   )
+  // );
+
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
   // // Robot slides left (when front is away from the drivers)

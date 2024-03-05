@@ -79,6 +79,8 @@ class RobotContainer
     frc::XboxController m_auxController{1};
 
     // The robot's subsystems are defined here...
+    int testInt = 0;
+
     DriveSubsystem m_drive;
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
