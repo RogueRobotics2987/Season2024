@@ -4,7 +4,9 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem() {}
+ClimberSubsystem::ClimberSubsystem() {
+    m_climberMoter.SetOpenLoopRampRate(0.5);
+}
 //TODO: Not sure what this does - commented out for now.
   /*int m_MotorController,
   rev::SparkRelativeEncoder::Type m_EncoderType,
@@ -28,25 +30,3 @@ void ClimberSubsystem::stopClimber()
 {
     m_climberMoter.Set(0.0);
 }
-
-
-
-
-/*
-    "What the Flibity Bajingaas?" said the flunky binky older gentleman when he couldn't find his reading glasses.
-    "Hey pops, what's all this commotion about?" said the his son, Bob. 
-    The older gentleman responded with, "I'm sorry to worry you son, but I can't seem to find my poopity scoop glasses. It's really pushing my buttons, I'm sorry." 
-    Bob: "Don't worry old sport, I'll help you find them!"
-    5 seconds later...
-    Bob: "Bruh, how are you this skibbidy pop?"
-    Gramps: "Oh, I'm sorry son. I know I'm a bit sus, but I really can't find them."
-    Bob: "BRUH, you goblitering boob! They're one you stanky head!"
-    Gramps: "NOOOOOOOO! I can't believe it! Please don't vote me out I have a wife and son!"
-    Bob: "I know, I am your son after all. However I can't overlook this fatal mistake, red. I'm not skipping on this one. GET THE HECK OUT OF HERE!"
-    Gramps: "NOOOOO! Fiddle sticks! Rabloop! Shucks! AHHHHasdasjfk."
-
-    Gramps was the imposter.
-
-    The Ebster - FHS Senior
-    February 10, 2024.
-*/

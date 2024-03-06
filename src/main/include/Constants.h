@@ -134,6 +134,10 @@ namespace StateMachineConstants{
 namespace ShooterConstants {
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
+
+    constexpr double SubwooferAngle = 60;   // temp value, please test and find out
+    constexpr double StageAngle = 40;       // temp value, please test and find out
+
     constexpr double ShooterMaxSoftLimit = 80;
     constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;

@@ -131,6 +131,36 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
+  frc2::JoystickButton(&m_auxController, 4).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+        {
+          m_shooter.SetActuator(ShooterConstants::SubwooferAngle); 
+        },
+      {&m_shooter}
+    )
+  );
+
+  frc2::JoystickButton(&m_auxController, 5).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+        {
+          m_shooter.SetActuator(ShooterConstants::StageAngle); 
+        },
+      {&m_shooter}
+    )
+  );
+
+  frc2::JoystickButton(&m_auxController, 6).WhileTrue( //change to button on ians controller?
+    frc2::cmd::RunOnce(
+      [this]
+        {
+          m_climb.startClimber(); 
+        },
+      {&m_climb}
+    )
+  );
+
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
   // // Robot slides left (when front is away from the drivers)
