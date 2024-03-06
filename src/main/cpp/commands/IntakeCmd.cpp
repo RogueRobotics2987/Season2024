@@ -15,7 +15,6 @@ void IntakeCmd::Initialize()
 {
   m_intake->runIntake(0.25);
   m_intake->Direction(0.25);
-  // m_intake->run(0.25); arm wheels need to move too but what build is doing with it is unknown
   m_intake->runMagazine(0.25);
 }
 
@@ -30,7 +29,6 @@ void IntakeCmd::End(bool interrupted)
 {
   m_intake->runIntake(0);
   m_intake->Direction(0);
-  // m_intake->run(0); arm wheels need to move too but what build is doing with it is unknown
   m_intake->runMagazine(0);
 }
 

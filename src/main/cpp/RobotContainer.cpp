@@ -129,7 +129,20 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
+
+  frc2::POVButton(&m_driverController, 0).WhileTrue(SpitOutCmd(m_intake).ToPtr());
+
+  frc2::POVButton(&m_driverController, 90).WhileTrue(
+    frc2::cmd::RunOnce(
+      [this]
+        {
+          m_climb.startClimber(); 
+        },
+      {&m_climb}
+    )
+  );
 
   frc2::JoystickButton(&m_auxController, 4).WhileTrue(
     frc2::cmd::RunOnce(
@@ -148,16 +161,6 @@ void RobotContainer::ConfigureButtonBindings()
           m_shooter.SetActuator(ShooterConstants::StageAngle); 
         },
       {&m_shooter}
-    )
-  );
-
-  frc2::JoystickButton(&m_auxController, 6).WhileTrue( //change to button on ians controller?
-    frc2::cmd::RunOnce(
-      [this]
-        {
-          m_climb.startClimber(); 
-        },
-      {&m_climb}
     )
   );
 
@@ -272,7 +275,7 @@ frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-
+/* needs a refactor still
   m_drive.ZeroHeading();
 
   chosenAuto = m_chooser.GetSelected();
@@ -1104,5 +1107,5 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr()
     );
-  }
+  }*/
 }

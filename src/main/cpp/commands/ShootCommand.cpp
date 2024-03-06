@@ -21,23 +21,47 @@ ShootCommand::ShootCommand(ShooterSubsystem &shooter,
 // Called when the command is initially scheduled.
 void ShootCommand::Initialize() 
 {
-
+  finished = false;
+  time = 0;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void ShootCommand::Execute() 
 {
+  if(time <= 60) //todo change values to be most efficient/effective
+  {
+    shooterWarmup();
+  }
+  else if(60 >= time && time <= 150)
+  {
+    shoot();
+  }
+  else if(time >= 150)
+  {
+    stopShoot();
+    finished = true;
+  }
 
+  time++;
 }
 
 void ShootCommand::shooterWarmup()
 {
-
+  m_shooter->SetShooter(0.75, 0.75);
 }
 
 void ShootCommand::shoot()
 {
-  
+  m_intake->runIntake(1);
+  m_intake->runMagazine(1);
+  m_intake->DirectionNote(1);
+}
+
+void ShootCommand::stopShoot()
+{
+  m_intake->stopIntake();
+  m_intake->stopMagazine();
+  m_shooter->StopShooter();
 }
 
 // Called once the command ends or is interrupted.
@@ -49,5 +73,5 @@ void ShootCommand::End(bool interrupted)
 // Returns true when the command should end.
 bool ShootCommand::IsFinished() 
 {
-  return false;
+  return finished;
 }

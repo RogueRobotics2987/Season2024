@@ -7,6 +7,7 @@
 IntakeSubsystem::IntakeSubsystem()
 {
     magPIDController.SetP(ShooterConstants::magKp);
+    middleRollers.Follow(MagazineMotor, false); //possibly change
 
     CenterIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     FrontIntake.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
@@ -74,6 +75,7 @@ void IntakeSubsystem::spitOutIntake(){
     FrontIntake.Set(-0.2);
     BackIntake.Set(0.2);
     CenterIntake.Set(0.2);
+    MagazineMotor.Set(-0.2);
 }
 
 bool IntakeSubsystem::GetMagazineSensor(){
@@ -82,6 +84,7 @@ bool IntakeSubsystem::GetMagazineSensor(){
 
 void IntakeSubsystem::runMagazine(double speed){
     MagazineMotor.Set(speed);
+    
 }
 
 void IntakeSubsystem::stopMagazine(){
