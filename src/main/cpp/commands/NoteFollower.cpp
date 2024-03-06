@@ -61,7 +61,13 @@ frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
             NoJoystickInput = false;
         }
 
-        m_drivetrain->Drive(units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed), units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed), true, NoJoystickInput);
+        m_drivetrain->Drive(
+          units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed),
+          units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed),
+          units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed),
+          false,
+          NoJoystickInput
+        );
     }
 }
 

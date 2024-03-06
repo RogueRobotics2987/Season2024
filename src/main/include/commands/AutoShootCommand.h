@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 
 /**
@@ -16,14 +17,18 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeCmd
-    : public frc2::CommandHelper<frc2::Command, IntakeCmd>
+class AutoShootCommand
+    : public frc2::CommandHelper<frc2::Command, AutoShootCommand>
 {
   public:
-    IntakeCmd();
-    IntakeCmd(
-      IntakeSubsystem &intake
+    AutoShootCommand();
+    AutoShootCommand(ShooterSubsystem &shooter,
+                  IntakeSubsystem &intake
     );
+
+    void shooterWarmup();
+    void shoot();
+    void stopShoot();
 
     void Initialize() override;
 
@@ -34,9 +39,9 @@ class IntakeCmd
     bool IsFinished() override;
 
   private:
+    ShooterSubsystem* m_shooter = nullptr;
     IntakeSubsystem* m_intake = nullptr;
 
-    int state = 0;
-    int time = 0;
+    double time = 0;
     bool finished = false;
 };

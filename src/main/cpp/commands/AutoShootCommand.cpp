@@ -2,68 +2,64 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/ShootCommand.h"
+#include "commands/AutoShootCommand.h"
 
-ShootCommand::ShootCommand()
+AutoShootCommand::AutoShootCommand()
 {
 
 }
 
-ShootCommand::ShootCommand(
-  ShooterSubsystem &shooter,
-  IntakeSubsystem &intake,
-  frc::XboxController &driverController
-) 
+AutoShootCommand::AutoShootCommand(ShooterSubsystem &shooter,
+                            IntakeSubsystem &intake) 
 {
   m_shooter = &shooter;
   AddRequirements({m_shooter});
   m_intake = &intake;
-  m_driverController = &driverController;
   AddRequirements({m_intake});
 }
 
 // Called when the command is initially scheduled.
-void ShootCommand::Initialize() 
-{
-  hasShot = false;
+void AutoShootCommand::Initialize() 
+{  
   finished = false;
   time = 0;
-
-  shooterWarmup();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void ShootCommand::Execute() 
+void AutoShootCommand::Execute() 
 {
   m_shooter->accumulateError();
 
-  if(time >= 100 && hasShot == true)
+  if(time <= 60) //todo change values to be most efficient/effective
   {
-    finished = true;
+    shooterWarmup();
   }
-  else if(m_driverController->GetRightTriggerAxis() > 0.05)
+  else if(60 >= time && time <= 150)
   {
     shoot();
-    time = 0;
-    hasShot = true;
+  }
+  else if(time >= 150)
+  {
+    stopShoot();
+    finished = true;
   }
 
   time++;
 }
 
-void ShootCommand::shooterWarmup()
+void AutoShootCommand::shooterWarmup()
 {
   m_shooter->SetShooter(0.75, 0.75);
 }
 
-void ShootCommand::shoot()
+void AutoShootCommand::shoot()
 {
   m_intake->runIntake(1);
   m_intake->runMagazine(1);
   m_intake->DirectionNote(1);
 }
 
-void ShootCommand::stopShoot()
+void AutoShootCommand::stopShoot()
 {
   m_intake->stopIntake();
   m_intake->stopMagazine();
@@ -71,13 +67,13 @@ void ShootCommand::stopShoot()
 }
 
 // Called once the command ends or is interrupted.
-void ShootCommand::End(bool interrupted) 
+void AutoShootCommand::End(bool interrupted) 
 {
-  stopShoot();
+
 }
 
 // Returns true when the command should end.
-bool ShootCommand::IsFinished() 
+bool AutoShootCommand::IsFinished() 
 {
   return finished;
 }

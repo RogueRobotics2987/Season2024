@@ -128,11 +128,11 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
-  
-  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 6).OnTrue(ShootCommand(m_shooter, m_intake, m_driverController).ToPtr());
 
-  frc2::POVButton(&m_driverController, 0).WhileTrue(SpitOutCmd(m_intake).ToPtr());
+  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+
+  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   frc2::POVButton(&m_driverController, 90).WhileTrue(
     frc2::cmd::RunOnce(
@@ -144,7 +144,11 @@ void RobotContainer::ConfigureButtonBindings()
     )
   );
 
-  frc2::JoystickButton(&m_auxController, 4).WhileTrue(
+  frc2::POVButton(&m_auxController, 0).WhileTrue(SpitOutCmd(m_intake).ToPtr());
+
+  frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
+
+  frc2::POVButton(&m_auxController, 180).WhileTrue(
     frc2::cmd::RunOnce(
       [this]
         {
@@ -154,7 +158,7 @@ void RobotContainer::ConfigureButtonBindings()
     )
   );
 
-  frc2::JoystickButton(&m_auxController, 5).WhileTrue(
+  frc2::POVButton(&m_auxController, 90).WhileTrue(
     frc2::cmd::RunOnce(
       [this]
         {
@@ -275,8 +279,8 @@ frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-/* needs a refactor still
   m_drive.ZeroHeading();
+  m_shooter.zeroIntergralVal();
 
   chosenAuto = m_chooser.GetSelected();
 
@@ -395,144 +399,20 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      frc2::cmd::RunOnce(
-        [this]
-          {
-            m_shooter.zeroIntergralVal();
-          }
-      ),
       frc2::cmd::Race( //aim shooter for 0.75s
-        frc2::cmd::Run(
-          [this]
-            {
-              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-              m_shooter.accumulateError();
-              if(filteredTargetID == 7 || filteredTargetID == 4)
-              {
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-            }
-        ),
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
-      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]  
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0); 
-              m_shooter.SetIntakePose();
-            }
-        )
-      ),
-      frc2::cmd::Parallel( // follow path and turn on intake until a note has been seen by the mag
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
+      frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr(),
-        frc2::FunctionalCommand(
-          [this] 
-            { //init
-              m_intake.runIntake(0.25);
-              m_intake.DirectionNote(0.25); //will always run direction backwards unless note detected in front, useful here as pickup will only be from back atm
-              // m_arm.runArmWheels(0.25); //todo change to new wheels when put on
-              m_intake.runMagazine(0.25);
-            },
-          [this] 
-            { //execute
-              //do nothin.
-            },
-          [this] (bool interrupted)
-            { //on end
-              m_intake.runIntake(0);
-              m_intake.DirectionNote(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runMagazine(0);
-            },
-          [this]
-            { //isfinished
-              return m_intake.GetMagazineSensor();
-            },
-          {&m_intake, &m_shooter, &m_arm} //re check this list to see if the "arm" is needed
-        ).ToPtr()
-      ),
-      frc2::cmd::Sequence( //does a backup with the mag to prime the notes position
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(-0.2);
-            }
-        ),
-        frc2::WaitCommand(0.11_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(0);
-            }
-        )
+        IntakeCmd(m_intake).ToPtr()
       ),
       frc2::cmd::Race( //primes the shooter again as before
-        frc2::cmd::Run(
-          [this]
-            {
-              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-              m_shooter.accumulateError();
-              if(filteredTargetID == 7 || filteredTargetID == 4)
-              {
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-            }
-        ),
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(2_s).ToPtr()
       ),
-      frc2::cmd::Sequence( //shoots note
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0);  
-            }
-        )
-      )
+      AutoShootCommand(m_shooter, m_intake).ToPtr()
     );
     
     // to deploy to run no auto. --------------------------------------------------------------
@@ -550,56 +430,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
-      frc2::cmd::RunOnce(
-        [this]
-          {
-            m_shooter.zeroIntergralVal();
-          }
-      ),
       frc2::cmd::Race( //aim shooter for 0.75s
-        frc2::cmd::Run(
-          [this]
-            {
-              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-              m_shooter.accumulateError();
-              if(filteredTargetID == 7 || filteredTargetID == 4)
-              {
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-            }
-        ),
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
-      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0);  
-            }
-        )
-      )
+      AutoShootCommand(m_shooter, m_intake).ToPtr()
     );
   }
   else if(chosenAuto == "sideShootToback")
@@ -614,49 +449,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           }
       ),
       frc2::cmd::Race( //aim shooter for 0.75s
-        frc2::cmd::Run(
-          [this]
-            {
-              double filteredTargetID = m_limelight.GetFilteredTarget().GetFiducialId();
-              double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-              m_shooter.accumulateError();
-              if(filteredTargetID == 7 || filteredTargetID == 4)
-              {
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-            }
-        ),
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
-      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0);  
-            }
-        )
-      ),
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
       FollowWaypoints(m_drive, m_limelight, sideBackupWaypoints, sideBackupPointSpeed, sideBackupCruiseSpeed, false).ToPtr()
     );
   }
@@ -667,132 +463,22 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time.
       frc2::cmd::Parallel( 
         frc2::cmd::Race( //aim shooter for 0.75s
-          frc2::cmd::Run(
-            [this]
-              {
-                double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-                m_intake.holdMagazine(magEncoderPos);
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-          ),
+          AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
           frc2::WaitCommand(1.5_s).ToPtr() //can change if need
-        ),
-        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr()
-      ),
-      frc2::cmd::Sequence( //shoot a note and turn back off mechanisms
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0);  
-            }
         )
       ),
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
       frc2::cmd::Parallel( // follow path and turn on intake until a note has been seen by the mag
         FollowWaypoints(m_drive, m_limelight, B_1Waypoints, B_1PointSpeed, B_1CruiseSpeed, false).ToPtr(),
-        frc2::FunctionalCommand(
-          [this] 
-            { //init
-              m_intake.runIntake(0.25);
-              m_intake.DirectionNote(0.25); //will always run direction backwards unless note detected in front, useful here as pickup will only be from back atm
-              // m_arm.runArmWheels(0.25); //todo change to new wheels when put on
-              m_intake.runMagazine(0.25);
-            },
-          [this] 
-            { //execute
-              //do nothin.
-            },
-          [this] (bool interrupted) //This is neccesary or it breaks
-            { //on end
-              m_intake.runIntake(0);
-              m_intake.DirectionNote(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runMagazine(0);
-            },
-          [this]
-            { //isfinished
-              return m_intake.GetMagazineSensor();
-            },
-          {&m_intake, &m_shooter, &m_arm}
-        ).ToPtr()
-      ),
-      frc2::cmd::Sequence( //does a backup with the mag to prime the notes position
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(-0.2);
-            }
-        ),
-        frc2::WaitCommand(0.11_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(0);
-            }
-        )
+        IntakeCmd(m_intake).ToPtr()
       ),
       frc2::cmd::Parallel( 
         frc2::cmd::Race( //aim shooter for 0.75s
-          frc2::cmd::Run(
-            [this]
-              {
-                // double magEncoderPos = m_intake.GetCurrMagEncoderVal();
-                m_limelight.GetApriltagShooterTheta(m_limelight.FilteredDistance(), m_shooter.GetAngleTrim());
-              }
-          ),
+          AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
           frc2::WaitCommand(1.5_s).ToPtr() //can change if need
-        ),
-        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr()
-      ),
-      frc2::cmd::Sequence( //shoots note
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0.75, 0.75);
-            }
-        ),
-        frc2::WaitCommand(0.75_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_intake.runMagazine(1);
-              // m_arm.runArmWheels(1); //todo change to new wheels when put on
-              m_intake.runIntake(1);
-              m_intake.Direction(1);
-            }
-        ),
-        frc2::WaitCommand(1.5_s).ToPtr(),
-        frc2::cmd::RunOnce(
-          [this]
-            {
-              m_shooter.SetShooter(0, 0);
-              m_intake.runMagazine(0);
-              // m_arm.runArmWheels(0); //todo change to new wheels when put on
-              m_intake.runIntake(0);
-              m_intake.Direction(0);  
-            }
         )
-      )
+      ),
+      AutoShootCommand(m_shooter, m_intake).ToPtr()
     );
   }
   else if(chosenAuto == "B_2")
@@ -1107,5 +793,5 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence(
       frc2::WaitCommand(0.1_s).ToPtr()
     );
-  }*/
+  }
 }

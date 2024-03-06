@@ -11,6 +11,7 @@
 #include <frc/XboxController.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/button/POVButton.h>
+// #include <frc2/command/button/CommandXboxController.h> //might be something to look into
 #include <frc2/command/Command.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
@@ -50,6 +51,9 @@
 #include "commands/DriveStateMachine.h"
 #include "commands/IntakeCmd.h"
 #include "commands/SpitOutCmd.h"
+#include "commands/ManualAim.h"
+#include "commands/ShootCommand.h"
+#include "commands/AutoShootCommand.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

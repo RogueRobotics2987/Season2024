@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/XboxController.h>
 
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
@@ -22,7 +23,9 @@ class ShootCommand
  public:
   ShootCommand();
   ShootCommand(ShooterSubsystem &shooter,
-                IntakeSubsystem &intake);
+                IntakeSubsystem &intake,
+                frc::XboxController &driverController
+);
 
   void shooterWarmup();
   void shoot();
@@ -39,8 +42,10 @@ class ShootCommand
  private:
   ShooterSubsystem* m_shooter = nullptr;
   IntakeSubsystem* m_intake = nullptr;
+  frc::XboxController* m_driverController = nullptr;
 
   double time = 0;
   bool finished = false;
+  bool hasShot = false;
 
 };
