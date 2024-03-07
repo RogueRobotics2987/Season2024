@@ -43,6 +43,9 @@ void IntakeCmd::Execute()
   }
   else if(state == 2)
   {
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
+    camera.SetPipelineIndex(1);
+
     time++;
     m_intake->runMagazine(-0.2);
 

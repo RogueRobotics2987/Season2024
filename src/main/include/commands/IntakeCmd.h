@@ -9,6 +9,12 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableInstance.inc"
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "photon/PhotonUtils.h"
+#include "photon/PhotonCamera.h"
+
 /**
  * An example command.
  *
@@ -39,4 +45,5 @@ class IntakeCmd
     int state = 0;
     int time = 0;
     bool finished = false;
+    photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
 };
