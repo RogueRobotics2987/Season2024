@@ -41,7 +41,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax middleRollers{19, rev::CANSparkMax::MotorType::kBrushless}; //motor number may change? may be a follower to the mag?
+  rev::CANSparkMax middleRollers{18, rev::CANSparkMax::MotorType::kBrushless};
 
 
   frc::DigitalInput intakeColorSensorFront {3};   // 0 is a place holder for the DIO port

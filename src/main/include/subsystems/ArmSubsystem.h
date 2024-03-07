@@ -64,6 +64,8 @@
 //   void Periodic() override;
 
 //  private:
+//lower arm up down will be 17
+//arm rollers will be 19
 //   rev::CANSparkMax LowerArm{17, rev::CANSparkMax::MotorType::kBrushless};
 //   rev::CANSparkMax UpperArm{18, rev::CANSparkMax::MotorType::kBrushless};
 //   rev::CANSparkMax ArmWheels{19, rev::CANSparkMax::MotorType::kBrushless};
