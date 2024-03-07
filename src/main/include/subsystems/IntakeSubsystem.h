@@ -48,12 +48,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // frc::DigitalInput intakeColorSensorRear {4}; is not attached anymore
   frc::DigitalInput MagazineSensor{5};
 
-    rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
-    rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?
-
-
-
-
+  rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
+  rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
