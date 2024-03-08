@@ -54,7 +54,7 @@
 #include "commands/ManualAim.h"
 #include "commands/ShootCommand.h"
 #include "commands/AutoShootCommand.h"
-
+#include "commands/AmpCommand.h"
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -90,7 +90,7 @@ class RobotContainer
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
-    // ArmSubsystem m_arm;
+    ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
     ColorSensorSubsystem m_color;
 

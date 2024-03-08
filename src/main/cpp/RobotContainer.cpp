@@ -134,6 +134,8 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
+  frc2::JoystickButton(&m_driverController, 3).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
+
   frc2::POVButton(&m_driverController, 90).WhileTrue(
     frc2::cmd::RunOnce(
       [this]
