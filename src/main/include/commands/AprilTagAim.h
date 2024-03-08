@@ -26,7 +26,7 @@ class AprilTagAim
 {
   public:
     AprilTagAim(); 
-    AprilTagAim(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driveXbox, ShooterSubsystem &shooter);
+    AprilTagAim(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driveXbox, ShooterSubsystem &shooter, frc::XboxController &auxController);
 
     void Initialize() override;
 
@@ -48,6 +48,7 @@ class AprilTagAim
     DriveSubsystem* m_drivetrain = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
     frc::XboxController* m_driverController = nullptr;
+    frc::XboxController* m_auxController = nullptr;
     
     units::angular_velocity::radians_per_second_t rotApril = units::angular_velocity::radians_per_second_t(0);
     

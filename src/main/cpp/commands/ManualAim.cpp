@@ -19,7 +19,8 @@ void ManualAim::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void ManualAim::Execute()
 {
-  m_shooter->JoystickActuator(m_auxController->GetLeftY());
+  m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
+  m_shooter->JoystickActuator(m_auxController->GetRightY());
 }
 
 // Called once the command ends or is interrupted.

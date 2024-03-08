@@ -24,7 +24,8 @@ class ShootCommand
   ShootCommand();
   ShootCommand(ShooterSubsystem &shooter,
                 IntakeSubsystem &intake,
-                frc::XboxController &driverController
+                frc::XboxController &driverController,
+                frc::XboxController &auxController
 );
 
   void shooterWarmup();
@@ -43,6 +44,7 @@ class ShootCommand
   ShooterSubsystem* m_shooter = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   frc::XboxController* m_driverController = nullptr;
+  frc::XboxController* m_auxController = nullptr;
 
   double time = 0;
   bool finished = false;

@@ -5,12 +5,18 @@
 #include "commands/AprilTagAim.h"
 
 AprilTagAim::AprilTagAim(){}
-AprilTagAim::AprilTagAim(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driveXbox, ShooterSubsystem &shooter) 
+AprilTagAim::AprilTagAim(
+  LimelightSubsystem &limelight,
+  DriveSubsystem &drivetrain,
+  frc::XboxController &driveXbox,
+  ShooterSubsystem &shooter,
+  frc::XboxController &auxController) 
 {
   m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_driverController = &driveXbox;
   m_shooter = &shooter;
+  m_auxController = &auxController;
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});  
   AddRequirements({m_shooter});
@@ -22,9 +28,14 @@ void AprilTagAim::Initialize(){}
 // Called repeatedly when this Command is scheduled to run
 void AprilTagAim::Execute()
 {
+  frc::SmartDashboard::PutBoolean("apriltagAim", true);
+
+  m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
 
   rotApril = units::angular_velocity::radians_per_second_t(m_limelight->GetApriltagDriveMotorVal(currentHeading));
+
+  frc::SmartDashboard::PutNumber("apriltagRotation", rotApril.value());
     
   m_shooter->SetActuator(m_limelight->GetApriltagShooterTheta(m_limelight->FilteredDistance(), m_shooter->GetAngleTrim()));
 
@@ -39,12 +50,27 @@ void AprilTagAim::Execute()
   {
     NoJoystickInput = false;
   }
+
+  if(m_limelight->FilteredDistance() == 0)
+  {
+    rotApril = 0_rad_per_s;
+  }
   
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+  if(fabs(rotApril.value()) > 0.05)
+  {
+    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, false);
+  }
+  else
+  {
+    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+  }
 }
 
 // Called once the command ends or is interrupted.
-void AprilTagAim::End(bool interrupted) {}
+void AprilTagAim::End(bool interrupted)
+{
+  frc::SmartDashboard::PutBoolean("apriltagAim", false);
+}
 
 // Returns true when the command should end.
 bool AprilTagAim::IsFinished()

@@ -31,6 +31,9 @@ void LimelightSubsystem::Periodic()
     result = camera.GetLatestResult();
     hasTarget = result.HasTargets();
 
+    filteredTargetID = -1;
+
+
     if(hasTarget == true){
         tempTargets = result.GetTargets();
 
@@ -50,14 +53,15 @@ void LimelightSubsystem::Periodic()
                 CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
                 units::degree_t{filteredTarget.GetPitch()});
 
-                if(DebugConstants::debugLimelight == true){
-                    frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
-                    frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
-                    frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
-                    frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
-                }
             }
         }   
+    }
+
+    if(DebugConstants::debugLimelight == true){
+        frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
+        frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
+        frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
+        frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
     }
 }
 
@@ -134,8 +138,15 @@ photon::PhotonTrackedTarget LimelightSubsystem::GetFilteredTarget()
 //pass in the angle trim from the shooter subsystems function get angletrim
 double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim)
 {
-    frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
-    return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+    if(dist != 0.0)
+    {
+        frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+        return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+    }
+    else
+    {
+        return ShooterConstants::RestingAngle;
+    }
 }
 
 double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
@@ -143,10 +154,15 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
     if(filteredTargetID == 4 || filteredTargetID == 7)
     {
         txApril = FilteredPhotonYaw();
-        desiredHeading = currentHeading + txApril;//txApril;   // calculated actual angle instead of the error
+        desiredHeading = currentHeading + -txApril;//txApril;   // calculated actual angle instead of the error
     }
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+    // std::cout << "txApril " << txApril << std::endl; 
+    // std::cout << "driveError " << driveError << std::endl;
+    // std::cout << "desiredHeading " << desiredHeading << std::endl; 
+    // std::cout << "currentHeading " << currentHeading << std::endl; 
 
     return (driveError * kpApril);
 }

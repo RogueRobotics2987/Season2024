@@ -96,7 +96,9 @@ RobotContainer::RobotContainer()
   frc2::RunCommand(
     [this]
       {
+        m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
         m_shooter.setRestingActuatorPosition();
+        m_shooter.StopShooter();
       },
       {&m_shooter}
   ));
@@ -128,14 +130,14 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 6).OnTrue(ShootCommand(m_shooter, m_intake, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(ShootCommand(m_shooter, m_intake, m_driverController, m_auxController).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter, m_auxController).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   frc2::POVButton(&m_driverController, 90).WhileTrue(
-    frc2::cmd::RunOnce(
+    frc2::cmd::Run(
       [this]
         {
           m_climb.startClimber(); 
@@ -146,27 +148,29 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::POVButton(&m_auxController, 0).WhileTrue(SpitOutCmd(m_intake).ToPtr());
 
-  frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
-
-  frc2::POVButton(&m_auxController, 180).WhileTrue(
-    frc2::cmd::RunOnce(
+  frc2::POVButton(&m_auxController, 90).WhileTrue(
+    frc2::cmd::Run(
       [this]
         {
+          m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
+          m_shooter.SetActuator(ShooterConstants::StageAngle); 
+        },
+      {&m_shooter}
+    )
+  );
+
+  frc2::POVButton(&m_auxController, 180).WhileTrue(
+    frc2::cmd::Run(
+      [this]
+        {
+          m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
           m_shooter.SetActuator(ShooterConstants::SubwooferAngle); 
         },
       {&m_shooter}
     )
   );
 
-  frc2::POVButton(&m_auxController, 90).WhileTrue(
-    frc2::cmd::RunOnce(
-      [this]
-        {
-          m_shooter.SetActuator(ShooterConstants::StageAngle); 
-        },
-      {&m_shooter}
-    )
-  );
+  frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));

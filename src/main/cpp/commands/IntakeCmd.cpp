@@ -13,19 +13,21 @@ IntakeCmd::IntakeCmd(IntakeSubsystem &intake)
 // Called when the command is initially scheduled.
 void IntakeCmd::Initialize()
 {
-  m_intake->runIntake(0.25);
-  m_intake->Direction(0.25); //possibly up all these speeds
+  m_intake->runIntake(0.35);
+  m_intake->DirectionNote(0.25); //possibly up all these speeds
   m_intake->runMagazine(0.25);
   state = 0;
   time = 0;
+  finished = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeCmd::Execute()
 {
+  m_intake->Direction(0.35);
+
   if(state == 0)
   {
-
     //just run until we have a note
 
     if(m_intake->GetMagazineSensor())
@@ -35,16 +37,14 @@ void IntakeCmd::Execute()
   }
   else if(state == 1)
   {
-    m_intake->runIntake(0);
-    m_intake->Direction(0);
-    m_intake->runMagazine(0);
+    m_intake->stopIntake();
+    m_intake->stopMagazine();
 
     state = 2;
   }
   else if(state == 2)
   {
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
-    camera.SetPipelineIndex(1);
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
 
     time++;
     m_intake->runMagazine(-0.2);
