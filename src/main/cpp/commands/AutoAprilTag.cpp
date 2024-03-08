@@ -25,8 +25,19 @@ void AutoAprilTag::Execute()
 
   rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading));
   
-  m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), -rotApril, false, false);
+  if(m_limePose->FilteredDistance() == 0)
+  {
+    rotApril = 0_rad_per_s;
+  }
 
+  if(fabs(rotApril.value()) > 0.05)
+  {
+    m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), rotApril, false, false);
+  }
+  else
+  {
+    m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), rotApril, false, true);
+  }
   m_shooter->SetActuator(m_limePose->GetApriltagShooterTheta(m_limePose->FilteredDistance(), m_shooter->GetAngleTrim()));
 }
 

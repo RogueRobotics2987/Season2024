@@ -71,7 +71,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
   double driveError = 0;
   double txApril = 0;
   double desiredHeading = 0;
-  double kpApril = 0.09;
+  double kpApril = 0.065;
 
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.

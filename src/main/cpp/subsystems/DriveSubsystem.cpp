@@ -70,7 +70,7 @@ void DriveSubsystem::Periodic(){
   // }
 
   m_odometry.Update(
-    frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())),
+    frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() - orientationOffset.Radians())),
       {
         m_frontLeft.GetPosition(),
         m_frontRight.GetPosition(),
@@ -83,6 +83,9 @@ void DriveSubsystem::Periodic(){
   DrivePose = &tempPose;
 
   periodicHelper();
+
+  frc::SmartDashboard::PutNumber("Rotation", GetPose().Rotation().Degrees().value());
+
 
   if(DebugConstants::debugDrive == true)
   {
@@ -147,7 +150,7 @@ void DriveSubsystem::periodicHelper()
         xSpeed,
         ySpeed, 
         rot, 
-        frc::Rotation2d(m_gyro.GetRotation2d().Radians() + orientationOffset.Radians())
+        frc::Rotation2d(m_gyro.GetRotation2d().Radians() - orientationOffset.Radians())
       ) 
     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
@@ -208,18 +211,21 @@ void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desir
   m_rearRight.SetDesiredState(desiredStates[3]);
 }
 
-units::degree_t DriveSubsystem::GetHeading(){
-  return m_gyro.GetRotation2d().Degrees() + orientationOffset.Degrees();
+units::degree_t DriveSubsystem::GetHeading()
+{
+  return m_gyro.GetRotation2d().Degrees() - orientationOffset.Degrees();
 }
 
-void DriveSubsystem::ZeroHeading()
+void DriveSubsystem::ZeroHeading(frc::Rotation2d startRot)
 {
+  orientationOffset = startRot.Degrees();
   m_gyro.Reset();
 }
 
 frc2::CommandPtr DriveSubsystem::ZeroHeadingCmd(){
   return this->RunOnce(
     [this] {
+      orientationOffset = frc::Rotation2d(0_rad);
       m_gyro.Reset();
     }
   );
@@ -292,17 +298,17 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
 }
 
 // void DriveSubsystem::SetRanAuto(bool ranAuto)
-//{
+// {
 //   this-> ranAuto = ranAuto;
 // }
 
-frc2::CommandPtr DriveSubsystem::SetAngleAdjustment(double angle){
-  return this->RunOnce(
-    [this, angle] {
-      m_gyro.SetAngleAdjustment(angle);
-      // m_gyro.Reset();
-    });
-}
+// frc2::CommandPtr DriveSubsystem::SetAngleAdjustment(double angle){
+//   return this->RunOnce(
+//     [this, angle] {
+//       m_gyro.SetAngleAdjustment(angle);
+//       // m_gyro.Reset();
+//     });
+// }
 
 DriveSubsystem::~DriveSubsystem()
 {

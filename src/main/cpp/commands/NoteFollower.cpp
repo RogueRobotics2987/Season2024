@@ -25,7 +25,7 @@ void NoteFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
-frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
+    frc::SmartDashboard::PutBoolean("noteFollower", true);
 
     //limited drive, else regular
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
@@ -62,7 +62,7 @@ frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
         }
 
         m_drivetrain->Drive(
-          units::velocity::meters_per_second_t(-speedY * AutoConstants::kMaxSpeed),
+          units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed),
           units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed),
           units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed),
           false,
@@ -73,10 +73,16 @@ frc::SmartDashboard::PutString("DriveConfiguration ", "NoteFollow");
 
 
 // Called once the command ends or is interrupted.
-void NoteFollower::End(bool interrupted) {}
+void NoteFollower::End(bool interrupted)
+{
+  frc::SmartDashboard::PutBoolean("noteFollower", true);
+}
 
 // Returns true when the command should end.
-bool NoteFollower::IsFinished(){}
+bool NoteFollower::IsFinished()
+{
+  return false;
+}
 
 float NoteFollower::Deadzone(float x)
 {

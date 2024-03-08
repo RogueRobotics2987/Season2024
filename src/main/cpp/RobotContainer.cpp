@@ -57,7 +57,7 @@ RobotContainer::RobotContainer()
 
   // Configure the button bindings
   ConfigureButtonBindings();
-  m_drive.ZeroHeading(); //resets the heading on the gyro
+  m_drive.ZeroHeading(0_rad); //resets the heading on the gyro
 
   //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
@@ -96,6 +96,7 @@ RobotContainer::RobotContainer()
   frc2::RunCommand(
     [this]
       {
+        m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
         m_shooter.setRestingActuatorPosition();
         m_shooter.StopShooter();
       },
@@ -141,9 +142,9 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 6).OnTrue(ShootCommand(m_shooter, m_intake, m_driverController).ToPtr());
+  frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(ShootCommand(m_shooter, m_intake, m_driverController, m_auxController).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
+  frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter, m_auxController).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
@@ -152,7 +153,7 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm).ToPtr());
 
   frc2::POVButton(&m_driverController, 90).WhileTrue(
-    frc2::cmd::RunOnce(
+    frc2::cmd::Run(
       [this]
         {
           m_climb.startClimber(); 
@@ -163,27 +164,29 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::POVButton(&m_auxController, 0).WhileTrue(SpitOutCmd(m_intake).ToPtr());
 
-  frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
-
-  frc2::POVButton(&m_auxController, 180).WhileTrue(
-    frc2::cmd::RunOnce(
+  frc2::POVButton(&m_auxController, 90).WhileTrue(
+    frc2::cmd::Run(
       [this]
         {
+          m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
+          m_shooter.SetActuator(ShooterConstants::StageAngle); 
+        },
+      {&m_shooter}
+    )
+  );
+
+  frc2::POVButton(&m_auxController, 180).WhileTrue(
+    frc2::cmd::Run(
+      [this]
+        {
+          m_shooter.AngleTrimAdjust(m_auxController.GetRawButtonPressed(6), m_auxController.GetRawButtonPressed(5));
           m_shooter.SetActuator(ShooterConstants::SubwooferAngle); 
         },
       {&m_shooter}
     )
   );
 
-  frc2::POVButton(&m_auxController, 90).WhileTrue(
-    frc2::cmd::RunOnce(
-      [this]
-        {
-          m_shooter.SetActuator(ShooterConstants::StageAngle); 
-        },
-      {&m_shooter}
-    )
-  );
+  frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
 
   // // Robot slides right (when front is away from the drivers)
   // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
@@ -296,7 +299,6 @@ frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  m_drive.ZeroHeading();
   m_shooter.zeroIntergralVal();
 
   chosenAuto = m_chooser.GetSelected();
@@ -429,7 +431,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(2_s).ToPtr()
       ),
-      AutoShootCommand(m_shooter, m_intake).ToPtr()
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}
+      )
     );
     
     // to deploy to run no auto. --------------------------------------------------------------
@@ -443,7 +452,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
   }
   else if(chosenAuto == "JustShoot")
   { 
-    m_drive.ResetOdometry(B_1Waypoints[0]);
+    // m_drive.ZeroHeading(B_1Waypoints[0].Rotation());
+    m_drive.ResetOdometry({0_m, 0_m, -90_deg});
     // m_drive.SetAngleAdjustment(180);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
@@ -451,11 +461,19 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
-      AutoShootCommand(m_shooter, m_intake).ToPtr()
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}
+      )
     );
   }
   else if(chosenAuto == "sideShootToback")
   {
+    // m_drive.ZeroHeading(B_1Waypoints[0].Rotation());
     m_drive.ResetOdometry(sideBackupWaypoints[0]);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
@@ -470,7 +488,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::WaitCommand(1.5_s).ToPtr() //can change if need
       ),
       AutoShootCommand(m_shooter, m_intake).ToPtr(),
-      FollowWaypoints(m_drive, m_limelight, sideBackupWaypoints, sideBackupPointSpeed, sideBackupCruiseSpeed, false).ToPtr()
+      FollowWaypoints(m_drive, m_limelight, sideBackupWaypoints, sideBackupPointSpeed, sideBackupCruiseSpeed, false).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}
+      )
     );
   }
   else if(chosenAuto == "B_1")
@@ -495,7 +520,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           frc2::WaitCommand(1.5_s).ToPtr() //can change if need
         )
       ),
-      AutoShootCommand(m_shooter, m_intake).ToPtr()
+      AutoShootCommand(m_shooter, m_intake).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}
+      )
     );
   }
   else if(chosenAuto == "B_2")

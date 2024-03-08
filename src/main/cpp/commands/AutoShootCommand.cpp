@@ -34,11 +34,11 @@ void AutoShootCommand::Execute()
   {
     shooterWarmup();
   }
-  else if(60 >= time && time <= 150)
+  else if(60 <= time && time <= 100)
   {
     shoot();
   }
-  else if(time >= 150)
+  else if(time >= 100)
   {
     stopShoot();
     finished = true;
@@ -67,10 +67,7 @@ void AutoShootCommand::stopShoot()
 }
 
 // Called once the command ends or is interrupted.
-void AutoShootCommand::End(bool interrupted) 
-{
-
-}
+void AutoShootCommand::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool AutoShootCommand::IsFinished() 
