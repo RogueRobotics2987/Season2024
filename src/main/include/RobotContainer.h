@@ -10,6 +10,8 @@
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc/XboxController.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/button/POVButton.h>
+// #include <frc2/command/button/CommandXboxController.h> //might be something to look into
 #include <frc2/command/Command.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
@@ -34,7 +36,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/SwerveModuleSubsystem.h"
 #include "commands/NoteFollower.h"
-#include "commands/AprilTagFollower.h"
+#include "commands/AprilTagAim.h"
 #include "commands/AutoAprilTag.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
@@ -47,6 +49,11 @@
 #include "subsystems/ClimberSubsystem.h"
 #include "subsystems/ColorSensorSubsystem.h"
 #include "commands/DriveStateMachine.h"
+#include "commands/IntakeCmd.h"
+#include "commands/SpitOutCmd.h"
+#include "commands/ManualAim.h"
+#include "commands/ShootCommand.h"
+#include "commands/AutoShootCommand.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -83,7 +90,7 @@ class RobotContainer
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
-    ArmSubsystem m_arm;
+    // ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
     ColorSensorSubsystem m_color;
 

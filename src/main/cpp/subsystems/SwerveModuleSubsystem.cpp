@@ -15,7 +15,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
   this->m_EncoderType = m_EncoderType;
   this->m_counts_per_rev = m_counts_per_rev;
   m_driveMotor = new rev::CANSparkMax(m_MotorController, rev::CANSparkMax::MotorType::kBrushless);
-  m_driveMotor->SetOpenLoopRampRate(1);
+  m_driveMotor->SetOpenLoopRampRate(0.5);
   m_driveMotor->SetInverted(true);
   m_turningMotor = new rev::CANSparkMax(m_MotorControllerTurning, rev::CANSparkMax::MotorType::kBrushless);
   m_turningMotor->SetInverted(true);

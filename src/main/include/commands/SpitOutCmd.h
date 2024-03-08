@@ -9,12 +9,6 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-#include "networktables/NetworkTable.h"
-#include "networktables/NetworkTableInstance.inc"
-#include <frc/smartdashboard/SmartDashboard.h>
-#include "photon/PhotonUtils.h"
-#include "photon/PhotonCamera.h"
-
 /**
  * An example command.
  *
@@ -22,14 +16,15 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeCmd
-    : public frc2::CommandHelper<frc2::Command, IntakeCmd>
+class SpitOutCmd
+    : public frc2::CommandHelper<frc2::Command, SpitOutCmd>
 {
   public:
-    IntakeCmd();
-    IntakeCmd(
+    SpitOutCmd();
+    SpitOutCmd(
       IntakeSubsystem &intake
     );
+
 
     void Initialize() override;
 
@@ -40,10 +35,6 @@ class IntakeCmd
     bool IsFinished() override;
 
   private:
-    IntakeSubsystem* m_intake = nullptr;
+  IntakeSubsystem* m_intake = nullptr;
 
-    int state = 0;
-    int time = 0;
-    bool finished = false;
-    photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
 };

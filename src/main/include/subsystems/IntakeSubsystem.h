@@ -19,8 +19,14 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void runIntake(double speed);
   void stopIntake();
   bool GetIntakeFront();
-  bool GetIntakeRear();
   void spitOutIntake();
+
+  void runMagazine(double speed);
+  void stopMagazine();
+  void holdMagazine(double pos);
+  double GetCurrMagEncoderVal();
+  bool GetMagazineSensor();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -34,10 +40,16 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax BackIntake{9, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax FrontIntake{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax CenterIntake{11, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax middleRollers{18, rev::CANSparkMax::MotorType::kBrushless};
+
 
   frc::DigitalInput intakeColorSensorFront {3};   // 0 is a place holder for the DIO port
-  frc::DigitalInput intakeColorSensorRear {4};   // 0 is a place holder for the DIO port
+  // frc::DigitalInput intakeColorSensorRear {4}; is not attached anymore
+  frc::DigitalInput MagazineSensor{5};
 
+  rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
+  rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

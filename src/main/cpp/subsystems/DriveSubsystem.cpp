@@ -212,9 +212,17 @@ units::degree_t DriveSubsystem::GetHeading(){
   return m_gyro.GetRotation2d().Degrees() + orientationOffset.Degrees();
 }
 
-void DriveSubsystem::ZeroHeading(){
-      // SetRanAuto(false);
+void DriveSubsystem::ZeroHeading()
+{
+  m_gyro.Reset();
+}
+
+frc2::CommandPtr DriveSubsystem::ZeroHeadingCmd(){
+  return this->RunOnce(
+    [this] {
       m_gyro.Reset();
+    }
+  );
 }
 
 //small left right movement. Optional to have

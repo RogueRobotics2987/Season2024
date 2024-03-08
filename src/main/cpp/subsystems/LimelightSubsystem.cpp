@@ -31,6 +31,9 @@ void LimelightSubsystem::Periodic()
     result = camera.GetLatestResult();
     hasTarget = result.HasTargets();
 
+    filteredTargetID = -1;
+
+
     if(hasTarget == true){
         tempTargets = result.GetTargets();
 
@@ -50,14 +53,15 @@ void LimelightSubsystem::Periodic()
                 CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
                 units::degree_t{filteredTarget.GetPitch()});
 
-                if(DebugConstants::debugLimelight == true){
-                    frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
-                    frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
-                    frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
-                    frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
-                }
             }
         }   
+    }
+
+    if(DebugConstants::debugLimelight == true){
+        frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
+        frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
+        frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
+        frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
     }
 }
 
@@ -81,22 +85,8 @@ double LimelightSubsystem::PhotonYaw(){
     return yaw;
 }
 
-double LimelightSubsystem::FilteredPhotonYaw(){
-
-    double cameraLateralOffset = 0.19; //7.5" in meters
-    double dist = FilteredDistance();
-
-    double x1 = cos(filteredTarget.GetYaw()) * dist;
-    double y1 = sin(filteredTarget.GetYaw()) * dist;
-
-    double x2 = x1;
-
-    double y2 = y1 - cameraLateralOffset;//cameraLateralOffset - y1;
-
-    double OffsetAngle = atan(y2/x2) * (180/3.14159269);//atan2(y2, x2) * (180/3.14159269);
-
-    // double alpha = atan(cameraLateralOffset/dist) * (180/3.14159269); // finds the angle 
-
+double LimelightSubsystem::FilteredPhotonYaw()
+{
     double staticOffset = 4;
 
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
@@ -144,4 +134,59 @@ photon::PhotonTrackedTarget LimelightSubsystem::GetFilteredTarget()
     return filteredTarget;
 }
 
+//still need to do the hold mag seperate from the subsystem, I think in the command.
+//pass in the angle trim from the shooter subsystems function get angletrim
+double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim)
+{
+    if(dist != 0.0)
+    {
+        frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+        return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+    }
+    else
+    {
+        return ShooterConstants::RestingAngle;
+    }
+}
 
+double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
+{
+    if(filteredTargetID == 4 || filteredTargetID == 7)
+    {
+        txApril = FilteredPhotonYaw();
+        desiredHeading = currentHeading + -txApril;//txApril;   // calculated actual angle instead of the error
+    }
+
+    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+    // std::cout << "txApril " << txApril << std::endl; 
+    // std::cout << "driveError " << driveError << std::endl;
+    // std::cout << "desiredHeading " << desiredHeading << std::endl; 
+    // std::cout << "currentHeading " << currentHeading << std::endl; 
+
+    return (driveError * kpApril);
+}
+
+double LimelightSubsystem::GetApriltagDriveError()
+{
+    return driveError;
+}
+
+double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
+
+  return a;
+}

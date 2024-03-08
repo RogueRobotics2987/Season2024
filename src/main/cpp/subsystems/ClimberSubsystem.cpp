@@ -4,7 +4,9 @@
 
 #include "subsystems/ClimberSubsystem.h"
 
-ClimberSubsystem::ClimberSubsystem() {}
+ClimberSubsystem::ClimberSubsystem() {
+    m_climberMoter.SetOpenLoopRampRate(0.5);
+}
 //TODO: Not sure what this does - commented out for now.
   /*int m_MotorController,
   rev::SparkRelativeEncoder::Type m_EncoderType,
@@ -28,9 +30,6 @@ void ClimberSubsystem::stopClimber()
 {
     m_climberMoter.Set(0.0);
 }
-
-
-
 
 /*
     "What the Flibity Bajingaas?" said the flunky binky older gentleman when he couldn't find his reading glasses.

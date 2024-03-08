@@ -4,15 +4,11 @@
 
 #pragma once
 
-#include <frc/Joystick.h>
-#include <frc/XboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "networktables/NetworkTableInstance.inc"
-#include "subsystems/DriveSubsystem.h"
-#include "subsystems/LimelightSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 
 /**
  * An example command.
@@ -21,12 +17,18 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AprilTagFollower
-    : public frc2::CommandHelper<frc2::Command, AprilTagFollower> 
+class AutoShootCommand
+    : public frc2::CommandHelper<frc2::Command, AutoShootCommand>
 {
   public:
-    AprilTagFollower(); 
-    AprilTagFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &Xbox, ShooterSubsystem &shooter);
+    AutoShootCommand();
+    AutoShootCommand(ShooterSubsystem &shooter,
+                  IntakeSubsystem &intake
+    );
+
+    void shooterWarmup();
+    void shoot();
+    void stopShoot();
 
     void Initialize() override;
 
@@ -36,17 +38,10 @@ class AprilTagFollower
 
     bool IsFinished() override;
 
-    double kp = 0.02206;
-    double speedX = 0;
-    double speedY = 0;
-    bool NoJoystickInput = false;
-
   private:
-    LimelightSubsystem* m_limelight = nullptr;
-    DriveSubsystem* m_drivetrain = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
-    frc::XboxController* m_Xbox = nullptr;
-    
-    float Deadzone(float x);
+    IntakeSubsystem* m_intake = nullptr;
 
+    double time = 0;
+    bool finished = false;
 };

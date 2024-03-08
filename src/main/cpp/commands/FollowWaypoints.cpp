@@ -143,20 +143,10 @@ void FollowWaypoints::Execute()
 
     if(limeBool == true)
     {
-      tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0);
-      tv = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv",0);
-      units::angular_velocity::radians_per_second_t rot = units::angular_velocity::radians_per_second_t(0);
+      units::angular_velocity::radians_per_second_t rotApril = 
+        units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentPose.Rotation().Degrees().value()));
 
-      if( tx != -9999 && (tx > 2.5 || tx < -2.5))
-      {
-        rot = units::angular_velocity::radians_per_second_t((0-tx) * kp);
-      }
-      else
-      {
-        rot = units::angular_velocity::radians_per_second_t(0);
-      }
-      
-      m_drivetrain->Drive(rot, false, false);
+      m_drivetrain->Drive(rotApril, false, false);
     }
     else
     {

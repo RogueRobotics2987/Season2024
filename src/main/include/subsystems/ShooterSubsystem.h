@@ -45,8 +45,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void runMagazine(double speed);
   void stopMagazine();
   void holdMagazine(double pos);
-
   double GetCurrMagEncoderVal();
+
   double ShooterError();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
@@ -60,6 +60,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void SetShooterAngle();
   double GetDesired();
 
+  double GetAngleTrim();
+
+
 
  private:
   rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
@@ -69,13 +72,13 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc::DutyCycleEncoder ShooterEncoder{8};
 
 
-  rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless};
-  //Current value encoder value, desired value is an equation using Limelight. Set to 10 for now | (curAngle - desAngle) * kp = motorOutput | kp can start at 1/90, wil check with encode when WE ACTUALLY GET THE GOSH DIDILY DARN ROBOT
-  frc::DigitalInput MagazineSensor{5};
-  rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder();
+  // rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless}; //now apart of the intake 
+  // frc::DigitalInput MagazineSensor{5};
+
+  // rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
   
   frc::PIDController shooterPIDController{ShooterConstants::kp, ShooterConstants::ki, 0};
-  rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController();
+  // rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?
 
   double m_DesiredAngle = 40; 
   double testAngle = 40;
