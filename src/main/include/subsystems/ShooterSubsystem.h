@@ -62,6 +62,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double GetAngleTrim();
 
+  void PIDShoot();
 
 
  private:
@@ -70,6 +71,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
   //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
+  rev::SparkPIDController TopShooterPID = TopShooter.GetPIDController();
+  rev::SparkPIDController BottomShooterPID = BottomShooter.GetPIDController();
+  rev::SparkRelativeEncoder TopShooterEncoder = TopShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  rev::SparkRelativeEncoder BottomShooterEncoder = BottomShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
 
   // rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless}; //now apart of the intake 
@@ -85,6 +90,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double angleTrim = 0;
   double accumulatedError = 0;
-
+  
   //double tempKp = 0.01;
 };

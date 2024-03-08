@@ -97,6 +97,7 @@ RobotContainer::RobotContainer()
     [this]
       {
         m_shooter.setRestingActuatorPosition();
+        m_shooter.StopShooter();
       },
       {&m_shooter}
   ));
@@ -119,6 +120,18 @@ RobotContainer::RobotContainer()
       },
       {&m_intake}
   ));
+
+ m_arm.SetDefaultCommand(
+  frc2::RunCommand(
+    [this]
+      {
+        m_arm.setLowerArmAngle(30);
+        m_arm.stopArmWheels();
+      },
+      {&m_arm}
+  ));
+   
+
 }
 
 void RobotContainer::ConfigureButtonBindings()
@@ -135,6 +148,8 @@ void RobotContainer::ConfigureButtonBindings()
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 3).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
+
+  frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm).ToPtr());
 
   frc2::POVButton(&m_driverController, 90).WhileTrue(
     frc2::cmd::RunOnce(

@@ -137,7 +137,7 @@ namespace ShooterConstants {
 
     constexpr double SubwooferAngle = 60;   // temp value, please test and find out
     constexpr double StageAngle = 40;       // temp value, please test and find out
-
+    constexpr double AmpAngle = 0;          // TODO find angle value
     constexpr double ShooterMaxSoftLimit = 80;
     constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;

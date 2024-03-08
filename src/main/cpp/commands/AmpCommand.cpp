@@ -22,13 +22,15 @@ void AmpCommand::Initialize()
 void AmpCommand::Execute()
 {
   frc::SmartDashboard::PutString("armAmp", "");
+  if(m_arm->GetOffSetEncoderValueLower() > 100)
+  {
+    m_arm->runArmWheels(1);
+  }
 }
-
 // Called once the command ends or is interrupted.
 void AmpCommand::End(bool interrupted)
 {
-  m_arm->setLowerArmAngle(30);
-  std::cout << "should be 30" << std::endl;
+  //std::cout << "should be 30" << std::endl;
 }
 
 // Returns true when the command should end.

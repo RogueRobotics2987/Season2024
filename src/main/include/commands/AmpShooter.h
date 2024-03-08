@@ -6,13 +6,11 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/smartdashboard/SmartDashboard.h> 
-#include <frc/Joystick.h> //new
-
+#include <frc/XboxController.h>
+#include "RobotContainer.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
-#include "ShootCommand.h" //new
-#include "RobotContainer.h" //new
-
 
 /**
  * An example command.
@@ -21,11 +19,12 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AmpCommand
-    : public frc2::CommandHelper<frc2::Command, AmpCommand> {
+class AmpShooter
+    : public frc2::CommandHelper<frc2::Command, AmpShooter> {
  public:
-  AmpCommand();
-  AmpCommand(ArmSubsystem &arm);
+  AmpShooter();
+  AmpShooter(ShooterSubsystem &shooter, IntakeSubsystem &intake,
+  frc::XboxController &driverController, ArmSubsystem &arm);
 
   void Initialize() override;
 
@@ -34,12 +33,11 @@ class AmpCommand
   void End(bool interrupted) override;
 
   bool IsFinished() override;
- private:
+  private:
+  ShooterSubsystem* m_shooter = nullptr;
+  IntakeSubsystem* m_intake = nullptr;
+  frc::XboxController* m_driverController = nullptr;
   ArmSubsystem* m_arm = nullptr;
 
-  // float x = 5;
-  // bool y;
-  // y = x;
-
-
 };
+
