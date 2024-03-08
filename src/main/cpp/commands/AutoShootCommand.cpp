@@ -34,11 +34,11 @@ void AutoShootCommand::Execute()
   {
     shooterWarmup();
   }
-  else if(60 >= time && time <= 85)
+  else if(60 <= time && time <= 100)
   {
     shoot();
   }
-  else if(time >= 85)
+  else if(time >= 100)
   {
     stopShoot();
     finished = true;
