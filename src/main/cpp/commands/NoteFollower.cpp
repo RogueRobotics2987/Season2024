@@ -13,6 +13,7 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
   m_drivetrain = &drivetrain;
   m_driverController = &driverController;
 
+  AddRequirements({m_intake});
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
 }
@@ -98,7 +99,7 @@ void NoteFollower::Execute()
     time++;
     m_intake->RunMagazine(-0.2);
 
-    if(time <= 7)
+    if(time >= 7)
     {
       finished = true;
     }

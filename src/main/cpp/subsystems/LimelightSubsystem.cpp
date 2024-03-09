@@ -143,7 +143,9 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
     if(dist != 0.0)
     {
         frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
-        return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+        // return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+        return -0.2238* pow((dist+angleTrim),3) + 4.1431 * pow((dist+angleTrim), 2) - 27.38 * (dist+angleTrim) + 89.093;
+        // y = -0.2238x3 + 4.1431x2 - 27.38x + 89.093
     }
     else
     {
