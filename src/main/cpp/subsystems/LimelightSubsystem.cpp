@@ -64,6 +64,16 @@ void LimelightSubsystem::Periodic()
         frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
     }
 }
+double LimelightSubsystem::GetAmptx(){
+    if(filteredTargetID == 5)
+        {
+            return PhotonYaw();
+        } else {
+            return 0;
+        }
+
+        }
+
 
 
 bool LimelightSubsystem::PhotonHasTarget(){

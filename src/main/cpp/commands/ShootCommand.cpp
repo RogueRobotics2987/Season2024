@@ -56,7 +56,8 @@ void ShootCommand::Execute()
 
 void ShootCommand::shooterWarmup()
 {
-  m_shooter->SetShooter(0.75, 0.75);
+  m_shooter->PIDShoot();
+  //m_shooter->SetShooter(0.75, 0.75);
 }
 
 void ShootCommand::shoot()
