@@ -165,7 +165,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
     if(filteredTargetID == 4 || filteredTargetID == 7)
     {
         txApril = FilteredPhotonYaw();
-        desiredHeading = currentHeading + -txApril; // calculated actual angle instead of the error
+        //desiredHeading = currentHeading + -txApril; // calculated actual angle instead of the error
 
         recalcDeltaX = 0.0;
         recalcDeltaY = 0.0;
@@ -173,8 +173,11 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
         prevX = currX;
         prevY = currY;
 
-        recalcX1 = sin(txApril * M_PI / 180) * dist; 
-        recalcY1 = cos(txApril * M_PI / 180) * dist;
+        recalcY1 = sin(txApril * M_PI / 180) * dist; 
+        recalcX1 = cos(txApril * M_PI / 180) * dist;
+
+        x2 = recalcX1;
+        y2 = recalcY1;
 
         // if(filteredTargetID == 4)
         // {
@@ -191,11 +194,11 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
     recalcDeltaX = currX - prevX;
     recalcDeltaY = currY - prevY;
 
-    x2 = recalcX1 - recalcDeltaX;
-    y2 = recalcY1 - recalcDeltaY;
+    x2 = x2 - recalcDeltaX;
+    y2 = y2 - recalcDeltaY;
 
 
-    desiredHeading = atan2(x2, y2) * 180 / M_PI;
+    desiredHeading = atan2(y2, x2) * 180 / M_PI;
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
 

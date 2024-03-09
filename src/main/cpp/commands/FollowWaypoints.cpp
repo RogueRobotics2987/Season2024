@@ -140,7 +140,7 @@ void FollowWaypoints::Execute()
     if(limeBool == true)
     {
       units::angular_velocity::radians_per_second_t rotApril = 
-        units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentPose.Rotation().Degrees().value()));
+        units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentPose.Rotation().Degrees().value(), m_drivetrain->GetPose().X().value(), m_drivetrain->GetPose().Y().value()));
 
       m_drivetrain->Drive(rotApril, false, false);
     }

@@ -23,7 +23,7 @@ void AutoAprilTag::Execute()
 {
   currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
-  rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading));
+  rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading, m_drive->GetPose().X().value(), m_drive->GetPose().Y().value()));
   
   if(m_limePose->FilteredDistance() == 0)
   {
