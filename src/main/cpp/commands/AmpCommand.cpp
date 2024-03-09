@@ -24,7 +24,7 @@ void AmpCommand::Execute()
   frc::SmartDashboard::PutString("armAmp", "");
   if(m_arm->GetOffSetEncoderValueLower() > 100)
   {
-    m_arm->runArmWheels(1);
+    m_arm->runArmWheels(-1);
   }
 }
 // Called once the command ends or is interrupted.
