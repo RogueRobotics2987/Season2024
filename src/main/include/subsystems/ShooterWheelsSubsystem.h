@@ -16,28 +16,26 @@
 
 class ShooterWheelsSubsystem : public frc2::SubsystemBase
 {
- public:
-  ShooterWheelsSubsystem();
+  public:
+    ShooterWheelsSubsystem();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  void StopShooter();
-  void SetShooter(double speedRight, double speedLeft);
-  void ReverseShooter();
-  void PIDShoot();
+    void StopShooter();
+    void SetShooter(double speedRight, double speedLeft);
+    void ReverseShooter();
+    void PIDShoot();
 
-
-
- private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax BottomShooter{16, rev::CANSparkMax::MotorType::kBrushless};
-  rev::SparkPIDController TopShooterPID = TopShooter.GetPIDController();
-  rev::SparkPIDController BottomShooterPID = BottomShooter.GetPIDController();
-  rev::SparkRelativeEncoder TopShooterEncoder = TopShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-  rev::SparkRelativeEncoder BottomShooterEncoder = BottomShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  private:
+    // Components (e.g. motor controllers and sensors) should generally be
+    // declared private and exposed only through public methods.
+    rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax BottomShooter{16, rev::CANSparkMax::MotorType::kBrushless};
+    rev::SparkPIDController TopShooterPID = TopShooter.GetPIDController();
+    rev::SparkPIDController BottomShooterPID = BottomShooter.GetPIDController();
+    rev::SparkRelativeEncoder TopShooterEncoder = TopShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    rev::SparkRelativeEncoder BottomShooterEncoder = BottomShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 };

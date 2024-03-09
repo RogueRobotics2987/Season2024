@@ -16,15 +16,11 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class SpitOutCmd
-    : public frc2::CommandHelper<frc2::Command, SpitOutCmd>
+class SpitOutCmd : public frc2::CommandHelper<frc2::Command, SpitOutCmd>
 {
   public:
     SpitOutCmd();
-    SpitOutCmd(
-      IntakeSubsystem &intake
-    );
-
+    SpitOutCmd(IntakeSubsystem &intake);
 
     void Initialize() override;
 
@@ -35,6 +31,5 @@ class SpitOutCmd
     bool IsFinished() override;
 
   private:
-  IntakeSubsystem* m_intake = nullptr;
-
+    IntakeSubsystem* m_intake = nullptr;
 };

@@ -24,16 +24,16 @@ void ArmSubsystem::Periodic()
     RunLowerArm();
 }
 
-double ArmSubsystem::getLowerEncoderPos()
+double ArmSubsystem::GetLowerEncoderPos()
 {
     return m_LowerArmEncoder.GetAbsolutePosition();
 }
 
-void ArmSubsystem::runArmWheels(double speed)
+void ArmSubsystem::RunArmWheels(double speed)
 {
    ArmWheels.Set(-speed);
 }
-void ArmSubsystem::stopArmWheels()
+void ArmSubsystem::StopArmWheels()
 {
     ArmWheels.Set(0.0);
 }
@@ -78,12 +78,12 @@ void ArmSubsystem::MoveLowerArm()
     LowerArm.Set(0.5);
 }
 
-double ArmSubsystem::getLowerArmError()
+double ArmSubsystem::GetLowerArmError()
 {
    return m_LowerDesired-GetOffSetEncoderValueLower();
 }
 
-void ArmSubsystem::setLowerArmAngle(double desiredAngle)
+void ArmSubsystem::SetLowerArmAngle(double desiredAngle)
 {
     if(desiredAngle >= ArmConstants::LowerArmSoftLimitHigh)
     {
@@ -99,7 +99,7 @@ void ArmSubsystem::setLowerArmAngle(double desiredAngle)
     }
 }
 
-void ArmSubsystem::accumulateErrorLower()
+void ArmSubsystem::AccumulateErrorLower()
 {
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
     if(LowerangleError < 10)

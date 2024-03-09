@@ -13,9 +13,9 @@ IntakeCmd::IntakeCmd(IntakeSubsystem &intake)
 // Called when the command is initially scheduled.
 void IntakeCmd::Initialize()
 {
-  m_intake->runIntake(0.3);
+  m_intake->RunIntake(0.3);
   m_intake->DirectionNote(0.25); //possibly up all these speeds
-  m_intake->runMagazine(0.25);
+  m_intake->RunMagazine(0.25);
   state = 0;
   time = 0;
   finished = false;
@@ -37,8 +37,8 @@ void IntakeCmd::Execute()
   }
   else if(state == 1)
   {
-    m_intake->stopIntake();
-    m_intake->stopMagazine();
+    m_intake->StopIntake();
+    m_intake->StopMagazine();
 
     state = 2;
   }
@@ -47,7 +47,7 @@ void IntakeCmd::Execute()
     nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
 
     time++;
-    m_intake->runMagazine(-0.2);
+    m_intake->RunMagazine(-0.2);
 
     if(time <= 7)
     {
@@ -59,9 +59,9 @@ void IntakeCmd::Execute()
 // Called once the command ends or is interrupted.
 void IntakeCmd::End(bool interrupted)
 {
-  m_intake->runIntake(0);
+  m_intake->RunIntake(0);
   m_intake->Direction(0);
-  m_intake->runMagazine(0);
+  m_intake->RunMagazine(0);
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
