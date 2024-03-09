@@ -53,6 +53,14 @@ void LimelightSubsystem::Periodic()
         frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
         frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
     }
+
+    frc::SmartDashboard::PutNumber("autoApriltag - x1", recalcX1);
+    frc::SmartDashboard::PutNumber("autoApriltag - y1", recalcY1);
+    frc::SmartDashboard::PutNumber("autoApriltag - x2", x2);
+    frc::SmartDashboard::PutNumber("autoApriltag - y2", y2);    
+    frc::SmartDashboard::PutNumber("autoApriltag - deltaX", recalcDeltaX);
+    frc::SmartDashboard::PutNumber("autoApriltag - deltaY", recalcDeltaY);
+    frc::SmartDashboard::PutNumber("desiered heading", desiredHeading);
 }
 
 double LimelightSubsystem::GetAmptx()
@@ -173,8 +181,8 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
         prevX = currX;
         prevY = currY;
 
-        recalcY1 = sin(txApril * M_PI / 180) * dist; 
-        recalcX1 = cos(txApril * M_PI / 180) * dist;
+        recalcY1 = sin(txApril /** M_PI / 180*/) * dist; 
+        recalcX1 = cos(txApril /** M_PI / 180*/) * dist;
 
         x2 = recalcX1;
         y2 = recalcY1;
