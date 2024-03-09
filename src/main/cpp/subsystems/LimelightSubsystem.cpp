@@ -90,7 +90,8 @@ double LimelightSubsystem::PhotonYaw()
 
 double LimelightSubsystem::FilteredPhotonYaw()
 {
-    double staticOffset = 4;
+    double staticOffset = 2;
+
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
 }
 
@@ -155,7 +156,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
     if(filteredTargetID == 4 || filteredTargetID == 7)
     {
         txApril = FilteredPhotonYaw();
-        desiredHeading = currentHeading + -txApril;m// calculated actual angle instead of the error
+        desiredHeading = currentHeading + -txApril;// calculated actual angle instead of the error
     }
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);

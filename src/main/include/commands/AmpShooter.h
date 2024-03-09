@@ -11,6 +11,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 
 /**
  * An example command.
@@ -24,7 +25,7 @@ class AmpShooter
  public:
   AmpShooter();
   AmpShooter(ShooterSubsystem &shooter, IntakeSubsystem &intake,
-  frc::XboxController &driverController, ArmSubsystem &arm);
+  frc::XboxController &driverController, ArmSubsystem &arm, ShooterWheelsSubsystem &m_shooterWheels);
 
   void Initialize() override;
 
@@ -35,6 +36,7 @@ class AmpShooter
   bool IsFinished() override;
   private:
   ShooterSubsystem* m_shooter = nullptr;
+  ShooterWheelsSubsystem* m_shooterWheels = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   frc::XboxController* m_driverController = nullptr;
   ArmSubsystem* m_arm = nullptr;

@@ -56,4 +56,7 @@ class AprilTagAim
     double desiredHeading = 0;
     int filteredTargetID = -1;
     double error = 0;
+    bool finished = false;
+    bool shoot = false;
+    int time = 0;
 };

@@ -23,7 +23,12 @@ AprilTagAim::AprilTagAim(
 }
 
 // Called when the command is initially scheduled.
-void AprilTagAim::Initialize() {}
+void AprilTagAim::Initialize()
+{
+  finished = false;
+  shoot = false;
+  time = 0;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void AprilTagAim::Execute()
@@ -40,7 +45,7 @@ void AprilTagAim::Execute()
   m_shooter->SetActuator(m_limelight->GetApriltagShooterTheta(m_limelight->FilteredDistance(), m_shooter->GetAngleTrim()));
 
   speedY = Deadzone(m_driverController->GetLeftY());
-  speedX = Deadzone(m_driverController->GetLeftY());
+  speedX = Deadzone(m_driverController->GetLeftX());
 
   if((fabs(speedY) + fabs(speedX)) < .05)
   {
@@ -58,12 +63,27 @@ void AprilTagAim::Execute()
   
   if(fabs(rotApril.value()) > 0.05)
   {
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, false);
+    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, false);
   }
   else
   {
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY), units::velocity::meters_per_second_t(speedX), rotApril, false, NoJoystickInput);
+    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, NoJoystickInput);
   }
+
+  if(m_driverController->GetRightTriggerAxis() > 0.05)
+  {
+    shoot = true;
+  }
+
+  if(shoot == true)
+  {
+    time++;
+  }
+
+  if(time > 30)
+  {
+    finished = true;
+  } 
 }
 
 // Called once the command ends or is interrupted.
@@ -75,7 +95,7 @@ void AprilTagAim::End(bool interrupted)
 // Returns true when the command should end.
 bool AprilTagAim::IsFinished()
 {
-  return false;
+  return finished;
 }
 
 float AprilTagAim::Deadzone(float x)

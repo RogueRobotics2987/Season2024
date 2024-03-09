@@ -54,6 +54,7 @@
 #include "commands/ManualAim.h"
 #include "commands/ShootCommand.h"
 #include "commands/AutoShootCommand.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 #include "commands/AmpCommand.h"
 #include "commands/AmpShooter.h"
 #include "commands/AmpLineup.h"
@@ -91,6 +92,7 @@ class RobotContainer
     DriveSubsystem m_drive;
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
+    ShooterWheelsSubsystem m_shooterWheels;
     IntakeSubsystem m_intake;
     ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
@@ -348,4 +350,88 @@ class RobotContainer
       1_mps,
       1_mps
     };
+
+    std::vector<frc::Pose2d> FarSideMid1{
+      frc::Pose2d(0.45_m, 2.05_m, 180_deg),
+      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> FarSideMid2{
+      frc::Pose2d(3.5_m, 2.05_m, 180_deg),
+      frc::Pose2d(8.15_m, 0.8_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> FarSideMid3{
+      frc::Pose2d(8.15_m, 0.8_m, 180_deg),
+      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+    };
+    
+    std::vector<frc::Pose2d> FarSideMid4{
+      frc::Pose2d(3.5_m, 2.05_m, 180_deg),
+      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
+      frc::Pose2d(8.15_m, 2.45_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> FarSideMid5{
+      frc::Pose2d(8.15_m, 2.45_m, 180_deg),
+      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
+      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+    };
+
+    std::vector<units::velocity::meters_per_second_t> FarSideMidPoint1{
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> FarSideMidPoint2{
+      1_mps,
+      0_mps
+    };
+
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidPoint3{
+      1_mps,
+      0_mps
+    };
+
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidPoint4{
+      1_mps,
+      2_mps,
+      0_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidPoint5{
+      1_mps,
+      3_mps,
+      0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> FarSideMidCruise1{
+      1_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidCruise2{
+      1_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidCruise3{
+      1_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidCruise4{
+      1_mps,
+      3_mps,
+      2_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> FarSideMidCruise5{
+      1_mps,
+      3_mps,
+      3_mps
+    };
+    
 };

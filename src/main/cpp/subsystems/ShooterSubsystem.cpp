@@ -6,28 +6,11 @@
 
 ShooterSubsystem::ShooterSubsystem() 
 {
-    // frc::SmartDashboard::PutNumber("SetAngle", m_DesiredAngle);
-    // frc::SmartDashboard::PutNumber("shooter actuator kp", tempKp);
-
-    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
-    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
-    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
-    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
-    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
-    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
-    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
-    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
-    TopShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
-    BottomShooter.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
-    TopShooterPID.SetP(0.0005);
-    BottomShooterPID.SetP(0.0005);
-    TopShooterPID.SetFF(0.7 /3500);
-    BottomShooterPID.SetFF(0.7 /3500);
 }
 
 // This method will be called once per scheduler run
@@ -42,8 +25,6 @@ void ShooterSubsystem::Periodic()
         frc::SmartDashboard::PutNumber("Raw Shooter Encoder", ShooterEncoder.GetAbsolutePosition());
         frc::SmartDashboard::PutNumber("ShooterDesired", m_DesiredAngle);
         frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
-        frc::SmartDashboard::PutNumber("TopShooterVelocity", TopShooterEncoder.GetVelocity());
-        frc::SmartDashboard::PutNumber("BottomShooterVelocity", BottomShooterEncoder.GetVelocity());
         // m_DesiredAngle = frc::SmartDashboard::GetNumber("SetAngle", m_DesiredAngle);
     }
 
@@ -58,37 +39,11 @@ void ShooterSubsystem::JoystickActuator(double pos)
     }
 }
 
-void ShooterSubsystem::StopShooter()
-{
-    TopShooter.Set(0.0);
-    BottomShooter.Set(0.0);
-}
-
-void ShooterSubsystem::SetShooter(double speedBottom, double speedTop)
-{
-    BottomShooter.Set(speedBottom);
-    TopShooter.Set(speedTop);
-}
-
-void ShooterSubsystem::ReverseShooter()
-{   
-    BottomShooter.Set(-0.2);
-    TopShooter.Set(0.2);
-}
-
-void ShooterSubsystem::SetActuator(double DesiredAngle)
-{
+void ShooterSubsystem::SetActuator(double DesiredAngle) {
     m_DesiredAngle = DesiredAngle;
 }   
 
-void ShooterSubsystem::PIDShoot()
-{
-    TopShooterPID.SetReference(4062, rev::CANSparkMax::ControlType::kVelocity);
-    BottomShooterPID.SetReference(4171, rev::CANSparkMax::ControlType::kVelocity);
-}
-
-bool ShooterSubsystem::IsTargeted()
-{
+bool ShooterSubsystem::IsTargeted(){
     return fabs(GetOffSetEncoderValue() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
 }
 

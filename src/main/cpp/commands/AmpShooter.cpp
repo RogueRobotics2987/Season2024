@@ -9,13 +9,16 @@ AmpShooter::AmpShooter(
   ShooterSubsystem &shooter, 
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
-  ArmSubsystem &arm)
+  ArmSubsystem &arm,
+  ShooterWheelsSubsystem &shooterWheels)
 {
   m_shooter = &shooter;
   m_intake = &intake;
   m_arm = &arm;
+  m_shooterWheels = &shooterWheels;
   m_driverController = &driverController;
   AddRequirements({m_shooter});
+  AddRequirements({m_shooterWheels});
   AddRequirements({m_intake});
   AddRequirements({m_arm});
 }
@@ -23,7 +26,7 @@ AmpShooter::AmpShooter(
 // Called when the command is initially scheduled.
 void AmpShooter::Initialize() 
 {
-  m_shooter->SetShooter(0.4, 0.4);
+  m_shooterWheels->SetShooter(0.4, 0.4);
   hasShot = false; 
   time = 0;
 }
@@ -53,7 +56,7 @@ void AmpShooter::Execute()
 // Called once the command ends or is interrupted.
 void AmpShooter::End(bool interrupted) 
 {
- 
+ m_shooterWheels->StopShooter();
 }
 
 // Returns true when the command should end.
