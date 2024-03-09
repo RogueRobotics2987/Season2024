@@ -40,8 +40,14 @@ void LimelightSubsystem::Periodic()
                 //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
 
                 filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
-                CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
+                CAMERA_HEIGHT, TARGET_HEIGHT, CAMERA_PITCH,
                 units::degree_t{filteredTarget.GetPitch()});
+            }
+            else if(myTargets.at(i).GetFiducialId() == 5 || myTargets.at(i).GetFiducialId() == 6)
+            {
+                filteredTarget = myTargets.at(i);
+                filteredTargetID = filteredTarget.GetFiducialId();
+                //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
             }
         }   
     }
@@ -57,7 +63,7 @@ void LimelightSubsystem::Periodic()
 
 double LimelightSubsystem::GetAmptx()
 {
-    if(filteredTargetID == 5)
+    if(filteredTargetID == 5 || filteredTargetID == 6)
     {
         return PhotonYaw();
     } 
@@ -157,6 +163,11 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
     {
         txApril = FilteredPhotonYaw();
         desiredHeading = currentHeading + -txApril;// calculated actual angle instead of the error
+    }
+    else if(filteredTargetID == 5 || filteredTargetID == 6)
+    {
+        txApril = FilteredPhotonYaw();
+        desiredHeading = currentHeading + -txApril;
     }
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);

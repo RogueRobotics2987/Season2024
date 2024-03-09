@@ -32,6 +32,8 @@ class AmpLineup : public frc2::CommandHelper<frc2::Command, AmpLineup>
 
     bool IsFinished() override;
 
+    double Apriltx = 0;
+
   private:
     DriveSubsystem* m_drive;
     LimelightSubsystem* m_LimeLight;

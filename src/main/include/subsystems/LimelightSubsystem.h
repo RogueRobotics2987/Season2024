@@ -65,10 +65,8 @@ class LimelightSubsystem : public frc2::SubsystemBase
     units::meter_t filteredRange = 0_m;
 
     units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
-    units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
+    units::meter_t TARGET_HEIGHT = units::meter_t(1.5);
     units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.45);
-
-    units::meter_t AMP_TARGET_HEIGHT = units::meter_t(1.405);
 
     double driveError = 0;
     double txApril = 0;
