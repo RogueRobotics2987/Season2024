@@ -49,7 +49,7 @@ void IntakeCmd::Execute()
     time++;
     m_intake->runMagazine(-0.2);
 
-    if(time <= 7)
+    if(time >= 7)
     {
       finished = true;
     }
