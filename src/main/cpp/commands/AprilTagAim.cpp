@@ -38,7 +38,8 @@ void AprilTagAim::Execute()
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
 
-  rotApril = units::angular_velocity::radians_per_second_t(m_limelight->GetApriltagDriveMotorVal(currentHeading));
+  rotApril = units::angular_velocity::radians_per_second_t(m_limelight->GetApriltagDriveMotorVal(currentHeading, 
+                                                           m_drivetrain->GetPose().X().value(), m_drivetrain->GetPose().Y().value()));
 
   frc::SmartDashboard::PutNumber("apriltagRotation", rotApril.value());
     

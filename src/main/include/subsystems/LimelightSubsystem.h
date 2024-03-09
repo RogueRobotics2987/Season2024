@@ -40,7 +40,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double GetApriltagShooterTheta(double dist, double angleTrim);
     double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
-    double GetApriltagDriveMotorVal(double currentHeading);
+    double GetApriltagDriveMotorVal(double currentHeading, double currX, double currY);
     double GetApriltagDriveError();
 
     double GetAmptx();
@@ -72,10 +72,19 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
   units::meter_t AMP_TARGET_HEIGHT = units::meter_t(1.405);
 
-  double driveError = 0;
+  double angleError = 0;
   double txApril = 0;
   double desiredHeading = 0;
   double kpApril = 0.065;
+
+  double recalcX1 = 0.0;
+  double recalcY1 = 0.0;
+  double recalcDeltaX = 0.0;
+  double recalcDeltaY = 0.0;
+  double x2 = 0.0;
+  double y2 = 0.0;
+  double prevX = 0.0;
+  double prevY = 0.0;
 
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.

@@ -140,10 +140,17 @@ photon::PhotonTrackedTarget LimelightSubsystem::GetFilteredTarget()
 //pass in the angle trim from the shooter subsystems function get angletrim
 double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim)
 {
-    if(dist != 0.0)
+    double recalcDist = sqrt((x2 * x2) + (y2 * y2));
+
+    // if(dist != 0.0)
+    // {
+    //     frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
+    //     return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+    // }
+    if(recalcDist != 0.0)
     {
-        frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
-        return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
+        frc::SmartDashboard::PutNumber("Distance AprilTag", recalcDist);
+        return -0.2351* pow((recalcDist + angleTrim),3) + 4.38 * pow((recalcDist + angleTrim), 2) - 29 * (recalcDist + angleTrim) + 89.64;
     }
     else
     {
@@ -151,27 +158,60 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
     }
 }
 
-double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
+double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, double currX, double currY)
 {
+    double dist = FilteredDistance();
+
     if(filteredTargetID == 4 || filteredTargetID == 7)
     {
         txApril = FilteredPhotonYaw();
-        desiredHeading = currentHeading + -txApril;// calculated actual angle instead of the error
+        desiredHeading = currentHeading + -txApril; // calculated actual angle instead of the error
+
+        recalcDeltaX = 0.0;
+        recalcDeltaY = 0.0;
+
+        prevX = currX;
+        prevY = currY;
+
+        recalcX1 = sin(txApril * M_PI / 180) * dist; 
+        recalcY1 = cos(txApril * M_PI / 180) * dist;
+
+        // if(filteredTargetID == 4)
+        // {
+        //     recalcX1 = 16.5 - currX;    // (red side) ID 4 is at pose (16.5, 5.5)
+        //     recalcY1 = 5.5 - currY;
+        // }
+        // else if(filteredTargetID == 7)
+        // {
+        //     recalcX1 = 0 - currX;       // (blue side) ID 7 is at pose (0, 5.5)
+        //     recalcY1 = 5.5 - currY;
+        // }
     }
 
-    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+    recalcDeltaX = currX - prevX;
+    recalcDeltaY = currY - prevY;
 
+    x2 = recalcX1 - recalcDeltaX;
+    y2 = recalcY1 - recalcDeltaY;
+
+
+    desiredHeading = atan2(x2, y2) * 180 / M_PI;
+
+    angleError = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+    prevX = currX;
+    prevY = currY;
     // std::cout << "txApril " << txApril << std::endl; 
     // std::cout << "driveError " << driveError << std::endl;
     // std::cout << "desiredHeading " << desiredHeading << std::endl; 
     // std::cout << "currentHeading " << currentHeading << std::endl; 
 
-    return (driveError * kpApril);
+    return (angleError * kpApril);
 }
 
 double LimelightSubsystem::GetApriltagDriveError()
 {
-    return driveError;
+    return angleError;
 }
 
 double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
