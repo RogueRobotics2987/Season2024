@@ -4,7 +4,6 @@
 
 #include "commands/AutoNotePickup.h"
 
-
 AutoNotePickup::AutoNotePickup(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
 {
   // Use addRequirements() here to declare subsystem dependencies.

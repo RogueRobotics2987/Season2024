@@ -4,7 +4,7 @@
 
 #include "commands/AprilTagAim.h"
 
-AprilTagAim::AprilTagAim(){}
+AprilTagAim::AprilTagAim() {}
 AprilTagAim::AprilTagAim(
   LimelightSubsystem &limelight,
   DriveSubsystem &drivetrain,
@@ -100,13 +100,16 @@ bool AprilTagAim::IsFinished()
 
 float AprilTagAim::Deadzone(float x)
 {
-  if ((x < 0.1) &&  (x > -0.1)){
-    x=0;
+  if ((x < 0.1) &&  (x > -0.1))
+  {
+    x = 0;
   }
-  else if (x >= 0.1){
+  else if (x >= 0.1)
+  {
     x = x - 0.1;
   }
-  else if (x <= -0.1){
+  else if (x <= -0.1)
+  {
     x = x + 0.1;
   }
   return(x);

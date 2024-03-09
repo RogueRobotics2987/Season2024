@@ -4,17 +4,13 @@
 
 #include "commands/ShootCommand.h"
 
-ShootCommand::ShootCommand()
-{
-
-}
+ShootCommand::ShootCommand() {}
 
 ShootCommand::ShootCommand(
   ShooterWheelsSubsystem &shooterWheels,
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
-  frc::XboxController &auxController
-) 
+  frc::XboxController &auxController) 
 {
   m_shooterWheels = &shooterWheels;
   AddRequirements({m_shooterWheels});

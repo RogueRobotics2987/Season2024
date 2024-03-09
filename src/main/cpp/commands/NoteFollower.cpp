@@ -32,41 +32,39 @@ void NoteFollower::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void NoteFollower::Execute() 
 {
-    frc::SmartDashboard::PutBoolean("noteFollower", true);
+  frc::SmartDashboard::PutBoolean("noteFollower", true);
 
-    //limited drive, else regular
-    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
+  //limited drive, else regular
+  if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
+  {
+    txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
+    rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
+    speedY = Deadzone(m_driverController->GetLeftY());
+
+    if((fabs(speedY) + fabs(rotNote.value())) < .05)
     {
-      txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
-
-      rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
-
-      speedY = Deadzone(m_driverController->GetLeftY());
-
-      if((fabs(speedY) + fabs(rotNote.value())) < .05)
-      {
-        NoJoystickInput = true;
-      }
-      else
-      {
-        NoJoystickInput = false;
-      }
-      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
-    }   
+      NoJoystickInput = true;
+    }
     else
     {
-        speedY = Deadzone(m_driverController->GetLeftY());
-        speedX = Deadzone(m_driverController->GetLeftX());
-        rot = Deadzone(m_driverController->GetRightX());
+      NoJoystickInput = false;
+    }
+    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+  }   
+  else
+  {
+    speedY = Deadzone(m_driverController->GetLeftY());
+    speedX = Deadzone(m_driverController->GetLeftX());
+    rot = Deadzone(m_driverController->GetRightX());
 
-        if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
-        {
-            NoJoystickInput = true;
-        }
-        else
-        {
-            NoJoystickInput = false;
-        }
+    if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
+    {
+        NoJoystickInput = true;
+    }
+    else
+    {
+        NoJoystickInput = false;
+    }
 
         m_drivetrain->Drive(
           units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed),
@@ -125,7 +123,7 @@ float NoteFollower::Deadzone(float x)
 {
   if ((x < 0.1) && (x > -0.1))
   {
-    x=0;
+    x = 0;
   }
   else if (x >= 0.1)
   {

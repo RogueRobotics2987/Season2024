@@ -4,13 +4,12 @@
 
 #include "commands/AmpCommand.h"
 
-AmpCommand::AmpCommand(){}
+AmpCommand::AmpCommand() {}
 AmpCommand::AmpCommand(ArmSubsystem &arm)
 {
   m_arm = &arm;
   AddRequirements({m_arm});
 }
-
 
 // Called when the command is initially scheduled.
 void AmpCommand::Initialize()
@@ -22,16 +21,15 @@ void AmpCommand::Initialize()
 void AmpCommand::Execute()
 {
   frc::SmartDashboard::PutString("armAmp", "");
+
   if(m_arm->GetOffSetEncoderValueLower() > 100)
   {
     m_arm->runArmWheels(-1);
   }
 }
+
 // Called once the command ends or is interrupted.
-void AmpCommand::End(bool interrupted)
-{
-  //std::cout << "should be 30" << std::endl;
-}
+void AmpCommand::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool AmpCommand::IsFinished()

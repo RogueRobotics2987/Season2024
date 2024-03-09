@@ -10,19 +10,10 @@ LimelightSubsystem::LimelightSubsystem() = default;
 void LimelightSubsystem::Periodic()
 {
     targetIDs.clear();
-    
-    //works to read values from the network tables for limelight and pushes them back out to confirm we are reading values
-    // botPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("botpose", std::span<const double>({1 , 0, 0, 0, 0, 0}));
-
-    //TODO Coment this back in eventually once limelights are put onto the robot
-
-    //AprilTagstx = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
-    //AprilTagsty = ;//nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("ty",0.0);
     Notetx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
     Notety = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty",0.0);
     auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
     auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
-
 
     double distanceToTagInMeters = threeDPose[0];
     frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
@@ -33,10 +24,9 @@ void LimelightSubsystem::Periodic()
 
     filteredTargetID = -1;
 
-
-    if(hasTarget == true){
+    if(hasTarget == true)
+    {
         tempTargets = result.GetTargets();
-
         myTargets.assign(tempTargets.begin(), tempTargets.end());
 
         for(unsigned int i = 0; i < myTargets.size(); i++)
@@ -52,31 +42,33 @@ void LimelightSubsystem::Periodic()
                 filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
                 CAMERA_HEIGHT, TAREGT_HEIGHT, CAMERA_PITCH,
                 units::degree_t{filteredTarget.GetPitch()});
-
             }
         }   
     }
 
-    if(DebugConstants::debugLimelight == true){
+    if(DebugConstants::debugLimelight == true)
+    {
         frc::SmartDashboard::PutNumber("FilteredRange", filteredRange.value());
         frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
         frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
         frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
     }
 }
-double LimelightSubsystem::GetAmptx(){
+
+double LimelightSubsystem::GetAmptx()
+{
     if(filteredTargetID == 5)
-        {
-            return PhotonYaw();
-        } else {
-            return 0;
-        }
+    {
+        return PhotonYaw();
+    } 
+    else 
+    {
+        return 0;
+    }
+}
 
-        }
-
-
-
-bool LimelightSubsystem::PhotonHasTarget(){
+bool LimelightSubsystem::PhotonHasTarget()
+{
     bool hasTargetFiltered = false;
 
     if(hasTarget == true)
@@ -90,7 +82,8 @@ bool LimelightSubsystem::PhotonHasTarget(){
     return hasTargetFiltered;
 }
 
-double LimelightSubsystem::PhotonYaw(){
+double LimelightSubsystem::PhotonYaw()
+{
     double yaw = filteredTarget.GetYaw();
     return yaw;
 }
@@ -100,7 +93,6 @@ double LimelightSubsystem::FilteredPhotonYaw()
     double staticOffset = 2;
 
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
-    // return OffsetAngle;
 }
 
 double LimelightSubsystem::PhotonYawMap(double originalVal)
@@ -164,7 +156,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
     if(filteredTargetID == 4 || filteredTargetID == 7)
     {
         txApril = FilteredPhotonYaw();
-        desiredHeading = currentHeading + -txApril;//txApril;   // calculated actual angle instead of the error
+        desiredHeading = currentHeading + -txApril;m// calculated actual angle instead of the error
     }
 
     driveError = DistanceBetweenAngles(desiredHeading, currentHeading);

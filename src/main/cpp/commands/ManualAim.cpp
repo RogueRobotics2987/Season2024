@@ -27,6 +27,7 @@ void ManualAim::Execute()
 void ManualAim::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool ManualAim::IsFinished() {
+bool ManualAim::IsFinished() 
+{
   return false;
 }

@@ -62,16 +62,8 @@ void DriveSubsystem::Periodic(){
   frc::SmartDashboard::PutNumber("NavX temp", m_gyro.GetTempC());
   frc::SmartDashboard::PutNumber("OrientationOffset", orientationOffset.Degrees().value());
 
-  // if(ranAuto == true){
-  //   orientationOffset = frc::Rotation2d(3.14159265359_rad);
-  //   //used to set field oriented in autonomous when we arent facing the correct way
-  // }
-  // else{
-  //   orientationOffset = frc::Rotation2d(0_rad);
-  // }
-
   m_odometry.Update(
-    frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians() /* - orientationOffset.Radians()*/)),
+    frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians())),
       {
         m_frontLeft.GetPosition(),
         m_frontRight.GetPosition(),
@@ -87,7 +79,6 @@ void DriveSubsystem::Periodic(){
 
   frc::SmartDashboard::PutNumber("Rotation", GetPose().Rotation().Degrees().value());
 
-
   if(DebugConstants::debugDrive == true)
   {
     frc::SmartDashboard::PutNumber("DrivePosePtrX", (double)DrivePose->X());
@@ -95,7 +86,7 @@ void DriveSubsystem::Periodic(){
     frc::SmartDashboard::PutBoolean("GyroConnection",  m_gyro.IsConnected());
     frc::SmartDashboard::PutBoolean("GyroCalibrating",  m_gyro.IsCalibrating());
     frc::SmartDashboard::PutString("GyroFirmware", m_gyro.GetFirmwareVersion());
-    }
+  }
 }
 
 void DriveSubsystem::Drive(
@@ -103,8 +94,7 @@ void DriveSubsystem::Drive(
   units::meters_per_second_t yDriveSpeed,
   units::radians_per_second_t rotDrive,
   bool driveFieldRelative,
-  bool driveNoJoystickInput
-)
+  bool driveNoJoystickInput)
 {
   //set local member variables for X,Y,Rot, field relative, noJoystick
   xSpeed = xDriveSpeed;
@@ -118,8 +108,7 @@ void DriveSubsystem::Drive(
   units::meters_per_second_t xDriveSpeed,
   units::meters_per_second_t yDriveSpeed,
   bool driveFieldRelative,
-  bool driveNoJoystickInput
-)
+  bool driveNoJoystickInput)
 {
   xSpeed = xDriveSpeed;
   ySpeed = yDriveSpeed;
@@ -130,8 +119,7 @@ void DriveSubsystem::Drive(
 void DriveSubsystem::Drive(
   units::radians_per_second_t rotDrive,
   bool driveFieldRelative,
-  bool driveNoJoystickInput
-)
+  bool driveNoJoystickInput)
 {
   rot = rotDrive;
   fieldRelative = driveFieldRelative;
@@ -159,7 +147,8 @@ void DriveSubsystem::periodicHelper()
 
   auto [fl, fr, bl, br] = states;
 
-  if (noJoystickInput == true){
+  if (noJoystickInput == true)
+  {
     fl.speed = (units::velocity::meters_per_second_t)(0);
     fr.speed = (units::velocity::meters_per_second_t)(0);
     bl.speed = (units::velocity::meters_per_second_t)(0);
@@ -170,21 +159,24 @@ void DriveSubsystem::periodicHelper()
     br.angle = (units::angle::degree_t)(-135);
   } 
 
-  if (driveSlow == true){
+  if (driveSlow == true)
+  {
     fl.speed = (units::velocity::meters_per_second_t)(0.5 * fl.speed);
     fr.speed = (units::velocity::meters_per_second_t)(0.5 * fr.speed);
     bl.speed = (units::velocity::meters_per_second_t)(0.5 * bl.speed);
     br.speed = (units::velocity::meters_per_second_t)(0.5 * br.speed);
   }
 
-  if (WheelsStraight == true){
+  if (WheelsStraight == true)
+  {
     fl.angle = (units::angle::degree_t)(0);
     fr.angle = (units::angle::degree_t)(0);
     bl.angle = (units::angle::degree_t)(0);
     br.angle = (units::angle::degree_t)(0);
   }
 
-  if (DebugConstants::debugDrive == true){
+  if (DebugConstants::debugDrive == true)
+  {
     frc::SmartDashboard::PutNumber("Fl Desired angle",(float)fl.angle.Degrees());
     frc::SmartDashboard::PutNumber("Fr Desired angle",(float)fr.angle.Degrees());
     frc::SmartDashboard::PutNumber("Bl Desired angle",(float)bl.angle.Degrees());
@@ -204,7 +196,8 @@ void DriveSubsystem::periodicHelper()
   m_rearRight.SetDesiredState(br);
 }
 
-void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates) {
+void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates)
+{
   kDriveKinematics.DesaturateWheelSpeeds(&desiredStates, AutoConstants::kMaxSpeed);
   m_frontLeft.SetDesiredState(desiredStates[0]);
   m_frontRight.SetDesiredState(desiredStates[1]);
@@ -223,7 +216,8 @@ void DriveSubsystem::ZeroHeading(frc::Rotation2d startRot)
   m_gyro.Reset();
 }
 
-frc2::CommandPtr DriveSubsystem::ZeroHeadingCmd(){
+frc2::CommandPtr DriveSubsystem::ZeroHeadingCmd()
+{
   return this->RunOnce(
     [this] {
       orientationOffset = frc::Rotation2d(0_rad);
@@ -233,7 +227,8 @@ frc2::CommandPtr DriveSubsystem::ZeroHeadingCmd(){
 }
 
 //small left right movement. Optional to have
-frc2::CommandPtr DriveSubsystem::Twitch(bool direction){
+frc2::CommandPtr DriveSubsystem::Twitch(bool direction)
+{
   return this -> Run(
     [this, direction]
     {
@@ -253,17 +248,18 @@ frc2::CommandPtr DriveSubsystem::Twitch(bool direction){
   );
 }
 
-
-double DriveSubsystem::GetTurnRate(){
+double DriveSubsystem::GetTurnRate()
+{
   return -m_gyro.GetRate();
 }
 
-
-frc::Pose2d DriveSubsystem::GetPose(){
+frc::Pose2d DriveSubsystem::GetPose()
+{
   return m_odometry.GetPose();
 }
 
-void DriveSubsystem::ResetOdometry(frc::Pose2d pose){
+void DriveSubsystem::ResetOdometry(frc::Pose2d pose)
+{
   m_odometry.ResetPosition(
     GetHeading(),
     {
@@ -276,11 +272,13 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose){
   );
 }
 
-frc::Pose2d* DriveSubsystem::GetDrivePosePtr(){
+frc::Pose2d* DriveSubsystem::GetDrivePosePtr()
+{
   return DrivePose;
 }
 
-frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
+frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds()
+{
   auto [forward, sideways, angular] = kDriveKinematics.ToChassisSpeeds(
     m_frontLeft.GetState(),
     m_frontRight.GetState(),
@@ -297,19 +295,6 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds(){
 
   return {forward, sideways, angular};
 }
-
-// void DriveSubsystem::SetRanAuto(bool ranAuto)
-// {
-//   this-> ranAuto = ranAuto;
-// }
-
-// frc2::CommandPtr DriveSubsystem::SetAngleAdjustment(double angle){
-//   return this->RunOnce(
-//     [this, angle] {
-//       m_gyro.SetAngleAdjustment(angle);
-//       // m_gyro.Reset();
-//     });
-// }
 
 DriveSubsystem::~DriveSubsystem()
 {

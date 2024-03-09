@@ -30,6 +30,7 @@ void AmpShooter::Initialize()
   hasShot = false; 
   time = 0;
 }
+
 // Called repeatedly when this Command is scheduled to run
 void AmpShooter::Execute() 
 {
@@ -46,9 +47,10 @@ void AmpShooter::Execute()
     hasShot = true; 
   }
 
-    if(hasShot) {
-      time += 1;
-    }
+  if(hasShot) 
+  {
+    time += 1;
+  }
 }
 
 // Called once the command ends or is interrupted.
@@ -60,10 +62,12 @@ void AmpShooter::End(bool interrupted)
 // Returns true when the command should end.
 bool AmpShooter::IsFinished() 
 {
-   if(time > 30) {
+  if(time > 30) 
+  {
     return true;
   }
-  else {
+  else 
+  {
     return false;
   }
 }
