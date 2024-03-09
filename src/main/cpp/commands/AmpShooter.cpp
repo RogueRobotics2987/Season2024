@@ -35,14 +35,14 @@ void AmpShooter::Initialize()
 void AmpShooter::Execute() 
 {
   m_shooter->SetActuator(37.5);
-  m_arm->setLowerArmAngle(112);
+  m_arm->SetLowerArmAngle(112);
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
   {
-    m_intake->runMagazine(1);
-    m_intake->runIntake(1);
+    m_intake->RunMagazine(1);
+    m_intake->RunIntake(1);
     m_intake->DirectionNote(1);
-    m_arm->runArmWheels(-1);
+    m_arm->RunArmWheels(-1);
 
     hasShot = true; 
   }

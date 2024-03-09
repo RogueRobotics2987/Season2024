@@ -97,7 +97,6 @@ class DriveSubsystem : public frc2::SubsystemBase
     frc2::CommandPtr SetDriveSlow(bool m_bool);
     void ConfigMotorControllers();
     frc2::CommandPtr Twitch(bool direction);
-    void SetRanAuto(bool ranAuto);
 
     frc::SwerveDriveKinematics<4> kDriveKinematics
     {

@@ -32,14 +32,10 @@ void Robot::AutonomousInit()
 {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand) {
+  if (m_autonomousCommand)
+  {
     m_autonomousCommand->Schedule();
-    // ranAuto = true; 
   }
-  // m_autoDriveStateMachine = m_container.GetAutoDriveStateMachine();
-  // m_autoDriveStateMachine->Schedule();
-  // m_autoAuxilaryStateMachine = m_container.GetAutoAuxilaryStateMachine();
-  // m_autoAuxilaryStateMachine->Schedule();
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -51,23 +47,11 @@ void Robot::TeleopInit()
   // continue until interrupted by another command, remove
   // this line or comment it out.
 
-  // m_container.SetRanAuto(ranAuto);
-  if (m_autonomousCommand) {
+  if (m_autonomousCommand)
+  {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
   }
-  // if (m_autoAuxilaryStateMachine) {
-  //   m_autoAuxilaryStateMachine->Cancel();
-  //   m_autoAuxilaryStateMachine.reset();
-  // }  
-  // if (m_autoDriveStateMachine) {
-  //   m_autoDriveStateMachine->Cancel();
-  //   m_autoDriveStateMachine.reset();
-  // }
-  // m_stateMachine = m_container.GetAuxilaryStateMachine();
-  // m_stateMachine->Schedule();
-  //m_driveStateMachine = m_container.GetDriveStateMachine();
-  //m_driveStateMachine->Schedule();
 }
 
 /**

@@ -27,7 +27,7 @@ void AutoShootCommand::Execute()
 {
   if(time <= 60) //todo change values to be most efficient/effective
   {
-    shooterWarmup();
+    ShooterWarmup();
   }
   else if(60 <= time && time <= 100)
   {
@@ -42,22 +42,22 @@ void AutoShootCommand::Execute()
   time++;
 }
 
-void AutoShootCommand::shooterWarmup()
+void AutoShootCommand::ShooterWarmup()
 {
   m_shooterWheel->SetShooter(0.75, 0.75);
 }
 
 void AutoShootCommand::shoot()
 {
-  m_intake->runIntake(1);
-  m_intake->runMagazine(1);
+  m_intake->RunIntake(1);
+  m_intake->RunMagazine(1);
   m_intake->DirectionNote(1);
 }
 
 void AutoShootCommand::stopShoot()
 {
-  m_intake->stopIntake();
-  m_intake->stopMagazine();
+  m_intake->StopIntake();
+  m_intake->StopMagazine();
   m_shooterWheel->StopShooter();
 }
 

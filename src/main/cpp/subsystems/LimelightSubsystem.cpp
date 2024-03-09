@@ -197,7 +197,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
 
     desiredHeading = atan2(x2, y2) * 180 / M_PI;
 
-    angleError = DistanceBetweenAngles(desiredHeading, currentHeading);
+    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
 
     prevX = currX;
     prevY = currY;
@@ -206,12 +206,12 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
     // std::cout << "desiredHeading " << desiredHeading << std::endl; 
     // std::cout << "currentHeading " << currentHeading << std::endl; 
 
-    return (angleError * kpApril);
+    return (driveError * kpApril);
 }
 
 double LimelightSubsystem::GetApriltagDriveError()
 {
-    return angleError;
+    return driveError;
 }
 
 double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)

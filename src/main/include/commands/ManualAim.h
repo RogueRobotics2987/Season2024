@@ -17,14 +17,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class ManualAim
-    : public frc2::CommandHelper<frc2::Command, ManualAim> {
+class ManualAim : public frc2::CommandHelper<frc2::Command, ManualAim>
+{
   public:
     ManualAim();
     ManualAim(
       ShooterSubsystem &shooter,
-      frc::XboxController &auxController
-    );
+      frc::XboxController &auxController);
 
     void Initialize() override;
 

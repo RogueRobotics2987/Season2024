@@ -21,9 +21,9 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
 void NoteFollower::Initialize()
 {
   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
-  m_intake->runIntake(0.3);
+  m_intake->RunIntake(0.3);
   m_intake->DirectionNote(0.25); //possibly up all these speeds
-  m_intake->runMagazine(0.25);
+  m_intake->RunMagazine(0.25);
   state = 0;
   time = 0;
   finished = false;
@@ -59,21 +59,21 @@ void NoteFollower::Execute()
 
     if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
     {
-        NoJoystickInput = true;
+      NoJoystickInput = true;
     }
     else
     {
-        NoJoystickInput = false;
+      NoJoystickInput = false;
     }
 
-        m_drivetrain->Drive(
-          units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed),
-          units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed),
-          units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed),
-          false,
-          NoJoystickInput
-        );
-    }
+    m_drivetrain->Drive(
+      units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed),
+      units::velocity::meters_per_second_t(-speedX * AutoConstants::kMaxSpeed),
+      units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed),
+      false,
+      NoJoystickInput
+    );
+  }
 
   if(state == 0)
   {
@@ -86,8 +86,8 @@ void NoteFollower::Execute()
   }
   else if(state == 1)
   {
-    m_intake->stopIntake();
-    m_intake->stopMagazine();
+    m_intake->StopIntake();
+    m_intake->StopMagazine();
 
     state = 2;
   }
@@ -96,7 +96,7 @@ void NoteFollower::Execute()
     nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
 
     time++;
-    m_intake->runMagazine(-0.2);
+    m_intake->RunMagazine(-0.2);
 
     if(time <= 7)
     {
@@ -104,7 +104,6 @@ void NoteFollower::Execute()
     }
   }
 }
-
 
 // Called once the command ends or is interrupted.
 void NoteFollower::End(bool interrupted)

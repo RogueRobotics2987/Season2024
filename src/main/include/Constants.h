@@ -9,7 +9,6 @@
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
-
 #include "rev/SparkRelativeEncoder.h"
 
 /**
@@ -21,7 +20,8 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-namespace DriveConstants {
+namespace DriveConstants
+{
     constexpr int kFrontLeftDriveMotorPort = 8;
     constexpr int kRearLeftDriveMotorPort = 6;
     constexpr int kFrontRightDriveMotorPort = 2;
@@ -75,7 +75,8 @@ namespace DriveConstants {
     constexpr double kPRearRightVel = 0.5;
 }  
 
-namespace ModuleConstants {
+namespace ModuleConstants
+{
     constexpr units::meter_t kTrackWidth = 0.58_m;  // Distance between centers of right and left wheels on robot
     constexpr units::meter_t kWheelBase = 0.58_m;  // Distance between centers of front and back wheels on robot
     constexpr units::meter_t kModuleRadius = 0.41_m;  // Distance between centers of robot and Swerve modules
@@ -84,12 +85,12 @@ namespace ModuleConstants {
     constexpr double kEncoderCPR = 1;
     constexpr double kWheelDiameterMeters = 0.0977;
 
+    // Assumes the encoders are directly mounted on the wheel shafts
     constexpr double kDriveEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
         (kWheelDiameterMeters * std::numbers::pi) / (kEncoderCPR) / gearRatio;
 
+    // Assumes the encoders are directly mounted on the wheel shafts
     constexpr double kTurningEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
         (std::numbers::pi * 2) / (kEncoderCPR);
 
     constexpr double kPModuleTurningController = 0.6;
@@ -97,7 +98,8 @@ namespace ModuleConstants {
     constexpr double kFFModuleDriveController = 0.259375;
 }
 
-namespace AutoConstants {
+namespace AutoConstants
+{
     constexpr auto kMaxSpeed = 6.7_mps;
     constexpr auto kMaxAcceleration = 2_mps_sq;
     constexpr auto kMaxAngularSpeed = 3.142_rad_per_s * 2;
@@ -109,7 +111,8 @@ namespace AutoConstants {
     extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
 } 
 
-namespace DebugConstants {
+namespace DebugConstants
+{
     //change this to true to debug and put most things to the smartdashboard
     constexpr bool debugShooter = true; 
     constexpr bool debugArm = false; 
@@ -118,20 +121,11 @@ namespace DebugConstants {
     constexpr bool debugIntake = true; 
     constexpr bool debugLimelight = true; 
     constexpr bool debugSwerveModules = false; 
-    constexpr bool debugStateMachine = false; 
-    constexpr bool debugDriveStateMachine = false; 
     constexpr bool debugAuto = true; 
 }  
 
-namespace StateMachineConstants{
-//constexpr double loweredArmExtended = 70;
-// constexpr double upperArmExtended = 140;
-    constexpr double RaisedShooterAngle = 80;//94;
-    constexpr double LowerClimbingExtentionAngle = 70;
-    constexpr double UpperClimbingExtentionAngle = 140;
-}
-
-namespace ShooterConstants {
+namespace ShooterConstants
+{
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
 
@@ -147,8 +141,8 @@ namespace ShooterConstants {
     constexpr double magKp = 0.1;
 }
 
-namespace ArmConstants {
-    
+namespace ArmConstants
+{
     constexpr double LowerInitialAngle = 0;
     constexpr double UpperInitialAngle = 0;
 
@@ -160,18 +154,12 @@ namespace ArmConstants {
 
     constexpr double LowerBackwardAmpExtentionAngle = 50;
     constexpr double UpperBackwardAmpExtentionAngle = 206;
-
     
     constexpr double LowerTrapExtentionAngle = 95;
     constexpr double UpperTrapExtentionAngle = 150;
 
-   
-
     constexpr double LowerFirstRetractionAngle = 90;
     constexpr double UpperFirstRetractionAngle = 0;
-    
-    // constexpr double LowerDropAngle = 20;
-    // constexpr double UpperDropAngle = 20;
 
     /*TODO find angles that are actually correct. absolute encoder values are nowhere near correct right now.
         check shooter subsytem GetOffsetEncoderValue function to see how the encoders polarity is inverted with an offset added.
@@ -194,6 +182,5 @@ namespace ArmConstants {
 
     constexpr double kiSumLowerArm = 0.0;
     constexpr double kiSumUpperArm = 0.0;
-
 }
  

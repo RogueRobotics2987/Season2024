@@ -20,28 +20,32 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AmpShooter
-    : public frc2::CommandHelper<frc2::Command, AmpShooter> {
- public:
-  AmpShooter();
-  AmpShooter(ShooterSubsystem &shooter, IntakeSubsystem &intake,
-  frc::XboxController &driverController, ArmSubsystem &arm, ShooterWheelsSubsystem &m_shooterWheels);
+class AmpShooter : public frc2::CommandHelper<frc2::Command, AmpShooter>
+{
+  public:
+    AmpShooter();
+    AmpShooter(
+      ShooterSubsystem &shooter,
+      IntakeSubsystem &intake,
+      frc::XboxController &driverController,
+      ArmSubsystem &arm,
+      ShooterWheelsSubsystem &m_shooterWheels);
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
+    bool IsFinished() override;
+
   private:
-  ShooterSubsystem* m_shooter = nullptr;
-  ShooterWheelsSubsystem* m_shooterWheels = nullptr;
-  IntakeSubsystem* m_intake = nullptr;
-  frc::XboxController* m_driverController = nullptr;
-  ArmSubsystem* m_arm = nullptr;
-  double time = 0;
-  bool hasShot = false; 
-
+    ShooterSubsystem* m_shooter = nullptr;
+    ShooterWheelsSubsystem* m_shooterWheels = nullptr;
+    IntakeSubsystem* m_intake = nullptr;
+    frc::XboxController* m_driverController = nullptr;
+    ArmSubsystem* m_arm = nullptr;
+    double time = 0;
+    bool hasShot = false; 
 };
 

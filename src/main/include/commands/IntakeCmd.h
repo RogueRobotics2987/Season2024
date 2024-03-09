@@ -22,14 +22,11 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeCmd
-    : public frc2::CommandHelper<frc2::Command, IntakeCmd>
+class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
 {
   public:
     IntakeCmd();
-    IntakeCmd(
-      IntakeSubsystem &intake
-    );
+    IntakeCmd(IntakeSubsystem &intake);
 
     void Initialize() override;
 
