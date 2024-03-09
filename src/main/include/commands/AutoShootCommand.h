@@ -7,7 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 
 /**
@@ -22,7 +22,7 @@ class AutoShootCommand
 {
   public:
     AutoShootCommand();
-    AutoShootCommand(ShooterSubsystem &shooter,
+    AutoShootCommand(ShooterWheelsSubsystem &shooterWheels,
                   IntakeSubsystem &intake
     );
 
@@ -39,7 +39,7 @@ class AutoShootCommand
     bool IsFinished() override;
 
   private:
-    ShooterSubsystem* m_shooter = nullptr;
+    ShooterWheelsSubsystem* m_shooterWheel = nullptr;
     IntakeSubsystem* m_intake = nullptr;
 
     double time = 0;

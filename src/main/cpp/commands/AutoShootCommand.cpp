@@ -9,11 +9,11 @@ AutoShootCommand::AutoShootCommand()
 
 }
 
-AutoShootCommand::AutoShootCommand(ShooterSubsystem &shooter,
+AutoShootCommand::AutoShootCommand(ShooterWheelsSubsystem &shooterWheel,
                             IntakeSubsystem &intake) 
 {
-  m_shooter = &shooter;
-  AddRequirements({m_shooter});
+  m_shooterWheel = &shooterWheel;
+  AddRequirements({m_shooterWheel});
   m_intake = &intake;
   AddRequirements({m_intake});
 }
@@ -28,8 +28,6 @@ void AutoShootCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AutoShootCommand::Execute() 
 {
-  m_shooter->accumulateError();
-
   if(time <= 60) //todo change values to be most efficient/effective
   {
     shooterWarmup();
@@ -49,7 +47,7 @@ void AutoShootCommand::Execute()
 
 void AutoShootCommand::shooterWarmup()
 {
-  m_shooter->SetShooter(0.75, 0.75);
+  m_shooterWheel->SetShooter(0.75, 0.75);
 }
 
 void AutoShootCommand::shoot()
@@ -63,14 +61,11 @@ void AutoShootCommand::stopShoot()
 {
   m_intake->stopIntake();
   m_intake->stopMagazine();
-  m_shooter->StopShooter();
+  m_shooterWheel->StopShooter();
 }
 
 // Called once the command ends or is interrupted.
-void AutoShootCommand::End(bool interrupted)
-{
-  m_shooter->setRestingActuatorPosition();
-}
+void AutoShootCommand::End(bool interrupted){}
 
 // Returns true when the command should end.
 bool AutoShootCommand::IsFinished() 

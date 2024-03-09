@@ -10,14 +10,14 @@ ShootCommand::ShootCommand()
 }
 
 ShootCommand::ShootCommand(
-  ShooterSubsystem &shooter,
+  ShooterWheelsSubsystem &shooterWheels,
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
   frc::XboxController &auxController
 ) 
 {
-  m_shooter = &shooter;
-  AddRequirements({m_shooter});
+  m_shooterWheels = &shooterWheels;
+  AddRequirements({m_shooterWheels});
   m_intake = &intake;
   m_driverController = &driverController;
   m_auxController = &auxController;
@@ -37,9 +37,6 @@ void ShootCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void ShootCommand::Execute() 
 {
-  m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
-  m_shooter->accumulateError();
-
   if(time >= 25 && hasShot == true)
   {
     finished = true;
@@ -56,7 +53,7 @@ void ShootCommand::Execute()
 
 void ShootCommand::shooterWarmup()
 {
-  m_shooter->SetShooter(0.75, 0.75);
+  m_shooterWheels->SetShooter(0.75, 0.75);
 }
 
 void ShootCommand::shoot()
@@ -70,11 +67,14 @@ void ShootCommand::stopShoot()
 {
   m_intake->stopIntake();
   m_intake->stopMagazine();
-  m_shooter->StopShooter();
+  m_shooterWheels->StopShooter();
 }
 
 // Called once the command ends or is interrupted.
-void ShootCommand::End(bool interrupted) {}
+void ShootCommand::End(bool interrupted)
+{
+  m_shooterWheels->StopShooter();
+}
 
 // Returns true when the command should end.
 bool ShootCommand::IsFinished() 

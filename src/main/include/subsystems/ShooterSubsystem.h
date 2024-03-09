@@ -42,11 +42,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double GetOffSetEncoderValue();
 
-  void runMagazine(double speed);
-  void stopMagazine();
-  void holdMagazine(double pos);
-  double GetCurrMagEncoderVal();
-
   double ShooterError();
   void driveActuator(double speed);
   void setRestingActuatorPosition();
@@ -62,23 +57,11 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double GetAngleTrim();
 
-
-
  private:
-  rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax BottomShooter{16, rev::CANSparkMax::MotorType::kBrushless};
+
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
   //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
   frc::DutyCycleEncoder ShooterEncoder{8};
-
-
-  // rev::CANSparkMax MagazineMotor{14, rev::CANSparkMax::MotorType::kBrushless}; //now apart of the intake 
-  // frc::DigitalInput MagazineSensor{5};
-
-  // rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
-  
-  frc::PIDController shooterPIDController{ShooterConstants::kp, ShooterConstants::ki, 0};
-  // rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?
 
   double m_DesiredAngle = 40; 
   double testAngle = 40;

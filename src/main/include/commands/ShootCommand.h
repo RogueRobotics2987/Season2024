@@ -8,7 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/XboxController.h>
 
-#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 
 /**
@@ -19,14 +19,15 @@
  * Command will *not* work!
  */
 class ShootCommand
-    : public frc2::CommandHelper<frc2::Command, ShootCommand> {
+    : public frc2::CommandHelper<frc2::Command, ShootCommand>
+{
  public:
   ShootCommand();
-  ShootCommand(ShooterSubsystem &shooter,
+  ShootCommand(ShooterWheelsSubsystem &shooterWheels,
                 IntakeSubsystem &intake,
                 frc::XboxController &driverController,
                 frc::XboxController &auxController
-);
+  );
 
   void shooterWarmup();
   void shoot();
@@ -41,7 +42,7 @@ class ShootCommand
   bool IsFinished() override;
 
  private:
-  ShooterSubsystem* m_shooter = nullptr;
+  ShooterWheelsSubsystem* m_shooterWheels = nullptr;
   IntakeSubsystem* m_intake = nullptr;
   frc::XboxController* m_driverController = nullptr;
   frc::XboxController* m_auxController = nullptr;

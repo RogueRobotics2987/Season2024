@@ -5,10 +5,11 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driverController)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driverController, IntakeSubsystem &intake)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
+  m_intake = &intake;
   m_drivetrain = &drivetrain;
   m_driverController = &driverController;
 
@@ -20,6 +21,12 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
 void NoteFollower::Initialize()
 {
   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
+  m_intake->runIntake(0.3);
+  m_intake->DirectionNote(0.25); //possibly up all these speeds
+  m_intake->runMagazine(0.25);
+  state = 0;
+  time = 0;
+  finished = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -69,6 +76,35 @@ void NoteFollower::Execute()
           NoJoystickInput
         );
     }
+
+  if(state == 0)
+  {
+    //just run until we have a note
+
+    if(m_intake->GetMagazineSensor())
+    {
+      state = 1;
+    }
+  }
+  else if(state == 1)
+  {
+    m_intake->stopIntake();
+    m_intake->stopMagazine();
+
+    state = 2;
+  }
+  else if(state == 2)
+  {
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
+
+    time++;
+    m_intake->runMagazine(-0.2);
+
+    if(time <= 7)
+    {
+      finished = true;
+    }
+  }
 }
 
 
@@ -76,12 +112,13 @@ void NoteFollower::Execute()
 void NoteFollower::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("noteFollower", true);
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
 // Returns true when the command should end.
 bool NoteFollower::IsFinished()
 {
-  return false;
+  return finished;
 }
 
 float NoteFollower::Deadzone(float x)

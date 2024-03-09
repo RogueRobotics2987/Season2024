@@ -54,6 +54,7 @@
 #include "commands/ManualAim.h"
 #include "commands/ShootCommand.h"
 #include "commands/AutoShootCommand.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -89,6 +90,7 @@ class RobotContainer
     DriveSubsystem m_drive;
     LimelightSubsystem m_limelight;
     ShooterSubsystem m_shooter;
+    ShooterWheelsSubsystem m_shooterWheels;
     IntakeSubsystem m_intake;
     // ArmSubsystem m_arm;
     ClimberSubsystem m_climb;

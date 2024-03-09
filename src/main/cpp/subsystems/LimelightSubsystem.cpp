@@ -87,7 +87,7 @@ double LimelightSubsystem::PhotonYaw(){
 
 double LimelightSubsystem::FilteredPhotonYaw()
 {
-    double staticOffset = 4;
+    double staticOffset = 2;
 
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
     // return OffsetAngle;
