@@ -101,7 +101,7 @@ void FollowWaypoints::Execute()
     // robotSpeed = 1_mps;
     if((distanceTraveled + (distanceTraveled * 0.1)) >= currentDistance)
     {
-      robotSpeed = 0.5_mps;
+      robotSpeed = 1.5_mps;
     }
     else if((currentDistance-distanceTraveled) <= 0.65)
     {
@@ -151,7 +151,6 @@ void FollowWaypoints::Execute()
     else
     {
       m_drivetrain->Drive(thetaVal, false, false);
-
     }
   }
 
@@ -184,7 +183,7 @@ void FollowWaypoints::Execute()
 // Called once the command ends or is interrupted.
 void FollowWaypoints::End(bool interrupted)
 {
-  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, true, false);
+  m_drivetrain->Drive(0_mps, 0_mps , 0_rad_per_s, false, false);
   distanceTraveled = 0;
   finished = false;
   totalDistance = 0;
