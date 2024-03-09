@@ -24,6 +24,8 @@ AmpShooter::AmpShooter(
 void AmpShooter::Initialize() 
 {
   m_shooter->SetShooter(0.4, 0.4);
+  hasShot = false; 
+  time = 0;
 }
 // Called repeatedly when this Command is scheduled to run
 void AmpShooter::Execute() 
@@ -37,17 +39,28 @@ void AmpShooter::Execute()
     m_intake->runIntake(1);
     m_intake->DirectionNote(1);
     m_arm->runArmWheels(-1);
+
+    hasShot = true; 
   }
+
+    if(hasShot) {
+      time += 1;
+    }
 }
 
 // Called once the command ends or is interrupted.
 void AmpShooter::End(bool interrupted) 
 {
-
+ 
 }
 
 // Returns true when the command should end.
 bool AmpShooter::IsFinished() 
 {
-  return false;
+   if(time > 30) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }

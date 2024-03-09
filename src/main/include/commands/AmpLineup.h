@@ -6,11 +6,11 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/XboxController.h>
-#include "RobotContainer.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
-#include "subsystems/ArmSubsystem.h"
+#include "subsystems/DriveSubsystem.h"
+#include "networktables/NetworkTableInstance.inc"
+#include "subsystems/LimelightSubsystem.h"
+
+
 
 /**
  * An example command.
@@ -19,12 +19,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AmpShooter
-    : public frc2::CommandHelper<frc2::Command, AmpShooter> {
+class AmpLineup
+    : public frc2::CommandHelper<frc2::Command, AmpLineup> {
  public:
-  AmpShooter();
-  AmpShooter(ShooterSubsystem &shooter, IntakeSubsystem &intake,
-  frc::XboxController &driverController, ArmSubsystem &arm);
+  AmpLineup(DriveSubsystem &drive, LimelightSubsystem &LimeLight);
 
   void Initialize() override;
 
@@ -33,13 +31,10 @@ class AmpShooter
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-  private:
-  ShooterSubsystem* m_shooter = nullptr;
-  IntakeSubsystem* m_intake = nullptr;
-  frc::XboxController* m_driverController = nullptr;
-  ArmSubsystem* m_arm = nullptr;
-  double time = 0;
-  bool hasShot = false; 
+
+private:
+  
+  DriveSubsystem* m_drive;
+  LimelightSubsystem* m_LimeLight;
 
 };
-
