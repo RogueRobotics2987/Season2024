@@ -20,8 +20,7 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class FollowWaypoints
-    : public frc2::CommandHelper<frc2::Command, FollowWaypoints>
+class FollowWaypoints : public frc2::CommandHelper<frc2::Command, FollowWaypoints>
 {
   public:
     FollowWaypoints();
@@ -31,8 +30,7 @@ class FollowWaypoints
       std::vector<frc::Pose2d> waypoints,
       std::vector<units::meters_per_second_t> driveSpeed,
       std::vector<units::meters_per_second_t> cruiseSpeed,
-      bool limeLight
-    );
+      bool limeLight);
 
     void Initialize() override;
 
@@ -43,7 +41,6 @@ class FollowWaypoints
     bool IsFinished() override;
 
     double DistanceBetweenAngles(double angle1, double angle2);
-
 
   private:
     DriveSubsystem* m_drivetrain = nullptr;

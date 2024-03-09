@@ -19,8 +19,7 @@ class SwerveModuleSubsystem : public frc2::SubsystemBase
       int m_MotorControllerTurning,
       bool driveEncoderReversed,
       int TurningEncoderNumber,
-      bool turningEncoderReversed
-    );
+      bool turningEncoderReversed);
 
     ~SwerveModuleSubsystem();
     frc::SwerveModuleState GetState();
@@ -50,13 +49,16 @@ class SwerveModuleSubsystem : public frc2::SubsystemBase
     bool m_reverseDriveEncoder;
     bool m_reverseTurningEncoder;
 
-    frc::ProfiledPIDController<units::radians> m_turningPIDController{
+    frc::ProfiledPIDController<units::radians> m_turningPIDController
+    {
       ModuleConstants::kPModuleTurningController,
       0.0,
       0.0,
       {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}
     };
-    frc::PIDController m_drivePIDController{
+
+    frc::PIDController m_drivePIDController
+    {
       ModuleConstants::kPModuleDriveController, 0, 0
     };
 };

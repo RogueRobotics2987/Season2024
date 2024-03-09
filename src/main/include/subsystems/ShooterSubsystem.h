@@ -18,58 +18,53 @@
 #include <math.h>
 #include <iostream>
 
-class ShooterSubsystem : public frc2::SubsystemBase {
- public:
-  ShooterSubsystem();
+class ShooterSubsystem : public frc2::SubsystemBase
+{
+  public:
+    ShooterSubsystem();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  void JoystickActuator(double pos);
+    void JoystickActuator(double pos);
 
-  void StopShooter();
-  void SetShooter(double speedRight, double speedLeft);
+    void StopShooter();
+    void SetShooter(double speedRight, double speedLeft);
 
-  void ReverseShooter();
-  
-  void SetActuator(double DesiredAngle);
+    void ReverseShooter();
+    
+    void SetActuator(double DesiredAngle);
 
-  bool GetMagazineSensor();
-  
-  bool IsTargeted();
+    bool GetMagazineSensor();
+    
+    bool IsTargeted();
 
-  double GetOffSetEncoderValue();
+    double GetOffSetEncoderValue();
 
-  double ShooterError();
-  void driveActuator(double speed);
-  void setRestingActuatorPosition();
-  double DistanceBetweenAngles(double targetAngle, double sourceAngle);
-  void SetIntakePose();
+    double ShooterError();
+    void driveActuator(double speed);
+    void setRestingActuatorPosition();
+    double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+    void SetIntakePose();
 
-  void ApriltagShooterTheta(double dist, double pos);
-  void AngleTrimAdjust(bool buttonUp, bool buttonDown);
-  void zeroIntergralVal();
-  void accumulateError();
-  void SetShooterAngle();
-  double GetDesired();
+    void ApriltagShooterTheta(double dist, double pos);
+    void AngleTrimAdjust(bool buttonUp, bool buttonDown);
+    void zeroIntergralVal();
+    void accumulateError();
+    void SetShooterAngle();
+    double GetDesired();
 
-  double GetAngleTrim();
+    double GetAngleTrim();
 
+  private:
+    rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
+    frc::DutyCycleEncoder ShooterEncoder{8};
 
+    double m_DesiredAngle = 40; 
+    double testAngle = 40;
 
- private:
-
-  rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::SparkMaxAlternateEncoder ShooterEncoder{ShooterActuator.GetAlternateEncoder(8192)};
-  frc::DutyCycleEncoder ShooterEncoder{8};
-
-  double m_DesiredAngle = 40; 
-  double testAngle = 40;
-
-  double angleTrim = 0;
-  double accumulatedError = 0;
-  
-  //double tempKp = 0.01;
+    double angleTrim = 0;
+    double accumulatedError = 0;
 };

@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 
-class CommandMessenger {
+class CommandMessenger
+{
     public:  
 
         void SetAuxMessage(std::string message)

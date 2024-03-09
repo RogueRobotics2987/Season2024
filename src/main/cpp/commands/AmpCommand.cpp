@@ -14,7 +14,7 @@ AmpCommand::AmpCommand(ArmSubsystem &arm)
 // Called when the command is initially scheduled.
 void AmpCommand::Initialize()
 {
-  m_arm->setLowerArmAngle(112);
+  m_arm->SetLowerArmAngle(112);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -24,7 +24,7 @@ void AmpCommand::Execute()
 
   if(m_arm->GetOffSetEncoderValueLower() > 100)
   {
-    m_arm->runArmWheels(-1);
+    m_arm->RunArmWheels(-1);
   }
 }
 

@@ -21,12 +21,16 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AprilTagAim
-    : public frc2::CommandHelper<frc2::Command, AprilTagAim> 
+class AprilTagAim : public frc2::CommandHelper<frc2::Command, AprilTagAim> 
 {
   public:
     AprilTagAim(); 
-    AprilTagAim(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driveXbox, ShooterSubsystem &shooter, frc::XboxController &auxController);
+    AprilTagAim(
+      LimelightSubsystem &limelight,
+      DriveSubsystem &drivetrain,
+      frc::XboxController &driveXbox,
+      ShooterSubsystem &shooter,
+      frc::XboxController &auxController);
 
     void Initialize() override;
 

@@ -17,16 +17,15 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AutoShootCommand
-    : public frc2::CommandHelper<frc2::Command, AutoShootCommand>
+class AutoShootCommand : public frc2::CommandHelper<frc2::Command, AutoShootCommand>
 {
   public:
     AutoShootCommand();
-    AutoShootCommand(ShooterWheelsSubsystem &shooterWheels,
-                  IntakeSubsystem &intake
-    );
+    AutoShootCommand(
+      ShooterWheelsSubsystem &shooterWheels,
+      IntakeSubsystem &intake);
 
-    void shooterWarmup();
+    void ShooterWarmup();
     void shoot();
     void stopShoot();
 

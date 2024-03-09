@@ -13,7 +13,6 @@
 #include "ShootCommand.h" //new
 #include "RobotContainer.h" //new
 
-
 /**
  * An example command.
  *
@@ -21,25 +20,20 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AmpCommand
-    : public frc2::CommandHelper<frc2::Command, AmpCommand> {
- public:
-  AmpCommand();
-  AmpCommand(ArmSubsystem &arm);
+class AmpCommand : public frc2::CommandHelper<frc2::Command, AmpCommand> 
+{
+  public:
+    AmpCommand();
+    AmpCommand(ArmSubsystem &arm);
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
- private:
-  ArmSubsystem* m_arm = nullptr;
+    bool IsFinished() override;
 
-  // float x = 5;
-  // bool y;
-  // y = x;
-
-
+  private:
+    ArmSubsystem* m_arm = nullptr;
 };

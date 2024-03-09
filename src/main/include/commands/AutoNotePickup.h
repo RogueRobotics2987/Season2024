@@ -13,13 +13,14 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
  
-class AutoNotePickup
-    : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
+class AutoNotePickup : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
 {
   public:
     AutoNotePickup();
-    AutoNotePickup(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox);
-
+    AutoNotePickup(
+      LimelightSubsystem &limePose,
+      DriveSubsystem &drivetrain,
+      frc::XboxController &Xbox);
 
     void Initialize() override;
 
