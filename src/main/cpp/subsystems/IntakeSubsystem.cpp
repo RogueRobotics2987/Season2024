@@ -55,14 +55,14 @@ void IntakeSubsystem::DirectionNote(double speed)
     }
 }
 
-void IntakeSubsystem::runIntake(double speed)
+void IntakeSubsystem::RunIntake(double speed)
 {
     // need to make it so that these turn on with a button
     FrontIntake.Set(speed);
     BackIntake.Set(-speed);
 }
 
-void IntakeSubsystem::stopIntake()
+void IntakeSubsystem::StopIntake()
 {
     FrontIntake.Set(0.0);
     BackIntake.Set(0.0);
@@ -74,7 +74,7 @@ bool IntakeSubsystem::GetIntakeFront()
     return intakeColorSensorFront.Get();
 }
 
-void IntakeSubsystem::spitOutIntake()
+void IntakeSubsystem::SpitOutIntake()
 {
     FrontIntake.Set(-0.2);
     BackIntake.Set(0.2);
@@ -87,17 +87,17 @@ bool IntakeSubsystem::GetMagazineSensor()
     return MagazineSensor.Get();
 }
 
-void IntakeSubsystem::runMagazine(double speed)
+void IntakeSubsystem::RunMagazine(double speed)
 {
     MagazineMotor.Set(speed);
 }
 
-void IntakeSubsystem::stopMagazine()
+void IntakeSubsystem::StopMagazine()
 {
     MagazineMotor.Set(0.0);
 }
 
-void IntakeSubsystem::holdMagazine(double pos)
+void IntakeSubsystem::HoldMagazine(double pos)
 {
     magPIDController.SetReference(pos, rev::ControlType::kPosition);
 }

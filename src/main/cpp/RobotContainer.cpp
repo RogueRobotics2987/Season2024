@@ -19,45 +19,8 @@ RobotContainer::RobotContainer()
   //paths commented out for now since they are unused
   
   m_chooser.AddOption("B_1", "B_1");
-  // m_chooser.AddOption("B_2", "B_2");
-  // m_chooser.AddOption("B_3", "B_3");
-  // m_chooser.AddOption("B_1_2_3", "B_1_2_3");
   m_chooser.AddOption("B_3_6", "B_3_6");
-  // m_chooser.AddOption("B_3_7", "B_3_7");
-  // m_chooser.AddOption("B_2_6", "B_2_6");
-  // m_chooser.AddOption("B_2_7", "B_2_7");
-  // m_chooser.AddOption("B_1_4", "B_1_4");
-  // m_chooser.AddOption("B_3_8", "B_3_8");
-  // m_chooser.AddOption("B_2_5", "B_2_5");
-  // m_chooser.AddOption("R_1", "R_1");
-  // m_chooser.AddOption("R_2", "R_2");
-  // m_chooser.AddOption("R_3", "R_3");
-  // m_chooser.AddOption("R_3_6", "R_3_6");
-  // m_chooser.AddOption("R_3_7", "R_3_7");
-  // m_chooser.AddOption("B_3_2_1", "B_3_2_1");
-  // m_chooser.AddOption("B_1_5", "B_1_5");
-  // m_chooser.AddOption("B_3_7_8", "B_3_7_8");
-  // m_chooser.AddOption("B_1_4_5", "B_1_4_5");
-  // m_chooser.AddOption("B_2_6_7", "B_2_6_7");
-  // m_chooser.AddOption("B_3_6_7", "B_3_6_7");
-  // m_chooser.AddOption("B_2_6_5", "B_2_6_5");
-  // m_chooser.AddOption("B_2_5_6", "B_2_5_6");
-  // m_chooser.AddOption("B_3_2_1_4_5", "B_3_2_1_4_5");
-  // m_chooser.AddOption("R_1_2_3", "R_1_2_3");
-  // m_chooser.AddOption("R_2_6", "R_2_6");
-  // m_chooser.AddOption("R_2_7", "R_2_7");
-  // m_chooser.AddOption("R_1_4", "R_1_4");
-  // m_chooser.AddOption("R_3_8", "R_3_8");
-  // m_chooser.AddOption("R_2_5", "R_2_5");
-  // m_chooser.AddOption("R_3_2_1", "R_3_2_1");
-  // m_chooser.AddOption("R_1_5", "R_1_5");
-  // m_chooser.AddOption("R_3_7_8", "R_3_7_8");
-  // m_chooser.AddOption("R_1_4_5", "R_1_4_5");
-  // m_chooser.AddOption("R_2_6_7", "R_2_6_7");
-  // m_chooser.AddOption("R_3_6_7", "R_3_6_7");
-  // m_chooser.AddOption("R_2_6_5", "R_2_6_5");
-  // m_chooser.AddOption("R_2_5_6", "R_2_5_6");
-  // m_chooser.AddOption("R_3_2_1_4_5", "R_3_2_1_4_5");
+
   frc::SmartDashboard::PutData(&m_chooser);
 
   // Configure the button bindings
@@ -74,15 +37,18 @@ RobotContainer::RobotContainer()
 
       bool fieldOrientated;
 
-      if (m_driverController.GetRawAxis(3)> 0.15){ //if the right trigger is pulled
+      if (m_driverController.GetRawAxis(3)> 0.15) //if the right trigger is pulled
+      {
         fieldOrientated = false; //robot orientated driving
       }
 
-      if (m_driverController.GetRawAxis(3)< 0.15){ //if the right trigger is not pulled
+      if (m_driverController.GetRawAxis(3)< 0.15) //if the right trigger is not pulled
+      {
         fieldOrientated = true; //field orientated driving
       }
 
-      if ((safeX == 0) && (safeY == 0) && (safeRot == 0)) {
+      if ((safeX == 0) && (safeY == 0) && (safeRot == 0))
+      {
         noJoystickInput = true; //the wheels will move to the 45 degree (X) position
       }
 
@@ -111,7 +77,7 @@ RobotContainer::RobotContainer()
   frc2::RunCommand(
     [this]
       {
-        m_climb.stopClimber();
+        m_climb.StopClimber();
       },
       {&m_climb}
   ));
@@ -120,8 +86,8 @@ RobotContainer::RobotContainer()
   frc2::RunCommand(
     [this]
       {
-        m_intake.stopIntake();
-        m_intake.holdMagazine(m_intake.GetCurrMagEncoderVal());
+        m_intake.StopIntake();
+        m_intake.HoldMagazine(m_intake.GetCurrMagEncoderVal());
       },
       {&m_intake}
   ));
@@ -130,13 +96,11 @@ RobotContainer::RobotContainer()
   frc2::RunCommand(
     [this]
       {
-        m_arm.setLowerArmAngle(30);
-        m_arm.stopArmWheels();
+        m_arm.SetLowerArmAngle(30);
+        m_arm.StopArmWheels();
       },
       {&m_arm}
   ));
-   
-
 }
 
 void RobotContainer::ConfigureButtonBindings()
@@ -158,12 +122,11 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 8).ToggleOnTrue(AmpLineup(m_drive, m_limelight).ToPtr());
 
-
   frc2::POVButton(&m_driverController, 90).WhileTrue(
     frc2::cmd::Run(
       [this]
         {
-          m_climb.startClimber(); 
+          m_climb.StartClimber(); 
         },
       {&m_climb}
     )
@@ -194,115 +157,45 @@ void RobotContainer::ConfigureButtonBindings()
   );
 
   frc2::POVButton(&m_auxController, 270).WhileTrue(ManualAim(m_shooter, m_auxController).ToPtr()); //could change to a toggle depending on what drivers like
-
-  // // Robot slides right (when front is away from the drivers)
-  // frc2::JoystickButton(&m_driverController, 1).WhileTrue(m_drive.Twitch(true));
-  // // Robot slides left (when front is away from the drivers)
-  // frc2::JoystickButton(&m_driverController, 2).WhileTrue(m_drive.Twitch(false));
-
-  // //Limelight Note Detection
-  //frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_shooter, m_arm).ToPtr());
-
-  // //Limelight April Tag Detection, y
-  // frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter).ToPtr());
-
-  //TODO adjust deadzone so the robot will not be at an angle when aiming, also implement this fucntion into the state machine
-  // frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(AutoAprilTag(m_limelight, m_drive).ToPtr());
-
-  // //start PICKUP state
-  // //frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(m_intakeShoot.Pickup());
-  // //frc2::JoystickButton(&m_driverController, 5).ToggleOnFalse(m_intakeShoot.PickupStop());
-
 }
 
-float RobotContainer::DeadzoneCubed(float x){
+float RobotContainer::DeadzoneCubed(float x)
+{
   x = x * x * x;  // exponetial curve, slow acceleration at begining
 
-  if ((x < 0.001) &&  (x > -0.001)){
-    x=0;
+  if ((x < 0.001) &&  (x > -0.001))
+  {
+    x = 0;
   }
-  else if (x >= 0.001){
-    x = x ;//- 0.1;
+  else if (x >= 0.001)
+  {
+    x = x ;
   }
-  else if (x <= -0.001){
-    x = x ;//+ 0.1;
+  else if (x <= -0.001)
+  {
+    x = x ;
   }
 
   return(x);
- 
 }
 
-float RobotContainer::Deadzone(float x){
-  if ((x < 0.1) &&  (x > -0.1)){
-    x=0;
+float RobotContainer::Deadzone(float x)
+{
+  if ((x < 0.1) && (x > -0.1))
+  {
+    x = 0;
   }
-  else if (x >= 0.1){
+  else if (x >= 0.1)
+  {
     x = x - 0.1;
   }
-  else if (x <= -0.1){
+  else if (x <= -0.1)
+  {
     x = x + 0.1;
   }
 
   return(x);
 }
-
-// frc2::CommandPtr RobotContainer::GetAuxilaryStateMachine()
-// {
-//   return StateMachine(
-//       m_drive,
-//       m_limelight,
-//       m_arm, 
-//       m_climb,
-//       m_color, //can remove?
-//       m_intake,
-//       m_shooter,
-//       m_driverController,
-//       m_auxController
-//     ).ToPtr();
-// }
-
-/*
-frc2::CommandPtr RobotContainer::GetDriveStateMachine(){
-  return DriveStateMachine(
-    m_drive,
-    m_limelight, 
-    m_driverController, 
-    m_auxController, 
-    driveShooterMessager
-  ).ToPtr();
-}
-*/
-
-// frc2::CommandPtr RobotContainer::GetAutoAuxilaryStateMachine(){
-//   return AutoAuxilaryStateMachine(
-//       m_arm, 
-//       m_climb, //can remove?
-//       m_color, //can remove.
-//       m_intake,
-//       m_shooter, 
-//       m_driverController,
-//       m_auxController,
-//       driveShooterMessager
-//     ).ToPtr();
-// }
-
-// frc2::CommandPtr RobotContainer::GetAutoDriveStateMachine(){
-
-//   // m_drive.ResetOdometry(B_1Waypoints[0]);
-
-//   return AutoDriveStateMachine(
-//     m_drive,
-//     m_limelight,
-//     m_driverController,
-//     m_auxController,
-//     driveShooterMessager,
-//     path
-//   ).ToPtr();
-// }
-
-// void RobotContainer::SetRanAuto(bool ranAuto){
-//   m_drive.SetRanAuto(ranAuto);
-// }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
@@ -310,14 +203,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
   chosenAuto = m_chooser.GetSelected();
 
-
-  std::vector<frc::Pose2d> twoNotePoses{
+  std::vector<frc::Pose2d> twoNotePoses
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(0.75_m, 0.25_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(1.75_m, 0.25_m, frc::Rotation2d(235_deg))
   };
   
-  std::vector<frc::Pose2d> thirdNotePoses{
+  std::vector<frc::Pose2d> thirdNotePoses
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(0.75_m, 0.25_m, frc::Rotation2d(180_deg)),
     frc::Pose2d(1.75_m, 0.25_m, frc::Rotation2d(235_deg)),
@@ -326,7 +220,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(1.75_m, -1.16_m, frc::Rotation2d(235_deg))
   };
 
-  std::vector<frc::Pose2d> forthNotePoses{
+  std::vector<frc::Pose2d> forthNotePoses
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(0.75_m, 0.25_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1.75_m, 0.25_m, frc::Rotation2d(0_deg)),
@@ -343,7 +238,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(7.1_m, -0.95_m, frc::Rotation2d(0_deg))
   };
 
-  std::vector<frc::Pose2d> squareDance{
+  std::vector<frc::Pose2d> squareDance
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1.7_m, 0_m, frc::Rotation2d(90_deg)),
     frc::Pose2d(2_m, 0.3_m, frc::Rotation2d(0_deg)),
@@ -355,7 +251,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg))
   };
 
-  std::vector<units::meters_per_second_t> squareDanceSpeeds{
+  std::vector<units::meters_per_second_t> squareDanceSpeeds
+  {
     0_mps,
     1_mps,
     1_mps,
@@ -367,7 +264,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     0_mps
   };
 
-  std::vector<units::meters_per_second_t> squareDanceCruiseSpeeds{
+  std::vector<units::meters_per_second_t> squareDanceCruiseSpeeds
+  {
     0_mps,
     1_mps,
     1_mps,
@@ -379,13 +277,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     1_mps
   };
 
-  std::vector<frc::Pose2d> theTwist{
+  std::vector<frc::Pose2d> theTwist
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(1_m, 0_m, frc::Rotation2d(90_deg)),
     frc::Pose2d(2_m, 0_m, frc::Rotation2d(180_deg))
   };
 
-  std::vector<frc::Pose2d> walkTheLine{
+  std::vector<frc::Pose2d> walkTheLine
+  {
     frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(2_m, 0_m, frc::Rotation2d(0_deg)),
     frc::Pose2d(4_m, 0_m, frc::Rotation2d(0_deg)),
@@ -393,7 +293,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     frc::Pose2d(7_m, 0_m, frc::Rotation2d(0_deg))
   };
 
-  std::vector<units::meters_per_second_t> walkTheLineSpeeds{
+  std::vector<units::meters_per_second_t> walkTheLineSpeeds
+  {
     0_mps,
     1_mps,
     0_mps,
@@ -401,23 +302,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     0_mps
   };
 
-  std::vector<units::meters_per_second_t> walkTheLineCruiseSpeeds{
+  std::vector<units::meters_per_second_t> walkTheLineCruiseSpeeds
+  {
     1_mps,
     1_mps,
     1_mps,
     1_mps,
     1_mps
   };
-
-  // std::vector<frc::Pose2d>  BPose1Shoot3{
-  //   frc::Pose2d(1.25_m, 7_m, frc::Rotation2d(0_deg)),
-  //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
-  // };
-
-  // std::vector<frc::Pose2d>  RPose1Shoot3{
-  //   frc::Pose2d(15.05_m, 7_m, frc::Rotation2d(0_deg)),
-  //   frc::Pose2d(8.3_m, 7.45_m, frc::Rotation2d(0_deg))
-  // };
   
   if(chosenAuto == "B_2")
   {

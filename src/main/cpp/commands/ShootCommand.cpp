@@ -27,7 +27,7 @@ void ShootCommand::Initialize()
   finished = false;
   time = 0;
 
-  shooterWarmup();
+  ShooterWarmup();
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -47,23 +47,22 @@ void ShootCommand::Execute()
   time++;
 }
 
-void ShootCommand::shooterWarmup()
+void ShootCommand::ShooterWarmup()
 {
   m_shooterWheels->PIDShoot();
-  //m_shooter->SetShooter(0.75, 0.75);
 }
 
 void ShootCommand::shoot()
 {
-  m_intake->runIntake(1);
-  m_intake->runMagazine(1);
+  m_intake->RunIntake(1);
+  m_intake->RunMagazine(1);
   m_intake->DirectionNote(1);
 }
 
 void ShootCommand::stopShoot()
 {
-  m_intake->stopIntake();
-  m_intake->stopMagazine();
+  m_intake->StopIntake();
+  m_intake->StopMagazine();
   m_shooterWheels->StopShooter();
 }
 

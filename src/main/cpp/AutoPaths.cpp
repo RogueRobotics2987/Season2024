@@ -18,6 +18,4 @@ class AutoPaths {
     };   
         
     private:
-
-
 };

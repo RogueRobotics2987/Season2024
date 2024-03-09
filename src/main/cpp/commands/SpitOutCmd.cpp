@@ -17,7 +17,7 @@ void SpitOutCmd::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void SpitOutCmd::Execute()
 {
-  m_intake->spitOutIntake();
+  m_intake->SpitOutIntake();
 }
 
 // Called once the command ends or is interrupted.

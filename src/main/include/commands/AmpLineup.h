@@ -10,8 +10,6 @@
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/LimelightSubsystem.h"
 
-
-
 /**
  * An example command.
  *
@@ -19,22 +17,22 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AmpLineup
-    : public frc2::CommandHelper<frc2::Command, AmpLineup> {
- public:
-  AmpLineup(DriveSubsystem &drive, LimelightSubsystem &LimeLight);
+class AmpLineup : public frc2::CommandHelper<frc2::Command, AmpLineup> 
+{
+  public:
+    AmpLineup(
+      DriveSubsystem &drive,
+      LimelightSubsystem &LimeLight);
 
-  void Initialize() override;
+    void Initialize() override;
 
-  void Execute() override;
+    void Execute() override;
 
-  void End(bool interrupted) override;
+    void End(bool interrupted) override;
 
-  bool IsFinished() override;
+    bool IsFinished() override;
 
-private:
-  
-  DriveSubsystem* m_drive;
-  LimelightSubsystem* m_LimeLight;
-
+  private:
+    DriveSubsystem* m_drive;
+    LimelightSubsystem* m_LimeLight;
 };

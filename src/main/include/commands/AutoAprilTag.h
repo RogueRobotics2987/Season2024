@@ -11,6 +11,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
+
 /*
  * An example command.
  *
@@ -18,12 +19,14 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AutoAprilTag
-    : public frc2::CommandHelper<frc2::Command, AutoAprilTag>
+class AutoAprilTag : public frc2::CommandHelper<frc2::Command, AutoAprilTag>
 {
   public:
     AutoAprilTag(); 
-    AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, ShooterSubsystem &m_shooter);
+    AutoAprilTag(
+      LimelightSubsystem &limePose,
+      DriveSubsystem &drivetrain,
+      ShooterSubsystem &m_shooter);
 
     void Initialize() override;
 
@@ -46,5 +49,4 @@ class AutoAprilTag
     double desiredHeading = 0;
     int filteredTargetID = -1;
     double error = 0;
-
 };
