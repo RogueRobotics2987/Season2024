@@ -560,7 +560,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         )
       ),
       frc2::cmd::Parallel(
-        FollowWaypoints(m_drive, m_limelight, close4Waypoint3, close4PointSpeed3, close4CruiseSpeed3, true).ToPtr(),
+        FollowWaypoints(m_drive, m_limelight, close4Waypoint3, close4PointSpeed3, close4CruiseSpeed3, false).ToPtr(),
         IntakeCmd(m_intake).ToPtr()
       ),
       frc2::cmd::Race( //aim shooter for 0.75s

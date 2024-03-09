@@ -323,7 +323,7 @@ class RobotContainer
       frc::Pose2d(2.65_m, 7_m, 180_deg),
       frc::Pose2d(2.2_m, 4.3_m, 180_deg),
       frc::Pose2d(2.6_m, 4.1_m, 180_deg),
-      frc::Pose2d(2.35_m, 4.1_m, -130_deg)
+      frc::Pose2d(2.35_m, 4.1_m, 130_deg)
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed1
