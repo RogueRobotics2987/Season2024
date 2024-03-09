@@ -46,6 +46,7 @@ void AutoAprilTag::Execute()
 void AutoAprilTag::End(bool interrupted)
 {
   m_drive->Drive(0_rad_per_s, false, false);
+  m_shooter->setRestingActuatorPosition();
 }
 
 // Returns true when the command should end.

@@ -50,6 +50,7 @@
 #include "commands/AmpCommand.h"
 #include "commands/AmpShooter.h"
 #include "commands/AmpLineup.h"
+#include "commands/AutoShooterWarmupCmd.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -67,6 +68,7 @@ class RobotContainer
     float Deadzone(float x); 
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
+    void ZeroHeading();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -312,16 +314,16 @@ class RobotContainer
     std::vector<frc::Pose2d> close4Waypoint2
     {
       frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2_m, 6.8_m, 180_deg),
+      frc::Pose2d(2.2_m, 6.8_m, 180_deg),
       frc::Pose2d(2.65_m, 7_m, 180_deg)
     };
 
     std::vector<frc::Pose2d> close4Waypoint3
     {
       frc::Pose2d(2.65_m, 7_m, 180_deg),
-      frc::Pose2d(2_m, 4.3_m, 180_deg),
+      frc::Pose2d(2.2_m, 4.3_m, 180_deg),
       frc::Pose2d(2.6_m, 4.1_m, 180_deg),
-      frc::Pose2d(2.35_m, 4.1_m, 180_deg)
+      frc::Pose2d(2.35_m, 4.1_m, 130_deg)
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed1
@@ -341,7 +343,7 @@ class RobotContainer
     {
       1_mps,
       1.5_mps,
-      0_mps,
+      1.5_mps,
       0_mps
     };
 

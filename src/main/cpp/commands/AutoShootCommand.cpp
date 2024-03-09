@@ -25,15 +25,12 @@ void AutoShootCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AutoShootCommand::Execute() 
 {
-  if(time <= 60) //todo change values to be most efficient/effective
-  {
-    ShooterWarmup();
-  }
-  else if(60 <= time && time <= 100)
+
+  if(time <= 40)
   {
     shoot();
   }
-  else if(time >= 100)
+  else if(time >= 40)
   {
     stopShoot();
     finished = true;
@@ -44,7 +41,7 @@ void AutoShootCommand::Execute()
 
 void AutoShootCommand::ShooterWarmup()
 {
-  m_shooterWheel->SetShooter(0.75, 0.75);
+  m_shooterWheel->PIDShoot();
 }
 
 void AutoShootCommand::shoot()
@@ -58,7 +55,6 @@ void AutoShootCommand::stopShoot()
 {
   m_intake->StopIntake();
   m_intake->StopMagazine();
-  m_shooterWheel->StopShooter();
 }
 
 // Called once the command ends or is interrupted.
