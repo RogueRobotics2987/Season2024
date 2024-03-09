@@ -4,7 +4,7 @@
 
 #include "commands/AutoAprilTag.h"
 
-AutoAprilTag::AutoAprilTag(){}
+AutoAprilTag::AutoAprilTag() {}
 AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, ShooterSubsystem &shooter)
 {
   m_limePose = &limePose;
@@ -16,7 +16,7 @@ AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetr
 }
 
 // Called when the command is initially scheduled.
-void AutoAprilTag::Initialize(){}
+void AutoAprilTag::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void AutoAprilTag::Execute()
@@ -38,6 +38,7 @@ void AutoAprilTag::Execute()
   {
     m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), rotApril, false, true);
   }
+
   m_shooter->SetActuator(m_limePose->GetApriltagShooterTheta(m_limePose->FilteredDistance(), m_shooter->GetAngleTrim()));
 }
 
@@ -50,14 +51,7 @@ void AutoAprilTag::End(bool interrupted)
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
-  // if(fabs(m_limePose->GetApriltagDriveError()) < 3)
-  // {
-  //   return true;
-  // }
-  // else
-  // {
     return false;
-  // }
 }
 
 double AutoAprilTag::DistanceBetweenAngles(double targetAngle, double sourceAngle)

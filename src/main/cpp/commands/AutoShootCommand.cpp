@@ -4,10 +4,7 @@
 
 #include "commands/AutoShootCommand.h"
 
-AutoShootCommand::AutoShootCommand()
-{
-
-}
+AutoShootCommand::AutoShootCommand() {}
 
 AutoShootCommand::AutoShootCommand(ShooterSubsystem &shooter,
                             IntakeSubsystem &intake) 

@@ -10,8 +10,7 @@ FollowWaypoints::FollowWaypoints(
   std::vector<frc::Pose2d> waypoints,
   std::vector<units::meters_per_second_t> driveSpeed,
   std::vector<units::meters_per_second_t> cruiseSpeed,
-  bool limeLight
-) 
+  bool limeLight) 
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_drivetrain = &drivetrain;
@@ -22,7 +21,6 @@ FollowWaypoints::FollowWaypoints(
   m_waypoints.assign(waypoints.begin(), waypoints.end());
   m_driveSpeed.assign(driveSpeed.begin(), driveSpeed.end());
   m_cruiseSpeed.assign(cruiseSpeed.begin(), cruiseSpeed.end());
-  // maxSpeed = driveSpeed;
 
   for(int i = 0; i < (int)waypoints.size()-1; ++i)
   {
@@ -51,7 +49,6 @@ void FollowWaypoints::Initialize()
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
 
   accumulatedError = 0;
-
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -60,8 +57,7 @@ void FollowWaypoints::Execute()
   currentPose = m_drivetrain->GetPose();
 
   if((fabs((double)currentPose.X() - (double)desiredPose.X()) < threshold) 
-    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold) 
-    /*&& ((fabs(DistanceBetweenAngles((double)desiredPose.Rotation().Degrees(), (double)currentPose.Rotation().Degrees()))) < 5)*/)
+    && (fabs((double)currentPose.Y() - (double)desiredPose.Y()) < threshold))
   {
     if(m_waypoints.size() > 0) 
     {
@@ -124,10 +120,10 @@ void FollowWaypoints::Execute()
         frc::SmartDashboard::PutNumber("Xvalue1", x);
       }
     }
-    else{
+    else
+    {
       robotSpeed = cruiseSpeed;
     }
-
 
     alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));
     alpha = alpha - (double)currentPose.Rotation().Radians();
