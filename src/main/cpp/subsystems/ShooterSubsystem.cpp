@@ -39,31 +39,9 @@ void ShooterSubsystem::JoystickActuator(double pos)
     }
 }
 
-void ShooterSubsystem::StopShooter(){
-    TopShooter.Set(0.0);
-    BottomShooter.Set(0.0);
-}
-
-// void ShooterSubsystem::SetShooter(double speedBottom, double speedTop) {
-//     BottomShooter.Set(speedBottom);
-//     TopShooter.Set(speedTop);
-// }
-
-// void ShooterSubsystem::ReverseShooter(){   
-//     BottomShooter.Set(-0.2);
-//     TopShooter.Set(0.2);
-// }
-
-
 void ShooterSubsystem::SetActuator(double DesiredAngle) {
     m_DesiredAngle = DesiredAngle;
 }   
-
-
-
-// bool ShooterSubsystem::GetMagazineSensor(){
-//     return MagazineSensor.Get();
-// }
 
 bool ShooterSubsystem::IsTargeted(){
     return fabs(GetOffSetEncoderValue() - m_DesiredAngle) < ShooterConstants::AngleThreshold; 
