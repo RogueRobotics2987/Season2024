@@ -15,6 +15,7 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("ShootTobackupLeft", "ShootTobackupLeft");
   m_chooser.AddOption("Close4", "Close4");
   m_chooser.AddOption("FarSideMid", "FarSideMid");
+  m_chooser.AddOption("CenterBackup", "CenterBackup");
 
   //paths commented out for now since they are unused
   
@@ -625,6 +626,28 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         {&m_drive}
       )
     );
+  }
+  else if(chosenAuto == "CenterBackup")
+  {
+    m_drive.ResetOdometry(CenterBackup[0]);
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),
+      frc2::cmd::Race(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        frc2::WaitCommand(1.5_s).ToPtr()
+      ),
+      AutoShootCommand(m_shooterWheels, m_intake).ToPtr(),
+      frc2::cmd::Parallel(
+          FollowWaypoints(m_drive, m_limelight, CenterBackup, CenterBackupPointSpeeds, CenterBackupCruiseSpeeds, false).ToPtr(),
+          IntakeCmd(m_intake).ToPtr()
+      ),
+      frc2::cmd::Race(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        frc2::WaitCommand(1.5_s).ToPtr()
+      ),
+      AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
+    
+  );
   }
   else
   {

@@ -463,4 +463,42 @@ class RobotContainer
       3_mps,
       3_mps
     };
+
+    std::vector<frc::Pose2d> CenterBackup
+    {
+      frc::Pose2d(1.3_m, 5.55_m, 180_deg),
+      frc::Pose2d( 2.65_m, 5.55_m, 180_deg),
+    
+    };
+
+    std::vector<units::velocity::meters_per_second_t> CenterBackupPointSpeeds
+    {
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> CenterBackupCruiseSpeeds
+    {
+      1_mps,
+      1_mps
+    };
+
+     std::vector<frc::Pose2d> RedCenterBackup
+    {
+      frc::Pose2d(15.25_m, 5.55_m, 180_deg),
+      frc::Pose2d(13.9_m, 5.55_m, 180_deg),
+    
+    };
+
+    std::vector<units::velocity::meters_per_second_t> RedCenterbackupSpeeds
+    {
+      0_mps,
+      0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> RedCenterBackCruiseSpeeds
+    {
+      1_mps,
+      1_mps
+    };
 };
