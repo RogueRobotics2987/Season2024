@@ -50,14 +50,14 @@ void AutoAprilTag::End(bool interrupted)
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
-  if(error < 3)
-  {
-    return true;
-  }
-  else
-  {
+  // if(fabs(m_limePose->GetApriltagDriveError()) < 3)
+  // {
+  //   return true;
+  // }
+  // else
+  // {
     return false;
-  }
+  // }
 }
 
 double AutoAprilTag::DistanceBetweenAngles(double targetAngle, double sourceAngle)

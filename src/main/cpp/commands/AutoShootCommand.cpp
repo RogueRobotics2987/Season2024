@@ -67,7 +67,10 @@ void AutoShootCommand::stopShoot()
 }
 
 // Called once the command ends or is interrupted.
-void AutoShootCommand::End(bool interrupted) {}
+void AutoShootCommand::End(bool interrupted)
+{
+  m_shooter->setRestingActuatorPosition();
+}
 
 // Returns true when the command should end.
 bool AutoShootCommand::IsFinished() 

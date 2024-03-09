@@ -62,6 +62,7 @@ void IntakeCmd::End(bool interrupted)
   m_intake->runIntake(0);
   m_intake->Direction(0);
   m_intake->runMagazine(0);
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
 // Returns true when the command should end.
