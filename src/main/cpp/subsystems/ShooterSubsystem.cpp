@@ -70,6 +70,8 @@ void ShooterSubsystem::SetActuator(double DesiredAngle) {
     m_DesiredAngle = DesiredAngle;
 }   
 
+
+
 // bool ShooterSubsystem::GetMagazineSensor(){
 //     return MagazineSensor.Get();
 // }

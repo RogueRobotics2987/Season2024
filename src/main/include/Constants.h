@@ -137,7 +137,7 @@ namespace ShooterConstants {
 
     constexpr double SubwooferAngle = 60;   // temp value, please test and find out
     constexpr double StageAngle = 40;       // temp value, please test and find out
-
+    constexpr double AmpAngle = 0;          // TODO find angle value
     constexpr double ShooterMaxSoftLimit = 80;
     constexpr double ShooterMinSoftLimit = 20;
     constexpr double EncoderOffSet = 0.13; //0.03787;
@@ -178,15 +178,15 @@ namespace ArmConstants {
         if you need help talk to kaden before he leaves on wednesday 2/21 
     */
     constexpr double UpperArmSoftLimitLow = 0;
-    constexpr double LowerArmSoftLimitLow = 0;
+    constexpr double LowerArmSoftLimitLow = 40;
     
     constexpr double UpperArmSoftLimitHigh = 160; //change??
-    constexpr double LowerArmSoftLimitHigh = 110;
+    constexpr double LowerArmSoftLimitHigh = 112;
 
     constexpr double LowerArmOffset = -49;
     constexpr double UpperArmOffset = 0.14; //TODO: test
     
-    constexpr double kpLowerArm = 0.01;  //TODO: test
+    constexpr double kpLowerArm = 0.005;  //TODO: test
     constexpr double kpUpperArm = 0.0025;
 
     constexpr double kiLowerArm = 0.0005;  //TODO: test

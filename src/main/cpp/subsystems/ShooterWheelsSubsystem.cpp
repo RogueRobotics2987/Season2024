@@ -4,12 +4,22 @@
 
 #include "subsystems/ShooterWheelsSubsystem.h"
 
-ShooterWheelsSubsystem::ShooterWheelsSubsystem() = default;
+ShooterWheelsSubsystem::ShooterWheelsSubsystem()
+{
+    TopShooterPID.SetP(0.0005);
+    BottomShooterPID.SetP(0.0005);
+    TopShooterPID.SetFF(0.7 /3500);
+    BottomShooterPID.SetFF(0.7 /3500);
+};
 
 // This method will be called once per scheduler run
 void ShooterWheelsSubsystem::Periodic()
 {
-
+    if(DebugConstants::debugShooter == true)
+    {
+        frc::SmartDashboard::PutNumber("TopShooterVelocity", TopShooterEncoder.GetVelocity());
+        frc::SmartDashboard::PutNumber("BottomShooterVelocity", BottomShooterEncoder.GetVelocity());
+    }
 }
 
 void ShooterWheelsSubsystem::SetShooter(double speedBottom, double speedTop) {
@@ -25,4 +35,10 @@ void ShooterWheelsSubsystem::ReverseShooter(){
 void ShooterWheelsSubsystem::StopShooter(){
     TopShooter.Set(0.0);
     BottomShooter.Set(0.0);
+}
+
+void ShooterWheelsSubsystem::PIDShoot()
+{
+    TopShooterPID.SetReference(4062, rev::CANSparkMax::ControlType::kVelocity);
+    BottomShooterPID.SetReference(4171, rev::CANSparkMax::ControlType::kVelocity);
 }

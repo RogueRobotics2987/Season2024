@@ -55,7 +55,9 @@
 #include "commands/ShootCommand.h"
 #include "commands/AutoShootCommand.h"
 #include "subsystems/ShooterWheelsSubsystem.h"
-
+#include "commands/AmpCommand.h"
+#include "commands/AmpShooter.h"
+#include "commands/AmpLineup.h"
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -92,7 +94,7 @@ class RobotContainer
     ShooterSubsystem m_shooter;
     ShooterWheelsSubsystem m_shooterWheels;
     IntakeSubsystem m_intake;
-    // ArmSubsystem m_arm;
+    ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
     ColorSensorSubsystem m_color;
 

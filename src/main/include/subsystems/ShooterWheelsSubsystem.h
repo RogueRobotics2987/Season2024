@@ -27,6 +27,7 @@ class ShooterWheelsSubsystem : public frc2::SubsystemBase
   void StopShooter();
   void SetShooter(double speedRight, double speedLeft);
   void ReverseShooter();
+  void PIDShoot();
 
 
 
@@ -35,4 +36,8 @@ class ShooterWheelsSubsystem : public frc2::SubsystemBase
   // declared private and exposed only through public methods.
   rev::CANSparkMax TopShooter{15, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax BottomShooter{16, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkPIDController TopShooterPID = TopShooter.GetPIDController();
+  rev::SparkPIDController BottomShooterPID = BottomShooter.GetPIDController();
+  rev::SparkRelativeEncoder TopShooterEncoder = TopShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  rev::SparkRelativeEncoder BottomShooterEncoder = BottomShooter.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 };

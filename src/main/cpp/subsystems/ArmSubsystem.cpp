@@ -1,44 +1,44 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// #include "subsystems/ArmSubsystem.h"
+#include "subsystems/ArmSubsystem.h"
 
-// ArmSubsystem::ArmSubsystem()
-// {
-//     ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-//     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
-//     UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
-//     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
-//     UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
-//     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
-//     UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
-//     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
-//     UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500); 
-//     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
-//     UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
-// }
+ArmSubsystem::ArmSubsystem()
+{
+    ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    //UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    //UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    //UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
+    //UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500); 
+    LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    //UpperArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+}
 
-// // This method will be called once per scheduler run
-// void ArmSubsystem::Periodic() {
-//     frc::SmartDashboard::PutNumber("LowerArmEncoderValue", m_LowerArmEncoder.GetAbsolutePosition());
-//     frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
-//     frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
-//     frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
-//     frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
-//     //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
+// This method will be called once per scheduler run
+void ArmSubsystem::Periodic() {
+    frc::SmartDashboard::PutNumber("LowerArmEncoderValue", m_LowerArmEncoder.GetAbsolutePosition());
+   //frc::SmartDashboard::PutNumber("UpperArmEncoderValue", m_UpperArmEncoder.GetAbsolutePosition()); 
+    frc::SmartDashboard::PutNumber("LowerArmEncoderValueOffset", GetOffSetEncoderValueLower());
+    //frc::SmartDashboard::PutNumber("UpperArmEncoderValueOffset", GetOffSetEncoderValueUpper());
+    frc::SmartDashboard::PutNumber("lower arm desired", m_LowerDesired);
+    //frc::SmartDashboard::PutNumber("lower desired: limit", m_LowerDesired);
 
-//     frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
-//    // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
+    //frc::SmartDashboard::PutNumber("upper arm desired", m_UpperDesired);
+   // frc::SmartDashboard::PutNumber("upper desired: limit", m_UpperDesired);
 
-//     RunLowerArm();
-//     RunUpperArm();
-// }
-// /* 
-// void ArmSubsystem::setVoltage(double speed){ 
-//     LowerArm.Set(speed);
-// }
-//  */
+    RunLowerArm();
+    //RunUpperArm();
+}
+/* 
+void ArmSubsystem::setVoltage(double speed){ 
+    LowerArm.Set(speed);
+}
+ */
 
 // void ArmSubsystem::dropNote(){      //TODO: motor direction based on arm pos(?)
 //     //frc::SmartDashboard::PutString("state function: ", "dropNote");
@@ -48,42 +48,40 @@
 //     //ArmWheels.Set(0.5);
 // }
 
-// void ArmSubsystem::stopDrop(){      //stop armWheels
+// void ArmSubsystem::stopDrop()
+// {      //stop armWheels
 //     //frc::SmartDashboard::PutString("state function: ", "stopDrop");
 //     //ArmWheels.Set(0.0);
 // }
 
-// double ArmSubsystem::getLowerEncoderPos(){
-//     return m_LowerArmEncoder.GetAbsolutePosition();
-// }
+double ArmSubsystem::getLowerEncoderPos()
+{
+    return m_LowerArmEncoder.GetAbsolutePosition();
+}
 
 // double ArmSubsystem::getUpperEncoderPos(){
 //     return m_UpperArmEncoder.GetAbsolutePosition();
 // }
 
-// void ArmSubsystem::runArmWheels(double speed){
-//    ArmWheels.Set(-speed);
-// }
-// void ArmSubsystem::stopArmWheels()
-// {
-//     ArmWheels.Set(0.0);
-// }
+void ArmSubsystem::runArmWheels(double speed)
+{
+   ArmWheels.Set(-speed);
+}
+void ArmSubsystem::stopArmWheels()
+{
+    ArmWheels.Set(0.0);
+}
 
-// void ArmSubsystem::StopWheels()
-// {
-//     ArmWheels.Set(0.0);
-// }
+double ArmSubsystem::GetOffSetEncoderValueLower()
+{
+    double Pose = 0;
+    Pose = m_LowerArmEncoder.GetAbsolutePosition() ; //Offset used to reference a desired zero position with raw encoder value
 
-// double ArmSubsystem::GetOffSetEncoderValueLower()
-// {
-//     double Pose = 0;
-//     Pose = m_LowerArmEncoder.GetAbsolutePosition() ; //Offset used to reference a desired zero position with raw encoder value
+    Pose = fabs(Pose - 1);  //This is the invert
+    Pose *= 360; //360 for per revolution
 
-//     Pose = fabs(Pose - 1);  //This is the invert
-//     Pose *= 360; //360 for per revolution
-
-//     return Pose + ArmConstants::LowerArmOffset;
-// }
+    return Pose + ArmConstants::LowerArmOffset;
+}
 
 // double ArmSubsystem::GetOffSetEncoderValueUpper()
 // {
@@ -96,35 +94,35 @@
 //     return Pose;
 // }
 
-// double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
-// {
-//   double a = targetAngle - sourceAngle;
-//   if(a > 180)
-//   {
-//     a = a + -360;
-//   }
-//   else if(a < -180)
-//   {
-//     a = a + 360;
-//   }
-//   else
-//   {
-//     a = a;
-//   }
+double ArmSubsystem::DistanceBetweenAngles(double targetAngle, double sourceAngle)
+{
+  double a = targetAngle - sourceAngle;
+  if(a > 180)
+  {
+    a = a + -360;
+  }
+  else if(a < -180)
+  {
+    a = a + 360;
+  }
+  else
+  {
+    a = a;
+  }
 
-//   return a;
-// }
-// void ArmSubsystem::FollowShooter(double error){
-//     ArmWheels.Set(error * 0.035);
-// }
+  return a;
+}
+void ArmSubsystem::FollowShooter(double error){
+    ArmWheels.Set(error * 0.035);
+}
 
-// void ArmSubsystem::MoveLowerArm(){
-//     LowerArm.Set(0.5);
-// }
-// double ArmSubsystem::getLowerArmError()
-// {
-//    return m_LowerDesired-GetOffSetEncoderValueLower();
-// }
+void ArmSubsystem::MoveLowerArm(){
+    LowerArm.Set(0.5);
+}
+double ArmSubsystem::getLowerArmError()
+{
+   return m_LowerDesired-GetOffSetEncoderValueLower();
+}
 
 // double ArmSubsystem::getUpperArmError()
 // {
@@ -132,22 +130,22 @@
 // }
 
 
-// void ArmSubsystem::setLowerArmAngle(double desiredAngle)
-// {
-//     if(desiredAngle >= ArmConstants::LowerArmSoftLimitHigh)
-//     {
-//         m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
-//     }
-//     else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
-//     {
-//         desiredAngle = ArmConstants::LowerArmSoftLimitLow;
-//     }
-//     else
-//     {
-//         m_LowerDesired = desiredAngle;
-//     }
+void ArmSubsystem::setLowerArmAngle(double desiredAngle)
+{
+    if(desiredAngle >= ArmConstants::LowerArmSoftLimitHigh)
+    {
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitHigh;
+    }
+    else if(desiredAngle <= ArmConstants::LowerArmSoftLimitLow)
+    {
+        m_LowerDesired = ArmConstants::LowerArmSoftLimitLow;
+    }
+    else
+    {
+        m_LowerDesired = desiredAngle;
+    }
 
-// }
+}
 
 // void ArmSubsystem::setUpperArmAngle(double desiredAngle)
 // {
@@ -164,18 +162,18 @@
 //     }
 // }
 
-// void ArmSubsystem::accumulateErrorLower()
-// {
-//  double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
-//     if(LowerangleError < 10)
-//     {
-//         LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
-//     }    
-//     else
-//     {
-//         LoweraccumulatedError = 0;
-//     }
-// }
+void ArmSubsystem::accumulateErrorLower()
+{
+ double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
+    if(LowerangleError < 10)
+    {
+        LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
+    }    
+    else
+    {
+        LoweraccumulatedError = 0;
+    }
+}
 
 // void ArmSubsystem::accumulateErrorUpper()
 // {
@@ -189,14 +187,14 @@
 //     }
 // }
 
-// void ArmSubsystem::RunLowerArm()
-// {
-//     // std::cout << m_LowerDesired << " Debug lower arm desired" << std::endl;
-//     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
+void ArmSubsystem::RunLowerArm()
+{
+    // std::cout << m_LowerDesired << " Debug lower arm desired" << std::endl;
+    double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
 
-//     double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;
-//     LowerArm.Set(lowerAngleOutput); //TODO verify polarity
-// }
+    double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;
+    LowerArm.Set(lowerAngleOutput); //TODO verify polarity
+}
 
 // void ArmSubsystem::RunUpperArm()
 // {
@@ -207,8 +205,8 @@
 //     UpperArm.Set(UpperAngleOutput); //TODO verify polarity
 // }
 
-// void ArmSubsystem::ZeroIntergral()
-// {
-//     LoweraccumulatedError = 0;
-//     UpperaccumulatedError = 0;
-// }
+void ArmSubsystem::ZeroIntergral()
+{
+    LoweraccumulatedError = 0;
+    // UpperaccumulatedError = 0;
+}

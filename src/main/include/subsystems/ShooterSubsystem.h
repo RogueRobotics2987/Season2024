@@ -57,6 +57,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double GetAngleTrim();
 
+
+
  private:
 
   rev::CANSparkMax ShooterActuator{13, rev::CANSparkMax::MotorType::kBrushless};
@@ -68,6 +70,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double angleTrim = 0;
   double accumulatedError = 0;
-
+  
   //double tempKp = 0.01;
 };
