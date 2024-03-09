@@ -4,17 +4,13 @@
 
 #include "commands/ShootCommand.h"
 
-ShootCommand::ShootCommand()
-{
-
-}
+ShootCommand::ShootCommand() {}
 
 ShootCommand::ShootCommand(
   ShooterSubsystem &shooter,
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
-  frc::XboxController &auxController
-) 
+  frc::XboxController &auxController) 
 {
   m_shooter = &shooter;
   AddRequirements({m_shooter});
@@ -57,7 +53,6 @@ void ShootCommand::Execute()
 void ShootCommand::shooterWarmup()
 {
   m_shooter->PIDShoot();
-  //m_shooter->SetShooter(0.75, 0.75);
 }
 
 void ShootCommand::shoot()

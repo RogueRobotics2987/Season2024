@@ -12,10 +12,7 @@ SpitOutCmd::SpitOutCmd(IntakeSubsystem &intake)
 }
 
 // Called when the command is initially scheduled.
-void SpitOutCmd::Initialize()
-{
-
-}
+void SpitOutCmd::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void SpitOutCmd::Execute()
@@ -27,6 +24,7 @@ void SpitOutCmd::Execute()
 void SpitOutCmd::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool SpitOutCmd::IsFinished() {
+bool SpitOutCmd::IsFinished()
+{
   return false;
 }
