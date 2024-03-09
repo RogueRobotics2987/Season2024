@@ -29,7 +29,6 @@
 #include <string>
 
 #include "subsystems/LimelightSubsystem.h"
-#include "../cpp/CommandMessenger.cpp"
 #include "../cpp/AutoPaths.cpp"
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -42,7 +41,6 @@
 #include "subsystems/ArmSubsystem.h"
 #include "commands/FollowWaypoints.h"
 #include "subsystems/ClimberSubsystem.h"
-#include "subsystems/ColorSensorSubsystem.h"
 #include "commands/IntakeCmd.h"
 #include "commands/SpitOutCmd.h"
 #include "commands/ManualAim.h"
@@ -83,12 +81,9 @@ class RobotContainer
     IntakeSubsystem m_intake;
     ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
-    ColorSensorSubsystem m_color;
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
-
-    CommandMessenger driveShooterMessager;
 
     std::vector<AutoPaths::AutoPath> path;
 
