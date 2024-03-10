@@ -47,6 +47,10 @@ void LimelightSubsystem::Periodic()
             {
                 filteredTarget = myTargets.at(i);
                 filteredTargetID = filteredTarget.GetFiducialId();
+
+                filteredRange = photon::PhotonUtils::CalculateDistanceToTarget(
+                CAMERA_HEIGHT, AMP_TARGET_HEIGHT, CAMERA_PITCH,
+                units::degree_t{filteredTarget.GetPitch()});
                 //TODO have the yaw on our robot search for 0. include our specific id into the calc dist to target
             }
         }   
@@ -58,18 +62,6 @@ void LimelightSubsystem::Periodic()
         frc::SmartDashboard::PutNumber("FilteredYaw", filteredTarget.GetYaw());
         frc::SmartDashboard::PutNumber("FilteredPitch", filteredTarget.GetPitch());
         frc::SmartDashboard::PutNumber("FilteredID", filteredTargetID);
-    }
-}
-
-double LimelightSubsystem::GetAmptx()
-{
-    if(filteredTargetID == 5 || filteredTargetID == 6)
-    {
-        return PhotonYaw();
-    } 
-    else 
-    {
-        return 0;
     }
 }
 
@@ -94,10 +86,8 @@ double LimelightSubsystem::PhotonYaw()
     return yaw;
 }
 
-double LimelightSubsystem::FilteredPhotonYaw()
+double LimelightSubsystem::FilteredPhotonYaw(double staticOffset = 2)
 {
-    double staticOffset = 2;
-
     return PhotonYawMap(filteredTarget.GetYaw()) + staticOffset;
 }
 
@@ -164,9 +154,22 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
         txApril = FilteredPhotonYaw();
         desiredHeading = currentHeading + -txApril;// calculated actual angle instead of the error
     }
-    else if(filteredTargetID == 5 || filteredTargetID == 6)
+
+    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+
+    // std::cout << "txApril " << txApril << std::endl; 
+    // std::cout << "driveError " << driveError << std::endl;
+    // std::cout << "desiredHeading " << desiredHeading << std::endl; 
+    // std::cout << "currentHeading " << currentHeading << std::endl; 
+
+    return (driveError * kpApril);
+}
+
+double LimelightSubsystem::GetAmpApriltagDriveMotorVal(double currentHeading)
+{
+    if(filteredTargetID == 5 || filteredTargetID == 6)
     {
-        txApril = FilteredPhotonYaw();
+        txApril = FilteredPhotonYaw(6.0);
         desiredHeading = currentHeading + -txApril;
     }
 

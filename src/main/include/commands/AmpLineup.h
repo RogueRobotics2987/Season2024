@@ -9,6 +9,8 @@
 #include "subsystems/DriveSubsystem.h"
 #include "networktables/NetworkTableInstance.inc"
 #include "subsystems/LimelightSubsystem.h"
+#include <frc/XboxController.h>
+#include <frc/Joystick.h>
 
 /**
  * An example command.
@@ -22,7 +24,8 @@ class AmpLineup : public frc2::CommandHelper<frc2::Command, AmpLineup>
   public:
     AmpLineup(
       DriveSubsystem &drive,
-      LimelightSubsystem &LimeLight);
+      LimelightSubsystem &LimeLight,
+      frc::XboxController &driveXbox);
 
     void Initialize() override;
 
@@ -32,9 +35,17 @@ class AmpLineup : public frc2::CommandHelper<frc2::Command, AmpLineup>
 
     bool IsFinished() override;
 
-    double Apriltx = 0;
+    float Deadzone(float x);
+
+    double ampSpeedY = 0;
+    double ampSpeedX = 0;
+    bool ampNoJoystickInput = false;
 
   private:
     DriveSubsystem* m_drive;
     LimelightSubsystem* m_LimeLight;
+    frc::XboxController* m_driverController = nullptr;
+    units::angular_velocity::radians_per_second_t ampRotApril = units::angular_velocity::radians_per_second_t(0);
+    
+    double ampCurrentHeading = 0;
 };

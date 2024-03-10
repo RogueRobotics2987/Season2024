@@ -31,7 +31,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
     bool PhotonHasTarget();
     double PhotonYaw();
-    double FilteredPhotonYaw();
+    double FilteredPhotonYaw(double staticOffset);
     double PhotonYawMap(double originalVal);
     double FilteredDistance();
     photon::PhotonTrackedTarget GetFilteredTarget();
@@ -39,9 +39,8 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double DistanceBetweenAngles(double targetAngle, double sourceAngle);
 
     double GetApriltagDriveMotorVal(double currentHeading);
+    double GetAmpApriltagDriveMotorVal(double currentHeading);
     double GetApriltagDriveError();
-
-    double GetAmptx();
 
     std::vector<double> botPose;
 
@@ -67,6 +66,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
     units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
     units::meter_t TARGET_HEIGHT = units::meter_t(1.5);
     units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.45);
+    units::meter_t AMP_TARGET_HEIGHT = units::meter_t(1.405);
 
     double driveError = 0;
     double txApril = 0;
