@@ -51,6 +51,7 @@
 #include "commands/AmpShooter.h"
 #include "commands/AmpLineup.h"
 #include "commands/AutoShooterWarmupCmd.h"
+#include "commands/AutoSubAim.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -69,6 +70,7 @@ class RobotContainer
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
     void ZeroHeading();
+    void ShooterOff();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -314,13 +316,14 @@ class RobotContainer
     std::vector<frc::Pose2d> close4Waypoint2
     {
       frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.2_m, 6.8_m, 180_deg),
-      frc::Pose2d(2.65_m, 7_m, 180_deg)
+      //frc::Pose2d(2.2_m, 6.8_m, 180_deg),
+      frc::Pose2d(2.65_m, 7_m, 230_deg),
+      //frc::Pose2d(2.65_m, 7_m, 230_deg)
     };
 
     std::vector<frc::Pose2d> close4Waypoint3
     {
-      frc::Pose2d(2.65_m, 7_m, 180_deg),
+      frc::Pose2d(2.65_m, 7_m, 230_deg),
       frc::Pose2d(2.2_m, 4.3_m, 180_deg),
       frc::Pose2d(2.6_m, 4.1_m, 180_deg),
       frc::Pose2d(2.35_m, 4.1_m, 130_deg)
@@ -328,45 +331,110 @@ class RobotContainer
 
     std::vector<units::meters_per_second_t> close4PointSpeed1
     {
-      0_mps,
+      0.5_mps,
       2_mps
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed2
     {
-      1_mps,
-      2_mps,
-      1.5_mps
+      1.5_mps,
+      1.5_mps,
+      //0_mps
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed3
     {
       1_mps,
-      1.5_mps,
-      1.5_mps,
+      2_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed1
     {
-      2_mps,
+      2.5_mps,
       1.5_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed2
     {
-      1_mps,
-      2_mps,
-      1.5_mps
+      1.5_mps,
+      1.5_mps,
+      //0_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed3
     {
+      1.5_mps,
+      2_mps,
+      1_mps,
+      0.5_mps
+    };
+  
+  std::vector<frc::Pose2d> redClose4Waypoint1
+    {
+      frc::Pose2d(14.7_m, 5.55_m, 180_deg),
+      frc::Pose2d(13.35_m, 5.55_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> redClose4Waypoint2
+    {
+      frc::Pose2d(13.35_m, 5.55_m, 180_deg),
+      //frc::Pose2d(2.2_m, 6.8_m, 180_deg),
+      frc::Pose2d(13.35_m, 7_m, 230_deg),
+      //frc::Pose2d(2.65_m, 7_m, 230_deg)
+    };
+
+    std::vector<frc::Pose2d> redClose4Waypoint3
+    {
+      frc::Pose2d(13.35_m, 7_m, 230_deg),
+      frc::Pose2d(13.8_m, 4.3_m, 180_deg),
+      frc::Pose2d(13.4_m, 4.1_m, 180_deg),
+      frc::Pose2d(13.65_m, 4.1_m, 130_deg)
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed1
+    {
+      0.5_mps,
+      2_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed2
+    {
+      1.5_mps,
+      1.5_mps,
+      //0_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed3
+    {
       1_mps,
       2_mps,
       1_mps,
-      1_mps
+      0_mps
     };
+
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed1
+    {
+      2.5_mps,
+      1.5_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed2
+    {
+      1.5_mps,
+      1.5_mps,
+      //0_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed3
+    {
+      1.5_mps,
+      2_mps,
+      1_mps,
+      0.5_mps
+    };
+
 
     std::vector<frc::Pose2d> FarSideMid1
     {

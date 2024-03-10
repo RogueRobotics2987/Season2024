@@ -47,13 +47,14 @@ void Robot::TeleopInit()
   // continue until interrupted by another command, remove
   // this line or comment it out.
   
-  m_container.ZeroHeading();
-
   if (m_autonomousCommand)
   {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
   }
+
+  //m_container.ZeroHeading();
+  m_container.ShooterOff();
 }
 
 /**
