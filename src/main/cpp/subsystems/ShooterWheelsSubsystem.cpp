@@ -6,8 +6,8 @@
 
 ShooterWheelsSubsystem::ShooterWheelsSubsystem()
 {
-    TopShooterPID.SetP(0.000015);
-    BottomShooterPID.SetP(0.000015);
+    TopShooterPID.SetP(0.000005);
+    BottomShooterPID.SetP(0.000005);
 
     TopShooterPID.SetI(0.0000003);
     BottomShooterPID.SetI(0.0000003);

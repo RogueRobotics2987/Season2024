@@ -2,35 +2,30 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/AmpCommand.h"
+#include "commands/AutoShooterWarmupCmd.h"
 
-AmpCommand::AmpCommand() {}
-AmpCommand::AmpCommand(ArmSubsystem &arm)
+AutoShooterWarmupCmd::AutoShooterWarmupCmd(ShooterWheelsSubsystem &shooterWheel)
 {
-  m_arm = &arm;
-  AddRequirements({m_arm});
+  m_shooterWheel = &shooterWheel;
+  AddRequirements({m_shooterWheel});
 }
 
 // Called when the command is initially scheduled.
-void AmpCommand::Initialize()
+void AutoShooterWarmupCmd::Initialize()
 {
-  m_arm->SetLowerArmAngle(112);
+  m_shooterWheel->PIDShoot();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void AmpCommand::Execute()
+void AutoShooterWarmupCmd::Execute()
 {
-  if(m_arm->GetOffSetEncoderValueLower() > 100)
-  {
-    m_arm->RunArmWheels(-1);
-  }
+  //do nothing
 }
 
 // Called once the command ends or is interrupted.
-void AmpCommand::End(bool interrupted) {}
+void AutoShooterWarmupCmd::End(bool interrupted){}
 
 // Returns true when the command should end.
-bool AmpCommand::IsFinished()
-{
-  return false;
+bool AutoShooterWarmupCmd::IsFinished() {
+  return true;
 }

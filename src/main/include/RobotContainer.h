@@ -50,6 +50,8 @@
 #include "commands/AmpCommand.h"
 #include "commands/AmpShooter.h"
 #include "commands/AmpLineup.h"
+#include "commands/AutoShooterWarmupCmd.h"
+#include "commands/AutoSubAim.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -67,6 +69,8 @@ class RobotContainer
     float Deadzone(float x); 
     float DeadzoneCubed(float x);
     void ConfigureButtonBindings();
+    void ZeroHeading();
+    void ShooterOff();
 
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
@@ -84,10 +88,20 @@ class RobotContainer
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
-
     std::vector<AutoPaths::AutoPath> path;
 
-    //Blue auto Paths
+    //CURRENT PATHS
+    //RED - 4 NOTE
+    //RED - SOURCE
+    //RED - AMP
+
+    //BLUE - 4 NOTE
+    //BLUE - SOURCE
+    //BLUE - AMP
+
+
+    /*
+    //Blue 1
     std::vector<frc::Pose2d>  B_1Waypoints
     {
       frc::Pose2d(0.7_m, 6.65_m, frc::Rotation2d(120_deg)), 
@@ -126,6 +140,10 @@ class RobotContainer
     std::string B_1EndCommand = "Shoot";
     std::string B_12EndCommand = "NoteFollow"; //temp string to force a state when testing
 
+    */
+
+   /*BLUE - 2
+
     std::vector<frc::Pose2d>  B_2Waypoints
     {
       frc::Pose2d(1.45_m, 5.55_m, frc::Rotation2d(180_deg)),
@@ -143,6 +161,10 @@ class RobotContainer
       1_mps,
       1.5_mps
     };
+
+    */
+
+   /* SIDE BACKUP
 
     std::vector<frc::Pose2d>  sideBackupWaypointsLeft
     {
@@ -180,6 +202,10 @@ class RobotContainer
       1.5_mps
     };
 
+    */
+
+
+    /* BLUE - 3
     std::vector<frc::Pose2d>  B_3Waypoints
     {
       frc::Pose2d(1.45_m, 4.1_m, frc::Rotation2d(180_deg)),
@@ -198,6 +224,9 @@ class RobotContainer
       1.5_mps
     };
 
+    */
+
+    /* BLUE - 1 2 3
     std::vector<frc::Pose2d>  B_1_2_3Waypoints
     {
       frc::Pose2d(1.45_m, 7.0_m, frc::Rotation2d(180_deg)),
@@ -228,7 +257,9 @@ class RobotContainer
       2_mps
     };
 
+    */
 
+    /* BLUE - 3 6
     std::vector<frc::Pose2d> B_3_6Waypoints1
     {
       frc::Pose2d(0.7_m, 4.4_m, frc::Rotation2d(120_deg)), //if this works needs to be changed on all B_3_.... statements.
@@ -303,6 +334,30 @@ class RobotContainer
       1.5_mps
     };
 
+    */
+
+   //THESE ARE THE TEST POINTS FOR JUSTSHOOTCENTER OUR TEST PATH
+   std::vector<frc::Pose2d> close4Waypoint1JustShootCenter
+    {
+      frc::Pose2d(1.3_m, 5.55_m, 180_deg),
+      frc::Pose2d(2.65_m, 5.55_m, 180_deg)
+    };
+
+    std::vector<units::meters_per_second_t> close4PointSpeed1JustShootCenter
+    {
+      0.5_mps,
+      2_mps
+    };
+
+    std::vector<units::meters_per_second_t> close4CruiseSpeed1JustShootCenter
+    {
+      2.5_mps,
+      1.5_mps
+    };
+    //END TEST
+    
+
+    // BLUE FRONT 4 NOTE
     std::vector<frc::Pose2d> close4Waypoint1
     {
       frc::Pose2d(1.3_m, 5.55_m, 180_deg),
@@ -312,90 +367,164 @@ class RobotContainer
     std::vector<frc::Pose2d> close4Waypoint2
     {
       frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2_m, 6.8_m, 180_deg),
-      frc::Pose2d(2.65_m, 7_m, 180_deg)
+      frc::Pose2d(2.65_m, 7_m, 230_deg)
     };
 
     std::vector<frc::Pose2d> close4Waypoint3
     {
-      frc::Pose2d(2.65_m, 7_m, 180_deg),
-      frc::Pose2d(2_m, 4.3_m, 180_deg),
+      frc::Pose2d(2.65_m, 7_m, 230_deg),
+      frc::Pose2d(2.2_m, 4.3_m, 180_deg),
       frc::Pose2d(2.6_m, 4.1_m, 180_deg),
-      frc::Pose2d(2.35_m, 4.1_m, 180_deg)
+      frc::Pose2d(2.35_m, 4.1_m, 130_deg)
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed1
     {
-      0_mps,
+      0.5_mps,
       2_mps
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed2
     {
-      1_mps,
-      2_mps,
+      1.5_mps,
       1.5_mps
     };
 
     std::vector<units::meters_per_second_t> close4PointSpeed3
     {
       1_mps,
-      1.5_mps,
-      0_mps,
+      2_mps,
+      1_mps,
       0_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed1
     {
-      2_mps,
+      2.5_mps,
       1.5_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed2
     {
-      1_mps,
-      2_mps,
+      1.5_mps,
       1.5_mps
     };
 
     std::vector<units::meters_per_second_t> close4CruiseSpeed3
     {
+      1.5_mps,
+      2_mps,
+      1_mps,
+      0.5_mps
+    };
+
+
+
+
+
+    // RED FRONT 4 NOTE - TODO: RED SIDE NEEDS TO BE TESTED
+    std::vector<frc::Pose2d> redClose4Waypoint1
+    {
+      frc::Pose2d(14.7_m, 5.55_m, 180_deg),
+      frc::Pose2d(13.35_m, 5.55_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> redClose4Waypoint2
+    {
+      frc::Pose2d(13.35_m, 5.55_m, 180_deg),
+      frc::Pose2d(13.35_m, 7_m, 230_deg)
+    };
+
+    std::vector<frc::Pose2d> redClose4Waypoint3
+    {
+      frc::Pose2d(13.35_m, 7_m, 230_deg),
+      frc::Pose2d(13.8_m, 4.3_m, 180_deg),
+      frc::Pose2d(13.4_m, 4.1_m, 180_deg),
+      frc::Pose2d(13.65_m, 4.1_m, 130_deg)
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed1
+    {
+      0.5_mps,
+      2_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed2
+    {
+      1.5_mps,
+      1.5_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4PointSpeed3
+    {
       1_mps,
       2_mps,
       1_mps,
-      1_mps
+      0_mps
     };
 
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed1
+    {
+      2.5_mps,
+      1.5_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed2
+    {
+      1.5_mps,
+      1.5_mps
+    };
+
+    std::vector<units::meters_per_second_t> redClose4CruiseSpeed3
+    {
+      1.5_mps,
+      2_mps,
+      1_mps,
+      0.5_mps
+    };
+
+
+    //BLUE SOURCE 3 NOTE
+    //Start to first shooting spot
     std::vector<frc::Pose2d> FarSideMid1
     {
-      frc::Pose2d(0.45_m, 2.05_m, 180_deg),
-      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+      frc::Pose2d(0.45_m, 2.5_m, 180_deg),
+      frc::Pose2d(2.5_m, 2.5_m, 130_deg)
     };
 
+    //Post first shoot to midline pickup
     std::vector<frc::Pose2d> FarSideMid2
     {
-      frc::Pose2d(3.5_m, 2.05_m, 180_deg),
-      frc::Pose2d(8.15_m, 0.8_m, 180_deg)
+      frc::Pose2d(2.75_m, 2.5_m, 130_deg),
+      frc::Pose2d(8.25_m, 0.8_m, 160_deg)
     };
 
+    //Midline pickup to 2nd shooting spot
     std::vector<frc::Pose2d> FarSideMid3
     {
-      frc::Pose2d(8.15_m, 0.8_m, 180_deg),
-      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+      frc::Pose2d(8.05_m, 0.8_m, 160_deg),
+      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
+      frc::Pose2d(4.0_m, 3.0_m, 130_deg)
     };
     
+    //Post 2nd shot around pillar to 3rd note pickup
     std::vector<frc::Pose2d> FarSideMid4
     {
-      frc::Pose2d(3.5_m, 2.05_m, 180_deg),
+      frc::Pose2d(3.9_m, 2.25_m, 130_deg),
       frc::Pose2d(5.5_m, 1.8_m, 180_deg),
-      frc::Pose2d(8.15_m, 2.45_m, 180_deg)
+      frc::Pose2d(8.25_m, 2.45_m, 200_deg)
     };
 
+    //3rd note pickup to 3rd not shooting spot
     std::vector<frc::Pose2d> FarSideMid5
     {
-      frc::Pose2d(8.15_m, 2.45_m, 180_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
-      frc::Pose2d(3.5_m, 2.05_m, 180_deg)
+      frc::Pose2d(8.05_m, 2.45_m, 200_deg),
+      frc::Pose2d(6.0_m, 1.6_m, 180_deg),
+      frc::Pose2d(4.0_m, 3.0_m, 130_deg)
+
+      //Potential cut through middle stage for 3rd note.
+      //frc::Pose2d(5.6_m, 4.0_m, 160_deg),
+      //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
     };
 
     std::vector<units::velocity::meters_per_second_t> FarSideMidPoint1
@@ -414,6 +543,7 @@ class RobotContainer
     std::vector<units::velocity::meters_per_second_t> FarSideMidPoint3
     {
       1_mps,
+      2_mps,
       0_mps
     };
 
@@ -432,6 +562,7 @@ class RobotContainer
       0_mps
     };
 
+
     std::vector<units::velocity::meters_per_second_t> FarSideMidCruise1
     {
       1_mps,
@@ -447,6 +578,7 @@ class RobotContainer
     std::vector<units::velocity::meters_per_second_t> FarSideMidCruise3
     {
       1_mps,
+      3_mps,
       3_mps
     };
     
@@ -458,6 +590,144 @@ class RobotContainer
     };
     
     std::vector<units::velocity::meters_per_second_t> FarSideMidCruise5
+    {
+      1_mps,
+      3_mps,
+      3_mps
+    };
+
+    /*********************************************************************************/
+    
+    //TODO: 
+    //RED SOURCE 3 NOTE POSE VALUES HAVE NOT BEEN SET
+    //IN FACT - THEY AREN'T EVEN CONSISTENT
+    //DO NOT RUN THIS UNDER ANY CIRCUMSTANCE
+    //WITHOUT FIRST INPUTTING THE CORRECT POSE WAYPOINT VALUES
+
+    /*********************************************************************************/
+
+    //RED SOURCE 3 NOTE
+    //Start to first shooting spot
+    std::vector<frc::Pose2d> redFarSideMid1
+    {
+      frc::Pose2d(0.45_m, 2.5_m, 180_deg),
+      frc::Pose2d(2.5_m, 2.5_m, 230_deg)
+      //frc::Pose2d(15.55_m, 2.5_m, 180_deg),
+      //frc::Pose2d(13.5_m, 2.5_m, 230_deg)
+    };
+
+    //Post first shoot to midline pickup
+    std::vector<frc::Pose2d> redFarSideMid2
+    {
+      frc::Pose2d(13.25_m, 2.5_m, 230_deg),
+      frc::Pose2d(7.75_m, 0.8_m, 200_deg)
+      //frc::Pose2d(13.25_m, 2.5_m, 230_deg),
+      //frc::Pose2d(7.75_m, 0.8_m, 200_deg)
+    };
+
+    //Midline pickup to 2nd shooting spot
+    std::vector<frc::Pose2d> redFarSideMid3
+    {
+      frc::Pose2d(7.95_m, 0.8_m, 200_deg),
+      frc::Pose2d(10.5_m, 1.8_m, 180_deg),
+      frc::Pose2d(12.0_m, 3.0_m, 230_deg)
+
+      //frc::Pose2d(7.95_m, 0.8_m, 200_deg),
+      //frc::Pose2d(10.5_m, 1.8_m, 180_deg),
+      //frc::Pose2d(12.0_m, 3.0_m, 230_deg)
+    };
+    
+    //Post 2nd shot around pillar to 3rd note pickup
+    std::vector<frc::Pose2d> redFarSideMid4
+    {
+      frc::Pose2d(12.1_m, 2.25_m, 230_deg),
+      frc::Pose2d(10.5_m, 1.8_m, 180_deg),
+      frc::Pose2d(7.75_m, 2.45_m, 160_deg)
+
+      //frc::Pose2d(12.1_m, 2.25_m, 230_deg),
+      //frc::Pose2d(10.5_m, 1.8_m, 180_deg),
+      //frc::Pose2d(7.75_m, 2.45_m, 160_deg)
+    };
+
+    //3rd note pickup to 3rd not shooting spot
+    std::vector<frc::Pose2d> redFarSideMid5
+    {
+      frc::Pose2d(7.95_m, 2.45_m, 160_deg),
+      frc::Pose2d(10.0_m, 1.6_m, 180_deg),
+      frc::Pose2d(12.0_m, 3.0_m, 230_deg)
+
+      //frc::Pose2d(7.95_m, 2.45_m, 160_deg),
+      //frc::Pose2d(10.0_m, 1.6_m, 180_deg),
+      //frc::Pose2d(12.0_m, 3.0_m, 230_deg)
+
+      //Potential cut through middle stage for 3rd note.
+      //frc::Pose2d(5.6_m, 4.0_m, 160_deg),
+      //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
+    };
+
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidPoint1
+    {
+      1_mps,
+      0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidPoint2
+    {
+      1_mps,
+      0_mps
+    };
+
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidPoint3
+    {
+      1_mps,
+      2_mps,
+      0_mps
+    };
+
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidPoint4
+    {
+      1_mps,
+      2_mps,
+      0_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidPoint5
+    {
+      1_mps,
+      3_mps,
+      0_mps
+    };
+
+
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidCruise1
+    {
+      1_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidCruise2
+    {
+      1_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidCruise3
+    {
+      1_mps,
+      3_mps,
+      3_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidCruise4
+    {
+      1_mps,
+      3_mps,
+      2_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> redFarSideMidCruise5
     {
       1_mps,
       3_mps,
