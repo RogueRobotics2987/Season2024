@@ -48,7 +48,7 @@ void AutoShootCommand::shoot()
 {
   m_intake->RunIntake(1);
   m_intake->RunMagazine(1);
-  m_intake->DirectionNote(1);
+  m_intake->DirectionNote(1); // why run this?
 }
 
 void AutoShootCommand::stopShoot()

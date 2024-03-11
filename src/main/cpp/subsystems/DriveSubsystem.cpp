@@ -61,6 +61,7 @@ void DriveSubsystem::Periodic(){
 
   frc::SmartDashboard::PutNumber("NavX temp", m_gyro.GetTempC());
   frc::SmartDashboard::PutNumber("OrientationOffset", orientationOffset.Degrees().value());
+  //frc::SmartDashboard::PutNumber("heading", GetHeading());
 
   m_odometry.Update(
     frc::Rotation2d(frc::Rotation2d(m_gyro.GetRotation2d().Radians())),
@@ -212,7 +213,7 @@ units::degree_t DriveSubsystem::GetHeading()
 
 void DriveSubsystem::ZeroHeading(frc::Rotation2d startRot)
 {
-  orientationOffset = 2 * (startRot.Degrees());
+  orientationOffset = (startRot.Degrees());
   m_gyro.Reset();
 }
 

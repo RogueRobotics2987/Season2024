@@ -20,8 +20,6 @@ void AmpCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AmpCommand::Execute()
 {
-  frc::SmartDashboard::PutString("armAmp", "");
-
   if(m_arm->GetOffSetEncoderValueLower() > 100)
   {
     m_arm->RunArmWheels(-1);

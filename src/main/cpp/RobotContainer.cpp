@@ -7,20 +7,21 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
 
-  m_chooser.SetDefaultOption("B_2", "B_2");
-  m_chooser.AddOption("JustShootLeft", "JustShootLeft");
-  m_chooser.AddOption("JustShootRight", "JustShootRight");
+  m_chooser.SetDefaultOption("Close4", "Close4");
+  //m_chooser.AddOption("JustShootLeft", "JustShootLeft");
+  //m_chooser.AddOption("JustShootRight", "JustShootRight");
   m_chooser.AddOption("JustShootCenter", "JustShootCenter");
-  m_chooser.AddOption("ShootTobackupRight", "ShootTobackupRight");
-  m_chooser.AddOption("ShootTobackupLeft", "ShootTobackupLeft");
-  m_chooser.AddOption("Close4", "Close4");
+  //m_chooser.AddOption("ShootTobackupRight", "ShootTobackupRight");
+  //m_chooser.AddOption("ShootTobackupLeft", "ShootTobackupLeft");
+  //m_chooser.AddOption("Close4", "Close4");
   m_chooser.AddOption("RedClose4", "RedClose4");
   m_chooser.AddOption("FarSideMid", "FarSideMid");
+  m_chooser.AddOption("RedFarSideMid", "RedFarSideMid");
 
   //paths commented out for now since they are unused
   
-  m_chooser.AddOption("B_1", "B_1");
-  m_chooser.AddOption("B_3_6", "B_3_6");
+  //m_chooser.AddOption("B_1", "B_1");
+  //m_chooser.AddOption("B_3_6", "B_3_6");
 
   frc::SmartDashboard::PutData(&m_chooser);
 
@@ -38,12 +39,12 @@ RobotContainer::RobotContainer()
 
       bool fieldOrientated;
 
-      if (m_driverController.GetRawAxis(3)> 0.15) //if the right trigger is pulled
+      if (m_driverController.GetRawAxis(3) > 0.15) //if the right trigger is pulled
       {
         fieldOrientated = false; //robot orientated driving
       }
 
-      if (m_driverController.GetRawAxis(3)< 0.15) //if the right trigger is not pulled
+      if (m_driverController.GetRawAxis(3) < 0.15) //if the right trigger is not pulled
       {
         fieldOrientated = true; //field orientated driving
       }
@@ -117,9 +118,9 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 3).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
+  frc2::JoystickButton(&m_auxController, 1).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 4).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm, m_shooterWheels).ToPtr());
+  frc2::JoystickButton(&m_auxController, 2).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm, m_shooterWheels).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 8).ToggleOnTrue(AmpLineup(m_drive, m_limelight).ToPtr());
 
@@ -312,6 +313,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     1_mps
   };
   
+  /*
   if(chosenAuto == "B_2")
   {
     m_drive.ResetOdometry(B_2Waypoints[0]);
@@ -341,8 +343,16 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       // )
     );
   }
+  */
+
+
+
+
+
+
   //JustShoot ------------------------------------------------------------------------------------------------------------------------------------------------
-  else if(chosenAuto == "JustShootLeft")
+  /*
+  if(chosenAuto == "JustShootLeft")
   { 
     m_drive.ResetOdometry({0_m, 0_m, -120_deg});
     return frc2::cmd::Sequence( //the whole auto path!
@@ -362,26 +372,38 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       // )
     );
   }
-  else if(chosenAuto == "JustShootCenter")
+  */
+  if(chosenAuto == "JustShootCenter")
   { 
-    m_drive.ResetOdometry({0_m, 0_m, 180_deg});
+    m_drive.ResetOdometry(close4Waypoint1JustShootCenter[0]);
     return frc2::cmd::Sequence( //the whole auto path!
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}),
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
+      frc2::cmd::Race(
+        AutoSubAim(m_shooter).ToPtr(),
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
+      ),
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, close4Waypoint1JustShootCenter, close4PointSpeed1JustShootCenter, close4CruiseSpeed1JustShootCenter, false).ToPtr(),
+        IntakeCmd(m_intake).ToPtr()
+      ),
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
-        frc2::WaitCommand(1.5_s).ToPtr() //can change if need
-      ),
-      AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-      // frc2::cmd::RunOnce(
-      //   [this]
-      //   {
-      //     m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
-      //   },
-      //   {&m_drive}
-      // )
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
+      )
     );
   }
+  /*
   else if(chosenAuto == "JustShootRight")
   { 
     m_drive.ResetOdometry({0_m, 0_m, 120_deg});
@@ -402,7 +424,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       // )
     );
   }
+    */
+
+
+
+
+
   //Shoot then backup -------------------------------------------------------------------------------------------------------------------------------
+  /*
   else if(chosenAuto == "ShootTobackupLeft")
   {
     m_drive.ResetOdometry(sideBackupWaypointsLeft[0]);
@@ -479,6 +508,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       // )
     );
   }
+  
   else if(chosenAuto == "B_3_6")
   { 
     m_drive.ResetOdometry(B_3_6Waypoints1[0]);
@@ -525,19 +555,18 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       // )
     );  
   }
+  */
   else if(chosenAuto == "Close4")
   {
     m_drive.ResetOdometry(close4Waypoint1[0]);
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
-      frc2::cmd::Race( //aim shooter for 0.75s
-        //AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+      frc2::cmd::Race(
         AutoSubAim(m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, close4Waypoint1, close4PointSpeed1, close4CruiseSpeed1, false).ToPtr(),
@@ -547,8 +576,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, close4Waypoint2, close4PointSpeed2, close4CruiseSpeed2, false).ToPtr(),
@@ -558,8 +586,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, close4Waypoint3, close4PointSpeed3, close4CruiseSpeed3, false).ToPtr(),
@@ -569,8 +596,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::RunOnce(
         [this]
@@ -587,13 +613,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
     return frc2::cmd::Sequence( //the whole auto path!
       frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
-      frc2::cmd::Race( //aim shooter for 0.75s
-        //AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+      frc2::cmd::Race(
         AutoSubAim(m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, redClose4Waypoint1, redClose4PointSpeed1, redClose4CruiseSpeed1, false).ToPtr(),
@@ -603,8 +627,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, redClose4Waypoint2, redClose4PointSpeed2, redClose4CruiseSpeed2, false).ToPtr(),
@@ -614,8 +637,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, redClose4Waypoint3, redClose4PointSpeed3, redClose4CruiseSpeed3, false).ToPtr(),
@@ -625,8 +647,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
-          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
-        )
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::RunOnce(
         [this]
@@ -646,9 +667,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limelight, FarSideMid1, FarSideMidPoint1, FarSideMidCruise1, false).ToPtr(),
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
-        frc2::WaitCommand(0.5_s).ToPtr() //can change if need
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
+        )
       ),
-      AutoShootCommand(m_shooterWheels, m_intake).ToPtr(),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, FarSideMid2, FarSideMidPoint2, FarSideMidCruise2, false).ToPtr(),
         IntakeCmd(m_intake).ToPtr()
@@ -656,9 +679,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limelight, FarSideMid3, FarSideMidPoint3, FarSideMidCruise3, false).ToPtr(),
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
-        frc2::WaitCommand(1.25_s).ToPtr() //can change if need
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
+        )
       ),
-      AutoShootCommand(m_shooterWheels, m_intake).ToPtr(),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, FarSideMid4, FarSideMidPoint4, FarSideMidCruise4, false).ToPtr(),
         IntakeCmd(m_intake).ToPtr()
@@ -666,9 +691,58 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       FollowWaypoints(m_drive, m_limelight, FarSideMid5, FarSideMidPoint5, FarSideMidCruise5, false).ToPtr(),
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
-        frc2::WaitCommand(1.25_s).ToPtr() //can change if need
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr() 
+        )
       ),
-      AutoShootCommand(m_shooterWheels, m_intake).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}
+      )
+    );
+  }
+  else if(chosenAuto == "RedFarSideMid")
+  {
+    m_drive.ResetOdometry(redFarSideMid1[0]);
+    return frc2::cmd::Sequence( //the whole auto path!
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
+      FollowWaypoints(m_drive, m_limelight, redFarSideMid1, redFarSideMidPoint1, redFarSideMidCruise1, false).ToPtr(),
+      frc2::cmd::Race( //aim shooter for 0.75s
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
+        )
+      ),
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, redFarSideMid2, redFarSideMidPoint2, redFarSideMidCruise2, false).ToPtr(),
+        IntakeCmd(m_intake).ToPtr()
+      ),
+      FollowWaypoints(m_drive, m_limelight, redFarSideMid3, redFarSideMidPoint3, redFarSideMidCruise3, false).ToPtr(),
+      frc2::cmd::Race( //aim shooter for 0.75s
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
+        )
+      ),
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, redFarSideMid4, redFarSideMidPoint4, redFarSideMidCruise4, false).ToPtr(),
+        IntakeCmd(m_intake).ToPtr()
+      ),
+      FollowWaypoints(m_drive, m_limelight, redFarSideMid5, redFarSideMidPoint5, redFarSideMidCruise5, false).ToPtr(),
+      frc2::cmd::Race( //aim shooter for 0.75s
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        frc2::cmd::Sequence(
+          frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
+          AutoShootCommand(m_shooterWheels, m_intake).ToPtr() 
+        )
+      ),
       frc2::cmd::RunOnce(
         [this]
         {
