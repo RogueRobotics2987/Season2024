@@ -354,6 +354,24 @@ class RobotContainer
       2.5_mps,
       1.5_mps
     };
+    
+    std::vector<frc::Pose2d> RedTest
+    {
+      frc::Pose2d(15.25_m, 5.55_m, 0_deg),
+      frc::Pose2d(13.9_m, 5.55_m, 0_deg)
+    };
+
+    std::vector<units::meters_per_second_t> RedTestPointSpeed
+    {
+      0.5_mps,
+      2_mps
+    };
+
+    std::vector<units::meters_per_second_t> RedTestCruiseSpeed
+    {
+      2.5_mps,
+      1.5_mps
+    };
     //END TEST
     
 
@@ -425,22 +443,22 @@ class RobotContainer
     // RED FRONT 4 NOTE - TODO: RED SIDE NEEDS TO BE TESTED
     std::vector<frc::Pose2d> redClose4Waypoint1
     {
-      frc::Pose2d(14.7_m, 5.55_m, 180_deg),
-      frc::Pose2d(13.35_m, 5.55_m, 180_deg)
+      frc::Pose2d(14.7_m, 5.55_m, 0_deg),
+      frc::Pose2d(13.35_m, 5.55_m, 0_deg)
     };
 
     std::vector<frc::Pose2d> redClose4Waypoint2
     {
-      frc::Pose2d(13.35_m, 5.55_m, 180_deg),
-      frc::Pose2d(13.35_m, 7_m, 230_deg)
+      frc::Pose2d(13.35_m, 5.55_m, 0_deg),
+      frc::Pose2d(13.35_m, 7_m, 50_deg)
     };
 
     std::vector<frc::Pose2d> redClose4Waypoint3
     {
-      frc::Pose2d(13.35_m, 7_m, 230_deg),
-      frc::Pose2d(13.8_m, 4.3_m, 180_deg),
-      frc::Pose2d(13.4_m, 4.1_m, 180_deg),
-      frc::Pose2d(13.65_m, 4.1_m, 130_deg)
+      frc::Pose2d(13.35_m, 7_m, 50_deg),
+      frc::Pose2d(13.8_m, 4.3_m, 0_deg),
+      frc::Pose2d(13.4_m, 4.1_m, 0_deg),
+      frc::Pose2d(13.65_m, 4.1_m, -50_deg)
     };
 
     std::vector<units::meters_per_second_t> redClose4PointSpeed1
@@ -552,7 +570,7 @@ class RobotContainer
     {
       1_mps,
       2_mps,
-      0_mps
+      0.5_mps
     };
     
     std::vector<units::velocity::meters_per_second_t> FarSideMidPoint5
