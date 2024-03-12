@@ -39,6 +39,9 @@ void AmpLineup::Execute()
     ampNoJoystickInput = false;
   }
 
+  //TODO put Filtered Distance on Dashboard
+  frc::SmartDashboard::PutNumber("AmpFilteredDistance", m_LimeLight->FilteredDistance());
+
   if(m_LimeLight->FilteredDistance() == 0)
   {
     ampRotApril = 0_rad_per_s;
