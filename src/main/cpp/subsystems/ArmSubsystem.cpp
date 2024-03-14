@@ -6,6 +6,7 @@
 
 ArmSubsystem::ArmSubsystem()
 {
+    sleep(0.1);
     ArmWheels.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);

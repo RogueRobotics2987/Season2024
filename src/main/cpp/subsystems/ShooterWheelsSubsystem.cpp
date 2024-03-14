@@ -6,17 +6,18 @@
 
 ShooterWheelsSubsystem::ShooterWheelsSubsystem()
 {
-    TopShooterPID.SetP(0.000005);
-    BottomShooterPID.SetP(0.000005);
+    sleep(0.1);
 
-    TopShooterPID.SetI(0.0000003);
-    BottomShooterPID.SetI(0.0000003);
+    //we set gains in the motor controller
+    // TopShooterPID.SetP(-0.4);
+    // BottomShooterPID.SetP(-0.4);
 
-    // TopShooterPID.SetD(0.0000002);
-    // BottomShooterPID.SetD(0.0000002);
+    // TopShooterPID.SetI(0.0);
+    // BottomShooterPID.SetI(0.0);
 
-    // TopShooterPID.SetFF(0.7 / 3500);
-    // BottomShooterPID.SetFF(0.7 / 3500);
+    // TopShooterPID.SetD(0.0);
+    // BottomShooterPID.SetD(0.0);
+
 };
 
 // This method will be called once per scheduler run
@@ -46,6 +47,6 @@ void ShooterWheelsSubsystem::StopShooter(){
 
 void ShooterWheelsSubsystem::PIDShoot()
 {
-    TopShooterPID.SetReference(3800, rev::CANSparkMax::ControlType::kVelocity);
-    BottomShooterPID.SetReference(3800, rev::CANSparkMax::ControlType::kVelocity);
+    TopShooterPID.SetReference(4100, rev::CANSparkMax::ControlType::kVelocity);
+    BottomShooterPID.SetReference(4100, rev::CANSparkMax::ControlType::kVelocity);
 }

@@ -6,6 +6,7 @@
 
 ClimberSubsystem::ClimberSubsystem() 
 {
+    sleep(0.1);
     m_climberMoter.SetOpenLoopRampRate(0.5);
 }
 

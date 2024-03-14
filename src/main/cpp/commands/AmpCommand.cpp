@@ -20,7 +20,7 @@ void AmpCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AmpCommand::Execute()
 {
-  if(m_arm->GetOffSetEncoderValueLower() > 100)
+  if(m_arm->GetOffSetEncoderValueLower() > 70)
   {
     m_arm->RunArmWheels(-1);
   }

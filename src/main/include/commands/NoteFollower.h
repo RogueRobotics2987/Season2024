@@ -16,7 +16,6 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
 #include "subsystems/ShooterSubsystem.h"
-#include "subsystems/ArmSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 
 /**

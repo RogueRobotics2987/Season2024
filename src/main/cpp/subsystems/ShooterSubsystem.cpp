@@ -6,6 +6,7 @@
 
 ShooterSubsystem::ShooterSubsystem() 
 {
+    sleep(0.1);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus2, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus3, 500);
     ShooterActuator.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
