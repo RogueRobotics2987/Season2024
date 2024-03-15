@@ -35,7 +35,7 @@ void AmpShooter::Initialize()
 void AmpShooter::Execute() 
 {
   m_shooter->SetActuator(38.5);
-  m_arm->SetLowerArmAngle(112);
+  m_arm->SetLowerArmAngle(112);   
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
   {
@@ -48,7 +48,7 @@ void AmpShooter::Execute()
 
   if(hasShot) 
   {
-    time += 1;
+    time++;
   }
 }
 
