@@ -405,7 +405,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed2
     {
       1.5_mps,
-      1.5_mps
+      1.25_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed3
@@ -470,7 +470,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Red_Close4PointSpeed2
     {
       1.5_mps,
-      1.5_mps
+      1.25_mps
     };
 
     std::vector<units::meters_per_second_t> Red_Close4PointSpeed3
@@ -754,13 +754,13 @@ class RobotContainer
     std::vector<frc::Pose2d> Red_FarSideMid2
     {
       frc::Pose2d(13.8_m, 2.5_m, 50_deg),
-      frc::Pose2d(8.3_m, 0.9_m, 20_deg)
+      frc::Pose2d(8.3_m, 1.05_m, 20_deg)
     };
 
     //Midline pickup to 2nd shooting spot
     std::vector<frc::Pose2d> Red_FarSideMid3
     {
-      frc::Pose2d(8.5_m, 0.9_m, 20_deg),
+      frc::Pose2d(8.5_m, 1.05_m, 20_deg),
       frc::Pose2d(11.05_m, 1.8_m, 0_deg),
       frc::Pose2d(12.55_m, 3.0_m, 50_deg)
     };

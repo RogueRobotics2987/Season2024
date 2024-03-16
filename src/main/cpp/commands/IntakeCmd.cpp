@@ -19,6 +19,7 @@ void IntakeCmd::Initialize()
   state = 0;
   time = 0;
   finished = false;
+  frc::SmartDashboard::PutBoolean("IntakeON", true);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -62,6 +63,7 @@ void IntakeCmd::End(bool interrupted)
   m_intake->RunIntake(0);
   m_intake->Direction(0);
   m_intake->RunMagazine(0);
+  frc::SmartDashboard::PutBoolean("IntakeON", false);
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
