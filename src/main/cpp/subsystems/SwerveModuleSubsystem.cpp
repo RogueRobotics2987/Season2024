@@ -59,7 +59,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
   frc::SmartDashboard::PutNumber("KFF Input " + std::to_string(m_driveMotor->GetDeviceId()), ModuleConstants::kFFModuleDriveController);
   frc::SmartDashboard::PutNumber("Wheel Offset " + std::to_string(m_turningMotor->GetDeviceId()), ModuleConstants::wheelOffset);
 
-  sleep(0.1);
+  sleep(1);
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::GetState()

@@ -34,8 +34,12 @@ void AmpShooter::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AmpShooter::Execute() 
 {
-  m_shooter->SetActuator(38.5);
-  m_arm->SetLowerArmAngle(112);   
+  m_shooter->SetActuator(45.5);
+
+  if(m_arm->GetOffSetEncoderValueLower() > 50)
+  {
+    m_arm->RunArmWheels(-1);
+  }
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
   {

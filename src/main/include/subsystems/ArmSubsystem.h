@@ -26,7 +26,7 @@ class ArmSubsystem : public frc2::SubsystemBase
     void SetLowerArmAngle(double desiredAngle);
 
     // void setVoltage(double speed);
-    void AccumulateErrorLower();
+    // void AccumulateErrorLower();
 
     void RunLowerArm();
 

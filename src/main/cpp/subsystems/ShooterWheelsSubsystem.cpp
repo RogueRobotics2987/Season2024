@@ -6,7 +6,7 @@
 
 ShooterWheelsSubsystem::ShooterWheelsSubsystem()
 {
-    sleep(0.1);
+    sleep(1);
 
     //we set gains in the motor controller
     // TopShooterPID.SetP(-0.4);

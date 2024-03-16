@@ -37,6 +37,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
     photon::PhotonTrackedTarget GetFilteredTarget();
     double GetApriltagShooterTheta(double dist, double angleTrim);
     double DistanceBetweenAngles(double targetAngle, double sourceAngle);
+    void apriltagAngleReset(double currentHeading);
 
     double GetApriltagDriveMotorVal(double currentHeading);
     double GetApriltagDriveError();

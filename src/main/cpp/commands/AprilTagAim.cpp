@@ -28,6 +28,7 @@ void AprilTagAim::Initialize()
   finished = false;
   shoot = false;
   time = 0;
+  m_limelight->apriltagAngleReset(m_drivetrain->GetPose().Rotation().Degrees().value());
 }
 
 // Called repeatedly when this Command is scheduled to run

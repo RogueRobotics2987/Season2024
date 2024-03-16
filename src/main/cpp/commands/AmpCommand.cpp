@@ -14,7 +14,7 @@ AmpCommand::AmpCommand(ArmSubsystem &arm)
 // Called when the command is initially scheduled.
 void AmpCommand::Initialize()
 {
-  m_arm->SetLowerArmAngle(112);
+  m_arm->SetLowerArmAngle(105);
 }
 
 // Called repeatedly when this Command is scheduled to run

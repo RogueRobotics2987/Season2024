@@ -56,7 +56,7 @@ DriveSubsystem::DriveSubsystem()
       frc::Pose2d{}
     }
     {
-      sleep(0.1);
+      sleep(1);
     }
 
 void DriveSubsystem::Periodic(){

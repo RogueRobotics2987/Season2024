@@ -6,7 +6,7 @@
 
 LimelightSubsystem::LimelightSubsystem()
 {
-    sleep(0.1);
+    sleep(1);
 }
 
 // This method will be called once per scheduler run
@@ -15,12 +15,12 @@ void LimelightSubsystem::Periodic()
     targetIDs.clear();
     Notetx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
     Notety = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty",0.0);
-    auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
-    auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
+    // auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
+    // auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
 
-    double distanceToTagInMeters = threeDPose[0];
-    frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
-    frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
+    // double distanceToTagInMeters = threeDPose[0];
+    // frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
+    // frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
 
     result = camera.GetLatestResult();
     hasTarget = result.HasTargets();
@@ -197,4 +197,9 @@ double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sour
   }
 
   return a;
+}
+
+void LimelightSubsystem::apriltagAngleReset(double currentHeading)
+{
+    desiredHeading = currentHeading;
 }

@@ -310,7 +310,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
-          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          frc2::WaitCommand(1.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
@@ -359,7 +359,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
-          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          frc2::WaitCommand(1.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
         )
       ),

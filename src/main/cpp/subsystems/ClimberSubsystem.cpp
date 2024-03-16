@@ -6,8 +6,8 @@
 
 ClimberSubsystem::ClimberSubsystem() 
 {
-    sleep(0.1);
     m_climberMoter.SetOpenLoopRampRate(0.5);
+    sleep(1);
 }
 
 // This method will be called once per scheduler run
