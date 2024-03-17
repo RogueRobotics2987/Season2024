@@ -14,7 +14,11 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
   this->m_counts_per_rev = m_counts_per_rev;
   m_driveMotor = new rev::CANSparkMax(m_MotorController, rev::CANSparkMax::MotorType::kBrushless);
   m_driveMotor->SetOpenLoopRampRate(0.5);
-  m_driveMotor->SetInverted(true);
+
+  if(m_MotorController != 8)
+  {
+    m_driveMotor->SetInverted(true);
+  }
   m_turningMotor = new rev::CANSparkMax(m_MotorControllerTurning, rev::CANSparkMax::MotorType::kBrushless);
   m_turningMotor->SetInverted(true);
   m_turningMotor->SetOpenLoopRampRate(0);
@@ -58,6 +62,8 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
 
   frc::SmartDashboard::PutNumber("KFF Input " + std::to_string(m_driveMotor->GetDeviceId()), ModuleConstants::kFFModuleDriveController);
   frc::SmartDashboard::PutNumber("Wheel Offset " + std::to_string(m_turningMotor->GetDeviceId()), ModuleConstants::wheelOffset);
+
+  sleep(1);
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::GetState()

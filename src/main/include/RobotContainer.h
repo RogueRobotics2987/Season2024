@@ -385,12 +385,12 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_close4Waypoint2
     {
       frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.65_m, 7_m, 230_deg)
+      frc::Pose2d(2.7_m, 6.95_m, 230_deg)
     };
 
     std::vector<frc::Pose2d> Blue_close4Waypoint3
     {
-      frc::Pose2d(2.65_m, 7_m, 230_deg),
+      frc::Pose2d(2.7_m, 6.95_m, 230_deg),
       frc::Pose2d(2.2_m, 4.3_m, 180_deg),
       frc::Pose2d(2.6_m, 4.1_m, 180_deg),
       frc::Pose2d(2.35_m, 4.1_m, 130_deg)
@@ -405,7 +405,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed2
     {
       1.5_mps,
-      1.5_mps
+      1.25_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed3
@@ -450,12 +450,12 @@ class RobotContainer
     std::vector<frc::Pose2d> Red_Close4Waypoint2
     {
       frc::Pose2d(13.35_m, 5.55_m, 0_deg),
-      frc::Pose2d(13.35_m, 7_m, -50_deg)
+      frc::Pose2d(13.3_m, 7.05_m, -50_deg)
     };
 
     std::vector<frc::Pose2d> Red_Close4Waypoint3
     {
-      frc::Pose2d(13.35_m, 7_m, 50_deg),
+      frc::Pose2d(13.3_m, 7.05_m, -50_deg),
       frc::Pose2d(13.8_m, 4.3_m, 0_deg),
       frc::Pose2d(13.4_m, 4.1_m, 0_deg),
       frc::Pose2d(13.65_m, 4.1_m, 50_deg)
@@ -470,7 +470,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Red_Close4PointSpeed2
     {
       1.5_mps,
-      1.5_mps
+      1.25_mps
     };
 
     std::vector<units::meters_per_second_t> Red_Close4PointSpeed3
@@ -754,13 +754,13 @@ class RobotContainer
     std::vector<frc::Pose2d> Red_FarSideMid2
     {
       frc::Pose2d(13.8_m, 2.5_m, 50_deg),
-      frc::Pose2d(8.3_m, 0.9_m, 20_deg)
+      frc::Pose2d(8.3_m, 1.05_m, 20_deg)
     };
 
     //Midline pickup to 2nd shooting spot
     std::vector<frc::Pose2d> Red_FarSideMid3
     {
-      frc::Pose2d(8.5_m, 0.9_m, 20_deg),
+      frc::Pose2d(8.5_m, 1.05_m, 20_deg),
       frc::Pose2d(11.05_m, 1.8_m, 0_deg),
       frc::Pose2d(12.55_m, 3.0_m, 50_deg)
     };

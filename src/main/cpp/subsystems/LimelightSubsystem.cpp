@@ -4,7 +4,10 @@
 
 #include "subsystems/LimelightSubsystem.h"
 
-LimelightSubsystem::LimelightSubsystem() = default;
+LimelightSubsystem::LimelightSubsystem()
+{
+    sleep(1);
+}
 
 // This method will be called once per scheduler run
 void LimelightSubsystem::Periodic()
@@ -12,12 +15,12 @@ void LimelightSubsystem::Periodic()
     targetIDs.clear();
     Notetx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx",0.0);
     Notety = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty",0.0);
-    auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
-    auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
+    // auto threeDPose = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose",std::vector<double>(6));
+    // auto threeDPose2 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumberArray("botpose blue",std::vector<double>(6));
 
-    double distanceToTagInMeters = threeDPose[0];
-    frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
-    frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
+    // double distanceToTagInMeters = threeDPose[0];
+    // frc::SmartDashboard::PutNumber("Distance", distanceToTagInMeters);
+    // frc::SmartDashboard::PutNumber("Distance2", threeDPose2[0]);
 
     result = camera.GetLatestResult();
     hasTarget = result.HasTargets();
@@ -143,9 +146,10 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
     if(dist != 0.0)
     {
         frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
-        // return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64;
-        return -0.2238* pow((dist+angleTrim),3) + 4.1431 * pow((dist+angleTrim), 2) - 27.38 * (dist+angleTrim) + 89.093;
-        // y = -0.2238x3 + 4.1431x2 - 27.38x + 89.093
+        // return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64; //initial curve not using the PID shooter 
+        // return -1.556* pow((dist+angleTrim),3) + 17.162 * pow((dist+angleTrim), 2) - 68 * (dist+angleTrim) + 127.2; //power of 3 magnolia
+        return 0.6042 * pow((dist+angleTrim),4) - 8.94 * pow((dist+angleTrim),3) + 49.7 * pow((dist+angleTrim),2) - 129.06 * (dist+angleTrim) + 168.18;
+        // return -0.2238* pow((dist+angleTrim),3) + 4.1431 * pow((dist+angleTrim), 2) - 27.38 * (dist+angleTrim) + 89.093; // for 3800 rpm - unused as of now
     }
     else
     {
@@ -193,4 +197,9 @@ double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sour
   }
 
   return a;
+}
+
+void LimelightSubsystem::apriltagAngleReset(double currentHeading)
+{
+    desiredHeading = currentHeading;
 }

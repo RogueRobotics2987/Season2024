@@ -34,22 +34,25 @@ void AmpShooter::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AmpShooter::Execute() 
 {
-  m_shooter->SetActuator(37.5);
-  m_arm->SetLowerArmAngle(112);
+  m_shooter->SetActuator(45.5);
+
+  if(m_arm->GetOffSetEncoderValueLower() > 50)
+  {
+    m_arm->RunArmWheels(-1);
+  }
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
   {
     m_intake->RunMagazine(1);
     m_intake->RunIntake(1);
     m_intake->DirectionNote(1);
-    m_arm->RunArmWheels(-1);
 
     hasShot = true; 
   }
 
   if(hasShot) 
   {
-    time += 1;
+    time++;
   }
 }
 
@@ -62,7 +65,7 @@ void AmpShooter::End(bool interrupted)
 // Returns true when the command should end.
 bool AmpShooter::IsFinished() 
 {
-  if(time > 30) 
+  if(time > 75) 
   {
     return true;
   }

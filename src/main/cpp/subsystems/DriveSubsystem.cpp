@@ -54,7 +54,10 @@ DriveSubsystem::DriveSubsystem()
         m_rearRight.GetPosition()
       },
       frc::Pose2d{}
-    } {}
+    }
+    {
+      sleep(1);
+    }
 
 void DriveSubsystem::Periodic(){
   // Implementation of subsystem periodic method goes here.

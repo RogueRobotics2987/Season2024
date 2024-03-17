@@ -16,7 +16,10 @@ AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetr
 }
 
 // Called when the command is initially scheduled.
-void AutoAprilTag::Initialize() {}
+void AutoAprilTag::Initialize()
+{
+  m_limePose->apriltagAngleReset(m_drive->GetPose().Rotation().Degrees().value());
+}
 
 // Called repeatedly when this Command is scheduled to run
 void AutoAprilTag::Execute()

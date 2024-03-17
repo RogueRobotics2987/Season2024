@@ -110,11 +110,11 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_auxController, 1).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
 
-  frc2::JoystickButton(&m_auxController, 2).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm, m_shooterWheels).ToPtr());
+  frc2::JoystickButton(&m_auxController, 2).ToggleOnTrue(AmpShooter(m_shooter, m_intake, m_driverController, m_arm, m_shooterWheels).ToPtr()); 
 
-  frc2::JoystickButton(&m_driverController, 8).ToggleOnTrue(AmpLineup(m_drive, m_limelight).ToPtr());
+  // frc2::JoystickButton(&m_driverController, 8).ToggleOnTrue(AmpLineup(m_drive, m_limelight).ToPtr());
 
-  frc2::POVButton(&m_driverController, 90).WhileTrue(
+  frc2::JoystickButton(&m_auxController, 4).WhileTrue(
     frc2::cmd::Run(
       [this]
         {
@@ -310,7 +310,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
-          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          frc2::WaitCommand(1.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
       frc2::cmd::Parallel(
@@ -359,7 +359,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Race( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         frc2::cmd::Sequence(
-          frc2::WaitCommand(1.25_s).ToPtr(), //can change if need
+          frc2::WaitCommand(1.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr()
         )
       ),

@@ -12,6 +12,8 @@ ArmSubsystem::ArmSubsystem()
     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus4, 500);
     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus5, 500);
     LowerArm.SetPeriodicFramePeriod(rev::CANSparkMaxLowLevel::PeriodicFrame::kStatus6, 500);
+    sleep(1);
+
 }
 
 // This method will be called once per scheduler run
@@ -99,23 +101,23 @@ void ArmSubsystem::SetLowerArmAngle(double desiredAngle)
     }
 }
 
-void ArmSubsystem::AccumulateErrorLower()
-{
-    double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
-    if(LowerangleError < 10)
-    {
-        LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
-    }    
-    else
-    {
-        LoweraccumulatedError = 0;
-    }
-}
+// void ArmSubsystem::AccumulateErrorLower()
+// {
+//     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
+//     if(LowerangleError < 10)
+//     {
+//         LoweraccumulatedError += ArmConstants::kiLowerArm * LowerangleError;
+//     }    
+//     else
+//     {
+//         LoweraccumulatedError = 0;
+//     }
+// }
 
 void ArmSubsystem::RunLowerArm()
 {
     double LowerangleError = DistanceBetweenAngles(m_LowerDesired, GetOffSetEncoderValueLower());
-    double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm)) + LoweraccumulatedError;
+    double lowerAngleOutput = ((LowerangleError * ArmConstants::kpLowerArm));
     LowerArm.Set(lowerAngleOutput); //TODO verify polarity
 }
 
