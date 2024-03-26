@@ -41,10 +41,10 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double DistanceBetweenAngles(double targetAngle, double sourceAngle);
     void apriltagAngleReset(double currentHeading);
 
-    double GetApriltagDriveMotorVal(double currentHeading);
+    double GetApriltagDriveMotorVal(double currentHeading, double lastHeading);
     double GetApriltagDriveError();
     double GetDistanceFromTarget();
-
+    int GetNumTargets();
 
     double GetAmptx();
 
@@ -81,12 +81,17 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double driveError = 0;
     double txApril = 0;
     double desiredHeading = 0;
-    double kpApril = 0.065;
+    double kpApril = 0.075;
+    // double kpApril = 0.065;
 
     double targetCount = -1;
 
     double redS = 2.55;
     double blueS = 5.45;
+
+    double rz = 0; // current heading but from limelight
+    double lastDistance= 0;
+    double currentDistance = 0;
 
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.

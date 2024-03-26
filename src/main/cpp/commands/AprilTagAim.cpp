@@ -29,6 +29,10 @@ void AprilTagAim::Initialize()
   shoot = false;
   time = 0;
   m_limelight->apriltagAngleReset(m_drivetrain->GetPose().Rotation().Degrees().value());
+  currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
+  lastHeading = currentHeading;
+
+  hasSeenTarget = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -39,7 +43,7 @@ void AprilTagAim::Execute()
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
 
-  rotApril = units::angular_velocity::radians_per_second_t(m_limelight->GetApriltagDriveMotorVal(currentHeading));
+  rotApril = units::angular_velocity::radians_per_second_t(m_limelight->GetApriltagDriveMotorVal(currentHeading, lastHeading));
 
   frc::SmartDashboard::PutNumber("apriltagRotation", rotApril.value());
     
@@ -47,8 +51,9 @@ void AprilTagAim::Execute()
 
   speedY = Deadzone(m_driverController->GetLeftY());
   speedX = Deadzone(m_driverController->GetLeftX());
+  rot = Deadzone(m_driverController->GetRightX());
 
-  if((fabs(speedY) + fabs(speedX)) < .05)
+  if((fabs(speedY) + fabs(speedX) + fabs(rot)) < .05)
   {
     NoJoystickInput = true;
   }
@@ -56,14 +61,27 @@ void AprilTagAim::Execute()
   {
     NoJoystickInput = false;
   }
-  
-  if(fabs(rotApril.value()) > 0.05)
+    
+  if(hasSeenTarget == true)
   {
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, false);
+    if(fabs(rotApril.value()) > 0.05)
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, false);
+    }
+    else
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, NoJoystickInput);
+    }
   }
   else
   {
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * 4), units::velocity::meters_per_second_t(speedX * 4), rotApril, false, NoJoystickInput);
+    m_drivetrain->Drive(
+      units::velocity::meters_per_second_t(speedY * 4),
+      units::velocity::meters_per_second_t(speedX * 4),
+      units::radians_per_second_t(-rot * AutoConstants::kMaxAngularSpeed),
+      false,
+      NoJoystickInput
+    );
   }
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
@@ -80,6 +98,14 @@ void AprilTagAim::Execute()
   {
     finished = true;
   } 
+
+  if(m_limelight->GetNumTargets() > 0)
+  {
+    hasSeenTarget = true;
+  }
+
+  //updating the last heading
+  lastHeading = currentHeading;
 }
 
 // Called once the command ends or is interrupted.

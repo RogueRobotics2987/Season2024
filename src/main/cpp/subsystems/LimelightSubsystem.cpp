@@ -163,8 +163,10 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
         frc::SmartDashboard::PutNumber("Distance AprilTag", dist);
         // return -0.2351* pow((dist+angleTrim),3) + 4.38 * pow((dist+angleTrim), 2) - 29 * (dist+angleTrim) + 89.64; //initial curve not using the PID shooter 
         // return -1.556* pow((dist+angleTrim),3) + 17.162 * pow((dist+angleTrim), 2) - 68 * (dist+angleTrim) + 127.2; //power of 3 magnolia
-        return 0.6042 * pow((dist+angleTrim),4) - 8.94 * pow((dist+angleTrim),3) + 49.7 * pow((dist+angleTrim),2) - 129.06 * (dist+angleTrim) + 168.18;
+        // return 0.6042 * pow((dist+angleTrim),4) - 8.94 * pow((dist+angleTrim),3) + 49.7 * pow((dist+angleTrim),2) - 129.06 * (dist+angleTrim) + 168.18;
         // return -0.2238* pow((dist+angleTrim),3) + 4.1431 * pow((dist+angleTrim), 2) - 27.38 * (dist+angleTrim) + 89.093; // for 3800 rpm - unused as of now
+
+        return 0.0487 * pow((dist+angleTrim),4) - 1.1665 * pow((dist+angleTrim),3) + 10.383 * pow((dist+angleTrim),2) - 42.875 * (dist+angleTrim) + 97.426;
     }
     else
     {
@@ -190,28 +192,36 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
 //     return (driveError * kpApril);
 // }
 
-double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading)
+double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, double lastHeading)
 {
     if(targetCount > 0)
     {
+        rz = bluePose[5]; 
+        double ty = bluePose[1]; //ty
+
         if(bluePose[0] > (16.55/2)) //red side
         {
             double tx = 16.55 - bluePose[0]; //tx
-            double ty = bluePose[1]; //ty
+            // double ty = bluePose[1]; //ty
 
             desiredHeading = atan((blueS - ty) / tx) * (180/3.14);
         }
         else if(bluePose[0] < (16.55/2)) //blue side
         {
             double tx = bluePose[0]; //tx
-            double ty = bluePose[1]; //ty
+            // double ty = bluePose[1]; //ty
 
             desiredHeading = atan((blueS - ty) / tx) * (180/3.14);
             desiredHeading += 180;
         }
     }
+    else
+    {
+        rz = rz + DistanceBetweenAngles(currentHeading, lastHeading);
+    }
 
-    driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+    // driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
+    driveError = DistanceBetweenAngles(desiredHeading, rz);
 
     if(fabs(driveError) > 2.0)
     {
@@ -261,18 +271,26 @@ double LimelightSubsystem::GetDistanceFromTarget()
             double tx = 16.55 - bluePose[0]; //tx
             double ty = bluePose[1]; //ty
 
-            return sqrt(pow(blueS - ty, 2) + pow(tx, 2));
+            currentDistance = sqrt(pow(blueS - ty, 2) + pow(tx, 2));
         }
         else if(bluePose[0] < (16.55/2)) 
         {
             double tx = bluePose[0]; //tx
             double ty = bluePose[1]; //ty
 
-            return sqrt(pow(blueS - ty, 2) + pow(tx, 2));
+            currentDistance = sqrt(pow(blueS - ty, 2) + pow(tx, 2));
         }
+
+        lastDistance = currentDistance;
+        return currentDistance;
     }
     else
     {
-        return 0;
+        return lastDistance;
     }
+}
+
+int LimelightSubsystem::GetNumTargets()
+{
+    return targetCount;
 }

@@ -49,4 +49,6 @@ class AutoAprilTag : public frc2::CommandHelper<frc2::Command, AutoAprilTag>
     double desiredHeading = 0;
     int filteredTargetID = -1;
     double error = 0;
+
+    double lastHeading = 0;
 };
