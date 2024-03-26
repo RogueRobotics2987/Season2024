@@ -43,7 +43,7 @@ void AprilTagAim::Execute()
 
   frc::SmartDashboard::PutNumber("apriltagRotation", rotApril.value());
     
-  m_shooter->SetActuator(m_limelight->GetApriltagShooterTheta(m_limelight->FilteredDistance(), m_shooter->GetAngleTrim()));
+  m_shooter->SetActuator(m_limelight->GetApriltagShooterTheta(m_limelight->GetDistanceFromTarget(), m_shooter->GetAngleTrim()));
 
   speedY = Deadzone(m_driverController->GetLeftY());
   speedX = Deadzone(m_driverController->GetLeftX());
@@ -55,11 +55,6 @@ void AprilTagAim::Execute()
   else
   {
     NoJoystickInput = false;
-  }
-
-  if(m_limelight->FilteredDistance() == 0)
-  {
-    rotApril = 0_rad_per_s;
   }
   
   if(fabs(rotApril.value()) > 0.05)

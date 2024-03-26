@@ -8,6 +8,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include <iostream>
 #include <frc/apriltag/AprilTagPoseEstimate.h>
+
+#include "LimelightHelpers.h"
 #include "networktables/NetworkTableInstance.inc"
 #include "Constants.h"
 #include "photon/PhotonUtils.h"
@@ -41,6 +43,8 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
     double GetApriltagDriveMotorVal(double currentHeading);
     double GetApriltagDriveError();
+    double GetDistanceFromTarget();
+
 
     double GetAmptx();
 
@@ -56,6 +60,9 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double Notety = 0;
 
     bool hasTarget = false;
+
+    std::vector<double> bluePose;
+    std::vector<double> redPose;
 
     std::vector<double> targetIDs;
     std::vector<photon::PhotonTrackedTarget> myTargets;
@@ -75,6 +82,11 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double txApril = 0;
     double desiredHeading = 0;
     double kpApril = 0.065;
+
+    double targetCount = -1;
+
+    double redS = 2.55;
+    double blueS = 5.45;
 
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
