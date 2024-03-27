@@ -7,12 +7,15 @@
 AutoShootCommand::AutoShootCommand() {}
 
 AutoShootCommand::AutoShootCommand(ShooterWheelsSubsystem &shooterWheel,
-                            IntakeSubsystem &intake) 
+                                    IntakeSubsystem &intake,
+                                    ShooterSubsystem &shooter) 
 {
   m_shooterWheel = &shooterWheel;
   AddRequirements({m_shooterWheel});
   m_intake = &intake;
   AddRequirements({m_intake});
+  m_shooter = &shooter;
+  AddRequirements({m_shooter});
 }
 
 // Called when the command is initially scheduled.
@@ -58,7 +61,10 @@ void AutoShootCommand::stopShoot()
 }
 
 // Called once the command ends or is interrupted.
-void AutoShootCommand::End(bool interrupted){}
+void AutoShootCommand::End(bool interrupted)
+{
+  m_shooter->setRestingActuatorPosition();
+}
 
 // Returns true when the command should end.
 bool AutoShootCommand::IsFinished() 

@@ -28,7 +28,6 @@ void ShooterSubsystem::Periodic()
         frc::SmartDashboard::PutNumber("AngleTrim", angleTrim);
         // m_DesiredAngle = frc::SmartDashboard::GetNumber("SetAngle", m_DesiredAngle);
     }
-
     SetShooterAngle();
 }
 
@@ -67,7 +66,7 @@ double ShooterSubsystem::GetOffSetEncoderValue()
 
 double ShooterSubsystem::ShooterError()
 {
-    return m_DesiredAngle - GetOffSetEncoderValue();
+    return DistanceBetweenAngles(m_DesiredAngle, GetOffSetEncoderValue());
 }
 
 void ShooterSubsystem::driveActuator(double speed)
