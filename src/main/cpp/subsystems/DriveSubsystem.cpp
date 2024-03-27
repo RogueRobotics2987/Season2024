@@ -151,6 +151,8 @@ void DriveSubsystem::periodicHelper()
 
   auto [fl, fr, bl, br] = states;
 
+  // float currentAngle = fmod((double)(m_frontLeft.GetState().angle().Degrees()), 180);
+
   if (noJoystickInput == true)
   {
     fl.speed = (units::velocity::meters_per_second_t)(0);
@@ -158,9 +160,9 @@ void DriveSubsystem::periodicHelper()
     bl.speed = (units::velocity::meters_per_second_t)(0);
     br.speed = (units::velocity::meters_per_second_t)(0);
     fl.angle = (units::angle::degree_t)(45);
-    fr.angle = (units::angle::degree_t)(135);
+    fr.angle = (units::angle::degree_t)(-45);
     bl.angle = (units::angle::degree_t)(-45);
-    br.angle = (units::angle::degree_t)(-135);
+    br.angle = (units::angle::degree_t)(45);
   } 
 
   if (driveSlow == true)
