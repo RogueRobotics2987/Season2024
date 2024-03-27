@@ -9,7 +9,6 @@
 #include <iostream>
 #include <frc/apriltag/AprilTagPoseEstimate.h>
 
-#include "LimelightHelpers.h"
 #include "networktables/NetworkTableInstance.inc"
 #include "Constants.h"
 #include "photon/PhotonUtils.h"
@@ -31,12 +30,6 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double GetNotetx();
     double GetNotety();
 
-    bool PhotonHasTarget();
-    double PhotonYaw();
-    double FilteredPhotonYaw();
-    double PhotonYawMap(double originalVal);
-    double FilteredDistance();
-    photon::PhotonTrackedTarget GetFilteredTarget();
     double GetApriltagShooterTheta(double dist, double angleTrim);
     double DistanceBetweenAngles(double targetAngle, double sourceAngle);
     void apriltagAngleReset(double currentHeading);
@@ -48,12 +41,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
 
     double GetAmptx();
 
-    std::vector<double> botPose;
-
   private:
-    photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
-    photon::PhotonPipelineResult result;
-
     double AprilTagstx = 0;
     double AprilTagsty = 0;
     double Notetx = 0;
@@ -62,37 +50,17 @@ class LimelightSubsystem : public frc2::SubsystemBase
     bool hasTarget = false;
 
     std::vector<double> bluePose;
-    std::vector<double> redPose;
-
-    std::vector<double> targetIDs;
-    std::vector<photon::PhotonTrackedTarget> myTargets;
-    std::span<const photon::PhotonTrackedTarget> tempTargets;
-    double targetData = 0;
-    photon::PhotonTrackedTarget filteredTarget;
-    int filteredTargetID = -1;
-    units::meter_t filteredRange = 0_m;
-
-    units::meter_t CAMERA_HEIGHT = units::meter_t(0.635);
-    units::meter_t TAREGT_HEIGHT = units::meter_t(1.5);
-    units::angle::radian_t CAMERA_PITCH = units::angle::radian_t(0.45);
-
-    units::meter_t AMP_TARGET_HEIGHT = units::meter_t(1.405);
 
     double driveError = 0;
     double txApril = 0;
     double desiredHeading = 0;
     double kpApril = 0.075;
-    // double kpApril = 0.065;
 
     double targetCount = -1;
 
-    double redS = 2.55;
     double blueS = 5.45;
 
     double rz = 0; // current heading but from limelight
     double lastDistance= 0;
     double currentDistance = 0;
-
-    // Components (e.g. motor controllers and sensors) should generally be
-    // declared private and exposed only through public methods.
 };
