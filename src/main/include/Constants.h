@@ -117,7 +117,7 @@ namespace DebugConstants
     constexpr bool debugShooter = true; 
     constexpr bool debugArm = false; 
     constexpr bool debugClimber = false; 
-    constexpr bool debugDrive = false; 
+    constexpr bool debugDrive = true; 
     constexpr bool debugIntake = true; 
     constexpr bool debugLimelight = true; 
     constexpr bool debugSwerveModules = false; 

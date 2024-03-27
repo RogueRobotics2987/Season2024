@@ -19,6 +19,9 @@ AutoAprilTag::AutoAprilTag(LimelightSubsystem &limePose, DriveSubsystem &drivetr
 void AutoAprilTag::Initialize()
 {
   m_limePose->apriltagAngleReset(m_drive->GetPose().Rotation().Degrees().value());
+  currentHeading = m_drive->GetPose().Rotation().Degrees().value();
+  lastHeading = currentHeading;
+
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -26,12 +29,12 @@ void AutoAprilTag::Execute()
 {
   currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
-  rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading));
+  rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading, lastHeading));
   
-  if(m_limePose->FilteredDistance() == 0)
-  {
-    rotApril = 0_rad_per_s;
-  }
+  // if(m_limePose->GetDistanceFromTarget() == 0)
+  // {
+  //   rotApril = 0_rad_per_s;
+  // }
 
   if(fabs(rotApril.value()) > 0.05)
   {
@@ -42,7 +45,10 @@ void AutoAprilTag::Execute()
     m_drive->Drive(units::velocity::meters_per_second_t(0), units::velocity::meters_per_second_t(0), rotApril, false, true);
   }
 
-  m_shooter->SetActuator(m_limePose->GetApriltagShooterTheta(m_limePose->FilteredDistance(), m_shooter->GetAngleTrim()));
+  m_shooter->SetActuator(m_limePose->GetApriltagShooterTheta(m_limePose->GetDistanceFromTarget(), m_shooter->GetAngleTrim()));
+
+  //updating the last heading
+  lastHeading = currentHeading;
 }
 
 // Called once the command ends or is interrupted.
