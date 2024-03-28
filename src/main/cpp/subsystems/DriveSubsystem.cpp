@@ -131,7 +131,7 @@ void DriveSubsystem::Drive(
 }
 
 void DriveSubsystem::periodicHelper()
-{       
+{
   if (DebugConstants::debugDrive == true)
   {
     frc::SmartDashboard::PutNumber("ROT value: ", rot.value());
@@ -164,7 +164,6 @@ void DriveSubsystem::periodicHelper()
     bl.angle = (units::angle::degree_t)(-45);
     br.angle = (units::angle::degree_t)(45);
   } 
-
   if (driveSlow == true)
   {
     fl.speed = (units::velocity::meters_per_second_t)(0.5 * fl.speed);
@@ -180,6 +179,7 @@ void DriveSubsystem::periodicHelper()
     bl.angle = (units::angle::degree_t)(0);
     br.angle = (units::angle::degree_t)(0);
   }
+
 
   if (DebugConstants::debugDrive == true)
   {

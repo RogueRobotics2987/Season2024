@@ -129,7 +129,7 @@ namespace ShooterConstants
     constexpr double AngleThreshold = 0.027;
     constexpr double RestingAngle = 20;//32; //also the low angle. TODO will change for updated offfset
 
-    constexpr double SubwooferAngle = 52.1;   // temp value, please test and find out
+    constexpr double SubwooferAngle = 54;   // temp value, please test and find out
     constexpr double StageAngle = 38.18;//53.61;       // temp value, please test and find out
     constexpr double AmpAngle = 0;          // TODO find angle value
     constexpr double ShooterMaxSoftLimit = 59;

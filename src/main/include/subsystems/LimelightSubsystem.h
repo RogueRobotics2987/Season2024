@@ -54,7 +54,7 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double driveError = 0;
     double txApril = 0;
     double desiredHeading = 0;
-    double kpApril = 0.075;
+    double kpApril = 0.055;
 
     double targetCount = -1;
 

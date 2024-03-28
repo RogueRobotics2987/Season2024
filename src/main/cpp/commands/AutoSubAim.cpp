@@ -30,7 +30,7 @@ void AutoSubAim::Execute() {
 
 // Called once the command ends or is interrupted.
 void AutoSubAim::End(bool interrupted) {
-  m_shooter->setRestingActuatorPosition();
+  // m_shooter->setRestingActuatorPosition();
 }
 
 // Returns true when the command should end.

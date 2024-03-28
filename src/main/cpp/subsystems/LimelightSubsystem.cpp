@@ -86,7 +86,10 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
     // driveError = DistanceBetweenAngles(desiredHeading, currentHeading);
     driveError = DistanceBetweenAngles(desiredHeading, rz);
 
-    if(fabs(driveError) > 2.0)
+    frc::SmartDashboard::PutNumber("DesiredHeadingLL", desiredHeading);
+    frc::SmartDashboard::PutNumber("DriveError", driveError);
+
+    if(fabs(driveError) > 2)
     {
         return (driveError * kpApril);
     }

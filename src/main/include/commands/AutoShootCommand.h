@@ -9,6 +9,7 @@
 
 #include "subsystems/ShooterWheelsSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 
 /**
  * An example command.
@@ -23,7 +24,8 @@ class AutoShootCommand : public frc2::CommandHelper<frc2::Command, AutoShootComm
     AutoShootCommand();
     AutoShootCommand(
       ShooterWheelsSubsystem &shooterWheels,
-      IntakeSubsystem &intake);
+      IntakeSubsystem &intake,
+      ShooterSubsystem &shooter);
 
     void ShooterWarmup();
     void shoot();
@@ -40,6 +42,7 @@ class AutoShootCommand : public frc2::CommandHelper<frc2::Command, AutoShootComm
   private:
     ShooterWheelsSubsystem* m_shooterWheel = nullptr;
     IntakeSubsystem* m_intake = nullptr;
+    ShooterSubsystem* m_shooter = nullptr;
 
     double time = 0;
     bool finished = false;
