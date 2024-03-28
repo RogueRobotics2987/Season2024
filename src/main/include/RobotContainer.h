@@ -450,7 +450,7 @@ class RobotContainer
 
     std::vector<frc::Pose2d> Red_Close4Waypoint2
     {
-      frc::Pose2d(13.3_m, 7.05_m, -40_deg)
+      frc::Pose2d(13.3_m, 7.05_m, -60_deg)
     };
 
     std::vector<frc::Pose2d> Red_Close4Waypoint3

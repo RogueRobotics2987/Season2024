@@ -151,7 +151,20 @@ void DriveSubsystem::periodicHelper()
 
   auto [fl, fr, bl, br] = states;
 
-  // float currentAngle = fmod((double)(m_frontLeft.GetState().angle().Degrees()), 180);
+  float errorFL = (float)m_frontLeft.GetTurnPID().GetPositionError();
+  float errorFR = (float)m_frontRight.GetTurnPID().GetPositionError();
+  float errorBL = (float)m_rearLeft.GetTurnPID().GetPositionError();
+  float errorBR = (float)m_rearLeft.GetTurnPID().GetPositionError();
+
+  float totalError = fabs(errorFL) + fabs(errorFR) + fabs(errorBL) + fabs(errorBR);
+  
+  if(totalError > 0.21)
+  {
+    fl.speed = (units::velocity::meters_per_second_t)(0);
+    fr.speed = (units::velocity::meters_per_second_t)(0);
+    bl.speed = (units::velocity::meters_per_second_t)(0);
+    br.speed = (units::velocity::meters_per_second_t)(0);
+  }
 
   if (noJoystickInput == true)
   {
