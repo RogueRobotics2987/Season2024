@@ -7,6 +7,7 @@
 LimelightSubsystem::LimelightSubsystem()
 {
     sleep(1);
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline", 0);
 }
 
 // This method will be called once per scheduler run

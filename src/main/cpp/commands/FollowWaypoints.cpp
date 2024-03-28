@@ -46,8 +46,6 @@ void FollowWaypoints::Initialize()
   m_cruiseSpeed.pop_front();
   lastPose = m_drivetrain->GetPose();
 
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",1);
-
   accumulatedError = 0;
 }
 

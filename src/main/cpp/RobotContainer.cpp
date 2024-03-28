@@ -272,6 +272,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
       ),
+      frc2::cmd::RunOnce(
+        [this]
+          {
+            Red_Close4Waypoint2.emplace(Red_Close4Waypoint2.begin(), m_drive.GetPose());
+          },
+          {&m_drive}
+      ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint2, Red_Close4PointSpeed2, Red_Close4CruiseSpeed2, false).ToPtr(),
         IntakeCmd(m_intake).ToPtr()
@@ -281,6 +288,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::Sequence(
           frc2::WaitCommand(0.75_s).ToPtr(), //can change if need
           AutoShootCommand(m_shooterWheels, m_intake).ToPtr())
+      ),
+      frc2::cmd::RunOnce(
+        [this]
+          {
+            Red_Close4Waypoint3.emplace(Red_Close4Waypoint3.begin(), m_drive.GetPose());
+          },
+          {&m_drive}
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint3, Red_Close4PointSpeed3, Red_Close4CruiseSpeed3, false).ToPtr(),
