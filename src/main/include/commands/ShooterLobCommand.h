@@ -6,10 +6,13 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/Joystick.h> 
 
-#include "subsystems/ShooterWheelsSubsystem.h"
+#include "ShootCommand.h" 
+#include "RobotContainer.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
+#include "subsystems/ShooterWheelsSubsystem.h"
 
 /**
  * An example command.
@@ -18,19 +21,16 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AutoShootCommand : public frc2::CommandHelper<frc2::Command, AutoShootCommand>
+class ShooterLobCommand: public frc2::CommandHelper<frc2::Command, ShooterLobCommand> 
 {
   public:
-    AutoShootCommand();
-    AutoShootCommand(
-      ShooterWheelsSubsystem &shooterWheels,
+    ShooterLobCommand();
+    ShooterLobCommand(
+      ShooterSubsystem &shooter,
       IntakeSubsystem &intake,
-      ShooterSubsystem &shooter);
-
-    void ShooterWarmup();
-    void shoot();
-    void stopShoot();
-
+      frc::XboxController &driverController,
+      ShooterWheelsSubsystem &m_shooterWheels);
+    
     void Initialize() override;
 
     void Execute() override;
@@ -40,10 +40,10 @@ class AutoShootCommand : public frc2::CommandHelper<frc2::Command, AutoShootComm
     bool IsFinished() override;
 
   private:
-    ShooterWheelsSubsystem* m_shooterWheel = nullptr;
-    IntakeSubsystem* m_intake = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
-
+    ShooterWheelsSubsystem* m_shooterWheels = nullptr;
+    IntakeSubsystem* m_intake = nullptr;
+    frc::XboxController* m_driverController = nullptr;
     double time = 0;
-    bool finished = false;
+    bool hasShot = false; 
 };

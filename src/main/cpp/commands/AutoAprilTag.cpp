@@ -30,11 +30,6 @@ void AutoAprilTag::Execute()
   currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
   rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading, lastHeading));
-  
-  // if(m_limePose->GetDistanceFromTarget() == 0)
-  // {
-  //   rotApril = 0_rad_per_s;
-  // }
 
   if(fabs(rotApril.value()) > 0.05)
   {
@@ -55,13 +50,19 @@ void AutoAprilTag::Execute()
 void AutoAprilTag::End(bool interrupted)
 {
   m_drive->Drive(0_rad_per_s, false, false);
-  m_shooter->setRestingActuatorPosition();
 }
 
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
+  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limePose->GetApriltagDriveError()) < 2)
+  {
+    return true;
+  }
+  else
+  {
     return false;
+  }
 }
 
 double AutoAprilTag::DistanceBetweenAngles(double targetAngle, double sourceAngle)

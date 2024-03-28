@@ -7,11 +7,11 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/smartdashboard/SmartDashboard.h> 
-#include <frc/Joystick.h> //new
+#include <frc/Joystick.h> 
 
 #include "subsystems/ArmSubsystem.h"
-#include "ShootCommand.h" //new
-#include "RobotContainer.h" //new
+#include "ShootCommand.h" 
+#include "RobotContainer.h"
 
 /**
  * An example command.
