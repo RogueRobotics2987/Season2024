@@ -73,6 +73,8 @@ class DriveSubsystem : public frc2::SubsystemBase
     frc2::CommandPtr FieldOrientatedTrue(); //field orientated driving
     frc2::CommandPtr FieldOrientatedFalse(); //robot centric driving
     frc2::CommandPtr SetAngleAdjustment(double angle);
+
+    void InitSendable(wpi::SendableBuilder& builder);
     
     /**
      * Returns the turn rate of the robot.
@@ -116,7 +118,7 @@ class DriveSubsystem : public frc2::SubsystemBase
     SwerveModuleSubsystem m_frontRight;
     SwerveModuleSubsystem m_rearLeft;
     SwerveModuleSubsystem m_rearRight;
-
+  
     // The gyro sensor
     AHRS m_gyro{frc::I2C::kMXP}; //Do not use Serial Port 
     // AHRS m_gyro{frc::SerialPort::kMXP}; //Do not use Serial Port 

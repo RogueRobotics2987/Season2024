@@ -151,19 +151,29 @@ void DriveSubsystem::periodicHelper()
 
   auto [fl, fr, bl, br] = states;
 
-  float errorFL = (float)m_frontLeft.GetTurnPID().GetPositionError();
-  float errorFR = (float)m_frontRight.GetTurnPID().GetPositionError();
-  float errorBL = (float)m_rearLeft.GetTurnPID().GetPositionError();
-  float errorBR = (float)m_rearLeft.GetTurnPID().GetPositionError();
+  double speedFL = m_frontLeft.GetState().speed.value();
+  double speedFR = m_frontRight.GetState().speed.value();
+  double speedBL = m_rearLeft.GetState().speed.value();
+  double speedBR = m_rearRight.GetState().speed.value();
 
-  float totalError = fabs(errorFL) + fabs(errorFR) + fabs(errorBL) + fabs(errorBR);
-  
-  if(totalError > 0.21)
+  double totalVelocity = speedFL + speedFR + speedBL + speedBR;
+
+  if(totalVelocity < 0.1)
   {
-    fl.speed = (units::velocity::meters_per_second_t)(0);
-    fr.speed = (units::velocity::meters_per_second_t)(0);
-    bl.speed = (units::velocity::meters_per_second_t)(0);
-    br.speed = (units::velocity::meters_per_second_t)(0);
+    float errorFL = (float)m_frontLeft.GetTurnPID().GetPositionError();
+    float errorFR = (float)m_frontRight.GetTurnPID().GetPositionError();
+    float errorBL = (float)m_rearLeft.GetTurnPID().GetPositionError();
+    float errorBR = (float)m_rearLeft.GetTurnPID().GetPositionError();
+
+    float totalError = fabs(errorFL) + fabs(errorFR) + fabs(errorBL) + fabs(errorBR);
+    
+    if(totalError > 0.21)
+    {
+      fl.speed = (units::velocity::meters_per_second_t)(0);
+      fr.speed = (units::velocity::meters_per_second_t)(0);
+      bl.speed = (units::velocity::meters_per_second_t)(0);
+      br.speed = (units::velocity::meters_per_second_t)(0);
+    }
   }
 
   if (noJoystickInput == true)
@@ -313,6 +323,25 @@ frc::ChassisSpeeds DriveSubsystem::getRobotRelativeSpeeds()
   }
 
   return {forward, sideways, angular};
+}
+
+void DriveSubsystem::InitSendable(wpi::SendableBuilder& builder)
+{
+  builder.SetSmartDashboardType("SwerveDrive");
+
+  builder.AddDoubleProperty("Front Left Angle", [this] { return m_frontLeft.GetState().angle.Radians().value(); }, nullptr);
+  builder.AddDoubleProperty("Front Left Velocity", [this] { return (double)m_frontLeft.GetState().speed; }, nullptr);
+
+  builder.AddDoubleProperty("Front Right Angle", [this] { return m_frontRight.GetState().angle.Radians().value(); }, nullptr);
+  builder.AddDoubleProperty("Front Right Velocity", [this] { return (double)m_frontRight.GetState().speed; }, nullptr);
+
+  builder.AddDoubleProperty("Back Left Angle", [this] { return m_rearLeft.GetState().angle.Radians().value(); }, nullptr);
+  builder.AddDoubleProperty("Back Left Velocity", [this] { return (double)m_rearLeft.GetState().speed; }, nullptr);
+
+  builder.AddDoubleProperty("Back Right Angle", [this] { return m_rearRight.GetState().angle.Radians().value(); }, nullptr);
+  builder.AddDoubleProperty("Back Right Velocity", [this] { return (double)m_rearRight.GetState().speed; }, nullptr);
+
+  builder.AddDoubleProperty("Robot Angle", [this] { return GetPose().Rotation().Radians().value(); }, nullptr);
 }
 
 DriveSubsystem::~DriveSubsystem()
