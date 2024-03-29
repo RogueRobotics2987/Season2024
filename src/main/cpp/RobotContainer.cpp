@@ -16,6 +16,8 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutData(&m_chooser);
   frc::SmartDashboard::PutData("SwerveDrive", &m_drive);
 
+  frc::SmartDashboard::PutString("AutoSpeed", "INIT");
+
   // Configure the button bindings
   ConfigureButtonBindings();
   m_drive.ZeroHeading(0_rad); //resets the heading on the gyro
@@ -194,6 +196,7 @@ float RobotContainer::Deadzone(float x)
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
+  m_drive.ZeroHeading(0_deg);
   m_shooter.zeroIntergralVal();
   chosenAuto = m_chooser.GetSelected();
 
@@ -277,13 +280,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
       ),
-      frc2::cmd::RunOnce(
-        [this]
-          {
-            Red_Close4Waypoint2.emplace(Red_Close4Waypoint2.begin(), m_drive.GetPose());
-          },
-          {&m_drive}
-      ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint2, Red_Close4PointSpeed2, Red_Close4CruiseSpeed2, false).ToPtr(),
         IntakeCmd(m_intake).ToPtr()
@@ -291,13 +287,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
-      ),
-      frc2::cmd::RunOnce(
-        [this]
-          {
-            Red_Close4Waypoint3.emplace(Red_Close4Waypoint3.begin(), m_drive.GetPose());
-          },
-          {&m_drive}
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint3, Red_Close4PointSpeed3, Red_Close4CruiseSpeed3, false).ToPtr(),

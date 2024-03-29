@@ -18,16 +18,11 @@ FollowWaypoints::FollowWaypoints(
   AddRequirements({m_drivetrain});
   AddRequirements({m_limePose});
 
-  m_waypoints.assign(waypoints.begin(), waypoints.end());
+  m_waypoints = waypoints;
+
+  // m_waypoints.assign(waypoints.begin(), waypoints.end());
   m_driveSpeed.assign(driveSpeed.begin(), driveSpeed.end());
   m_cruiseSpeed.assign(cruiseSpeed.begin(), cruiseSpeed.end());
-
-  for(int i = 0; i < (int)waypoints.size()-1; ++i)
-  {
-    deltaY = fabs((double)waypoints[i].Y() - (double)waypoints[i+1].Y());
-    deltaX = fabs((double)waypoints[i].X() - (double)waypoints[i+1].X());
-    m_waypointDistance.push_back(hypot(deltaX, deltaY));
-  }
 
   limeBool = limeLight;
 }
@@ -35,16 +30,31 @@ FollowWaypoints::FollowWaypoints(
 // Called when the command is initially scheduled.
 void FollowWaypoints::Initialize() 
 {
+  std::cout << m_waypoints.size() << std::endl;
+
+  if(!((fabs((double)m_waypoints[0].X() - (double)m_drivetrain->GetPose().X()) < threshold) && (fabs((double)m_waypoints[0].Y() - (double)m_drivetrain->GetPose().Y()) < threshold)))
+  {
+    m_waypoints.emplace(m_waypoints.begin(), m_drivetrain->GetPose());
+  }
+
+  for(int i = 0; i < (int)m_waypoints.size()-1; ++i)
+  {
+    deltaY = fabs((double)m_waypoints[i].Y() - (double)m_waypoints[i+1].Y());
+    deltaX = fabs((double)m_waypoints[i].X() - (double)m_waypoints[i+1].X());
+    m_waypointDistance.push_back(hypot(deltaX, deltaY));
+  }
+
   deltaX = 0;
   deltaY = 0;
   lastPointSpeed = 0_mps;
   
   desiredPose = m_waypoints.front();
-  m_waypoints.pop_front(); 
+  m_waypoints.erase(m_waypoints.begin()); 
   pointSpeed = m_driveSpeed.front();
   m_driveSpeed.pop_front();
   cruiseSpeed = m_cruiseSpeed.front();
   m_cruiseSpeed.pop_front();
+  currentDistance = 0;
 
   lastPose = m_drivetrain->GetPose();
 
@@ -62,7 +72,7 @@ void FollowWaypoints::Execute()
     if(m_waypoints.size() > 0) 
     {
       desiredPose = m_waypoints.front();
-      m_waypoints.pop_front();
+      m_waypoints.erase(m_waypoints.begin()); 
       lastPointSpeed = pointSpeed;
       pointSpeed = m_driveSpeed.front();
       m_driveSpeed.pop_front();
@@ -94,35 +104,28 @@ void FollowWaypoints::Execute()
 
   if(!finished)
   {
-    // robotSpeed = 1_mps;
-    if((distanceTraveled + (distanceTraveled * 0.1)) >= currentDistance)
+    if((distanceTraveled) >= (currentDistance * 1.1))
     {
-      robotSpeed = 1.5_mps;
+      robotSpeed = 1_mps;
+      frc::SmartDashboard::PutString("AutoSpeed", "OVERSHOOT");
     }
-    else if((currentDistance-distanceTraveled) <= 0.65)
+    else if(fabs(currentDistance-distanceTraveled) <= 0.2)
     {
       accumulatedError += 5E-3 * (currentDistance - distanceTraveled);
-      double x = (currentDistance-distanceTraveled) / 0.8;
+      double x = (currentDistance-distanceTraveled) / 0.2;
       robotSpeed = 1 * x * (cruiseSpeed - pointSpeed) + pointSpeed + (units::meters_per_second_t)accumulatedError; //0-100% of max speed aka Z
+
+      frc::SmartDashboard::PutString("AutoSpeed", "SLOWDOWN");
 
       if(DebugConstants::debugAuto == true)
       {
         frc::SmartDashboard::PutNumber("Xvalue2", x);
       }
     }
-    else if(distanceTraveled <= 0.5)
-    {
-      double x = distanceTraveled / 0.5;
-      robotSpeed = 1 * x * (cruiseSpeed - lastPointSpeed) + lastPointSpeed + 0.1_mps; //0-100% of max speed aka Z
-
-      if(DebugConstants::debugAuto == true)
-      {
-        frc::SmartDashboard::PutNumber("Xvalue1", x);
-      }
-    }
     else
     {
       robotSpeed = cruiseSpeed;
+      frc::SmartDashboard::PutString("AutoSpeed", "CruiseSpeed");
     }
 
     alpha = atan2(((double)desiredPose.Y() - (double)currentPose.Y()) , ((double)desiredPose.X() - (double)currentPose.X()));

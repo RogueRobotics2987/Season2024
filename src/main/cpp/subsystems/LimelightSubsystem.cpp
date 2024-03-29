@@ -22,6 +22,8 @@ void LimelightSubsystem::Periodic()
 
     frc::SmartDashboard::PutNumber("targetDistance", GetDistanceFromTarget());
     frc::SmartDashboard::PutNumber("targetCount", targetCount);
+
+    frc::SmartDashboard::PutNumber("RZ", rz);
 }
 
 
@@ -127,6 +129,7 @@ double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sour
 void LimelightSubsystem::apriltagAngleReset(double currentHeading)
 {
     desiredHeading = currentHeading;
+    rz = currentHeading;
 }
 
 double LimelightSubsystem::GetDistanceFromTarget()
