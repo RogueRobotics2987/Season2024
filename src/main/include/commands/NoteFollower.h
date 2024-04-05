@@ -52,14 +52,22 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
     frc::XboxController* m_driverController = nullptr;
 
     units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
-    double kpNote = 0.04;
+    double kpNote = 0.06;
     double txNote = 0.0;
     bool NoJoystickInput = false;
     double speedY = 0;  
     double speedX = 0;
     double rot = 0;
+    double noteError = 0;
+    double tyNote = 0;
 
     int state = 0;
     int time = 0;
     bool finished = false;
+
+    //if the robot has normal driving be false if it has the note tracker specific driving true
+    bool noteDrive = false;
+
+    //if the robot is currently intaking a note
+    bool hasNote = false;
 };

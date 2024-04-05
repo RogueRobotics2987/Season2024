@@ -26,6 +26,7 @@ class IntakeSubsystem : public frc2::SubsystemBase
     void HoldMagazine(double pos);
     double GetCurrMagEncoderVal();
     bool GetMagazineSensor();
+    double GetBackIntakeCurrent();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
