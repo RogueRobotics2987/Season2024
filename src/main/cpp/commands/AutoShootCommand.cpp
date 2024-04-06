@@ -29,11 +29,11 @@ void AutoShootCommand::Initialize()
 void AutoShootCommand::Execute() 
 {
 
-  if(time <= 40)
+  if(time <= 25)
   {
     shoot();
   }
-  else if(time >= 40)
+  else if(time >= 25)
   {
     stopShoot();
     finished = true;

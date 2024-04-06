@@ -44,6 +44,8 @@ void IntakeSubsystem::Periodic()
     {
         frc::SmartDashboard::PutBoolean("ColorFront", intakeColorSensorFront.Get());
     }
+
+    frc::SmartDashboard::PutNumber("BackIntakeCurrent", GetBackIntakeCurrent());
 }
 
 void IntakeSubsystem::Direction(double speed)
@@ -117,4 +119,9 @@ double IntakeSubsystem::GetCurrMagEncoderVal()
 {
     double currEncoderVal = MagazineEncoder.GetPosition();
     return currEncoderVal;
+}
+
+double IntakeSubsystem::GetBackIntakeCurrent()
+{
+    return BackIntake.GetOutputCurrent();
 }
