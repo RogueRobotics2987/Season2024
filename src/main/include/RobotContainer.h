@@ -549,6 +549,19 @@ class RobotContainer
       //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
     };
 
+    std::vector<frc::Pose2d> Blue_Mid4Note
+    {
+      frc::Pose2d(1.45_m, 5.55_m, 180_deg),
+      frc::Pose2d(2.9_m, 5.55_m, 180_deg),
+      frc::Pose2d(5.9_m, 6.4_m, 180_deg),
+      frc::Pose2d(8.3_m, 5.8_m, 180_deg),
+      frc::Pose2d(5.9_m, 4.20_m, 180_deg),
+      frc::Pose2d(4.4_m, 4.9_m, 180_deg),
+      frc::Pose2d(2.2_m, 4.9_m, 180_deg),
+      frc::Pose2d(2.2_m, 4.10_m, 180_deg),
+      frc::Pose2d(2.9_m, 4.1_m, 180_deg)
+    };
+
     std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint1
     {
       1_mps,
@@ -575,6 +588,19 @@ class RobotContainer
       1_mps,
       2_mps,
       0_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> Blue_Mid4Note
+    {
+      0_mps,
+      0_mps,
+      2_mps,
+      0_mps,
+      1_mps,
+      2_mps,
+      0_mps,
+      1_mps,
+      1_mps
     };
     
     std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint5
@@ -616,6 +642,18 @@ class RobotContainer
       1_mps,
       3_mps,
       3_mps
+    };
+
+    std::vector<units::velocity::meters_per_second_t> Blue_Mid4Note
+    {
+      2_mps,
+      3_mps,
+      2_mps,
+      3_mps,
+      2_mps,
+      3_mps,
+      2_mps,
+      2_mps
     };
 
     std::vector<frc::Pose2d> Blue_AmpSide1
