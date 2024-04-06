@@ -22,9 +22,9 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
 void NoteFollower::Initialize()
 {
   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
-  m_intake->RunIntake(0.3);
-  m_intake->DirectionNote(0.25); //possibly up all these speeds
-  m_intake->RunMagazine(0.25);
+  m_intake->RunIntake(0.5);
+  m_intake->DirectionNote(0.45); //possibly up all these speeds
+  m_intake->RunMagazine(0.5);
   state = 0;
   time = 0;
   finished = false;
@@ -50,7 +50,11 @@ void NoteFollower::Execute()
     txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
     tyNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty", 0.0);
 
-    noteError = (((21.86 + tyNote) /-8.369) - txNote);
+    //noteError = (((21.86 + tyNote) /-8.369) - txNote);
+
+    //noteError = (((21.18 + tyNote) /-6.8454) - txNote);
+
+    noteError = (((15 + tyNote) /-8.369) - txNote);
 
     frc::SmartDashboard::PutNumber("NoteTrackerError", noteError);
 
@@ -65,7 +69,15 @@ void NoteFollower::Execute()
     {
       NoJoystickInput = false;
     }
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+
+    if(fabs(noteError) > 5)
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * (AutoConstants::kMaxSpeed * 0.50)), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+    }
+    else
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * (AutoConstants::kMaxSpeed * 0.80)), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+    }
   }   
   else
   {

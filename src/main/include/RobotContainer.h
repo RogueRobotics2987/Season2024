@@ -385,16 +385,15 @@ class RobotContainer
 
     std::vector<frc::Pose2d> Blue_close4Waypoint2
     {
-      //frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.7_m, 6.95_m, 230_deg)
+      frc::Pose2d(2.55_m, 6_m, -130_deg),
+      frc::Pose2d(2.7_m, 7.05_m, -130_deg)
     };
 
     std::vector<frc::Pose2d> Blue_close4Waypoint3
     {
-      //frc::Pose2d(2.7_m, 6.95_m, 230_deg),
-      frc::Pose2d(2.2_m, 4.3_m, 180_deg),
-      frc::Pose2d(2.6_m, 4.1_m, 180_deg),
-      frc::Pose2d(2.35_m, 4.1_m, 130_deg)
+      frc::Pose2d(2.2_m, 4.85_m, 180_deg),
+      frc::Pose2d(2.6_m, 4.15_m, 180_deg),
+      frc::Pose2d(2.35_m, 4.15_m, 135_deg)
     };
 
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed1
@@ -405,26 +404,28 @@ class RobotContainer
 
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed2
     {
-      1.5_mps,
+      0_mps,
+      1.25_mps,
       1.25_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_close4PointSpeed3
     {
-      1_mps,
-      2_mps,
-      1_mps,
-      0_mps
+      0_mps,
+      2.5_mps,
+      1.5_mps,
+      0.5_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_close4CruiseSpeed1
     {
       2.5_mps,
-      1.5_mps
+      2.5_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_close4CruiseSpeed2
     {
+      1.5_mps,
       1.5_mps,
       1.5_mps
     };
@@ -432,7 +433,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Blue_close4CruiseSpeed3
     {
       1.5_mps,
-      2_mps,
+      3.25_mps,
       1_mps,
       0.5_mps
     };
@@ -441,10 +442,11 @@ class RobotContainer
 
 
 
-    // RED CLOSE 4 NOTE - TODO: RED SIDE NEEDS TO BE TESTED
+    // RED CLOSE 4 NOTE
+    //the numbers are wrong according to our map but they work so dont touch, off by 0.55
     std::vector<frc::Pose2d> Red_Close4Waypoint1
     {
-      frc::Pose2d(14.7_m, 5.55_m, 0_deg),
+      frc::Pose2d(14.7_m, 5.55_m, 0_deg), //15.25
       frc::Pose2d(13.35_m, 5.55_m, 0_deg)
     };
 
@@ -456,7 +458,7 @@ class RobotContainer
 
     std::vector<frc::Pose2d> Red_Close4Waypoint3
     {
-      frc::Pose2d(13.8_m, 4.4_m, 0_deg),
+      frc::Pose2d(13.8_m, 4.85_m, 0_deg),
       frc::Pose2d(13.2_m, 4.1_m, 0_deg),
       frc::Pose2d(13.65_m, 4.1_m, 45_deg)
     };
@@ -478,7 +480,7 @@ class RobotContainer
     {
       0_mps,
       2.5_mps,
-      1_mps,
+      1.5_mps,
       0.5_mps
     };
 
@@ -498,7 +500,7 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Red_Close4CruiseSpeed3
     {
       1.5_mps,
-      2.5_mps,
+      3.25_mps,
       1_mps,
       0.5_mps
     };

@@ -52,7 +52,7 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
     frc::XboxController* m_driverController = nullptr;
 
     units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
-    double kpNote = 0.06;
+    double kpNote = 0.04;
     double txNote = 0.0;
     bool NoJoystickInput = false;
     double speedY = 0;  

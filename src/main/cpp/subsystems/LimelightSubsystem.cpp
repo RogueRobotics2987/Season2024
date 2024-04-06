@@ -77,7 +77,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
             double tx = bluePose[0]; //tx
             // double ty = bluePose[1]; //ty
 
-            desiredHeading = atan((blueS - ty) / tx) * (180/3.14);
+            desiredHeading = -atan((blueS - ty) / tx) * (180/3.14);
             desiredHeading += 180;
         }
     }
