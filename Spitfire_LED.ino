@@ -25,7 +25,7 @@
 
 
 */
-#define NUMPIXELS 67// Number of LEDs in strip
+#define NUMPIXELS 53// Number of LEDs in strip
 #define DATAPIN    9
 #define CLOCKPIN   8
 Adafruit_DotStar strip(NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR); /* Sometimes your led strip doesnt have the right colors. switch the RGB letters around and itll work. */
