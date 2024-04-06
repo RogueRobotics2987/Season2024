@@ -7,6 +7,7 @@
 LimelightSubsystem::LimelightSubsystem()
 {
     sleep(1);
+    nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline", 0);
 }
 
 // This method will be called once per scheduler run
@@ -21,6 +22,8 @@ void LimelightSubsystem::Periodic()
 
     frc::SmartDashboard::PutNumber("targetDistance", GetDistanceFromTarget());
     frc::SmartDashboard::PutNumber("targetCount", targetCount);
+
+    frc::SmartDashboard::PutNumber("RZ", rz);
 }
 
 
@@ -74,7 +77,7 @@ double LimelightSubsystem::GetApriltagDriveMotorVal(double currentHeading, doubl
             double tx = bluePose[0]; //tx
             // double ty = bluePose[1]; //ty
 
-            desiredHeading = atan((blueS - ty) / tx) * (180/3.14);
+            desiredHeading = -atan((blueS - ty) / tx) * (180/3.14);
             desiredHeading += 180;
         }
     }
@@ -126,6 +129,7 @@ double LimelightSubsystem::DistanceBetweenAngles(double targetAngle, double sour
 void LimelightSubsystem::apriltagAngleReset(double currentHeading)
 {
     desiredHeading = currentHeading;
+    rz = currentHeading;
 }
 
 double LimelightSubsystem::GetDistanceFromTarget()

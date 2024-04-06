@@ -13,9 +13,9 @@ IntakeCmd::IntakeCmd(IntakeSubsystem &intake)
 // Called when the command is initially scheduled.
 void IntakeCmd::Initialize()
 {
-  m_intake->RunIntake(0.3);
-  m_intake->DirectionNote(0.25); //possibly up all these speeds
-  m_intake->RunMagazine(0.25);
+  m_intake->RunIntake(0.5);
+  m_intake->DirectionNote(0.45); //possibly up all these speeds
+  m_intake->RunMagazine(0.5);
   state = 0;
   time = 0;
   finished = false;

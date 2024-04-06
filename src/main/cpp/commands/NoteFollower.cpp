@@ -22,12 +22,19 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
 void NoteFollower::Initialize()
 {
   //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
-  m_intake->RunIntake(0.3);
-  m_intake->DirectionNote(0.25); //possibly up all these speeds
-  m_intake->RunMagazine(0.25);
+  m_intake->RunIntake(0.5);
+  m_intake->DirectionNote(0.45); //possibly up all these speeds
+  m_intake->RunMagazine(0.5);
   state = 0;
   time = 0;
   finished = false;
+  noteDrive = false;
+  hasNote = false;
+
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
+
+  frc::SmartDashboard::PutBoolean("NormalDrive", false);
+  frc::SmartDashboard::PutBoolean("NoteDrive", false);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -36,10 +43,22 @@ void NoteFollower::Execute()
   frc::SmartDashboard::PutBoolean("noteFollower", true);
 
   //limited drive, else regular
-  if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) == 1)
+  if(noteDrive == true)
   {
+    frc::SmartDashboard::PutBoolean("NoteDrive", true);
+
     txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
-    rotNote = units::angular_velocity::radians_per_second_t((0 - txNote) * kpNote);
+    tyNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty", 0.0);
+
+    //noteError = (((21.86 + tyNote) /-8.369) - txNote);
+
+    //noteError = (((21.18 + tyNote) /-6.8454) - txNote);
+
+    noteError = (((15 + tyNote) /-8.369) - txNote);
+
+    frc::SmartDashboard::PutNumber("NoteTrackerError", noteError);
+
+    rotNote = units::angular_velocity::radians_per_second_t(noteError * kpNote);
     speedY = Deadzone(m_driverController->GetLeftY());
 
     if((fabs(speedY) + fabs(rotNote.value())) < .05)
@@ -50,10 +69,22 @@ void NoteFollower::Execute()
     {
       NoJoystickInput = false;
     }
-    m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * AutoConstants::kMaxSpeed), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+
+    if(fabs(noteError) > 5)
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * (AutoConstants::kMaxSpeed * 0.50)), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+    }
+    else
+    {
+      m_drivetrain->Drive(units::velocity::meters_per_second_t(speedY * (AutoConstants::kMaxSpeed * 0.80)), units::velocity::meters_per_second_t(0), rotNote, false, NoJoystickInput);
+    }
   }   
   else
   {
+
+    frc::SmartDashboard::PutBoolean("NoteDrive", false);
+    frc::SmartDashboard::PutBoolean("NormalDrive", true);
+
     speedY = Deadzone(m_driverController->GetLeftY());
     speedX = Deadzone(m_driverController->GetLeftX());
     rot = Deadzone(m_driverController->GetRightX());
@@ -74,15 +105,29 @@ void NoteFollower::Execute()
       false,
       NoJoystickInput
     );
+
+    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) != 0 && hasNote == false)
+    {
+      noteDrive = true;
+      std::cout<< "Line 94" << std::endl;
+    }
   }
 
   if(state == 0)
   {
     //just run until we have a note
+    time++;
+
+    if(noteDrive == true && m_intake->GetBackIntakeCurrent() > 25 && time > 40)
+    {
+      noteDrive = false;
+      hasNote = true;
+    }
 
     if(m_intake->GetMagazineSensor())
     {
       state = 1;
+      time = 0;
     }
   }
   else if(state == 1)
@@ -94,8 +139,6 @@ void NoteFollower::Execute()
   }
   else if(state == 2)
   {
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",1);
-
     time++;
     m_intake->RunMagazine(-0.2);
 
@@ -110,7 +153,6 @@ void NoteFollower::Execute()
 void NoteFollower::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("noteFollower", true);
-  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
 // Returns true when the command should end.

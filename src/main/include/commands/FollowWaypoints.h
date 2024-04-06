@@ -46,7 +46,7 @@ class FollowWaypoints : public frc2::CommandHelper<frc2::Command, FollowWaypoint
     DriveSubsystem* m_drivetrain = nullptr;
     LimelightSubsystem* m_limePose = nullptr;
 
-    std::list<frc::Pose2d> m_waypoints;
+    std::vector<frc::Pose2d> m_waypoints;
     std::list<units::meters_per_second_t> m_driveSpeed;
     std::list<units::meters_per_second_t> m_cruiseSpeed;
     std::list<double> m_waypointDistance;
