@@ -91,7 +91,7 @@ class RobotContainer
     std::string chosenAuto;
     std::vector<AutoPaths::AutoPath> path;
 
-    //CURRENT PATHS
+    //CURRENT PATHS 
     //RED - 4 NOTE
     //RED - SOURCE
     //RED - AMP
@@ -99,6 +99,7 @@ class RobotContainer
     //BLUE - 4 NOTE
     //BLUE - SOURCE
     //BLUE - AMP
+    //BLUE - MIDDLE 4 NOTE
 
 
     /*
@@ -549,7 +550,7 @@ class RobotContainer
       //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
     };
 
-    std::vector<frc::Pose2d> Blue_Mid4Note
+    std::vector<frc::Pose2d> Blue_Mid4Note1
     {
       frc::Pose2d(1.45_m, 5.55_m, 180_deg),
       frc::Pose2d(2.9_m, 5.55_m, 180_deg),
@@ -561,6 +562,39 @@ class RobotContainer
       frc::Pose2d(2.2_m, 4.10_m, 180_deg),
       frc::Pose2d(2.9_m, 4.1_m, 180_deg)
     };
+
+    std::vector<frc::Pose2d> Blue_Mid4Note2
+    {
+      frc::Pose2d(2.9_m, 6.1_m, 180_deg),
+      frc::Pose2d(5.9_m, 6.4_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> Blue_Mid4Note3
+    {
+      frc::Pose2d(2.9_m, 6.95_m, 180_deg),
+      frc::Pose2d(8.3_m, 5.8_m, 180_deg)
+    };
+
+    std::vector<frc::Pose2d> Blue_Mid4Note4
+    {
+      frc::Pose2d(8.3_m, 5.25_m, 180_deg),
+
+    };
+
+    std::vector<frc::Pose2d> Blue_Mid4Note5
+    {};
+
+    std::vector<frc::Pose2d> Blue_Mid4Note6
+    {};
+
+    std::vector<frc::Pose2d> Blue_Mid4Note7
+    {};
+
+    std::vector<frc::Pose2d> Blue_Mid4Note8
+    {};
+
+    std::vector<frc::Pose2d> Blue_Mid4Note9
+    {};
 
     std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint1
     {

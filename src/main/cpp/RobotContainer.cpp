@@ -11,6 +11,7 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("Red_Close4", "Red_Close4");
   m_chooser.AddOption("Blue_FarSideMid", "Blue_FarSideMid");
   m_chooser.AddOption("Red_FarSideMid", "Red_FarSideMid");
+  m_chooser.AddOption("Blue_Mid4Note", "Blue_Mid4Note");
   //m_chooser.AddOption("Blue_AmpSide", "Blue_AmpSide");
 
   frc::SmartDashboard::PutData(&m_chooser);
@@ -549,6 +550,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
       )
     );
+  }
+  if (chosenAuto == "Blue_Mid4Note")
+  {
+    // m_drive.ResetOdometry(Blue_Mid4Note[0]);
   }
   else
   {
