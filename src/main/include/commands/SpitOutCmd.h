@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LightSubsystem.h"
 
 /**
  * An example command.
@@ -20,7 +21,7 @@ class SpitOutCmd : public frc2::CommandHelper<frc2::Command, SpitOutCmd>
 {
   public:
     SpitOutCmd();
-    SpitOutCmd(IntakeSubsystem &intake);
+    SpitOutCmd(IntakeSubsystem &intake, LightSubsystem &lights);
 
     void Initialize() override;
 
@@ -32,4 +33,5 @@ class SpitOutCmd : public frc2::CommandHelper<frc2::Command, SpitOutCmd>
 
   private:
     IntakeSubsystem* m_intake = nullptr;
+    LightSubsystem* m_lights = nullptr;
 };

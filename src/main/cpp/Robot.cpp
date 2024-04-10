@@ -55,6 +55,7 @@ void Robot::TeleopInit()
 
   //m_container.ZeroHeading();
   m_container.ShooterOff();
+  m_container.LightsOff();
 }
 
 /**

@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LightSubsystem.h"
 
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableInstance.inc"
@@ -26,7 +27,7 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
 {
   public:
     IntakeCmd();
-    IntakeCmd(IntakeSubsystem &intake);
+    IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light);
 
     void Initialize() override;
 
@@ -38,6 +39,7 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
 
   private:
     IntakeSubsystem* m_intake = nullptr;
+    LightSubsystem* m_lights = nullptr;
 
     int state = 0;
     int time = 0;

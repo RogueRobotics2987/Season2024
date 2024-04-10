@@ -4,10 +4,14 @@
 
 #include "commands/IntakeCmd.h"
 
-IntakeCmd::IntakeCmd(IntakeSubsystem &intake)
+
+IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light)
 {
   m_intake = &intake;
+  m_lights = &light;
   AddRequirements(m_intake);
+  AddRequirements(m_lights);
+
 }
 
 // Called when the command is initially scheduled.
@@ -20,12 +24,14 @@ void IntakeCmd::Initialize()
   time = 0;
   finished = false;
   frc::SmartDashboard::PutBoolean("IntakeON", true);
+  m_lights->SetLightsYellow();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeCmd::Execute()
 {
   m_intake->Direction(0.35);
+  // TODO set LEDs to yellow
 
   if(state == 0)
   {
@@ -34,6 +40,7 @@ void IntakeCmd::Execute()
     if(m_intake->GetMagazineSensor())
     {
       state = 1;
+      m_lights->SetLightsGreen();
     }
   }
   else if(state == 1)
@@ -53,6 +60,7 @@ void IntakeCmd::Execute()
     if(time >= 7)
     {
       finished = true;
+      // todo set LEDs green
     }
   }
 }
@@ -60,6 +68,16 @@ void IntakeCmd::Execute()
 // Called once the command ends or is interrupted.
 void IntakeCmd::End(bool interrupted)
 {
+  if(state == 2)
+  {
+    m_lights->SetLightsGreen();
+  }
+  else
+  {
+    m_lights->SetNoColor();
+    //m_lights->SetColorChase();
+  }
+
   m_intake->RunIntake(0);
   m_intake->Direction(0);
   m_intake->RunMagazine(0);

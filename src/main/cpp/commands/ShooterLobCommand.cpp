@@ -9,12 +9,16 @@ ShooterLobCommand::ShooterLobCommand(
   ShooterSubsystem &shooter,
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
-  ShooterWheelsSubsystem &shooterWheels)
+  ShooterWheelsSubsystem &shooterWheels,
+  LightSubsystem &lights)
 {
+  m_lights = &lights;
   m_shooter = &shooter;
   m_intake = &intake;
   m_shooterWheels = &shooterWheels;
   m_driverController = &driverController;
+
+  AddRequirements({m_lights});
   AddRequirements({m_shooter});
   AddRequirements({m_intake});
   AddRequirements({m_shooterWheels});
@@ -24,9 +28,10 @@ ShooterLobCommand::ShooterLobCommand(
 // Called when the command is initially scheduled.
 void ShooterLobCommand::Initialize() 
 {
-    m_shooterWheels->SetShooter(0.6, 0.6); //change speed
-    hasShot = false; 
-    time = 0;
+  m_lights->SetNoColor();
+  m_shooterWheels->SetShooter(0.6, 0.6); //change speed
+  hasShot = false; 
+  time = 0;
 }
 // Called repeatedly when this Command is scheduled to run
 void ShooterLobCommand::Execute() 
