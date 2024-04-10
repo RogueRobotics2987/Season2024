@@ -10,13 +10,16 @@ AmpShooter::AmpShooter(
   IntakeSubsystem &intake,
   frc::XboxController &driverController,
   ArmSubsystem &arm,
-  ShooterWheelsSubsystem &shooterWheels)
+  ShooterWheelsSubsystem &shooterWheels,
+  LightSubsystem &lights) 
 {
   m_shooter = &shooter;
   m_intake = &intake;
   m_arm = &arm;
   m_shooterWheels = &shooterWheels;
   m_driverController = &driverController;
+  m_lights = &lights;
+  AddRequirements({m_lights});
   AddRequirements({m_shooter});
   AddRequirements({m_shooterWheels});
   AddRequirements({m_intake});
@@ -26,6 +29,7 @@ AmpShooter::AmpShooter(
 // Called when the command is initially scheduled.
 void AmpShooter::Initialize() 
 {
+  m_lights->SetNoColor();
   m_shooterWheels->SetShooter(0.4, 0.4);
   hasShot = false; 
   time = 0;

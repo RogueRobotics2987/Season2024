@@ -10,16 +10,19 @@ AprilTagAim::AprilTagAim(
   DriveSubsystem &drivetrain,
   frc::XboxController &driveXbox,
   ShooterSubsystem &shooter,
-  frc::XboxController &auxController) 
+  frc::XboxController &auxController,
+  LightSubsystem &light) 
 {
   m_limelight = &limelight;
   m_drivetrain = &drivetrain;
   m_driverController = &driveXbox;
   m_shooter = &shooter;
   m_auxController = &auxController;
+  m_lights = &light;
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});  
   AddRequirements({m_shooter});
+  AddRequirements(m_lights);
 }
 
 // Called when the command is initially scheduled.
@@ -31,13 +34,21 @@ void AprilTagAim::Initialize()
   m_limelight->apriltagAngleReset(m_drivetrain->GetPose().Rotation().Degrees().value());
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
   lastHeading = currentHeading;
-
   hasSeenTarget = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AprilTagAim::Execute()
 {
+  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limelight->GetApriltagDriveError()) < 2 && m_limelight->GetNumTargets() > 0)
+  {
+    m_lights->SetFlashPurple();
+  }
+  else
+  {
+    m_lights->SetLightsPurple();
+  }
+
   frc::SmartDashboard::PutBoolean("apriltagAim", true);
 
   m_shooter->AngleTrimAdjust(m_auxController->GetRawButtonPressed(6), m_auxController->GetRawButtonPressed(5));
@@ -112,6 +123,8 @@ void AprilTagAim::Execute()
 void AprilTagAim::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("apriltagAim", false);
+  //setLights to off or colorchase
+  m_lights->SetNoColor();
 }
 
 // Returns true when the command should end.

@@ -13,6 +13,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/ShooterWheelsSubsystem.h"
+#include "subsystems/LightSubsystem.h"
 
 /**
  * An example command.
@@ -29,7 +30,8 @@ class ShooterLobCommand: public frc2::CommandHelper<frc2::Command, ShooterLobCom
       ShooterSubsystem &shooter,
       IntakeSubsystem &intake,
       frc::XboxController &driverController,
-      ShooterWheelsSubsystem &m_shooterWheels);
+      ShooterWheelsSubsystem &m_shooterWheels,
+      LightSubsystem &lights);
     
     void Initialize() override;
 
@@ -40,6 +42,7 @@ class ShooterLobCommand: public frc2::CommandHelper<frc2::Command, ShooterLobCom
     bool IsFinished() override;
 
   private:
+    LightSubsystem* m_lights = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
     ShooterWheelsSubsystem* m_shooterWheels = nullptr;
     IntakeSubsystem* m_intake = nullptr;

@@ -6,6 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/DigitalInput.h>
+#include <frc/DigitalOutput.h>
 
 #include "rev/CANSparkMax.h"
 #include "DriveSubsystem.h"
@@ -45,6 +46,7 @@ class IntakeSubsystem : public frc2::SubsystemBase
 
     frc::DigitalInput intakeColorSensorFront {3};   // 0 is a place holder for the DIO port
     frc::DigitalInput MagazineSensor{5};
+
 
     rev::SparkMaxRelativeEncoder MagazineEncoder = MagazineMotor.GetEncoder(); //implement in intake?
     rev::SparkMaxPIDController magPIDController = MagazineMotor.GetPIDController(); //implement in intake?

@@ -73,6 +73,8 @@ void IntakeSubsystem::RunIntake(double speed)
     // need to make it so that these turn on with a button
     FrontIntake.Set(speed);
     BackIntake.Set(-speed);
+
+    //TODO: Turn LED lights Yellow here?
 }
 
 void IntakeSubsystem::StopIntake()

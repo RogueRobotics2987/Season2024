@@ -4,15 +4,20 @@
 
 #include "commands/SpitOutCmd.h"
 
-SpitOutCmd::SpitOutCmd(IntakeSubsystem &intake)
+SpitOutCmd::SpitOutCmd(IntakeSubsystem &intake, LightSubsystem &lights)
 {
   // Use addRequirements() here to declare subsystem dependencies.
+  m_lights = &lights;
   m_intake = &intake;
   AddRequirements({m_intake});
+  AddRequirements({m_lights});
 }
 
 // Called when the command is initially scheduled.
-void SpitOutCmd::Initialize() {}
+void SpitOutCmd::Initialize()
+{
+  m_lights->SetNoColor();
+}
 
 // Called repeatedly when this Command is scheduled to run
 void SpitOutCmd::Execute()
