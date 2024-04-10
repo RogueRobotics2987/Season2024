@@ -47,6 +47,7 @@
 #include "commands/ShootCommand.h"
 #include "commands/AutoShootCommand.h"
 #include "subsystems/ShooterWheelsSubsystem.h"
+#include "subsystems/LightSubsystem.h"
 #include "commands/AmpCommand.h"
 #include "commands/AmpShooter.h"
 #include "commands/AmpLineup.h"
@@ -72,7 +73,7 @@ class RobotContainer
     void ConfigureButtonBindings();
     void ZeroHeading();
     void ShooterOff();
-
+    void LightsOff();
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
     frc::XboxController m_driverController{0};
@@ -86,6 +87,7 @@ class RobotContainer
     IntakeSubsystem m_intake;
     ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
+    LightSubsystem m_lights;
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;

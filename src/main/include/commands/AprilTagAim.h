@@ -13,6 +13,8 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
+#include "subsystems/LightSubsystem.h"
+
 
 /**
  * An example command.
@@ -30,7 +32,9 @@ class AprilTagAim : public frc2::CommandHelper<frc2::Command, AprilTagAim>
       DriveSubsystem &drivetrain,
       frc::XboxController &driveXbox,
       ShooterSubsystem &shooter,
-      frc::XboxController &auxController);
+      frc::XboxController &auxController,
+      LightSubsystem &lights
+    );
 
     void Initialize() override;
 
@@ -50,6 +54,7 @@ class AprilTagAim : public frc2::CommandHelper<frc2::Command, AprilTagAim>
   private:
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
+    LightSubsystem* m_lights = nullptr;
     ShooterSubsystem* m_shooter = nullptr;
     frc::XboxController* m_driverController = nullptr;
     frc::XboxController* m_auxController = nullptr;
