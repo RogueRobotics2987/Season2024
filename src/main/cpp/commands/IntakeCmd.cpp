@@ -5,10 +5,12 @@
 #include "commands/IntakeCmd.h"
 
 
-IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light)
+IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController)
 {
   m_intake = &intake;
   m_lights = &light;
+  m_driverController = &driverController;
+
   AddRequirements(m_intake);
   AddRequirements(m_lights);
 
@@ -41,6 +43,7 @@ void IntakeCmd::Execute()
     {
       state = 1;
       m_lights->SetLightsGreen();
+      m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
     }
   }
   else if(state == 1)
@@ -57,7 +60,7 @@ void IntakeCmd::Execute()
     time++;
     m_intake->RunMagazine(-0.2);
 
-    if(time >= 7)
+    if(time >= 10)
     {
       finished = true;
       // todo set LEDs green
@@ -78,6 +81,7 @@ void IntakeCmd::End(bool interrupted)
     //m_lights->SetColorChase();
   }
 
+  m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
   m_intake->RunIntake(0);
   m_intake->Direction(0);
   m_intake->RunMagazine(0);

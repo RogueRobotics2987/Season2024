@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/XboxController.h>
 
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LightSubsystem.h"
@@ -13,8 +14,7 @@
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableInstance.inc"
 #include <frc/smartdashboard/SmartDashboard.h>
-#include "photon/PhotonUtils.h"
-#include "photon/PhotonCamera.h"
+
 
 /**
  * An example command.
@@ -27,7 +27,7 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
 {
   public:
     IntakeCmd();
-    IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light);
+    IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController);
 
     void Initialize() override;
 
@@ -40,9 +40,9 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
   private:
     IntakeSubsystem* m_intake = nullptr;
     LightSubsystem* m_lights = nullptr;
+    frc::XboxController* m_driverController = nullptr;
 
     int state = 0;
     int time = 0;
     bool finished = false;
-    photon::PhotonCamera camera = photon::PhotonCamera("FrontCamera");
 };

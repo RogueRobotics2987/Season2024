@@ -115,7 +115,7 @@ void RobotContainer::ConfigureButtonBindings()
   //Resets the heading of the gyro. In other words, it resets which way the robot thinks is the front
   frc2::JoystickButton(&m_driverController, 7).OnTrue(m_drive.ZeroHeadingCmd());
 
-  frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake, m_lights).ToPtr());
+  frc2::JoystickButton(&m_driverController, 5).ToggleOnTrue(IntakeCmd(m_intake, m_lights, m_driverController).ToPtr());
 
   frc2::JoystickButton(&m_driverController, 6).ToggleOnTrue(ShootCommand(m_shooterWheels, m_intake, m_driverController, m_auxController).ToPtr());
 
@@ -230,7 +230,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_close4Waypoint1, Blue_close4PointSpeed1, Blue_close4CruiseSpeed1, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -238,7 +238,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_close4Waypoint2, Blue_close4PointSpeed2, Blue_close4CruiseSpeed2, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -246,7 +246,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_close4Waypoint3, Blue_close4PointSpeed3, Blue_close4CruiseSpeed3, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence( //aim shooter for 0.75s
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -272,7 +272,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint1, Red_Close4PointSpeed1, Red_Close4CruiseSpeed1, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -280,7 +280,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint2, Red_Close4PointSpeed2, Red_Close4CruiseSpeed2, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -288,7 +288,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_Close4Waypoint3, Red_Close4PointSpeed3, Red_Close4CruiseSpeed3, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -323,7 +323,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_FarSideMid2, Blue_FarSideMidPoint2, Blue_FarSideMidCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),  
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr()
         )
       ),
@@ -348,7 +348,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_FarSideMid4, Blue_FarSideMidPoint4, Blue_FarSideMidCruise4, false).ToPtr(),
-        IntakeCmd(m_intake, m_lights).ToPtr()
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
       ),
       frc2::cmd::RunOnce(
         [this]
@@ -392,7 +392,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_FarSideMid2, Red_FarSideMidPoint2, Red_FarSideMidCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(5.5_s).ToPtr()
         )
       ),
@@ -418,7 +418,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_FarSideMid4, Red_FarSideMidPoint4, Red_FarSideMidCruise4, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(5.5_s).ToPtr()
         )
       ),
@@ -463,7 +463,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_AmpSide2, Blue_AmpSidePoint2, Blue_AmpSideCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(3_s).ToPtr()
         )
       ),
@@ -481,7 +481,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Blue_AmpSide3, Blue_AmpSidePoint3, Blue_AmpSideCruise3, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(5_s).ToPtr()
         )
       ),
@@ -526,7 +526,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_AmpSide2, Red_AmpSidePoint2, Red_AmpSideCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(3_s).ToPtr()
         )
       ),
@@ -544,7 +544,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Parallel(
         FollowWaypoints(m_drive, m_limelight, Red_AmpSide3, Red_AmpSidePoint3, Red_AmpSideCruise3, false).ToPtr(),
         frc2::cmd::Race(
-          IntakeCmd(m_intake, m_lights).ToPtr(),
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
           frc2::WaitCommand(5_s).ToPtr()
         )
       ),
