@@ -5,17 +5,20 @@
 #include "commands/NoteFollower.h"
 
 NoteFollower::NoteFollower(){}
-NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, frc::XboxController &driverController, IntakeSubsystem &intake)
+NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, 
+                           frc::XboxController &driverController, IntakeSubsystem &intake, LightSubsystem &lights)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
   m_intake = &intake;
   m_drivetrain = &drivetrain;
   m_driverController = &driverController;
+  m_lights = &lights;
 
   AddRequirements({m_intake});
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
+  AddRequirements({m_lights});
 }
 
 // Called when the command is initially scheduled.
@@ -30,6 +33,8 @@ void NoteFollower::Initialize()
   finished = false;
   noteDrive = false;
   hasNote = false;
+
+  m_lights->SetLightsYellow();
 
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 
@@ -127,6 +132,8 @@ void NoteFollower::Execute()
     if(m_intake->GetMagazineSensor())
     {
       state = 1;
+      m_lights->SetLightsGreen();
+      m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
       time = 0;
     }
   }
@@ -153,6 +160,18 @@ void NoteFollower::Execute()
 void NoteFollower::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("noteFollower", true);
+
+  if(state == 2)
+  {
+    m_lights->SetLightsGreen();
+  }
+  else
+  {
+    m_lights->SetNoColor();
+    //m_lights->SetColorChase();
+  }
+
+  m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
 // Returns true when the command should end.

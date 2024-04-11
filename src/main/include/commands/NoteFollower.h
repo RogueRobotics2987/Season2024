@@ -17,6 +17,7 @@
 #include "Constants.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LightSubsystem.h"
 
 /**
  * An example command.
@@ -33,7 +34,8 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
       LimelightSubsystem &limelight,
       DriveSubsystem &drivetrain,
       frc::XboxController &driverController,
-      IntakeSubsystem &intake);
+      IntakeSubsystem &intake,
+      LightSubsystem &lights);
 
     void Initialize() override;
 
@@ -49,6 +51,7 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     IntakeSubsystem* m_intake = nullptr;
+    LightSubsystem* m_lights = nullptr; 
     frc::XboxController* m_driverController = nullptr;
 
     units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
