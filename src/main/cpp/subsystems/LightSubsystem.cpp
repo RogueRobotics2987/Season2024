@@ -57,3 +57,10 @@ void LightSubsystem::SetFlashPurple()
     pin3.Set(1);
     pin4.Set(1);
 }
+
+void LightSubsystem::SetLightsInitial()
+{
+    pin2.Set(1);
+    pin3.Set(0);
+    pin4.Set(0);
+}

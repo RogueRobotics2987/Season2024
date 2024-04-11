@@ -4,7 +4,7 @@ using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
 {
-  m_lights.SetNoColor();
+  //m_lights.SetNoColor();
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
 
@@ -23,7 +23,9 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(0_rad); //resets the heading on the gyro
 
-  m_lights.SetColorChase();
+  //m_lights.SetColorChase();
+  m_lights.SetLightsInitial();
+  frc::SmartDashboard::PutBoolean("radio signal: lights", true);
 
   //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
@@ -121,7 +123,7 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter, m_auxController, m_lights).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake).ToPtr());
+  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_lights).ToPtr());
 
   frc2::JoystickButton(&m_auxController, 1).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
 

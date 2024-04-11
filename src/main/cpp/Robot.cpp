@@ -22,7 +22,13 @@ void Robot::RobotPeriodic()
  */
 void Robot::DisabledInit() {}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() 
+{
+  signal = frc::SmartDashboard::GetBoolean("radio signal: lights", false);
+  if(signal == true){
+    m_container.m_lights.SetColorChase();
+  }
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
