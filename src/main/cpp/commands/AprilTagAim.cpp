@@ -35,18 +35,24 @@ void AprilTagAim::Initialize()
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
   lastHeading = currentHeading;
   hasSeenTarget = false;
+
+  m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AprilTagAim::Execute()
 {
+  //calibrate these values with the at home field to make sure the deadbands are okay
   if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limelight->GetApriltagDriveError()) < 2 && m_limelight->GetNumTargets() > 0)
   {
     m_lights->SetFlashPurple();
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
   }
   else
   {
     m_lights->SetLightsPurple();
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
   }
 
   frc::SmartDashboard::PutBoolean("apriltagAim", true);
@@ -123,8 +129,9 @@ void AprilTagAim::Execute()
 void AprilTagAim::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("apriltagAim", false);
-  //setLights to off or colorchase
+
   m_lights->SetNoColor();
+  m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
 // Returns true when the command should end.

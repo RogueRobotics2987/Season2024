@@ -11,9 +11,6 @@
 
 #include "networktables/NetworkTableInstance.inc"
 #include "Constants.h"
-#include "photon/PhotonUtils.h"
-#include "photon/PhotonCamera.h"
-#include "photon/PhotonPoseEstimator.h"
 
 class LimelightSubsystem : public frc2::SubsystemBase
 {
