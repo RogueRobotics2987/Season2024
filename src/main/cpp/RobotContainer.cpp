@@ -316,7 +316,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Sequence(
         FollowWaypoints(m_drive, m_limelight, Blue_SourceSide2, Blue_SourceSidePoint2, Blue_SourceSideCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          AutoNotePickup(m_limelight, m_drive, m_intake).ToPtr(),  
+          AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr() //change this time?
         )
       ),
@@ -327,7 +327,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       ),
       frc2::cmd::Sequence(
         FollowWaypoints(m_drive, m_limelight, Blue_SourceSide4, Blue_SourceSidePoint4, Blue_SourceSideCruise4, false).ToPtr(),
-        AutoNotePickup(m_limelight, m_drive, m_intake).ToPtr()
+        AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr()
       ),
       FollowWaypoints(m_drive, m_limelight, Blue_SourceSide5, Blue_SourceSidePoint5, Blue_SourceSideCruise5, false).ToPtr(),
       frc2::cmd::Sequence( //possibly have this shoot no matter what even if its not aimed?
@@ -357,7 +357,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Sequence(
         FollowWaypoints(m_drive, m_limelight, Red_SourceSide2, Red_SourceSidePoint2, Red_SourceSideCruise2, false).ToPtr(),
         frc2::cmd::Race(
-          AutoNotePickup(m_limelight, m_drive, m_intake).ToPtr(),  
+          AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr()
         )
       ),
@@ -369,7 +369,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::Sequence(
         FollowWaypoints(m_drive, m_limelight, Red_SourceSide4, Red_SourceSidePoint4, Red_SourceSideCruise4, false).ToPtr(),
         frc2::cmd::Race(
-          AutoNotePickup(m_limelight, m_drive, m_intake).ToPtr(),  
+          AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr()
         )
       ),

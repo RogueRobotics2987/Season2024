@@ -5,15 +5,15 @@
 #include "commands/AutoNotePickup.h"
 
 AutoNotePickup::AutoNotePickup(){}
-AutoNotePickup::AutoNotePickup(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, IntakeSubsystem &intake)
+AutoNotePickup::AutoNotePickup(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, IntakeSubsystem &intake, LightSubsystem &light)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
   m_intake = &intake;
   m_drivetrain = &drivetrain;
+  m_lights = &light;
 
-  //TODO add a seperate light color for note tracker 
-
+  AddRequirements({m_lights});
   AddRequirements({m_intake});
   AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
@@ -29,6 +29,8 @@ void AutoNotePickup::Initialize()
   state = 0;
   time = 0;
   finished = false;
+
+  m_lights->SetLightsYellow();
 
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
@@ -86,6 +88,8 @@ void AutoNotePickup::Execute()
     m_intake->StopIntake();
     m_intake->StopMagazine();
 
+    m_lights->SetLightsGreen();
+
     state = 2;
   }
   else if(state == 2)
@@ -104,6 +108,16 @@ void AutoNotePickup::Execute()
 void AutoNotePickup::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("AutoNotePickup", true);
+
+  if(finished == true)
+  {
+    m_lights->SetLightsGreen();
+  }
+  else
+  {
+    m_lights->SetNoColor();
+  }
+  
 }
 
 // Returns true when the command should end.

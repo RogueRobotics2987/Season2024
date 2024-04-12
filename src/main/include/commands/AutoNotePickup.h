@@ -13,6 +13,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LimelightSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LightSubsystem.h"
  
 class AutoNotePickup : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
 {
@@ -21,8 +22,9 @@ class AutoNotePickup : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
     AutoNotePickup(
       LimelightSubsystem &limePose,
       DriveSubsystem &drivetrain,
-      IntakeSubsystem &intake
-      );
+      IntakeSubsystem &intake,
+      LightSubsystem &lights
+    );
 
     void Initialize() override;
 
@@ -36,6 +38,7 @@ class AutoNotePickup : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
     LimelightSubsystem* m_limelight = nullptr;
     DriveSubsystem* m_drivetrain = nullptr;
     IntakeSubsystem* m_intake = nullptr;
+    LightSubsystem* m_lights = nullptr;
 
     units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
     double kpNote = 0.04;
