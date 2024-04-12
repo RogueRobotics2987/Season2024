@@ -55,7 +55,7 @@ void AutoAprilTag::End(bool interrupted)
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
-  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limePose->GetApriltagDriveError()) < 2)
+  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limePose->GetApriltagDriveError()) < 2.5)
   {
     return true;
   }

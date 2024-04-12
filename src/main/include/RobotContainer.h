@@ -36,6 +36,7 @@
 #include "commands/NoteFollower.h"
 #include "commands/AprilTagAim.h"
 #include "commands/AutoAprilTag.h"
+#include "commands/AutoNotePickup.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
@@ -510,76 +511,74 @@ class RobotContainer
 
     //BLUE SOURCE 3 NOTE
     //Start to first shooting spot
-    std::vector<frc::Pose2d> Blue_FarSideMid1
+    std::vector<frc::Pose2d> Blue_SourceSide1
     {
       frc::Pose2d(0.45_m, 2.5_m, 180_deg),
-      frc::Pose2d(2.5_m, 2.5_m, 130_deg)
+      frc::Pose2d(2.5_m, 2.5_m, 140_deg)
     };
 
     //Post first shoot to midline pickup
-    std::vector<frc::Pose2d> Blue_FarSideMid2
+    std::vector<frc::Pose2d> Blue_SourceSide2
     {
-      //frc::Pose2d(2.75_m, 2.5_m, 130_deg),
-      frc::Pose2d(8.25_m, 0.85_m, 160_deg)
+      frc::Pose2d(5.5_m, 1.65_m, 160_deg)
     };
 
     //Midline pickup to 2nd shooting spot
-    std::vector<frc::Pose2d> Blue_FarSideMid3
+    std::vector<frc::Pose2d> Blue_SourceSide3
     {
       //frc::Pose2d(8.05_m, 0.85_m, 160_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
-      frc::Pose2d(4.0_m, 3.0_m, 140_deg)
+      frc::Pose2d(5.5_m, 1.8_m, 140_deg),
+      frc::Pose2d(4.0_m, 2.5_m, 140_deg)
     };
     
     //Post 2nd shot around pillar to 3rd note pickup
-    std::vector<frc::Pose2d> Blue_FarSideMid4
+    std::vector<frc::Pose2d> Blue_SourceSide4
     {
-      //frc::Pose2d(3.9_m, 2.25_m, 130_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 180_deg),
-      frc::Pose2d(8.25_m, 2.45_m, 200_deg)
+      frc::Pose2d(5.5_m, 1.8_m, -160_deg),
+      // frc::Pose2d(6.5_m, 2_m, -160_deg)
     };
 
     //3rd note pickup to 3rd not shooting spot
-    std::vector<frc::Pose2d> Blue_FarSideMid5
+    std::vector<frc::Pose2d> Blue_SourceSide5
     {
       //frc::Pose2d(8.05_m, 2.45_m, 200_deg),
-      frc::Pose2d(6.0_m, 1.6_m, 180_deg),
-      frc::Pose2d(4.0_m, 3.0_m, 130_deg)
+      frc::Pose2d(5.5_m, 1.8_m, 140_deg),
+      frc::Pose2d(4.0_m, 2.5_m, 140_deg)
 
       //Potential cut through middle stage for 3rd note.
       //frc::Pose2d(5.6_m, 4.0_m, 160_deg),
       //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
     };
 
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint1
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint1
     {
       1_mps,
       0_mps
     };
 
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint2
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint2
     {
       1_mps,
+      2.5_mps
+    };
+
+    
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint3
+    {
+      1_mps,
+      3_mps,
       0_mps
     };
 
     
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint3
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint4
     {
       1_mps,
-      2_mps,
-      0_mps
-    };
-
-    
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint4
-    {
-      1_mps,
-      2_mps,
-      0_mps
+      2.5_mps
+      // 2_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidPoint5
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint5
     {
       1_mps,
       3_mps,
@@ -587,37 +586,37 @@ class RobotContainer
     };
 
 
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidCruise1
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSideCruise1
     {
       1_mps,
       3_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidCruise2
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSideCruise2
     {
       1_mps,
       3_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidCruise3
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSideCruise3
     {
       1_mps,
-      3_mps,
-      3_mps
-    };
-    
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidCruise4
-    {
-      1_mps,
-      3_mps,
+      4_mps,
       2_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Blue_FarSideMidCruise5
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSideCruise4
     {
       1_mps,
-      3_mps,
       3_mps
+      // 2_mps
+    };
+    
+    std::vector<units::velocity::meters_per_second_t> Blue_SourceSideCruise5
+    {
+      1_mps,
+      4_mps,
+      2_mps
     };
 
     std::vector<frc::Pose2d> Blue_AmpSide1
@@ -748,21 +747,21 @@ class RobotContainer
 
     //RED SOURCE 3 NOTE
     //Start to first shooting spot
-    std::vector<frc::Pose2d> Red_FarSideMid1
+    std::vector<frc::Pose2d> Red_SourceSide1
     {
       frc::Pose2d(16.1_m, 2.5_m, 0_deg),
       frc::Pose2d(14.05_m, 2.5_m, 50_deg)
     };
 
     //Post first shoot to midline pickup
-    std::vector<frc::Pose2d> Red_FarSideMid2
+    std::vector<frc::Pose2d> Red_SourceSide2
     {
       //frc::Pose2d(13.8_m, 2.5_m, 50_deg),
       frc::Pose2d(8.3_m, 1.05_m, 20_deg)
     };
 
     //Midline pickup to 2nd shooting spot
-    std::vector<frc::Pose2d> Red_FarSideMid3
+    std::vector<frc::Pose2d> Red_SourceSide3
     {
       //frc::Pose2d(8.5_m, 1.05_m, 20_deg),
       frc::Pose2d(11.05_m, 1.8_m, 0_deg),
@@ -770,7 +769,7 @@ class RobotContainer
     };
     
     //Post 2nd shot around pillar to 3rd note pickup
-    std::vector<frc::Pose2d> Red_FarSideMid4
+    std::vector<frc::Pose2d> Red_SourceSide4
     {
       //frc::Pose2d(12.65_m, 2.25_m, 50_deg),
       frc::Pose2d(11.05_m, 1.8_m, 0_deg),
@@ -778,7 +777,7 @@ class RobotContainer
     };
 
     //3rd note pickup to 3rd not shooting spot
-    std::vector<frc::Pose2d> Red_FarSideMid5
+    std::vector<frc::Pose2d> Red_SourceSide5
     {
       //frc::Pose2d(8.5_m, 2.45_m, -20_deg),
       frc::Pose2d(10.55_m, 1.6_m, 0_deg),
@@ -789,20 +788,20 @@ class RobotContainer
       //frc::Pose2d(4.0_m, 5.55_m, 200_deg)
     };
 
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidPoint1
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSidePoint1
     {
       1_mps,
       0_mps
     };
 
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidPoint2
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSidePoint2
     {
       1_mps,
       0_mps
     };
 
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidPoint3
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSidePoint3
     {
       1_mps,
       2_mps,
@@ -810,14 +809,14 @@ class RobotContainer
     };
 
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidPoint4
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSidePoint4
     {
       1_mps,
       2_mps,
       0_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidPoint5
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSidePoint5
     {
       1_mps,
       3_mps,
@@ -825,33 +824,33 @@ class RobotContainer
     };
 
 
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidCruise1
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSideCruise1
     {
       1_mps,
       3_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidCruise2
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSideCruise2
     {
       1_mps,
       3_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidCruise3
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSideCruise3
     {
       1_mps,
       3_mps,
       3_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidCruise4
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSideCruise4
     {
       1_mps,
       3_mps,
       2_mps
     };
     
-    std::vector<units::velocity::meters_per_second_t> Red_FarSideMidCruise5
+    std::vector<units::velocity::meters_per_second_t> Red_SourceSideCruise5
     {
       1_mps,
       3_mps,

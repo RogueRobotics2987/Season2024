@@ -4,44 +4,110 @@
 
 #include "commands/AutoNotePickup.h"
 
-AutoNotePickup::AutoNotePickup(LimelightSubsystem &limePose, DriveSubsystem &drivetrain, frc::XboxController &Xbox)
+AutoNotePickup::AutoNotePickup(){}
+AutoNotePickup::AutoNotePickup(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, IntakeSubsystem &intake)
 {
   // Use addRequirements() here to declare subsystem dependencies.
-  m_limePose = &limePose;
+  m_limelight = &limelight;
+  m_intake = &intake;
   m_drivetrain = &drivetrain;
-  m_Xbox = &Xbox;
-  AddRequirements({m_limePose});
+
+  //TODO add a seperate light color for note tracker 
+
+  AddRequirements({m_intake});
+  AddRequirements({m_limelight});
   AddRequirements({m_drivetrain});
 }
 
 // Called when the command is initially scheduled.
 void AutoNotePickup::Initialize()
 {
-   nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->PutNumber("pipeline",0);
+  //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
+  m_intake->RunIntake(0.5);
+  m_intake->DirectionNote(0.45); //possibly up all these speeds
+  m_intake->RunMagazine(0.5);
+  state = 0;
+  time = 0;
+  finished = false;
+
+  nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void AutoNotePickup::Execute()
+void AutoNotePickup::Execute() 
 {
-  double tx = nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tx",0.0);
+  frc::SmartDashboard::PutBoolean("AutoNotePickup", true);
 
-  if(tx > 7 || tx < -7)
+  txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
+  tyNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty", 0.0);
+
+  noteError = (((15 + tyNote) /-8.369) - txNote);
+
+  frc::SmartDashboard::PutNumber("NoteTrackerError", noteError);
+
+  rotNote = units::angular_velocity::radians_per_second_t(noteError * kpNote);
+
+  if(fabs(rotNote.value()) < .05)
   {
-    rot = units::angular_velocity::radians_per_second_t((0 + tx) * kp);
+    NoInput = true;
   }
   else
   {
-    rot = units::angular_velocity::radians_per_second_t(0);
+    NoInput = false;
   }
-  
-  m_drivetrain->Drive(units::velocity::meters_per_second_t(m_Xbox->GetLeftY()), units::velocity::meters_per_second_t(0), rot, false, false);
+  if(state == 0)
+  {
+    if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) > 0)
+    {
+      direction = -1;
+    }
+    else
+    {
+      direction = 1;
+    }
+
+    if(fabs(noteError) > 5)
+    {
+      m_drivetrain->Drive(direction * (driveSpeed * 0.50), units::velocity::meters_per_second_t(0), rotNote, false, NoInput);
+    }
+    else
+    {
+      m_drivetrain->Drive(direction * (driveSpeed * 0.80), units::velocity::meters_per_second_t(0), rotNote, false, NoInput);
+    }
+
+    if(m_intake->GetMagazineSensor())
+    {
+      state = 1;
+      m_drivetrain->Drive(1_mps, 0_mps, 0_rad_per_s, false, false);
+    }
+  }
+  else if(state == 1)
+  {
+    m_intake->StopIntake();
+    m_intake->StopMagazine();
+
+    state = 2;
+  }
+  else if(state == 2)
+  {
+    time++;
+    m_intake->RunMagazine(-0.2);
+
+    if(time >= 10)
+    {
+      finished = true;
+    }
+  }
 }
 
 // Called once the command ends or is interrupted.
-void AutoNotePickup::End(bool interrupted) {}
+void AutoNotePickup::End(bool interrupted)
+{
+  frc::SmartDashboard::PutBoolean("AutoNotePickup", true);
+}
 
 // Returns true when the command should end.
 bool AutoNotePickup::IsFinished()
 {
-  return false;
+  return finished;
 }
