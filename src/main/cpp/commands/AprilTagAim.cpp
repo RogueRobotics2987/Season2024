@@ -130,8 +130,17 @@ void AprilTagAim::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("apriltagAim", false);
 
-  m_lights->SetNoColor();
-  m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+  //m_lights->SetNoColor();
+  if(finished == true)
+  {
+    m_lights->SetNoColor();
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+  } 
+  else 
+  {  
+    m_lights->SetLightsGreen();
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+  }
 }
 
 // Returns true when the command should end.

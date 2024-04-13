@@ -74,6 +74,9 @@ class RobotContainer
     void ZeroHeading();
     void ShooterOff();
     void LightsOff();
+
+    LightSubsystem m_lights;
+    
   private:
     //replace with frc::Joystick if using a joystick instead of an xbox controller
     frc::XboxController m_driverController{0};
@@ -87,11 +90,11 @@ class RobotContainer
     IntakeSubsystem m_intake;
     ArmSubsystem m_arm;
     ClimberSubsystem m_climb;
-    LightSubsystem m_lights;
 
     frc::SendableChooser<std::string> m_chooser;
     std::string chosenAuto;
     std::vector<AutoPaths::AutoPath> path;
+
 
     //CURRENT PATHS
     //RED - 4 NOTE

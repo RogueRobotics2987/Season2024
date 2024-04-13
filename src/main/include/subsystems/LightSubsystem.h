@@ -16,6 +16,7 @@ class LightSubsystem : public frc2::SubsystemBase
         void SetNoColor();
         void SetColorChase();
         void SetFlashPurple();
+        void SetLightsInitial();
 
 
     private:
