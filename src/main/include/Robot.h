@@ -26,6 +26,8 @@ class Robot : public frc::TimedRobot
     // doesn't have undefined behavior and potentially crash.
     std::optional<frc2::CommandPtr> m_autonomousCommand;
     RobotContainer m_container;
+
+    bool signal = false;
 };
 
 
