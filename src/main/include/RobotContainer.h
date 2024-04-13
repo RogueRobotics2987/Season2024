@@ -22,6 +22,7 @@
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
@@ -243,7 +244,7 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide1
     {
       frc::Pose2d(0.45_m, 2.5_m, 180_deg),
-      frc::Pose2d(2.5_m, 2.5_m, 150_deg)
+      frc::Pose2d(2.5_m, 2.5_m, 160_deg)
     };
 
     //Post first shoot to midline pickup
@@ -256,7 +257,7 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide3
     {
       //frc::Pose2d(8.05_m, 0.85_m, 160_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 150_deg),
+      frc::Pose2d(5.5_m, 1.5_m, 150_deg),
       frc::Pose2d(4.0_m, 2.5_m, 150_deg)
     };
     
@@ -271,7 +272,7 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide5
     {
       //frc::Pose2d(8.05_m, 2.45_m, 200_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 150_deg),
+      frc::Pose2d(6.5_m, 1.5_m, 150_deg),
       frc::Pose2d(4.0_m, 2.5_m, 150_deg)
 
       //Potential cut through middle stage for 3rd note.
@@ -288,7 +289,7 @@ class RobotContainer
     std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint2
     {
       1_mps,
-      2.5_mps
+      3_mps
     };
 
     std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint3
@@ -301,7 +302,7 @@ class RobotContainer
     std::vector<units::velocity::meters_per_second_t> Blue_SourceSidePoint4
     {
       1_mps,
-      2.5_mps
+      3_mps
       // 2_mps
     };
     

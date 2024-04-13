@@ -54,5 +54,5 @@ class AutoNotePickup : public frc2::CommandHelper<frc2::Command, AutoNotePickup>
 
     int direction = 1;
 
-    const units::velocity::meters_per_second_t driveSpeed = 2.5_mps; //the max possible speed
+    const units::velocity::meters_per_second_t driveSpeed = 3_mps; //the max possible speed
 };

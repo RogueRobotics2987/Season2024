@@ -322,6 +322,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr() //change this time?
         )
+        // frc2::ConditionalCommand() possibly look into this to this to track a different note if it doesnt see the first note.
       ),
       FollowWaypoints(m_drive, m_limelight, Blue_SourceSide3, Blue_SourceSidePoint3, Blue_SourceSideCruise3, false).ToPtr(),
       frc2::cmd::Sequence(
