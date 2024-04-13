@@ -4,7 +4,7 @@ using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
 {
-  m_lights.SetNoColor();
+  //m_lights.SetNoColor();
   // Initialize all of your commands and subsystems here
   std::cout << "cout in robot container" << std::endl;
 
@@ -23,7 +23,9 @@ RobotContainer::RobotContainer()
   ConfigureButtonBindings();
   m_drive.ZeroHeading(0_rad); //resets the heading on the gyro
 
-  m_lights.SetColorChase();
+  //m_lights.SetColorChase();
+  m_lights.SetLightsInitial();
+  frc::SmartDashboard::PutBoolean("radio signal: lights", true);
 
   //Idea for implementing drive into state machine is putting this function in the execute possibly?
   m_drive.SetDefaultCommand(frc2::RunCommand(
@@ -121,7 +123,7 @@ void RobotContainer::ConfigureButtonBindings()
 
   frc2::JoystickButton(&m_driverController, 2).ToggleOnTrue(AprilTagAim(m_limelight, m_drive, m_driverController, m_shooter, m_auxController, m_lights).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake).ToPtr());
+  frc2::JoystickButton(&m_driverController, 1).ToggleOnTrue(NoteFollower(m_limelight, m_drive, m_driverController, m_intake, m_lights).ToPtr());
 
   frc2::JoystickButton(&m_auxController, 1).ToggleOnTrue(AmpCommand(m_arm).ToPtr());
 
@@ -430,7 +432,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       frc2::cmd::RunOnce(
         [this]
         {
-          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+          m_drive.ZeroHeading(180_deg);
         },
         {&m_drive}),
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
@@ -463,6 +465,51 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
       )
     );
+  }
+  if(chosenAuto == "Blue_MidLine4")
+  {
+    m_drive.ResetOdometry(Blue_MidLine4Waypoint1[0]);
+
+    return frc2::cmd::Sequence(
+      frc2::WaitCommand(0.1_s).ToPtr(),
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}),
+      AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
+      frc2::cmd::Sequence(
+        AutoSubAim(m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()),
+
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, Blue_MidLine4Waypoint1, Blue_MidLine4PointSpeed1, Blue_MidLine4CruiseSpeed1, false).ToPtr(),
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()),
+
+      frc2::cmd::Sequence(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()),
+
+      frc2::cmd::Sequence(
+        FollowWaypoints(m_drive, m_limelight, Blue_MidLine4Waypoint2, Blue_MidLine4PointSpeed2, Blue_MidLine4CruiseSpeed2, false).ToPtr(),
+        frc2::cmd::Race(
+          AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
+          frc2::WaitCommand(5.5_s).ToPtr())),
+
+      FollowWaypoints(m_drive, m_limelight, Blue_MidLine4Waypoint3, Blue_MidLine4PointSpeed3, Blue_MidLine4CruiseSpeed3, false).ToPtr(),
+
+      frc2::cmd::Sequence(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()),
+
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, Blue_MidLine4Waypoint4, Blue_MidLine4PointSpeed4, Blue_MidLine4CruiseSpeed4, false).ToPtr(),
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()),
+
+      frc2::cmd::Sequence(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()));
   }
   else
   {

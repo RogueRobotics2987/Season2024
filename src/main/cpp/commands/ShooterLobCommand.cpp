@@ -28,7 +28,7 @@ ShooterLobCommand::ShooterLobCommand(
 // Called when the command is initially scheduled.
 void ShooterLobCommand::Initialize() 
 {
-  m_lights->SetNoColor();
+  //m_lights->SetNoColor();
   m_shooterWheels->SetShooter(0.6, 0.6); //change speed
   hasShot = false; 
   time = 0;
@@ -36,7 +36,7 @@ void ShooterLobCommand::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void ShooterLobCommand::Execute() 
 {
-   m_shooter->SetActuator(45.5); //change angle
+  m_shooter->SetActuator(45.5); //change angle
 
   if(m_driverController->GetRightTriggerAxis() > 0.05)
   {
@@ -58,6 +58,15 @@ void ShooterLobCommand::Execute()
 void ShooterLobCommand::End(bool interrupted) 
 {
   m_shooterWheels->StopShooter();
+
+  if(IsFinished() == true)
+  {
+    m_lights->SetNoColor();
+  } 
+  else 
+  {  
+    m_lights->SetLightsGreen();
+  }
 }
 
 // Returns true when the command should end.
