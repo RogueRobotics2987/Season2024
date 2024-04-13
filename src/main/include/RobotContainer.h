@@ -704,22 +704,21 @@ class RobotContainer
 
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint2
     {
-      frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(3.00_m, 5.55_m, 180_deg),
-      frc::Pose2d(4.50_m, 5.50_m, 180_deg)
+      frc::Pose2d(3.25_m, 5.55_m, 180_deg),
+      frc::Pose2d(5.00_m, 4.05_m, 180_deg)
     };
 
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint3
     {
-      frc::Pose2d(4.50_m, 5.50_m, 180_deg),
-      frc::Pose2d(3.00_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.65_m, 5.55_m, 180_deg)
+      frc::Pose2d(5.00_m, 4.05_m, 180_deg),
+      frc::Pose2d(4.50_m, 5.55_m, 180_deg),
+      frc::Pose2d(2.25_m, 5.55_m, 180_deg)
     };
 
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint4
     {
-      frc::Pose2d(2.65_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.2_m, 4.85_m, 180_deg),
+      frc::Pose2d(2.15_m, 5.55_m, 180_deg),
+      frc::Pose2d(2.15_m, 4.15_m, 180_deg),
       frc::Pose2d(2.6_m, 4.15_m, 180_deg),
       frc::Pose2d(2.35_m, 4.15_m, 135_deg)
     };
@@ -734,7 +733,6 @@ class RobotContainer
     std::vector<units::meters_per_second_t> Blue_MidLine4PointSpeed2
     {
       0_mps,
-      1.25_mps,
       1.25_mps,
       1.25_mps
     };
@@ -767,14 +765,13 @@ class RobotContainer
     {
       1.5_mps,
       1.5_mps,
-      1.5_mps,
       1.5_mps
     };
 
     std::vector<units::meters_per_second_t> Blue_MidLine4CruiseSpeed3
     {
       1.5_mps,
-      3.25_mps,
+      3.0_mps,
       2.5_mps,
       0.5_mps
     };
