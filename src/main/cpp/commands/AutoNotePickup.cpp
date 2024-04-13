@@ -30,8 +30,6 @@ void AutoNotePickup::Initialize()
   time = 0;
   finished = false;
 
-  m_lights->SetLightsYellow();
-
   nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->PutNumber("pipeline",0);
 }
 
@@ -39,9 +37,12 @@ void AutoNotePickup::Initialize()
 void AutoNotePickup::Execute() 
 {
   frc::SmartDashboard::PutBoolean("AutoNotePickup", true);
-
-  txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
-  tyNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty", 0.0);
+  
+  if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) > 0)
+  {
+    txNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tx", 0.0);
+    tyNote = nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("ty", 0.0);
+  }
 
   noteError = (((15 + tyNote) /-8.369) - txNote);
 
@@ -49,32 +50,35 @@ void AutoNotePickup::Execute()
 
   rotNote = units::angular_velocity::radians_per_second_t(noteError * kpNote);
 
-  if(fabs(rotNote.value()) < .05)
-  {
-    NoInput = true;
-  }
-  else
-  {
-    NoInput = false;
-  }
+  // if(fabs(rotNote.value()) < .05)
+  // {
+  //   NoInput = true;
+  // }
+  // else
+  // {
+  //   NoInput = false;
+  // }
+
   if(state == 0)
   {
     if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-back")->GetNumber("tv", 0) > 0)
     {
       direction = -1;
+      m_lights->SetLightsPurple();
     }
     else
     {
       direction = 1;
+      m_lights->SetLightsYellow();
     }
 
     if(fabs(noteError) > 5)
     {
-      m_drivetrain->Drive(direction * (driveSpeed * 0.50), units::velocity::meters_per_second_t(0), rotNote, false, NoInput);
+      m_drivetrain->Drive(direction * (driveSpeed * 0.50), units::velocity::meters_per_second_t(0), rotNote, false, false);
     }
     else
     {
-      m_drivetrain->Drive(direction * (driveSpeed * 0.80), units::velocity::meters_per_second_t(0), rotNote, false, NoInput);
+      m_drivetrain->Drive(direction * (driveSpeed * 0.80), units::velocity::meters_per_second_t(0), rotNote, false, false);
     }
 
     if(m_intake->GetMagazineSensor())

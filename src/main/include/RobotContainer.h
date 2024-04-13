@@ -243,7 +243,7 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide1
     {
       frc::Pose2d(0.45_m, 2.5_m, 180_deg),
-      frc::Pose2d(2.5_m, 2.5_m, 140_deg)
+      frc::Pose2d(2.5_m, 2.5_m, 150_deg)
     };
 
     //Post first shoot to midline pickup
@@ -256,8 +256,8 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide3
     {
       //frc::Pose2d(8.05_m, 0.85_m, 160_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 140_deg),
-      frc::Pose2d(4.0_m, 2.5_m, 140_deg)
+      frc::Pose2d(5.5_m, 1.8_m, 150_deg),
+      frc::Pose2d(4.0_m, 2.5_m, 150_deg)
     };
     
     //Post 2nd shot around pillar to 3rd note pickup
@@ -271,8 +271,8 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_SourceSide5
     {
       //frc::Pose2d(8.05_m, 2.45_m, 200_deg),
-      frc::Pose2d(5.5_m, 1.8_m, 140_deg),
-      frc::Pose2d(4.0_m, 2.5_m, 140_deg)
+      frc::Pose2d(5.5_m, 1.8_m, 150_deg),
+      frc::Pose2d(4.0_m, 2.5_m, 150_deg)
 
       //Potential cut through middle stage for 3rd note.
       //frc::Pose2d(5.6_m, 4.0_m, 160_deg),
