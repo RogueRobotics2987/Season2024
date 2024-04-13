@@ -705,7 +705,7 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint2
     {
       frc::Pose2d(3.25_m, 5.55_m, 180_deg),
-      frc::Pose2d(5.00_m, 4.05_m, 180_deg)
+      frc::Pose2d(5.50_m, 4.05_m, 180_deg)
     };
 
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint3
@@ -718,9 +718,9 @@ class RobotContainer
     std::vector<frc::Pose2d> Blue_MidLine4Waypoint4
     {
       frc::Pose2d(2.15_m, 5.55_m, 180_deg),
-      frc::Pose2d(2.15_m, 4.15_m, 180_deg),
-      frc::Pose2d(2.6_m, 4.15_m, 180_deg),
-      frc::Pose2d(2.35_m, 4.15_m, 135_deg)
+      frc::Pose2d(2.15_m, 4.25_m, 180_deg),
+      frc::Pose2d(2.6_m, 4.25_m, 180_deg),
+      frc::Pose2d(2.35_m, 4.25_m, 135_deg)
     };
 
 
