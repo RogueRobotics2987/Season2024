@@ -47,7 +47,7 @@ void AprilTagAim::Execute()
   if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limelight->GetApriltagDriveError()) < 2 && m_limelight->GetNumTargets() > 0)
   {
     m_lights->SetFlashPurple();
-    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.5);
   }
   else
   {

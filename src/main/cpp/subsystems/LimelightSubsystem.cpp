@@ -49,7 +49,12 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
         // return 0.6042 * pow((dist+angleTrim),4) - 8.94 * pow((dist+angleTrim),3) + 49.7 * pow((dist+angleTrim),2) - 129.06 * (dist+angleTrim) + 168.18;
         // return -0.2238* pow((dist+angleTrim),3) + 4.1431 * pow((dist+angleTrim), 2) - 27.38 * (dist+angleTrim) + 89.093; // for 3800 rpm - unused as of now
 
-        return 0.0487 * pow((dist+angleTrim),4) - 1.1665 * pow((dist+angleTrim),3) + 10.383 * pow((dist+angleTrim),2) - 42.875 * (dist+angleTrim) + 97.426;
+        // return 0.0487 * pow((dist+angleTrim),4) - 1.1665 * pow((dist+angleTrim),3) + 10.383 * pow((dist+angleTrim),2) - 42.875 * (dist+angleTrim) + 97.426;
+
+
+        // 89.9 + -36.3x + 7.58x^2 + -0.714x^3 + 0.0252x^4
+
+        return 0.0252 * pow((dist+angleTrim),4) - 0.714 * pow((dist+angleTrim),3) + 7.58 * pow((dist+angleTrim),2) - 36.3 * (dist+angleTrim) + 89.9;
     }
     else
     {
@@ -163,4 +168,14 @@ double LimelightSubsystem::GetDistanceFromTarget()
 int LimelightSubsystem::GetNumTargets()
 {
     return targetCount;
+}
+
+void LimelightSubsystem::SetNoteSeen()
+{
+    hasSeenNote = true;
+}
+
+bool LimelightSubsystem::GetHasSeenNote()
+{
+    return hasSeenNote;
 }

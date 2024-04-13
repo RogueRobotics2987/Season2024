@@ -11,6 +11,7 @@ RobotContainer::RobotContainer()
   m_chooser.SetDefaultOption("Blue_Close4", "Blue_Close4");
   m_chooser.AddOption("Red_Close4", "Red_Close4");
   m_chooser.AddOption("Blue_SourceSide", "Blue_SourceSide");
+  m_chooser.AddOption("Blue_SourceSideDR", "Blue_SourceSideDR");
   m_chooser.AddOption("Red_SourceSide", "Red_SourceSide");
   m_chooser.AddOption("Blue_MidLine4", "Blue_MidLine4");
   //m_chooser.AddOption("Blue_AmpSide", "Blue_AmpSide");
@@ -322,8 +323,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
           AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr(),  
           frc2::WaitCommand(5.5_s).ToPtr() //change this time?
         )
-        // frc2::ConditionalCommand() possibly look into this to this to track a different note if it doesnt see the first note.
       ),
+
+    // // possibly look into this to this to track a different note if it doesnt see the first note.
+    //   frc2::ConditionalCommand(
+    //     frc2::cmd::Sequence().Unwrap(), //if the bool is true
+    //     frc2::cmd::Sequence().Unwrap(), //if the bool is false
+    //     m_limelight.GetHasSeenNote() // if we have seen a note or not
+    //   ),
+
       FollowWaypoints(m_drive, m_limelight, Blue_SourceSide3, Blue_SourceSidePoint3, Blue_SourceSideCruise3, false).ToPtr(),
       frc2::cmd::Sequence(
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
@@ -334,6 +342,46 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoNotePickup(m_limelight, m_drive, m_intake, m_lights).ToPtr()
       ),
       FollowWaypoints(m_drive, m_limelight, Blue_SourceSide5, Blue_SourceSidePoint5, Blue_SourceSideCruise5, false).ToPtr(),
+      frc2::cmd::Sequence( //possibly have this shoot no matter what even if its not aimed?
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
+      )
+    );
+  }
+  else if(chosenAuto == "Blue_SourceSideDR")
+  {
+    m_drive.ResetOdometry(Blue_SourceSide1DR[0]);
+    return frc2::cmd::Sequence( //the whole auto path!
+      frc2::WaitCommand(0.1_s).ToPtr(),  //This is neccesary because the reset odometry will not actually reset until after a very small amount of time. 
+      frc2::cmd::RunOnce(
+        [this]
+        {
+          m_drive.ZeroHeading(m_drive.GetPose().Rotation().Degrees());
+        },
+        {&m_drive}),
+      AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
+      FollowWaypoints(m_drive, m_limelight, Blue_SourceSide1DR, Blue_SourceSidePoint1DR, Blue_SourceSideCruise1DR, false).ToPtr(),
+      frc2::cmd::Sequence(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
+      ),
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, Blue_SourceSide2DR, Blue_SourceSidePoint2DR, Blue_SourceSideCruise2DR, false).ToPtr(),
+        frc2::cmd::Race(
+          IntakeCmd(m_intake, m_lights, m_driverController).ToPtr(),
+          frc2::WaitCommand(5.5_s).ToPtr() //change this time?
+        )
+      ),
+      FollowWaypoints(m_drive, m_limelight, Blue_SourceSide3DR, Blue_SourceSidePoint3DR, Blue_SourceSideCruise3DR, false).ToPtr(),
+      frc2::cmd::Sequence(
+        AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
+        AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()
+      ),
+      frc2::cmd::Parallel(
+        FollowWaypoints(m_drive, m_limelight, Blue_SourceSide4DR, Blue_SourceSidePoint4DR, Blue_SourceSideCruise4DR, false).ToPtr(),
+        IntakeCmd(m_intake, m_lights, m_driverController).ToPtr()
+      ),
+      FollowWaypoints(m_drive, m_limelight, Blue_SourceSide5DR, Blue_SourceSidePoint5DR, Blue_SourceSideCruise5DR, false).ToPtr(),
       frc2::cmd::Sequence( //possibly have this shoot no matter what even if its not aimed?
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()

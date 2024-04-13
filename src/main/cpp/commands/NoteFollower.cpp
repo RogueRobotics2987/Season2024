@@ -149,7 +149,7 @@ void NoteFollower::Execute()
     time++;
     m_intake->RunMagazine(-0.2);
 
-    if(time >= 10)
+    if(m_intake->GetMagazineSensor() && time >= 10)
     {
       finished = true;
     }
