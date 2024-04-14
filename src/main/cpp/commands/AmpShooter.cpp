@@ -29,7 +29,6 @@ AmpShooter::AmpShooter(
 // Called when the command is initially scheduled.
 void AmpShooter::Initialize() 
 {
-  m_lights->SetNoColor();
   m_shooterWheels->SetShooter(0.4, 0.4);
   hasShot = false; 
   time = 0;
@@ -64,6 +63,15 @@ void AmpShooter::Execute()
 void AmpShooter::End(bool interrupted) 
 {
  m_shooterWheels->StopShooter();
+
+ if(IsFinished() == true)
+  {
+    m_lights->SetNoColor();
+  } 
+  else 
+  {  
+    m_lights->SetLightsGreen();
+  }
 }
 
 // Returns true when the command should end.

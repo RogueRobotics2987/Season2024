@@ -22,11 +22,17 @@ void AutoAprilTag::Initialize()
   currentHeading = m_drive->GetPose().Rotation().Degrees().value();
   lastHeading = currentHeading;
 
+  hasSeen = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutoAprilTag::Execute()
 {
+  if(nt::NetworkTableInstance::GetDefault().GetTable("limelight-front")->GetNumber("tv", 0) > 0)
+  {
+    hasSeen = true;
+  }
+  
   currentHeading = m_drive->GetPose().Rotation().Degrees().value();
 
   rotApril = units::angular_velocity::radians_per_second_t(m_limePose->GetApriltagDriveMotorVal(currentHeading, lastHeading));
@@ -55,7 +61,7 @@ void AutoAprilTag::End(bool interrupted)
 // Returns true when the command should end.
 bool AutoAprilTag::IsFinished()
 {
-  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limePose->GetApriltagDriveError()) < 2)
+  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limePose->GetApriltagDriveError()) < 2 && hasSeen == true)
   {
     return true;
   }

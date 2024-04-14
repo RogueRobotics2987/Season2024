@@ -30,24 +30,26 @@ void AprilTagAim::Initialize()
 {
   finished = false;
   shoot = false;
-  time = 0;
+  shooterTime = 0;
+  lockOnLightDelay = 0;
   m_limelight->apriltagAngleReset(m_drivetrain->GetPose().Rotation().Degrees().value());
   currentHeading = m_drivetrain->GetPose().Rotation().Degrees().value();
   lastHeading = currentHeading;
   hasSeenTarget = false;
 
   m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
-
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AprilTagAim::Execute()
 {
+  lockOnLightDelay++;
+
   //calibrate these values with the at home field to make sure the deadbands are okay
-  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limelight->GetApriltagDriveError()) < 2 && m_limelight->GetNumTargets() > 0)
+  if(fabs(m_shooter->ShooterError()) <  1 && fabs(m_limelight->GetApriltagDriveError()) < 2 && m_limelight->GetNumTargets() > 0 && lockOnLightDelay > 50)
   {
     m_lights->SetFlashPurple();
-    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+    m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.5);
   }
   else
   {
@@ -108,10 +110,10 @@ void AprilTagAim::Execute()
 
   if(shoot == true)
   {
-    time++;
+    shooterTime++;
   }
 
-  if(time > 30)
+  if(shooterTime > 30)
   {
     finished = true;
   } 
@@ -130,7 +132,6 @@ void AprilTagAim::End(bool interrupted)
 {
   frc::SmartDashboard::PutBoolean("apriltagAim", false);
 
-  //m_lights->SetNoColor();
   if(finished == true)
   {
     m_lights->SetNoColor();

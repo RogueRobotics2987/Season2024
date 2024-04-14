@@ -67,7 +67,8 @@ class AprilTagAim : public frc2::CommandHelper<frc2::Command, AprilTagAim>
     double error = 0;
     bool finished = false;
     bool shoot = false;
-    int time = 0;
+    int shooterTime = 0;
+    int lockOnLightDelay = 0;
     double rot = 0;
     bool hasSeenTarget = false;
 

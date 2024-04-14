@@ -51,4 +51,6 @@ class AutoAprilTag : public frc2::CommandHelper<frc2::Command, AutoAprilTag>
     double error = 0;
 
     double lastHeading = 0;
+
+    bool hasSeen = false;
 };

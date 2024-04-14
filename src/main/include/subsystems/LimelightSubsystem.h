@@ -36,6 +36,9 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double GetDistanceFromTarget();
     int GetNumTargets();
 
+    void SetNoteSeen();
+    bool GetHasSeenNote();
+
     double GetAmptx();
 
   private:
@@ -60,4 +63,6 @@ class LimelightSubsystem : public frc2::SubsystemBase
     double rz = 0; // current heading but from limelight
     double lastDistance= 0;
     double currentDistance = 0;
+
+    bool hasSeenNote = false;
 };
