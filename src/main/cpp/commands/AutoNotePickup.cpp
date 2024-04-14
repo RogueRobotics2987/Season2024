@@ -22,7 +22,6 @@ AutoNotePickup::AutoNotePickup(LimelightSubsystem &limelight, DriveSubsystem &dr
 // Called when the command is initially scheduled.
 void AutoNotePickup::Initialize()
 {
-  //  nt::NetworkTableInstance::GetDefault().GetTable("limelight-bac\k")->PutNumber("pipeline",0);
   m_intake->RunIntake(0.5);
   m_intake->DirectionNote(0.45); //possibly up all these speeds
   m_intake->RunMagazine(0.5);
@@ -49,15 +48,6 @@ void AutoNotePickup::Execute()
   frc::SmartDashboard::PutNumber("NoteTrackerError", noteError);
 
   rotNote = units::angular_velocity::radians_per_second_t(noteError * kpNote);
-
-  // if(fabs(rotNote.value()) < .05)
-  // {
-  //   NoInput = true;
-  // }
-  // else
-  // {
-  //   NoInput = false;
-  // }
 
   if(state == 0)
   {
@@ -101,7 +91,7 @@ void AutoNotePickup::Execute()
     time++;
     m_intake->RunMagazine(-0.2);
 
-    if(time >= 10)
+    if(m_intake->GetMagazineSensor() && time >= 10)
     {
       finished = true;
     }
@@ -121,7 +111,6 @@ void AutoNotePickup::End(bool interrupted)
   {
     m_lights->SetNoColor();
   }
-  
 }
 
 // Returns true when the command should end.

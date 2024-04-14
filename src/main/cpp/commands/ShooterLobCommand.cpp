@@ -28,11 +28,11 @@ ShooterLobCommand::ShooterLobCommand(
 // Called when the command is initially scheduled.
 void ShooterLobCommand::Initialize() 
 {
-  //m_lights->SetNoColor();
   m_shooterWheels->SetShooter(0.6, 0.6); //change speed
   hasShot = false; 
   time = 0;
 }
+
 // Called repeatedly when this Command is scheduled to run
 void ShooterLobCommand::Execute() 
 {

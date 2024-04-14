@@ -47,6 +47,6 @@ void ShooterWheelsSubsystem::StopShooter(){
 
 void ShooterWheelsSubsystem::PIDShoot()
 {
-    TopShooterPID.SetReference(4100, rev::CANSparkMax::ControlType::kVelocity);
-    BottomShooterPID.SetReference(4100, rev::CANSparkMax::ControlType::kVelocity);
+    TopShooterPID.SetReference(4500, rev::CANSparkMax::ControlType::kVelocity);
+    BottomShooterPID.SetReference(4500, rev::CANSparkMax::ControlType::kVelocity);
 }

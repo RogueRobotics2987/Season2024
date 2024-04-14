@@ -4,7 +4,6 @@
 
 #include "commands/IntakeCmd.h"
 
-
 IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController)
 {
   m_intake = &intake;
@@ -13,7 +12,6 @@ IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxCo
 
   AddRequirements(m_intake);
   AddRequirements(m_lights);
-
 }
 
 // Called when the command is initially scheduled.
@@ -33,12 +31,10 @@ void IntakeCmd::Initialize()
 void IntakeCmd::Execute()
 {
   m_intake->Direction(0.35);
-  // TODO set LEDs to yellow
 
   if(state == 0)
   {
     //just run until we have a note
-
     if(m_intake->GetMagazineSensor())
     {
       state = 1;
@@ -50,7 +46,6 @@ void IntakeCmd::Execute()
   {
     m_intake->StopIntake();
     m_intake->StopMagazine();
-
     state = 2;
   }
   else if(state == 2)
@@ -63,7 +58,6 @@ void IntakeCmd::Execute()
     if(m_intake->GetMagazineSensor() && time >= 10)
     {
       finished = true;
-      // todo set LEDs green
     }
   }
 }
@@ -78,7 +72,6 @@ void IntakeCmd::End(bool interrupted)
   else
   {
     m_lights->SetNoColor();
-    //m_lights->SetColorChase();
   }
 
   m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);

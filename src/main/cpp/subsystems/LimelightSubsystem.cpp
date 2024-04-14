@@ -54,7 +54,8 @@ double LimelightSubsystem::GetApriltagShooterTheta(double dist, double angleTrim
 
         // 89.9 + -36.3x + 7.58x^2 + -0.714x^3 + 0.0252x^4
 
-        return 0.0252 * pow((dist+angleTrim),4) - 0.714 * pow((dist+angleTrim),3) + 7.58 * pow((dist+angleTrim),2) - 36.3 * (dist+angleTrim) + 89.9;
+        // return 0.0252 * pow((dist+angleTrim),4) - 0.714 * pow((dist+angleTrim),3) + 7.58 * pow((dist+angleTrim),2) - 36.3 * (dist+angleTrim) + 89.9;
+        return 0.0154 * pow((dist+angleTrim),4) - 0.478 * pow((dist+angleTrim),3) + 5.46 * pow((dist+angleTrim),2) - 29.1 * (dist+angleTrim) + 82.4;
     }
     else
     {
