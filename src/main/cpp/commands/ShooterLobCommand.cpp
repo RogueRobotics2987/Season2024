@@ -28,7 +28,7 @@ ShooterLobCommand::ShooterLobCommand(
 // Called when the command is initially scheduled.
 void ShooterLobCommand::Initialize() 
 {
-  m_shooterWheels->SetShooter(0.6, 0.6); //change speed
+  m_shooterWheels->SetShooter(0.5, 0.5); //change speed
   hasShot = false; 
   time = 0;
 }

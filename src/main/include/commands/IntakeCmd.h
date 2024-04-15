@@ -27,7 +27,7 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
 {
   public:
     IntakeCmd();
-    IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController);
+    IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController, frc::XboxController &auxController);
 
     void Initialize() override;
 
@@ -41,6 +41,7 @@ class IntakeCmd : public frc2::CommandHelper<frc2::Command, IntakeCmd>
     IntakeSubsystem* m_intake = nullptr;
     LightSubsystem* m_lights = nullptr;
     frc::XboxController* m_driverController = nullptr;
+    frc::XboxController* m_auxController = nullptr;
 
     int state = 0;
     int time = 0;

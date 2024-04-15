@@ -4,11 +4,12 @@
 
 #include "commands/IntakeCmd.h"
 
-IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController)
+IntakeCmd::IntakeCmd(IntakeSubsystem &intake, LightSubsystem &light, frc::XboxController &driverController, frc::XboxController &auxController)
 {
   m_intake = &intake;
   m_lights = &light;
   m_driverController = &driverController;
+  m_auxController = &auxController;
 
   AddRequirements(m_intake);
   AddRequirements(m_lights);
@@ -40,6 +41,7 @@ void IntakeCmd::Execute()
       state = 1;
       m_lights->SetLightsGreen();
       m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+      m_auxController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
     }
   }
   else if(state == 1)
@@ -75,6 +77,7 @@ void IntakeCmd::End(bool interrupted)
   }
 
   m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+  m_auxController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
   m_intake->RunIntake(0);
   m_intake->Direction(0);
   m_intake->RunMagazine(0);
