@@ -35,7 +35,8 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
       DriveSubsystem &drivetrain,
       frc::XboxController &driverController,
       IntakeSubsystem &intake,
-      LightSubsystem &lights);
+      LightSubsystem &lights,
+      frc::XboxController &m_auxController);
 
     void Initialize() override;
 
@@ -53,6 +54,7 @@ class NoteFollower : public frc2::CommandHelper<frc2::Command, NoteFollower>
     IntakeSubsystem* m_intake = nullptr;
     LightSubsystem* m_lights = nullptr; 
     frc::XboxController* m_driverController = nullptr;
+    frc::XboxController* m_auxController = nullptr;
 
     units::angular_velocity::radians_per_second_t rotNote = units::angular_velocity::radians_per_second_t(0);
     double kpNote = 0.04;

@@ -56,6 +56,7 @@
 #include "commands/AutoShooterWarmupCmd.h"
 #include "commands/AutoSubAim.h"
 #include "commands/ShooterLobCommand.h"
+#include "commands/AutoSideSubAngle.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

@@ -6,7 +6,7 @@
 
 NoteFollower::NoteFollower(){}
 NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivetrain, 
-                           frc::XboxController &driverController, IntakeSubsystem &intake, LightSubsystem &lights)
+                           frc::XboxController &driverController, IntakeSubsystem &intake, LightSubsystem &lights, frc::XboxController &auxController)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   m_limelight = &limelight;
@@ -14,6 +14,7 @@ NoteFollower::NoteFollower(LimelightSubsystem &limelight, DriveSubsystem &drivet
   m_drivetrain = &drivetrain;
   m_driverController = &driverController;
   m_lights = &lights;
+  m_auxController = &auxController;
 
   AddRequirements({m_intake});
   AddRequirements({m_limelight});
@@ -134,6 +135,8 @@ void NoteFollower::Execute()
       state = 1;
       m_lights->SetLightsGreen();
       m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+      m_auxController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+
       time = 0;
     }
   }
@@ -172,6 +175,7 @@ void NoteFollower::End(bool interrupted)
   }
 
   m_driverController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+  m_auxController->SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
 // Returns true when the command should end.
