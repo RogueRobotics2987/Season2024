@@ -19,14 +19,12 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption("Red_AmpJustShoot", "Red_AmpJustShoot");
   m_chooser.AddOption("Red_SourceJustShoot", "Red_SourceJustShoot");
 
-/*
   // move and shoot and thats all
   m_chooser.AddOption("Red_ShootSource", "Red_ShootSource");
   m_chooser.AddOption("Red_ShootAmp", "Red_ShootAmp");
 
   m_chooser.AddOption("Blue_ShootSource", "Blue_ShootSource");
   m_chooser.AddOption("Blue_ShootAmp", "Blue_ShootAmp");
-  */
 
   //m_chooser.AddOption("Blue_SourceSideDR", "Blue_SourceSideDR");
   m_chooser.AddOption("Red_SourceSide", "Red_SourceSide");
@@ -567,7 +565,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         AutoAprilTag(m_limelight, m_drive, m_shooter).ToPtr(),
         AutoShootCommand(m_shooterWheels, m_intake, m_shooter).ToPtr()));
   }
-  /*
   else if(chosenAuto == "Blue_ShootSource")
   {
     m_drive.ResetOdometry(Blue_SourceSide1[0]);
@@ -628,7 +625,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
       )
     );
   }
-  */
   else if(chosenAuto == "Red_ShootAmp")
   {
     m_drive.ResetOdometry(Red_AmpSide1[0]);
@@ -694,7 +690,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
         [this]  
         {
-          m_drive.ZeroHeading((180_deg - m_drive.GetPose().Rotation().Degrees()));
+          m_drive.ZeroHeading(-120_deg);
         },
         {&m_drive}),
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
@@ -712,7 +708,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
         frc2::cmd::RunOnce(
         [this]  
         {
-          m_drive.ZeroHeading((180_deg - m_drive.GetPose().Rotation().Degrees()));
+          m_drive.ZeroHeading(120_deg);
         },
         {&m_drive}),
       AutoShooterWarmupCmd(m_shooterWheels).ToPtr(),
